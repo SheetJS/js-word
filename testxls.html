@@ -1,0 +1,54 @@
+<style>
+#drop{
+	border:2px dashed #bbb;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	padding:25px;
+	text-align:center;
+	font:20pt bold,"Vollkorn";color:#bbb
+}
+</style>
+<div id="drop">Drop an XLS or DOC file here to see sheet data.</div>
+<pre id="out"></pre>
+<br />
+<script src="consts.js"></script>
+<script src="xlsconsts.js"></script>
+<script src="cfb.js"></script>
+<script src="xls.js"></script>
+<script>
+if(!window.cfbs) window.cfbs = {};
+var drop = document.getElementById('drop');
+function handleDrop(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	var files = e.dataTransfer.files;
+	var i,f;
+	for (i = 0, f = files[i]; i != files.length; ++i) {
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			var data = e.target.result;
+			var cfb = CFB.read(data, {type:'binary'})
+			window.cfbs[name] = cfb;
+			//cfb.Paths.forEach(function(x){console.log(x); out.innerText+=x+"\n";});
+			var wb = parse_xlscfb(cfb);
+			var ws = wb.Sheets[wb.Directory[0]] 
+			var csv = make_csv(ws);  
+			var cmds = get_formulae(ws).join("\n");
+			out.innerText+=csv+"\n";
+
+		};
+		reader.readAsBinaryString(f);
+	}
+}
+
+function handleDragover(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy';
+}
+drop.addEventListener('dragover', handleDragover, false);
+drop.addEventListener('drop', handleDrop, false);
+</script>
+
