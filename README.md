@@ -39,12 +39,16 @@ Please consult the attached LICENSE file for details.  All rights not explicitly
 
 It is the opinion of the Original Author that this code conforms to the terms of the Microsoft Open Specifications Promise, falling under the same terms as OpenOffice (which is governed by the Apache License v2).  Given the vagaries of the promise, the Original Author makes no legal claim that in fact end users are protected from future actions.  It is highly recommended that, for commercial uses, you consult a lawyer before proceeding.
 
+## XLSX Support
+
+XLSX is not supported in this module.  Due to Licensing issues [that are discussed in more detail elsewhere](https://github.com/Niggler/js-xls/issues/1#issuecomment-13852286), the implementation cannot be released in a GPL or MIT-style license.  If you need XLSX support, consult [my js-xlsx project](https://github.com/Niggler/js-xlsx).
+
 ## References
 
-[MS-CFB]: Compound File Binary File Format
-[MS-XLS]: Excel Binary File Format (.xls) Structure Specification
-[MS-ODATA]: Open Data Protocol (OData)
-[MS-OLEDS]: Object Linking and Embedding (OLE) Data Structures
-[MS-OLEPS]: Object Linking and Embedding (OLE) Property Set Data Structures
-[MS-OSHARED]: Office Common Data Types and Objects Structures
+ - [MS-CFB]: Compound File Binary File Format
+ - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification
+ - [MS-ODATA]: Open Data Protocol (OData)
+ - [MS-OLEDS]: Object Linking and Embedding (OLE) Data Structures
+ - [MS-OLEPS]: Object Linking and Embedding (OLE) Property Set Data Structures
+ - [MS-OSHARED]: Office Common Data Types and Objects Structures
 
