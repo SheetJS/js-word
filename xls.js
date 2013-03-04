@@ -13,11 +13,14 @@ function parse_compobj(obj) {
 	var l = 28, m; // skip the 28 bytes
 	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
 	
+	/* MS-OLEDS 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
 	switch(m) {
-		case 0xffffffff: case 0xfffffffe: l+=4; break;
 		case 0x00000000: break;
-		default: throw "Unsupported Clipboard: " + m;
+		case 0xffffffff: case 0xfffffffe: l+=4; break;
+		default: 
+			if(m > 0x190) throw "Unsupported Clipboard: " + m;
+			l += m;
 	}
 
 	m = o.lpstr(l); l += 5 + m.length; v.Reserved1 = m;
@@ -145,7 +148,7 @@ function parse_workbook(blob) {
 		var RecordType = read(2);
 		var length = read(2), y;
 		var R = RecordEnum[RecordType];
-		if(R) {
+		if(R && R.f) {
 			if(R.r === 2 || R.r == 12) {
 				var rt = read(2); length -= 2;
 				if(rt !== RecordType) throw "rt mismatch";
