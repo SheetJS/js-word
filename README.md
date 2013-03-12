@@ -12,7 +12,6 @@ THERE ARE PLANS FOR AN NPM MODULE (you can just require a few files and magic ha
 
 In the browser:
 
-    <script src="consts.js"></script>
     <script src="xlsconsts.js"></script>
     <script src="cfb.js"></script>
     <script src="xls.js"></script>
