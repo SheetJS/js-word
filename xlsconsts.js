@@ -294,7 +294,7 @@ function parse_XLUnicodeString(blob) {
 	return retval;
 }
 
-function parse_OptXLUnicodeString(blob, length) { return length === 0 ? "" : parseXLUnicodeString(blob); }
+function parse_OptXLUnicodeString(blob, length) { return length === 0 ? "" : parse_XLUnicodeString(blob); }
 
 /* 2.5.342 */
 function parse_Xnum(blob, length) { return blob.read_shift('ieee754'); }

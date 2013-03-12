@@ -112,6 +112,12 @@ function CheckField(hexstr, fld) {
 	this.l += hexstr.length/2;
 }
 
+function WarnField(hexstr, fld) {
+	var m = this.slice(this.l, this.l+hexstr.length/2).hexlify('hex');
+	if(m !== hexstr) console.error((fld||"") + 'Expected ' + hexstr +' saw ' + m);
+	this.l += hexstr.length/2;
+}
+
 function prep_blob(blob, pos) {
 	blob.read_shift = ReadShift.bind(blob);
 	blob.chk = CheckField;
@@ -143,10 +149,11 @@ var minifat_size = 0; // size of minifat data
 
 var fat_addrs = []; // locations of FAT sectors
 
-/** Parse Header */
+/** Parse Header [MS-CFB] 2.2 */
 var blob = file.slice(0,512);
 prep_blob(blob);
 var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+var wrn = WarnField.bind(blob);
 var j = 0;
 
 // header signature 8
@@ -156,7 +163,7 @@ chk(HEADER_SIGNATURE, 'Header Signature: ');
 chk(HEADER_CLSID, 'CLSID: ');
 	
 // minor version 2
-chk(HEADER_MINOR_VERSION, 'Minor Version: ');
+wrn(HEADER_MINOR_VERSION, 'Minor Version: ');
 
 // major version 3
 mver = read(2);
