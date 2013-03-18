@@ -8,13 +8,17 @@ This has been tested on some basic XLS files generated from Excel 2011 (using co
 
 ## Installation
 
-THERE ARE PLANS FOR AN NPM MODULE (you can just require a few files and magic happens) but someone is squatting `xls`: https://npmjs.org/package/xls
-
 In the browser:
 
     <script src="xlsconsts.js"></script>
     <script src="cfb.js"></script>
     <script src="xls.js"></script>
+
+In node:
+
+    require('xlsjs').readFile('file');
+
+The command-line utility `xls2csv` shows how to generate a CSV from an XLS.
 
 ## Usage
 
