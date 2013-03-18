@@ -2,8 +2,6 @@ if(typeof require !== 'undefined') {
 	var CFB= require('./cfb');
 	var vm = require('vm'), fs = require('fs');
 	vm.runInThisContext(fs.readFileSync(__dirname+'/xlsconsts.js'));
-	var cfb = CFB.read(process.argv[2] || 'Book1.xls', {type:'file'});
-	var target_sheet = process.argv[3] || '';
 }
 
 /* MS-OLEDS 2.3.8 CompObjStream TODO */
@@ -40,8 +38,9 @@ var CompObjP, SummaryP, WorkbookP;
 function parse_formula(formula, range) {
 	range = range || {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, sht;
+	if(!formula[0] || !formula[0][0]) return "";
 	formula[0].forEach(function(f) {
-		//console.log("++",f)
+		//console.log("++",f, formula[0])
 		switch(f[0]) {
 			/* Control Tokens -- ignore */
 			case 'PtgAttrIf': case 'PtgAttrChoose': case 'PtgAttrGoto': break;
@@ -257,13 +256,22 @@ function get_formulae(ws) {
 	return cmds;
 }
 
-if(typeof require !== 'undefined') {
-	var wb = parse_xlscfb(cfb);
-	//console.log(wb);
-	if(target_sheet === '') target_sheet = wb.Directory[0];
-	console.log(target_sheet);
-	var ws = wb.Sheets[target_sheet];
-	console.log(ws);
-	console.log(make_csv(ws));
-	console.log(get_formulae(ws));
+var utils = {
+	make_csv: make_csv,
+	get_formulae: get_formulae
+};
+
+var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); }
+if(typeof exports !== 'undefined') {
+	exports.readFile = readFile;
+	exports.utils = utils; 
+	if(typeof module !== 'undefined' && require.main === module ) {
+		var wb = readFile(process.argv[2] || 'Book1.xls');
+		var target_sheet = process.argv[3] || '';
+		if(target_sheet === '') target_sheet = wb.Directory[0];
+		var ws = wb.Sheets[target_sheet];
+		console.log(target_sheet);
+		console.log(make_csv(ws));
+		//console.log(get_formulae(ws));
+	}
 }
