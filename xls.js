@@ -10,19 +10,19 @@ function parse_compobj(obj) {
 	var o = obj.content;
 	var l = 28, m; // skip the 28 bytes
 	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
-	
+
 	/* MS-OLEDS 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
 	switch(m) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
-		default: 
+		default:
 			if(m > 0x190) throw "Unsupported Clipboard: " + m;
 			l += m;
 	}
 
 	m = o.lpstr(l); l += 5 + m.length; v.Reserved1 = m;
-	
+
 	if((m = o.readUInt32LE(l)) !== 0x71b2e9f4) return v;
 	throw "Unsupported Unicode Extension";
 }
@@ -53,14 +53,14 @@ function parse_formula(formula, range) {
 				type = f[1][0], sht = f[1][1], c = shift_cell(f[1][2], range);
 				stack.push("!"+encode_cell(c));
 				break;
-			
+
 			/* Function Call */
 			case 'PtgFuncVar':
 				var argc = f[1][0], func = f[1][1];
 				var args = stack.slice(-argc);
 				stack.length -= argc;
 				stack.push(func + "(" + args.join(",") + ")");
-				break;	
+				break;
 
 			/* Binary Operators -- pop 2 push 1*/
 			case 'PtgAdd':
@@ -111,7 +111,7 @@ function parse_formula(formula, range) {
 				e1 = stack.pop(); e2 = stack.pop();
 				stack.push(e2+"<>"+e1);
 				break;
-			
+
 			case 'PtgInt':
 				stack.push(f[1]); break;
 			case 'PtgArea':
@@ -224,7 +224,7 @@ function parse_workbook(blob) {
 	wb.SheetNames=sheetnamesraw;
 	wb.Sheets=Sheets;
 	wb.Preamble=Preamble;
-	return wb; 
+	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);
 
@@ -264,7 +264,7 @@ var utils = {
 var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); }
 if(typeof exports !== 'undefined') {
 	exports.readFile = readFile;
-	exports.utils = utils; 
+	exports.utils = utils;
 	if(typeof module !== 'undefined' && require.main === module ) {
 		var wb = readFile(process.argv[2] || 'Book1.xls');
 		var target_sheet = process.argv[3] || '';

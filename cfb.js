@@ -63,8 +63,8 @@ var Base64 = (function(){
 	};
 })();
 
-function s2a(s) { 
-	var w = s.split("").map(function(x){return x.charCodeAt(0);}); 
+function s2a(s) {
+	var w = s.split("").map(function(x){return x.charCodeAt(0);});
 	return w;
 }
 
@@ -161,7 +161,7 @@ chk(HEADER_SIGNATURE, 'Header Signature: ');
 
 // clsid 16
 chk(HEADER_CLSID, 'CLSID: ');
-	
+
 // minor version 2
 wrn(HEADER_MINOR_VERSION, 'Minor Version: ');
 
@@ -332,15 +332,15 @@ var root_name = Paths.shift();
 var rval = {
 	raw: {header: header, sectors: sectors},
 	Paths: Paths,
-	Directory: files 
+	Directory: files
 };
 
 for(var name in files) {
 	switch(name) {
 		case '!DocumentSummaryInformation': /* MS-OSHARED 2.3.3.2.2 */
-			rval.DocSummary = parse_PSS(files[name],DocSummaryPIDDSI); break; 
-		case '!SummaryInformation': /* MS-OSHARED 2.3.3.2.1 */ 
-			rval.Summary = parse_PSS(files[name], SummaryPIDSI); break; 
+			rval.DocSummary = parse_PSS(files[name],DocSummaryPIDDSI); break;
+		case '!SummaryInformation': /* MS-OSHARED 2.3.3.2.1 */
+			rval.Summary = parse_PSS(files[name], SummaryPIDSI); break;
 	}
 }
 
@@ -373,7 +373,7 @@ function parse_unaligned_vec_lpstr(blob) {
 
 /* 2.3.3.1.14 VtVecHeadingPairValue */
 function parse_heading_pair_vec(blob) {
-	// TODO: 
+	// TODO:
 }
 
 /* [MS-OLEPS] 2.8 FILETIME */
@@ -477,11 +477,11 @@ function parse_PSS(file, PIDSI) {
 
 	var NumSets, FMTID0, FMTID1, Offset0, Offset1;
 	chk('feff', 'Byte Order: ');
-	
-	var vers = read(2); // TODO: check version 
-	var SystemIdentifier = read(4);	
+
+	var vers = read(2); // TODO: check version
+	var SystemIdentifier = read(4);
 	chk(HEADER_CLSID, 'CLSID: ');
-	NumSets = read(4); 
+	NumSets = read(4);
 	if(NumSets !== 1 && NumSets !== 2) throw "Unrecognized #Sets: " + NumSets;
 	FMTID0 = read(16); Offset0 = read(4);
 
@@ -490,13 +490,13 @@ function parse_PSS(file, PIDSI) {
 	var PSet0 = parse_PSet(blob, PIDSI);
 
 	var rval = { SystemIdentifier: SystemIdentifier };
-	for(var y in PSet0) rval[y] = PSet0[y]; 
+	for(var y in PSet0) rval[y] = PSet0[y];
 	//rval.blob = blob;
 	rval.FMTID = FMTID0;
 	//rval.PSet0 = PSet0;
 	if(NumSets === 1) return rval;
 	var PSet1 = parse_PSet(blob, null);
-	for(var y in PSet1) rval[y] = PSet1[y]; 
+	for(var y in PSet1) rval[y] = PSet1[y];
 	rval.FMTID = [FMTID0, FMTID1]; // TODO: verify FMTID0/1
 	return rval;
 }
@@ -512,7 +512,7 @@ function readSync(blob, options) {
 	var o = options || {};
 	switch((o.type || "base64")) {
 		case "file": return readFileSync(blob);
-		case "base64": blob = Base64.decode(blob); break; 
+		case "base64": blob = Base64.decode(blob); break;
 		case "binary": blob = s2a(blob); break;
 	}
 	return parse(blob);
@@ -611,13 +611,13 @@ var SummaryPIDSI = {
 	0x11: { n: 'Thumbnail', t: VT_CF },
 	0x12: { n: 'ApplicationName', t: VT_LPSTR },
 	0x13: { n: 'DocumentSecurity', t: VT_I4 },
-	0xFF: {}	
+	0xFF: {}
 };
 
 /* CFB Constants */
 {
-	var MAXREGSECT = 0xFFFFFFFA; 
-	var DIFSECT = 0xFFFFFFFC; 
+	var MAXREGSECT = 0xFFFFFFFA;
+	var DIFSECT = 0xFFFFFFFC;
 	var FATSECT = 0xFFFFFFFD;
 	var ENDOFCHAIN = 0xFFFFFFFE;
 	var FREESECT = 0xFFFFFFFF;

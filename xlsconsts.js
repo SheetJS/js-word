@@ -57,7 +57,402 @@ var BERR = {
 
 /* 2.5.198.4 */
 var Cetab = {
-	0x0000: 'BEEP'
+	0x0000: 'BEEP',
+	0x0001: 'OPEN',
+	0x0002: 'OPEN.LINKS',
+	0x0003: 'CLOSE.ALL',
+	0x0004: 'SAVE',
+	0x0005: 'SAVE.AS',
+	0x0006: 'FILE.DELETE',
+	0x0007: 'PAGE.SETUP',
+	0x0008: 'PRINT',
+	0x0009: 'PRINTER.SETUP',
+	0x000A: 'QUIT',
+	0x000B: 'NEW.WINDOW',
+	0x000C: 'ARRANGE.ALL',
+	0x000D: 'WINDOW.SIZE',
+	0x000E: 'WINDOW.MOVE',
+	0x000F: 'FULL',
+	0x0010: 'CLOSE',
+	0x0011: 'RUN',
+	0x0016: 'SET.PRINT.AREA',
+	0x0017: 'SET.PRINT.TITLES',
+	0x0018: 'SET.PAGE.BREAK',
+	0x0019: 'REMOVE.PAGE.BREAK',
+	0x001A: 'FONT',
+	0x001B: 'DISPLAY',
+	0x001C: 'PROTECT.DOCUMENT',
+	0x001D: 'PRECISION',
+	0x001E: 'A1.R1C1',
+	0x001F: 'CALCULATE.NOW',
+	0x0020: 'CALCULATION',
+	0x0022: 'DATA.FIND',
+	0x0023: 'EXTRACT',
+	0x0024: 'DATA.DELETE',
+	0x0025: 'SET.DATABASE',
+	0x0026: 'SET.CRITERIA',
+	0x0027: 'SORT',
+	0x0028: 'DATA.SERIES',
+	0x0029: 'TABLE',
+	0x002A: 'FORMAT.NUMBER',
+	0x002B: 'ALIGNMENT',
+	0x002C: 'STYLE',
+	0x002D: 'BORDER',
+	0x002E: 'CELL.PROTECTION',
+	0x002F: 'COLUMN.WIDTH',
+	0x0030: 'UNDO',
+	0x0031: 'CUT',
+	0x0032: 'COPY',
+	0x0033: 'PASTE',
+	0x0034: 'CLEAR',
+	0x0035: 'PASTE.SPECIAL',
+	0x0036: 'EDIT.DELETE',
+	0x0037: 'INSERT',
+	0x0038: 'FILL.RIGHT',
+	0x0039: 'FILL.DOWN',
+	0x003D: 'DEFINE.NAME',
+	0x003E: 'CREATE.NAMES',
+	0x003F: 'FORMULA.GOTO',
+	0x0040: 'FORMULA.FIND',
+	0x0041: 'SELECT.LAST.CELL',
+	0x0042: 'SHOW.ACTIVE.CELL',
+	0x0043: 'GALLERY.AREA',
+	0x0044: 'GALLERY.BAR',
+	0x0045: 'GALLERY.COLUMN',
+	0x0046: 'GALLERY.LINE',
+	0x0047: 'GALLERY.PIE',
+	0x0048: 'GALLERY.SCATTER',
+	0x0049: 'COMBINATION',
+	0x004A: 'PREFERRED',
+	0x004B: 'ADD.OVERLAY',
+	0x004C: 'GRIDLINES',
+	0x004D: 'SET.PREFERRED',
+	0x004E: 'AXES',
+	0x004F: 'LEGEND',
+	0x0050: 'ATTACH.TEXT',
+	0x0051: 'ADD.ARROW',
+	0x0052: 'SELECT.CHART',
+	0x0053: 'SELECT.PLOT.AREA',
+	0x0054: 'PATTERNS',
+	0x0055: 'MAIN.CHART',
+	0x0056: 'OVERLAY',
+	0x0057: 'SCALE',
+	0x0058: 'FORMAT.LEGEND',
+	0x0059: 'FORMAT.TEXT',
+	0x005A: 'EDIT.REPEAT',
+	0x005B: 'PARSE',
+	0x005C: 'JUSTIFY',
+	0x005D: 'HIDE',
+	0x005E: 'UNHIDE',
+	0x005F: 'WORKSPACE',
+	0x0060: 'FORMULA',
+	0x0061: 'FORMULA.FILL',
+	0x0062: 'FORMULA.ARRAY',
+	0x0063: 'DATA.FIND.NEXT',
+	0x0064: 'DATA.FIND.PREV',
+	0x0065: 'FORMULA.FIND.NEXT',
+	0x0066: 'FORMULA.FIND.PREV',
+	0x0067: 'ACTIVATE',
+	0x0068: 'ACTIVATE.NEXT',
+	0x0069: 'ACTIVATE.PREV',
+	0x006A: 'UNLOCKED.NEXT',
+	0x006B: 'UNLOCKED.PREV',
+	0x006C: 'COPY.PICTURE',
+	0x006D: 'SELECT',
+	0x006E: 'DELETE.NAME',
+	0x006F: 'DELETE.FORMAT',
+	0x0070: 'VLINE',
+	0x0071: 'HLINE',
+	0x0072: 'VPAGE',
+	0x0073: 'HPAGE',
+	0x0074: 'VSCROLL',
+	0x0075: 'HSCROLL',
+	0x0076: 'ALERT',
+	0x0077: 'NEW',
+	0x0078: 'CANCEL.COPY',
+	0x0079: 'SHOW.CLIPBOARD',
+	0x007A: 'MESSAGE',
+	0x007C: 'PASTE.LINK',
+	0x007D: 'APP.ACTIVATE',
+	0x007E: 'DELETE.ARROW',
+	0x007F: 'ROW.HEIGHT',
+	0x0080: 'FORMAT.MOVE',
+	0x0081: 'FORMAT.SIZE',
+	0x0082: 'FORMULA.REPLACE',
+	0x0083: 'SEND.KEYS',
+	0x0084: 'SELECT.SPECIAL',
+	0x0085: 'APPLY.NAMES',
+	0x0086: 'REPLACE.FONT',
+	0x0087: 'FREEZE.PANES',
+	0x0088: 'SHOW.INFO',
+	0x0089: 'SPLIT',
+	0x008A: 'ON.WINDOW',
+	0x008B: 'ON.DATA',
+	0x008C: 'DISABLE.INPUT',
+	0x008E: 'OUTLINE',
+	0x008F: 'LIST.NAMES',
+	0x0090: 'FILE.CLOSE',
+	0x0091: 'SAVE.WORKBOOK',
+	0x0092: 'DATA.FORM',
+	0x0093: 'COPY.CHART',
+	0x0094: 'ON.TIME',
+	0x0095: 'WAIT',
+	0x0096: 'FORMAT.FONT',
+	0x0097: 'FILL.UP',
+	0x0098: 'FILL.LEFT',
+	0x0099: 'DELETE.OVERLAY',
+	0x009B: 'SHORT.MENUS',
+	0x009F: 'SET.UPDATE.STATUS',
+	0x00A1: 'COLOR.PALETTE',
+	0x00A2: 'DELETE.STYLE',
+	0x00A3: 'WINDOW.RESTORE',
+	0x00A4: 'WINDOW.MAXIMIZE',
+	0x00A6: 'CHANGE.LINK',
+	0x00A7: 'CALCULATE.DOCUMENT',
+	0x00A8: 'ON.KEY',
+	0x00A9: 'APP.RESTORE',
+	0x00AA: 'APP.MOVE',
+	0x00AB: 'APP.SIZE',
+	0x00AC: 'APP.MINIMIZE',
+	0x00AD: 'APP.MAXIMIZE',
+	0x00AE: 'BRING.TO.FRONT',
+	0x00AF: 'SEND.TO.BACK',
+	0x00B9: 'MAIN.CHART.TYPE',
+	0x00BA: 'OVERLAY.CHART.TYPE',
+	0x00BB: 'SELECT.END',
+	0x00BC: 'OPEN.MAIL',
+	0x00BD: 'SEND.MAIL',
+	0x00BE: 'STANDARD.FONT',
+	0x00BF: 'CONSOLIDATE',
+	0x00C0: 'SORT.SPECIAL',
+	0x00C1: 'GALLERY.3D.AREA',
+	0x00C2: 'GALLERY.3D.COLUMN',
+	0x00C3: 'GALLERY.3D.LINE',
+	0x00C4: 'GALLERY.3D.PIE',
+	0x00C5: 'VIEW.3D',
+	0x00C6: 'GOAL.SEEK',
+	0x00C7: 'WORKGROUP',
+	0x00C8: 'FILL.GROUP',
+	0x00C9: 'UPDATE.LINK',
+	0x00CA: 'PROMOTE',
+	0x00CB: 'DEMOTE',
+	0x00CC: 'SHOW.DETAIL',
+	0x00CE: 'UNGROUP',
+	0x00CF: 'OBJECT.PROPERTIES',
+	0x00D0: 'SAVE.NEW.OBJECT',
+	0x00D1: 'SHARE',
+	0x00D2: 'SHARE.NAME',
+	0x00D3: 'DUPLICATE',
+	0x00D4: 'APPLY.STYLE',
+	0x00D5: 'ASSIGN.TO.OBJECT',
+	0x00D6: 'OBJECT.PROTECTION',
+	0x00D7: 'HIDE.OBJECT',
+	0x00D8: 'SET.EXTRACT',
+	0x00D9: 'CREATE.PUBLISHER',
+	0x00DA: 'SUBSCRIBE.TO',
+	0x00DB: 'ATTRIBUTES',
+	0x00DC: 'SHOW.TOOLBAR',
+	0x00DE: 'PRINT.PREVIEW',
+	0x00DF: 'EDIT.COLOR',
+	0x00E0: 'SHOW.LEVELS',
+	0x00E1: 'FORMAT.MAIN',
+	0x00E2: 'FORMAT.OVERLAY',
+	0x00E3: 'ON.RECALC',
+	0x00E4: 'EDIT.SERIES',
+	0x00E5: 'DEFINE.STYLE',
+	0x00F0: 'LINE.PRINT',
+	0x00F3: 'ENTER.DATA',
+	0x00F9: 'GALLERY.RADAR',
+	0x00FA: 'MERGE.STYLES',
+	0x00FB: 'EDITION.OPTIONS',
+	0x00FC: 'PASTE.PICTURE',
+	0x00FD: 'PASTE.PICTURE.LINK',
+	0x00FE: 'SPELLING',
+	0x0100: 'ZOOM',
+	0x0103: 'INSERT.OBJECT',
+	0x0104: 'WINDOW.MINIMIZE',
+	0x0109: 'SOUND.NOTE',
+	0x010A: 'SOUND.PLAY',
+	0x010B: 'FORMAT.SHAPE',
+	0x010C: 'EXTEND.POLYGON',
+	0x010D: 'FORMAT.AUTO',
+	0x0110: 'GALLERY.3D.BAR',
+	0x0111: 'GALLERY.3D.SURFACE',
+	0x0112: 'FILL.AUTO',
+	0x0114: 'CUSTOMIZE.TOOLBAR',
+	0x0115: 'ADD.TOOL',
+	0x0116: 'EDIT.OBJECT',
+	0x0117: 'ON.DOUBLECLICK',
+	0x0118: 'ON.ENTRY',
+	0x0119: 'WORKBOOK.ADD',
+	0x011A: 'WORKBOOK.MOVE',
+	0x011B: 'WORKBOOK.COPY',
+	0x011C: 'WORKBOOK.OPTIONS',
+	0x011D: 'SAVE.WORKSPACE',
+	0x0120: 'CHART.WIZARD',
+	0x0121: 'DELETE.TOOL',
+	0x0122: 'MOVE.TOOL',
+	0x0123: 'WORKBOOK.SELECT',
+	0x0124: 'WORKBOOK.ACTIVATE',
+	0x0125: 'ASSIGN.TO.TOOL',
+	0x0127: 'COPY.TOOL',
+	0x0128: 'RESET.TOOL',
+	0x0129: 'CONSTRAIN.NUMERIC',
+	0x012A: 'PASTE.TOOL',
+	0x012E: 'WORKBOOK.NEW',
+	0x0131: 'SCENARIO.CELLS',
+	0x0132: 'SCENARIO.DELETE',
+	0x0133: 'SCENARIO.ADD',
+	0x0134: 'SCENARIO.EDIT',
+	0x0135: 'SCENARIO.SHOW',
+	0x0136: 'SCENARIO.SHOW.NEXT',
+	0x0137: 'SCENARIO.SUMMARY',
+	0x0138: 'PIVOT.TABLE.WIZARD',
+	0x0139: 'PIVOT.FIELD.PROPERTIES',
+	0x013A: 'PIVOT.FIELD',
+	0x013B: 'PIVOT.ITEM',
+	0x013C: 'PIVOT.ADD.FIELDS',
+	0x013E: 'OPTIONS.CALCULATION',
+	0x013F: 'OPTIONS.EDIT',
+	0x0140: 'OPTIONS.VIEW',
+	0x0141: 'ADDIN.MANAGER',
+	0x0142: 'MENU.EDITOR',
+	0x0143: 'ATTACH.TOOLBARS',
+	0x0144: 'VBAActivate',
+	0x0145: 'OPTIONS.CHART',
+	0x0148: 'VBA.INSERT.FILE',
+	0x014A: 'VBA.PROCEDURE.DEFINITION',
+	0x0150: 'ROUTING.SLIP',
+	0x0152: 'ROUTE.DOCUMENT',
+	0x0153: 'MAIL.LOGON',
+	0x0156: 'INSERT.PICTURE',
+	0x0157: 'EDIT.TOOL',
+	0x0158: 'GALLERY.DOUGHNUT',
+	0x015E: 'CHART.TREND',
+	0x0160: 'PIVOT.ITEM.PROPERTIES',
+	0x0162: 'WORKBOOK.INSERT',
+	0x0163: 'OPTIONS.TRANSITION',
+	0x0164: 'OPTIONS.GENERAL',
+	0x0172: 'FILTER.ADVANCED',
+	0x0175: 'MAIL.ADD.MAILER',
+	0x0176: 'MAIL.DELETE.MAILER',
+	0x0177: 'MAIL.REPLY',
+	0x0178: 'MAIL.REPLY.ALL',
+	0x0179: 'MAIL.FORWARD',
+	0x017A: 'MAIL.NEXT.LETTER',
+	0x017B: 'DATA.LABEL',
+	0x017C: 'INSERT.TITLE',
+	0x017D: 'FONT.PROPERTIES',
+	0x017E: 'MACRO.OPTIONS',
+	0x017F: 'WORKBOOK.HIDE',
+	0x0180: 'WORKBOOK.UNHIDE',
+	0x0181: 'WORKBOOK.DELETE',
+	0x0182: 'WORKBOOK.NAME',
+	0x0184: 'GALLERY.CUSTOM',
+	0x0186: 'ADD.CHART.AUTOFORMAT',
+	0x0187: 'DELETE.CHART.AUTOFORMAT',
+	0x0188: 'CHART.ADD.DATA',
+	0x0189: 'AUTO.OUTLINE',
+	0x018A: 'TAB.ORDER',
+	0x018B: 'SHOW.DIALOG',
+	0x018C: 'SELECT.ALL',
+	0x018D: 'UNGROUP.SHEETS',
+	0x018E: 'SUBTOTAL.CREATE',
+	0x018F: 'SUBTOTAL.REMOVE',
+	0x0190: 'RENAME.OBJECT',
+	0x019C: 'WORKBOOK.SCROLL',
+	0x019D: 'WORKBOOK.NEXT',
+	0x019E: 'WORKBOOK.PREV',
+	0x019F: 'WORKBOOK.TAB.SPLIT',
+	0x01A0: 'FULL.SCREEN',
+	0x01A1: 'WORKBOOK.PROTECT',
+	0x01A4: 'SCROLLBAR.PROPERTIES',
+	0x01A5: 'PIVOT.SHOW.PAGES',
+	0x01A6: 'TEXT.TO.COLUMNS',
+	0x01A7: 'FORMAT.CHARTTYPE',
+	0x01A8: 'LINK.FORMAT',
+	0x01A9: 'TRACER.DISPLAY',
+	0x01AE: 'TRACER.NAVIGATE',
+	0x01AF: 'TRACER.CLEAR',
+	0x01B0: 'TRACER.ERROR',
+	0x01B1: 'PIVOT.FIELD.GROUP',
+	0x01B2: 'PIVOT.FIELD.UNGROUP',
+	0x01B3: 'CHECKBOX.PROPERTIES',
+	0x01B4: 'LABEL.PROPERTIES',
+	0x01B5: 'LISTBOX.PROPERTIES',
+	0x01B6: 'EDITBOX.PROPERTIES',
+	0x01B7: 'PIVOT.REFRESH',
+	0x01B8: 'LINK.COMBO',
+	0x01B9: 'OPEN.TEXT',
+	0x01BA: 'HIDE.DIALOG',
+	0x01BB: 'SET.DIALOG.FOCUS',
+	0x01BC: 'ENABLE.OBJECT',
+	0x01BD: 'PUSHBUTTON.PROPERTIES',
+	0x01BE: 'SET.DIALOG.DEFAULT',
+	0x01BF: 'FILTER',
+	0x01C0: 'FILTER.SHOW.ALL',
+	0x01C1: 'CLEAR.OUTLINE',
+	0x01C2: 'FUNCTION.WIZARD',
+	0x01C3: 'ADD.LIST.ITEM',
+	0x01C4: 'SET.LIST.ITEM',
+	0x01C5: 'REMOVE.LIST.ITEM',
+	0x01C6: 'SELECT.LIST.ITEM',
+	0x01C7: 'SET.CONTROL.VALUE',
+	0x01C8: 'SAVE.COPY.AS',
+	0x01CA: 'OPTIONS.LISTS.ADD',
+	0x01CB: 'OPTIONS.LISTS.DELETE',
+	0x01CC: 'SERIES.AXES',
+	0x01CD: 'SERIES.X',
+	0x01CE: 'SERIES.Y',
+	0x01CF: 'ERRORBAR.X',
+	0x01D0: 'ERRORBAR.Y',
+	0x01D1: 'FORMAT.CHART',
+	0x01D2: 'SERIES.ORDER',
+	0x01D3: 'MAIL.LOGOFF',
+	0x01D4: 'CLEAR.ROUTING.SLIP',
+	0x01D5: 'APP.ACTIVATE.MICROSOFT',
+	0x01D6: 'MAIL.EDIT.MAILER',
+	0x01D7: 'ON.SHEET',
+	0x01D8: 'STANDARD.WIDTH',
+	0x01D9: 'SCENARIO.MERGE',
+	0x01DA: 'SUMMARY.INFO',
+	0x01DB: 'FIND.FILE',
+	0x01DC: 'ACTIVE.CELL.FONT',
+	0x01DD: 'ENABLE.TIPWIZARD',
+	0x01DE: 'VBA.MAKE.ADDIN',
+	0x01E0: 'INSERTDATATABLE',
+	0x01E1: 'WORKGROUP.OPTIONS',
+	0x01E2: 'MAIL.SEND.MAILER',
+	0x01E5: 'AUTOCORRECT',
+	0x01E9: 'POST.DOCUMENT',
+	0x01EB: 'PICKLIST',
+	0x01ED: 'VIEW.SHOW',
+	0x01EE: 'VIEW.DEFINE',
+	0x01EF: 'VIEW.DELETE',
+	0x01FD: 'SHEET.BACKGROUND',
+	0x01FE: 'INSERT.MAP.OBJECT',
+	0x01FF: 'OPTIONS.MENONO',
+	0x0205: 'MSOCHECKS',
+	0x0206: 'NORMAL',
+	0x0207: 'LAYOUT',
+	0x0208: 'RM.PRINT.AREA',
+	0x0209: 'CLEAR.PRINT.AREA',
+	0x020A: 'ADD.PRINT.AREA',
+	0x020B: 'MOVE.BRK',
+	0x0221: 'HIDECURR.NOTE',
+	0x0222: 'HIDEALL.NOTES',
+	0x0223: 'DELETE.NOTE',
+	0x0224: 'TRAVERSE.NOTES',
+	0x0225: 'ACTIVATE.NOTES',
+	0x026C: 'PROTECT.REVISIONS',
+	0x026D: 'UNPROTECT.REVISIONS',
+	0x0287: 'OPTIONS.ME',
+	0x028D: 'WEB.PUBLISH',
+	0x029B: 'NEWWEBQUERY',
+	0x02A1: 'PIVOT.TABLE.CHART',
+	0x02F1: 'OPTIONS.SAVE',
+	0x02F3: 'OPTIONS.SPELL',
+	0x0328: 'HIDEALL.INKANNOTS'
 };
 
 /* 2.5.198.17 */
@@ -468,7 +863,7 @@ function parse_RgceLoc(blob, length) {
 	var rw = blob.read_shift(2);
 	var cl = blob.read_shift(2);
 	var cRel = cl & 0x80, rRel = cl & 0x40;
-	cl &= 0x3F; 
+	cl &= 0x3F;
 	return {r:rw,c:cl,cRel:cRel,rRel:rRel};
 }
 
@@ -505,7 +900,7 @@ function parse_PtgAttrGoto(blob, length) {
 
 /* 2.5.198.63 TODO */
 function parse_PtgFuncVar(blob, length) {
-	blob.l++; 
+	blob.l++;
 	var cparams = blob.read_shift(1), tab = parsetab(blob);
 	return [cparams, (tab[0] === 0 ? Ftab : Cetab)[tab[1]]];
 }
@@ -518,7 +913,7 @@ function parsetab(blob, length) {
 /* 2.5.198.36 */
 var parse_PtgAttrIf = parseread4;
 /* 2.5.198.41 */
-var parse_PtgAttrSum = parseread4; 
+var parse_PtgAttrSum = parseread4;
 
 /* 2.5.198.26 */
 var parse_PtgAdd = parseread1;
@@ -603,7 +998,7 @@ function parslurp2(blob, length, cb) {
 	return arr;
 }
 
-function parseuint16(blob, length) { return blob.read_shift(2, 'u'); } 
+function parseuint16(blob, length) { return blob.read_shift(2, 'u'); }
 function parseuint16a(blob, length) { return parslurp(blob,length,parseuint16);}
 
 
@@ -670,7 +1065,7 @@ function parse_Xnum(blob, length) { return blob.read_shift('ieee754'); }
 
 /* 2.5.158 */
 var HIDEOBJENUM = ['SHOWALL', 'SHOWPLACEHOLDER', 'HIDEALL'];
-var parse_HideObjEnum = parseuint16; 
+var parse_HideObjEnum = parseuint16;
 
 function parse_XTI(blob, length) {
 	var read = blob.read_shift.bind(blob);
@@ -704,7 +1099,7 @@ function parse_FormulaValue(blob) {
 	if(blob.readUInt16LE(blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
 	switch(blob[blob.l+2]) {
 		case 0x00: blob.l += 8; return "String";
-		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return b; 
+		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return b;
 		case 0x02: b = BERR[blob.l+2]; blob.l += 8; return b;
 		case 0x03: blob.l += 8; return "";
 	}
@@ -749,7 +1144,7 @@ function parse_BOF(blob, length) {
 	o.BIFFVer = blob.read_shift(2); length -= 2;
 	if(o.BIFFVer != 0x0600) throw "Unexpected BIFF Ver " + o.BIFFVer;
 	blob.read_shift(length);
-	return o;	
+	return o;
 }
 
 
@@ -771,7 +1166,7 @@ function parse_WriteAccess(blob, length) {
 /* 2.4.28 */
 function parse_BoundSheet8(blob, length) {
 	var read = blob.read_shift.bind(blob);
-	var pos = read(4); 
+	var pos = read(4);
 	var hidden = read(1) >> 6;
 	var dt = read(1);
 	switch(dt) {
@@ -796,7 +1191,7 @@ function parse_SST(blob, length) {
 	}
 	strs.Count = cnt; strs.Unique = ucnt;
 	return strs;
-	//return { Count:cnt, Unique:ucnt, Strings:strs};	
+	//return { Count:cnt, Unique:ucnt, Strings:strs};
 }
 
 
@@ -897,7 +1292,7 @@ function parse_MulRk(blob, length) {
 }
 
 
-/* 2.4.127 TODO*/ 
+/* 2.4.127 TODO*/
 function parse_Formula(blob, length) {
 	var cell = parse_Cell(blob, 6);
 	var val = parse_FormulaValue(blob,8);
@@ -919,348 +1314,348 @@ var parse_XLHeaderFooter = parse_OptXLUnicodeString; // TODO: parse 2.4.136
 
 
 var parse_Backup = parsebool; /* 2.4.14 */
-var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */ 
+var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
-var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10*/ 
+var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10*/
 var parse_CalcCount = parseuint16; /* 2.4.31 #Iterations */
-var parse_CalcDelta = parse_Xnum; /* 2.4.32 */ 
+var parse_CalcDelta = parse_Xnum; /* 2.4.32 */
 var parse_CalcIter = parsebool;  /* 2.4.33 1=iterative calc */
 var parse_CalcMode = parseuint16; /* 2.4.34 0=manual, 1=auto (def), 2=table */
 var parse_CalcPrecision = parsebool; /* 2.4.35 */
 var parse_CalcRefMode = parsenoop2; /* 2.4.36 */
 var parse_CalcSaveRecalc = parsebool; /* 2.4.37 */
 var parse_CodePage = parseuint16; /* 2.4.52 */
-var parse_Compat12 = parsebool; /* 2.4.54 true = no compatibility check */ 
-var parse_Country = parseuint16a; /* 2.4.63 -- two ints, 1 to 981 */ 
-var parse_Date1904 = parsebool; /* 2.4.77 - 1=1904,0=1900 */ 
-var parse_DefColWidth = parseuint16; /* 2.4.89 */ 
-var parse_DSF = parsenoop2; /* 2.4.94 -- MUST be ignored */ 
+var parse_Compat12 = parsebool; /* 2.4.54 true = no compatibility check */
+var parse_Country = parseuint16a; /* 2.4.63 -- two ints, 1 to 981 */
+var parse_Date1904 = parsebool; /* 2.4.77 - 1=1904,0=1900 */
+var parse_DefColWidth = parseuint16; /* 2.4.89 */
+var parse_DSF = parsenoop2; /* 2.4.94 -- MUST be ignored */
 var parse_EntExU2 = parsenoop2; /* 2.4.102 -- Explicitly says to ignore */
 var parse_EOF = parsenoop2; /* 2.4.103 */
-var parse_Excel9File = parsenoop2; /* 2.4.104 -- Optional and unused */ 
-var parse_ExternSheet = parse_XTI2; /* 2.4.106 */ 
+var parse_Excel9File = parsenoop2; /* 2.4.104 -- Optional and unused */
+var parse_ExternSheet = parse_XTI2; /* 2.4.106 */
 var parse_FeatHdr = parsenoop2; /* 2.4.112 */
-var parse_FontX = parseuint16; /* 2.4.123 */ 
-var parse_Footer = parse_XLHeaderFooter; /* 2.4.124 */ 
-var parse_GridSet = parseuint16; /* 2.4.132, =1 */ 
+var parse_FontX = parseuint16; /* 2.4.123 */
+var parse_Footer = parse_XLHeaderFooter; /* 2.4.124 */
+var parse_GridSet = parseuint16; /* 2.4.132, =1 */
 var parse_HCenter = parsebool; /* 2.4.135 sheet centered horizontal on print */
-var parse_Header = parse_XLHeaderFooter; /* 2.4.136 */ 
-var parse_HideObj = parse_HideObjEnum; /* 2.4.139 */ 
+var parse_Header = parse_XLHeaderFooter; /* 2.4.136 */
+var parse_HideObj = parse_HideObjEnum; /* 2.4.139 */
 var parse_InterfaceEnd = parsenoop2; /* 2.4.145 -- noop */
-var parse_LeftMargin = parse_Xnum; /* 2.4.151 */ 
+var parse_LeftMargin = parse_Xnum; /* 2.4.151 */
 var parse_Mms = parsenoop2; /* 2.4.169 */
-var parse_ObjProtect = parsebool; /* 2.4.183 -- must be 1 if present */ 
+var parse_ObjProtect = parsebool; /* 2.4.183 -- must be 1 if present */
 var parse_Password = parseuint16; /* 2.4.191 */
-var parse_PrintGrid = parsebool; /* 2.4.202 */ 
-var parse_PrintRowCol = parsebool; /* 2.4.203 */ 
-var parse_PrintSize = parseuint16; /* 2.4.204 0:3 */ 
+var parse_PrintGrid = parsebool; /* 2.4.202 */
+var parse_PrintRowCol = parsebool; /* 2.4.203 */
+var parse_PrintSize = parseuint16; /* 2.4.204 0:3 */
 var parse_Prot4Rev = parsebool; /* 2.4.205 */
 var parse_Prot4RevPass = parseuint16; /* 2.4.206 */
-var parse_Protect = parsebool; /* 2.4.207 */ 
-var parse_RefreshAll = parsebool; /* 2.4.217 -- must be 0 if not template */ 
-var parse_RightMargin = parse_Xnum; /* 2.4.219 */ 
+var parse_Protect = parsebool; /* 2.4.207 */
+var parse_RefreshAll = parsebool; /* 2.4.217 -- must be 0 if not template */
+var parse_RightMargin = parse_Xnum; /* 2.4.219 */
 var parse_RRTabId = parseuint16a; /* 2.4.241 */
-var parse_ScenarioProtect = parsebool; /* 2.4.245 */ 
-var parse_Scl = parseuint16a; /* 2.4.247 num, den */ 
+var parse_ScenarioProtect = parsebool; /* 2.4.245 */
+var parse_Scl = parseuint16a; /* 2.4.247 num, den */
 var parse_String = parse_XLUnicodeString; /* 2.4.268 */
-var parse_SxBool = parsebool; /* 2.4.274 */ 
-var parse_TopMargin = parse_Xnum; /* 2.4.328 */ 
+var parse_SxBool = parsebool; /* 2.4.274 */
+var parse_TopMargin = parse_Xnum; /* 2.4.328 */
 var parse_UsesELFs = parsebool; /* 2.4.337 -- should be 0 */
-var parse_VCenter = parsebool; /* 2.4.342 */ 
+var parse_VCenter = parsebool; /* 2.4.342 */
 var parse_WinProtect = parsebool; /* 2.4.347 */
 
 
 /* ---- */
-var parse_Lbl = parsenoop; 
-var parse_VerticalPageBreaks = parsenoop; 
-var parse_HorizontalPageBreaks = parsenoop; 
-var parse_Note = parsenoop; 
-var parse_Selection = parsenoop; 
-var parse_ExternName = parsenoop; 
-var parse_FilePass = parsenoop; 
-var parse_Continue = parsenoop; 
-var parse_Pane = parsenoop; 
-var parse_Pls = parsenoop; 
-var parse_DCon = parsenoop; 
-var parse_DConRef = parsenoop; 
-var parse_DConName = parsenoop; 
-var parse_XCT = parsenoop; 
-var parse_CRN = parsenoop; 
-var parse_FileSharing = parsenoop; 
-var parse_Obj = parsenoop; 
-var parse_Uncalced = parsenoop; 
-var parse_Template = parsenoop; 
-var parse_Intl = parsenoop; 
-var parse_ColInfo = parsenoop; 
-var parse_Guts = parsenoop; 
-var parse_WsBool = parsenoop; 
-var parse_WriteProtect = parsenoop; 
-var parse_Sort = parsenoop; 
-var parse_Palette = parsenoop; 
-var parse_Sync = parsenoop; 
-var parse_LPr = parsenoop; 
-var parse_DxGCol = parsenoop; 
-var parse_FnGroupName = parsenoop; 
-var parse_FilterMode = parsenoop; 
-var parse_AutoFilterInfo = parsenoop; 
-var parse_AutoFilter = parsenoop; 
-var parse_Setup = parsenoop; 
-var parse_ScenMan = parsenoop; 
-var parse_SCENARIO = parsenoop; 
-var parse_SxView = parsenoop; 
-var parse_Sxvd = parsenoop; 
-var parse_SXVI = parsenoop; 
-var parse_SxIvd = parsenoop; 
-var parse_SXLI = parsenoop; 
-var parse_SXPI = parsenoop; 
-var parse_DocRoute = parsenoop; 
-var parse_RecipName = parsenoop; 
-var parse_MulBlank = parsenoop; 
-var parse_SXDI = parsenoop; 
-var parse_SXDB = parsenoop; 
-var parse_SXFDB = parsenoop; 
-var parse_SXDBB = parsenoop; 
-var parse_SXNum = parsenoop; 
-var parse_SxErr = parsenoop; 
-var parse_SXInt = parsenoop; 
-var parse_SXString = parsenoop; 
-var parse_SXDtr = parsenoop; 
-var parse_SxNil = parsenoop; 
-var parse_SXTbl = parsenoop; 
-var parse_SXTBRGIITM = parsenoop; 
-var parse_SxTbpg = parsenoop; 
-var parse_ObProj = parsenoop; 
-var parse_SXStreamID = parsenoop; 
-var parse_DBCell = parsenoop; 
-var parse_SXRng = parsenoop; 
-var parse_SxIsxoper = parsenoop; 
-var parse_BookBool = parsenoop; 
-var parse_DbOrParamQry = parsenoop; 
-var parse_OleObjectSize = parsenoop; 
-var parse_XF = parsenoop; 
-var parse_SXVS = parsenoop; 
-var parse_MergeCells = parsenoop; 
-var parse_BkHim = parsenoop; 
-var parse_MsoDrawingGroup = parsenoop; 
-var parse_MsoDrawing = parsenoop; 
-var parse_MsoDrawingSelection = parsenoop; 
-var parse_PhoneticInfo = parsenoop; 
-var parse_SxRule = parsenoop; 
-var parse_SXEx = parsenoop; 
-var parse_SxFilt = parsenoop; 
-var parse_SxDXF = parsenoop; 
-var parse_SxItm = parsenoop; 
-var parse_SxName = parsenoop; 
-var parse_SxSelect = parsenoop; 
-var parse_SXPair = parsenoop; 
-var parse_SxFmla = parsenoop; 
-var parse_SxFormat = parsenoop; 
-var parse_ExtSST = parsenoop; 
-var parse_SXVDEx = parsenoop; 
-var parse_SXFormula = parsenoop; 
-var parse_SXDBEx = parsenoop; 
-var parse_RRDInsDel = parsenoop; 
-var parse_RRDHead = parsenoop; 
-var parse_RRDChgCell = parsenoop; 
-var parse_RRDRenSheet = parsenoop; 
-var parse_RRSort = parsenoop; 
-var parse_RRDMove = parsenoop; 
-var parse_RRFormat = parsenoop; 
-var parse_RRAutoFmt = parsenoop; 
-var parse_RRInsertSh = parsenoop; 
-var parse_RRDMoveBegin = parsenoop; 
-var parse_RRDMoveEnd = parsenoop; 
-var parse_RRDInsDelBegin = parsenoop; 
-var parse_RRDInsDelEnd = parsenoop; 
-var parse_RRDConflict = parsenoop; 
-var parse_RRDDefName = parsenoop; 
-var parse_RRDRstEtxp = parsenoop; 
-var parse_LRng = parsenoop; 
-var parse_CUsr = parsenoop; 
-var parse_CbUsr = parsenoop; 
-var parse_UsrInfo = parsenoop; 
-var parse_UsrExcl = parsenoop; 
-var parse_FileLock = parsenoop; 
-var parse_RRDInfo = parsenoop; 
-var parse_BCUsrs = parsenoop; 
-var parse_UsrChk = parsenoop; 
-var parse_UserBView = parsenoop; 
-var parse_UserSViewBegin = parsenoop; // overloaded 
-var parse_UserSViewEnd = parsenoop; 
-var parse_RRDUserView = parsenoop; 
-var parse_Qsi = parsenoop; 
-var parse_SupBook = parsenoop; 
-var parse_CondFmt = parsenoop; 
-var parse_CF = parsenoop; 
-var parse_DVal = parsenoop; 
-var parse_DConBin = parsenoop; 
-var parse_TxO = parsenoop; 
-var parse_HLink = parsenoop; 
-var parse_Lel = parsenoop; 
-var parse_CodeName = parsenoop; 
-var parse_SXFDBType = parsenoop; 
-var parse_ObNoMacros = parsenoop; 
-var parse_Dv = parsenoop; 
-var parse_Label = parsenoop; 
-var parse_BoolErr = parsenoop; 
-var parse_Index = parsenoop; 
-var parse_Array = parsenoop; 
-var parse_Table = parsenoop; 
-var parse_Window2 = parsenoop; 
-var parse_Style = parsenoop; 
-var parse_BigName = parsenoop; 
-var parse_ContinueBigName = parsenoop; 
-var parse_ShrFmla = parsenoop; 
-var parse_HLinkTooltip = parsenoop; 
-var parse_WebPub = parsenoop; 
-var parse_QsiSXTag = parsenoop; 
-var parse_DBQueryExt = parsenoop; 
-var parse_ExtString = parsenoop; 
-var parse_TxtQry = parsenoop; 
-var parse_Qsir = parsenoop; 
-var parse_Qsif = parsenoop; 
-var parse_RRDTQSIF = parsenoop; 
-var parse_OleDbConn = parsenoop; 
-var parse_WOpt = parsenoop; 
-var parse_SXViewEx = parsenoop; 
-var parse_SXTH = parsenoop; 
-var parse_SXPIEx = parsenoop; 
-var parse_SXVDTEx = parsenoop; 
-var parse_SXViewEx9 = parsenoop; 
-var parse_ContinueFrt = parsenoop; 
-var parse_RealTimeData = parsenoop; 
-var parse_ChartFrtInfo = parsenoop; 
-var parse_FrtWrapper = parsenoop; 
-var parse_StartBlock = parsenoop; 
-var parse_EndBlock = parsenoop; 
-var parse_StartObject = parsenoop; 
-var parse_EndObject = parsenoop; 
-var parse_CatLab = parsenoop; 
-var parse_YMult = parsenoop; 
-var parse_SXViewLink = parsenoop; 
-var parse_PivotChartBits = parsenoop; 
-var parse_FrtFontList = parsenoop; 
-var parse_SheetExt = parsenoop; 
-var parse_BookExt = parsenoop; 
-var parse_SXAddl = parsenoop; 
-var parse_CrErr = parsenoop; 
-var parse_HFPicture = parsenoop; 
-var parse_Feat = parsenoop; 
-var parse_DataLabExt = parsenoop; 
-var parse_DataLabExtContents = parsenoop; 
-var parse_CellWatch = parsenoop; 
-var parse_FeatHdr11 = parsenoop; 
-var parse_Feature11 = parsenoop; 
-var parse_DropDownObjIds = parsenoop; 
-var parse_ContinueFrt11 = parsenoop; 
-var parse_DConn = parsenoop; 
-var parse_List12 = parsenoop; 
-var parse_Feature12 = parsenoop; 
-var parse_CondFmt12 = parsenoop; 
-var parse_CF12 = parsenoop; 
-var parse_CFEx = parsenoop; 
-var parse_XFCRC = parsenoop; 
-var parse_XFExt = parsenoop; 
-var parse_AutoFilter12 = parsenoop; 
-var parse_ContinueFrt12 = parsenoop; 
-var parse_MDTInfo = parsenoop; 
-var parse_MDXStr = parsenoop; 
-var parse_MDXTuple = parsenoop; 
-var parse_MDXSet = parsenoop; 
-var parse_MDXProp = parsenoop; 
-var parse_MDXKPI = parsenoop; 
-var parse_MDB = parsenoop; 
-var parse_PLV = parsenoop; 
-var parse_DXF = parsenoop; 
-var parse_TableStyles = parsenoop; 
-var parse_TableStyle = parsenoop; 
-var parse_TableStyleElement = parsenoop; 
-var parse_StyleExt = parsenoop; 
-var parse_NamePublish = parsenoop; 
-var parse_NameCmt = parsenoop; 
-var parse_SortData = parsenoop; 
-var parse_Theme = parsenoop; 
-var parse_GUIDTypeLib = parsenoop; 
-var parse_FnGrp12 = parsenoop; 
-var parse_NameFnGrp12 = parsenoop; 
-var parse_MTRSettings = parsenoop; 
-var parse_HeaderFooter = parsenoop; 
-var parse_CrtLayout12 = parsenoop; 
-var parse_CrtMlFrt = parsenoop; 
-var parse_CrtMlFrtContinue = parsenoop; 
-var parse_ShapePropsStream = parsenoop; 
-var parse_TextPropsStream = parsenoop; 
-var parse_RichTextStream = parsenoop; 
-var parse_CrtLayout12A = parsenoop; 
-var parse_Units = parsenoop; 
-var parse_Chart = parsenoop; 
-var parse_Series = parsenoop; 
-var parse_DataFormat = parsenoop; 
-var parse_LineFormat = parsenoop; 
-var parse_MarkerFormat = parsenoop; 
-var parse_AreaFormat = parsenoop; 
-var parse_PieFormat = parsenoop; 
-var parse_AttachedLabel = parsenoop; 
-var parse_SeriesText = parsenoop; 
-var parse_ChartFormat = parsenoop; 
-var parse_Legend = parsenoop; 
-var parse_SeriesList = parsenoop; 
-var parse_Bar = parsenoop; 
-var parse_Line = parsenoop; 
-var parse_Pie = parsenoop; 
-var parse_Area = parsenoop; 
-var parse_Scatter = parsenoop; 
-var parse_CrtLine = parsenoop; 
-var parse_Axis = parsenoop; 
-var parse_Tick = parsenoop; 
-var parse_ValueRange = parsenoop; 
-var parse_CatSerRange = parsenoop; 
-var parse_AxisLine = parsenoop; 
-var parse_CrtLink = parsenoop; 
-var parse_DefaultText = parsenoop; 
-var parse_Text = parsenoop; 
-var parse_ObjectLink = parsenoop; 
-var parse_Frame = parsenoop; 
-var parse_Begin = parsenoop; 
-var parse_End = parsenoop; 
-var parse_PlotArea = parsenoop; 
-var parse_Chart3d = parsenoop; 
-var parse_PicF = parsenoop; 
-var parse_DropBar = parsenoop; 
-var parse_Radar = parsenoop; 
-var parse_Surf = parsenoop; 
-var parse_RadarArea = parsenoop; 
-var parse_AxisParent = parsenoop; 
-var parse_LegendException = parsenoop; 
-var parse_ShtProps = parsenoop; 
-var parse_SerToCrt = parsenoop; 
-var parse_AxesUsed = parsenoop; 
-var parse_SBaseRef = parsenoop; 
-var parse_SerParent = parsenoop; 
-var parse_SerAuxTrend = parsenoop; 
-var parse_IFmtRecord = parsenoop; 
-var parse_Pos = parsenoop; 
-var parse_AlRuns = parsenoop; 
-var parse_BRAI = parsenoop; 
-var parse_SerAuxErrBar = parsenoop; 
-var parse_ClrtClient = parsenoop; 
-var parse_SerFmt = parsenoop; 
-var parse_Chart3DBarShape = parsenoop; 
-var parse_Fbi = parsenoop; 
-var parse_BopPop = parsenoop; 
-var parse_AxcExt = parsenoop; 
-var parse_Dat = parsenoop; 
-var parse_PlotGrowth = parsenoop; 
-var parse_SIIndex = parsenoop; 
-var parse_GelFrame = parsenoop; 
-var parse_BopPopCustom = parsenoop; 
-var parse_Fbi2 = parsenoop; 
+var parse_Lbl = parsenoop;
+var parse_VerticalPageBreaks = parsenoop;
+var parse_HorizontalPageBreaks = parsenoop;
+var parse_Note = parsenoop;
+var parse_Selection = parsenoop;
+var parse_ExternName = parsenoop;
+var parse_FilePass = parsenoop;
+var parse_Continue = parsenoop;
+var parse_Pane = parsenoop;
+var parse_Pls = parsenoop;
+var parse_DCon = parsenoop;
+var parse_DConRef = parsenoop;
+var parse_DConName = parsenoop;
+var parse_XCT = parsenoop;
+var parse_CRN = parsenoop;
+var parse_FileSharing = parsenoop;
+var parse_Obj = parsenoop;
+var parse_Uncalced = parsenoop;
+var parse_Template = parsenoop;
+var parse_Intl = parsenoop;
+var parse_ColInfo = parsenoop;
+var parse_Guts = parsenoop;
+var parse_WsBool = parsenoop;
+var parse_WriteProtect = parsenoop;
+var parse_Sort = parsenoop;
+var parse_Palette = parsenoop;
+var parse_Sync = parsenoop;
+var parse_LPr = parsenoop;
+var parse_DxGCol = parsenoop;
+var parse_FnGroupName = parsenoop;
+var parse_FilterMode = parsenoop;
+var parse_AutoFilterInfo = parsenoop;
+var parse_AutoFilter = parsenoop;
+var parse_Setup = parsenoop;
+var parse_ScenMan = parsenoop;
+var parse_SCENARIO = parsenoop;
+var parse_SxView = parsenoop;
+var parse_Sxvd = parsenoop;
+var parse_SXVI = parsenoop;
+var parse_SxIvd = parsenoop;
+var parse_SXLI = parsenoop;
+var parse_SXPI = parsenoop;
+var parse_DocRoute = parsenoop;
+var parse_RecipName = parsenoop;
+var parse_MulBlank = parsenoop;
+var parse_SXDI = parsenoop;
+var parse_SXDB = parsenoop;
+var parse_SXFDB = parsenoop;
+var parse_SXDBB = parsenoop;
+var parse_SXNum = parsenoop;
+var parse_SxErr = parsenoop;
+var parse_SXInt = parsenoop;
+var parse_SXString = parsenoop;
+var parse_SXDtr = parsenoop;
+var parse_SxNil = parsenoop;
+var parse_SXTbl = parsenoop;
+var parse_SXTBRGIITM = parsenoop;
+var parse_SxTbpg = parsenoop;
+var parse_ObProj = parsenoop;
+var parse_SXStreamID = parsenoop;
+var parse_DBCell = parsenoop;
+var parse_SXRng = parsenoop;
+var parse_SxIsxoper = parsenoop;
+var parse_BookBool = parsenoop;
+var parse_DbOrParamQry = parsenoop;
+var parse_OleObjectSize = parsenoop;
+var parse_XF = parsenoop;
+var parse_SXVS = parsenoop;
+var parse_MergeCells = parsenoop;
+var parse_BkHim = parsenoop;
+var parse_MsoDrawingGroup = parsenoop;
+var parse_MsoDrawing = parsenoop;
+var parse_MsoDrawingSelection = parsenoop;
+var parse_PhoneticInfo = parsenoop;
+var parse_SxRule = parsenoop;
+var parse_SXEx = parsenoop;
+var parse_SxFilt = parsenoop;
+var parse_SxDXF = parsenoop;
+var parse_SxItm = parsenoop;
+var parse_SxName = parsenoop;
+var parse_SxSelect = parsenoop;
+var parse_SXPair = parsenoop;
+var parse_SxFmla = parsenoop;
+var parse_SxFormat = parsenoop;
+var parse_ExtSST = parsenoop;
+var parse_SXVDEx = parsenoop;
+var parse_SXFormula = parsenoop;
+var parse_SXDBEx = parsenoop;
+var parse_RRDInsDel = parsenoop;
+var parse_RRDHead = parsenoop;
+var parse_RRDChgCell = parsenoop;
+var parse_RRDRenSheet = parsenoop;
+var parse_RRSort = parsenoop;
+var parse_RRDMove = parsenoop;
+var parse_RRFormat = parsenoop;
+var parse_RRAutoFmt = parsenoop;
+var parse_RRInsertSh = parsenoop;
+var parse_RRDMoveBegin = parsenoop;
+var parse_RRDMoveEnd = parsenoop;
+var parse_RRDInsDelBegin = parsenoop;
+var parse_RRDInsDelEnd = parsenoop;
+var parse_RRDConflict = parsenoop;
+var parse_RRDDefName = parsenoop;
+var parse_RRDRstEtxp = parsenoop;
+var parse_LRng = parsenoop;
+var parse_CUsr = parsenoop;
+var parse_CbUsr = parsenoop;
+var parse_UsrInfo = parsenoop;
+var parse_UsrExcl = parsenoop;
+var parse_FileLock = parsenoop;
+var parse_RRDInfo = parsenoop;
+var parse_BCUsrs = parsenoop;
+var parse_UsrChk = parsenoop;
+var parse_UserBView = parsenoop;
+var parse_UserSViewBegin = parsenoop; // overloaded
+var parse_UserSViewEnd = parsenoop;
+var parse_RRDUserView = parsenoop;
+var parse_Qsi = parsenoop;
+var parse_SupBook = parsenoop;
+var parse_CondFmt = parsenoop;
+var parse_CF = parsenoop;
+var parse_DVal = parsenoop;
+var parse_DConBin = parsenoop;
+var parse_TxO = parsenoop;
+var parse_HLink = parsenoop;
+var parse_Lel = parsenoop;
+var parse_CodeName = parsenoop;
+var parse_SXFDBType = parsenoop;
+var parse_ObNoMacros = parsenoop;
+var parse_Dv = parsenoop;
+var parse_Label = parsenoop;
+var parse_BoolErr = parsenoop;
+var parse_Index = parsenoop;
+var parse_Array = parsenoop;
+var parse_Table = parsenoop;
+var parse_Window2 = parsenoop;
+var parse_Style = parsenoop;
+var parse_BigName = parsenoop;
+var parse_ContinueBigName = parsenoop;
+var parse_ShrFmla = parsenoop;
+var parse_HLinkTooltip = parsenoop;
+var parse_WebPub = parsenoop;
+var parse_QsiSXTag = parsenoop;
+var parse_DBQueryExt = parsenoop;
+var parse_ExtString = parsenoop;
+var parse_TxtQry = parsenoop;
+var parse_Qsir = parsenoop;
+var parse_Qsif = parsenoop;
+var parse_RRDTQSIF = parsenoop;
+var parse_OleDbConn = parsenoop;
+var parse_WOpt = parsenoop;
+var parse_SXViewEx = parsenoop;
+var parse_SXTH = parsenoop;
+var parse_SXPIEx = parsenoop;
+var parse_SXVDTEx = parsenoop;
+var parse_SXViewEx9 = parsenoop;
+var parse_ContinueFrt = parsenoop;
+var parse_RealTimeData = parsenoop;
+var parse_ChartFrtInfo = parsenoop;
+var parse_FrtWrapper = parsenoop;
+var parse_StartBlock = parsenoop;
+var parse_EndBlock = parsenoop;
+var parse_StartObject = parsenoop;
+var parse_EndObject = parsenoop;
+var parse_CatLab = parsenoop;
+var parse_YMult = parsenoop;
+var parse_SXViewLink = parsenoop;
+var parse_PivotChartBits = parsenoop;
+var parse_FrtFontList = parsenoop;
+var parse_SheetExt = parsenoop;
+var parse_BookExt = parsenoop;
+var parse_SXAddl = parsenoop;
+var parse_CrErr = parsenoop;
+var parse_HFPicture = parsenoop;
+var parse_Feat = parsenoop;
+var parse_DataLabExt = parsenoop;
+var parse_DataLabExtContents = parsenoop;
+var parse_CellWatch = parsenoop;
+var parse_FeatHdr11 = parsenoop;
+var parse_Feature11 = parsenoop;
+var parse_DropDownObjIds = parsenoop;
+var parse_ContinueFrt11 = parsenoop;
+var parse_DConn = parsenoop;
+var parse_List12 = parsenoop;
+var parse_Feature12 = parsenoop;
+var parse_CondFmt12 = parsenoop;
+var parse_CF12 = parsenoop;
+var parse_CFEx = parsenoop;
+var parse_XFCRC = parsenoop;
+var parse_XFExt = parsenoop;
+var parse_AutoFilter12 = parsenoop;
+var parse_ContinueFrt12 = parsenoop;
+var parse_MDTInfo = parsenoop;
+var parse_MDXStr = parsenoop;
+var parse_MDXTuple = parsenoop;
+var parse_MDXSet = parsenoop;
+var parse_MDXProp = parsenoop;
+var parse_MDXKPI = parsenoop;
+var parse_MDB = parsenoop;
+var parse_PLV = parsenoop;
+var parse_DXF = parsenoop;
+var parse_TableStyles = parsenoop;
+var parse_TableStyle = parsenoop;
+var parse_TableStyleElement = parsenoop;
+var parse_StyleExt = parsenoop;
+var parse_NamePublish = parsenoop;
+var parse_NameCmt = parsenoop;
+var parse_SortData = parsenoop;
+var parse_Theme = parsenoop;
+var parse_GUIDTypeLib = parsenoop;
+var parse_FnGrp12 = parsenoop;
+var parse_NameFnGrp12 = parsenoop;
+var parse_MTRSettings = parsenoop;
+var parse_HeaderFooter = parsenoop;
+var parse_CrtLayout12 = parsenoop;
+var parse_CrtMlFrt = parsenoop;
+var parse_CrtMlFrtContinue = parsenoop;
+var parse_ShapePropsStream = parsenoop;
+var parse_TextPropsStream = parsenoop;
+var parse_RichTextStream = parsenoop;
+var parse_CrtLayout12A = parsenoop;
+var parse_Units = parsenoop;
+var parse_Chart = parsenoop;
+var parse_Series = parsenoop;
+var parse_DataFormat = parsenoop;
+var parse_LineFormat = parsenoop;
+var parse_MarkerFormat = parsenoop;
+var parse_AreaFormat = parsenoop;
+var parse_PieFormat = parsenoop;
+var parse_AttachedLabel = parsenoop;
+var parse_SeriesText = parsenoop;
+var parse_ChartFormat = parsenoop;
+var parse_Legend = parsenoop;
+var parse_SeriesList = parsenoop;
+var parse_Bar = parsenoop;
+var parse_Line = parsenoop;
+var parse_Pie = parsenoop;
+var parse_Area = parsenoop;
+var parse_Scatter = parsenoop;
+var parse_CrtLine = parsenoop;
+var parse_Axis = parsenoop;
+var parse_Tick = parsenoop;
+var parse_ValueRange = parsenoop;
+var parse_CatSerRange = parsenoop;
+var parse_AxisLine = parsenoop;
+var parse_CrtLink = parsenoop;
+var parse_DefaultText = parsenoop;
+var parse_Text = parsenoop;
+var parse_ObjectLink = parsenoop;
+var parse_Frame = parsenoop;
+var parse_Begin = parsenoop;
+var parse_End = parsenoop;
+var parse_PlotArea = parsenoop;
+var parse_Chart3d = parsenoop;
+var parse_PicF = parsenoop;
+var parse_DropBar = parsenoop;
+var parse_Radar = parsenoop;
+var parse_Surf = parsenoop;
+var parse_RadarArea = parsenoop;
+var parse_AxisParent = parsenoop;
+var parse_LegendException = parsenoop;
+var parse_ShtProps = parsenoop;
+var parse_SerToCrt = parsenoop;
+var parse_AxesUsed = parsenoop;
+var parse_SBaseRef = parsenoop;
+var parse_SerParent = parsenoop;
+var parse_SerAuxTrend = parsenoop;
+var parse_IFmtRecord = parsenoop;
+var parse_Pos = parsenoop;
+var parse_AlRuns = parsenoop;
+var parse_BRAI = parsenoop;
+var parse_SerAuxErrBar = parsenoop;
+var parse_ClrtClient = parsenoop;
+var parse_SerFmt = parsenoop;
+var parse_Chart3DBarShape = parsenoop;
+var parse_Fbi = parsenoop;
+var parse_BopPop = parsenoop;
+var parse_AxcExt = parsenoop;
+var parse_Dat = parsenoop;
+var parse_PlotGrowth = parsenoop;
+var parse_SIIndex = parsenoop;
+var parse_GelFrame = parsenoop;
+var parse_BopPopCustom = parsenoop;
+var parse_Fbi2 = parsenoop;
 
 
 var RecordEnum = {
 	0x0809: { n:'BOF', f:parse_BOF },
-	0x000a: { n:'EOF', f:parse_EOF }, 
-	
+	0x000a: { n:'EOF', f:parse_EOF },
+
 	0x0006: { n:"Formula", f:parse_Formula },
 	0x000c: { n:"CalcCount", f:parse_CalcCount },
 	0x000d: { n:"CalcMode", f:parse_CalcMode },
@@ -1323,8 +1718,8 @@ var RecordEnum = {
 	0x089b: { n:"CompressPictures", f:parse_CompressPictures },
 	0x08a3: { n:"ForceFullCalculation", f:parse_ForceFullCalculation },
 	0x1026: { n:"FontX", f:parse_FontX },
-	
-	
+
+
 	0x0018: { n:"Lbl", f:parse_Lbl },
 	0x001a: { n:"VerticalPageBreaks", f:parse_VerticalPageBreaks },
 	0x001b: { n:"HorizontalPageBreaks", f:parse_HorizontalPageBreaks },
