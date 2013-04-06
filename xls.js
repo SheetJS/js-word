@@ -141,7 +141,7 @@ function slurp(R, blob, length) {
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
-	var b = Buffer.concat(bufs);
+	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
 	prep_blob(b);
 	return R.f(b, b.length);
 }
