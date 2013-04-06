@@ -94,7 +94,7 @@ function ReadShift(size, t) {
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = this.readUInt8(this.l); break;
-		case 2:o=t==='u'?this.readUInt16LE(this.l):this.readInt16LE(this.l);break;
+		case 2: o=t==='u'?this.readUInt16LE(this.l):this.readInt16LE(this.l);break;
 		case 4: o = this.readUInt32LE(this.l); break;
 		case 8: if(t === 'f') { o = this.readDoubleLE(this.l); break; }
 		/* falls through */
@@ -102,6 +102,11 @@ function ReadShift(size, t) {
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 		case 'utf8': size = t; o = this.utf8(this.l, this.l + size); break;
 		case 'utf16le': size = 2*t; o = this.utf16le(this.l, this.l + size); break;
+		case 'dbcs': size = 2*t; o = ""; 
+			for(var i = 0; i != t; ++i) {
+					//console.error(this.readUInt8(this.l+2*i),this.l,i)
+					o += String.fromCharCode(this.readUInt8(this.l+2*i));
+			} break;
 	}
 	this.l+=size; return o;
 }
@@ -633,10 +638,15 @@ var SummaryPIDSI = {
 }
 
 if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
-	Buffers = require('buffers');
+	Buffers = Array;
+	Buffers.prototype.toBuffer = function() {
+		return Buffer.concat(this[0]);
+	};
 	var fs = require('fs');
 	exports.read = CFB.read;
 	exports.parse = CFB.parse;
+	exports.ReadShift = ReadShift;
+	exports.prep_blob = prep_blob;
 	exports.main = function(args) {
 		var cfb = CFB.read(args[0], {type:'file'});
 		console.log(cfb);
