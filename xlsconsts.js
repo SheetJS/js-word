@@ -1039,11 +1039,17 @@ function parse_ShortXLUnicodeString(blob) {
 
 /* 2.5.293 */
 function parse_XLUnicodeRichExtendedString(blob) {
-	var cch = blob.read_shift(2), flags = blob.read_shift(1);
+	var read_shift = blob.read_shift.bind(blob);
+	var cch = read_shift(2), flags = read_shift(1);
 	var width = 1 + (flags & 0x1);
-	// TODO: cRun
-	// TODO: cbExtRst
-	var msg = blob.read_shift('utf8', cch);
+	// fRichSt
+	if(flags & 0x08) {
+		// TODO: cRun
+		// TODO: cbExtRst
+		read_shift(6); 
+	}
+	var encoding = (flags & 0x1) ? 'dbcs' : 'utf8';
+	var msg = read_shift(encoding, cch);
 	return msg;
 }
 
@@ -1181,7 +1187,6 @@ function parse_BoundSheet8(blob, length) {
 
 /* 2.4.265 TODO */
 function parse_SST(blob, length) {
-	if(length > 1024) return [parsenoop(blob,length)];
 	var read = blob.read_shift.bind(blob);
 	var cnt = read(4);
 	var ucnt = read(4);
@@ -1191,8 +1196,18 @@ function parse_SST(blob, length) {
 	}
 	strs.Count = cnt; strs.Unique = ucnt;
 	return strs;
-	//return { Count:cnt, Unique:ucnt, Strings:strs};
 }
+
+/* 2.4.107 */
+function parse_ExtSST(blob, length) {
+	var read = blob.read_shift.bind(blob);
+	var extsst = {};
+	extsst.dsst = read(2);
+	blob.read_shift(length-2);
+	return extsst;
+}
+
+function parsenoop(blob, length) { blob.read_shift(length); return; }
 
 
 /* 2.4.221 TODO*/
@@ -1311,7 +1326,6 @@ function parse_Number(blob, length) {
 }
 
 var parse_XLHeaderFooter = parse_OptXLUnicodeString; // TODO: parse 2.4.136
-
 
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
@@ -1450,7 +1464,6 @@ var parse_SxSelect = parsenoop;
 var parse_SXPair = parsenoop;
 var parse_SxFmla = parsenoop;
 var parse_SxFormat = parsenoop;
-var parse_ExtSST = parsenoop;
 var parse_SXVDEx = parsenoop;
 var parse_SXFormula = parsenoop;
 var parse_SXDBEx = parsenoop;

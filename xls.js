@@ -3,6 +3,7 @@ if(typeof require !== 'undefined') {
 	var vm = require('vm'), fs = require('fs');
 	vm.runInThisContext(fs.readFileSync(__dirname+'/xlsconsts.js'));
 }
+var prep_blob = CFB.prep_blob;
 
 /* MS-OLEDS 2.3.8 CompObjStream TODO */
 function parse_compobj(obj) {
@@ -127,6 +128,24 @@ function parse_formula(formula, range) {
 	return stack[0];
 }
 
+/* 2.4.58 Continue logic */
+function slurp(R, blob, length) {
+	var read = blob.read_shift.bind(blob);
+	var l = length;
+	var bufs = [blob.slice(blob.l,blob.l+l)];
+	blob.l += length;
+	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+	while(next && next.n === 'Continue') { 
+		l = blob.readUInt16LE(blob.l+2);
+		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
+		blob.l += 4+l;
+		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+	}
+	var b = Buffer.concat(bufs);
+	prep_blob(b);
+	return R.f(b, b.length);
+}
+
 // 2.3.2
 function parse_workbook(blob) {
 	var wb = {opts:{}};
@@ -153,8 +172,15 @@ function parse_workbook(blob) {
 				if(rt !== RecordType) throw "rt mismatch";
 				if(R.r == 12){ blob.l += 10; length -= 10; } // skip FRT
 			}
-			//console.log(R,blob.l,length,blob.length);
-			var val = R.f(blob, length);
+			//console.error(R,blob.l,length,blob.length);
+			var val;
+			if(blob.l+length+2 >= blob.length) val = R.f(blob, length);
+			else {
+				var next = (RecordEnum[blob.readUInt16LE(blob.l+length)]);
+				if(next && next.n === 'Continue') { 
+					val = slurp(R, blob, length);
+				} else val = R.f(blob, length);
+			} 
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
