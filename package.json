@@ -4,14 +4,13 @@
 	"author": "Niggler",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [
-		"xls", "office", "excel", "spreadsheet"	
-	], 
+		"xls", "office", "excel", "spreadsheet"
+	],
 	"bin": {
 		"xls2csv": "./bin/xls2csv.njs"
 	},
 	"main": "./xls",
 	"dependencies": {
-		"buffers":""
 	},
 	"repository": {
 		"type":"git",
