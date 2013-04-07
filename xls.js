@@ -135,7 +135,7 @@ function slurp(R, blob, length) {
 	var bufs = [blob.slice(blob.l,blob.l+l)];
 	blob.l += length;
 	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
-	while(next && next.n === 'Continue') { 
+	while(next && next.n === 'Continue') {
 		l = blob.readUInt16LE(blob.l+2);
 		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
@@ -177,10 +177,10 @@ function parse_workbook(blob) {
 			if(blob.l+length+2 >= blob.length) val = R.f(blob, length);
 			else {
 				var next = (RecordEnum[blob.readUInt16LE(blob.l+length)]);
-				if(next && next.n === 'Continue') { 
+				if(next && next.n === 'Continue') {
 					val = slurp(R, blob, length);
 				} else val = R.f(blob, length);
-			} 
+			}
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
@@ -232,6 +232,10 @@ function parse_workbook(blob) {
 				case 'SST': {
 					sst = val;
 				} break;
+				case 'Format': {
+					// TODO: SSF
+					//console.error(val);
+				}
 				case 'Scl': {
 					//console.log("Zoom Level:", val[0]/val[1],val);
 				} break;
@@ -250,6 +254,7 @@ function parse_workbook(blob) {
 	wb.SheetNames=sheetnamesraw;
 	wb.Sheets=Sheets;
 	wb.Preamble=Preamble;
+	wb.Strings = sst;
 	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);
