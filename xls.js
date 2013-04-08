@@ -184,6 +184,8 @@ function parse_workbook(blob) {
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
+				case 'WriteProtect': wb.opts.WriteProtect = true; break;
+				case 'FilePass': console.error(val); break;
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
