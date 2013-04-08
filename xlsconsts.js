@@ -1046,7 +1046,7 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	if(flags & 0x08) {
 		// TODO: cRun
 		// TODO: cbExtRst
-		read_shift(6); 
+		read_shift(6);
 	}
 	var encoding = (flags & 0x1) ? 'dbcs' : 'utf8';
 	var msg = read_shift(encoding, cch);
@@ -1207,8 +1207,6 @@ function parse_ExtSST(blob, length) {
 	return extsst;
 }
 
-function parsenoop(blob, length) { blob.read_shift(length); return; }
-
 
 /* 2.4.221 TODO*/
 function parse_Row(blob, length) {
@@ -1306,6 +1304,66 @@ function parse_MulRk(blob, length) {
 	return {r:rw, c:col, C:lastcol, rkrec:rkrecs};
 }
 
+/* 2.5.343 */
+function parse_XORObfuscation(blob, length) { return parsenoop(blob, length); }
+/* [MS-OFFCRYPTO] 2.1.4 Version */
+function parse_Version(blob, length) {
+	var o = {};
+	o.Major = blob.read_shift(2);
+	o.Minor = blob.read_shift(2);
+	return o;
+}
+/* [MS-OFFCRYPTO] 2.3.2 Encryption Header */
+function parse_EncryptionHeader(blob, length) {
+	return parsenoop(blob, length);
+}
+/* [MS-OFFCRYPTO] 2.3.3 Encryption Verifier */
+function parse_EncryptionVerifier(blob, length) {
+	return parsenoop(blob, length);
+}
+/* [MS-OFFCRYPTO] 2.3.5.1 RC4 CryptoAPI Encryption Header */
+function parse_RC4CryptoHeader(blob, length) {
+	var o = {};
+	var vers = o.EncryptionVersionInfo = parse_Version(blob, 4); length -= 4;
+	if(vers.Minor != 2) throw 'unrecognized minor version code: ' + vers.Minor;
+	if(vers.Major > 4 || vers.Major < 2) throw 'unrecognized major version code: ' + vers.Major;
+	o.Flags = blob.read_shift(4); length -= 4;
+	var sz = blob.read_shift(4); length -= 4;
+	o.EncryptionHeader = parse_EncryptionHeader(blob, sz); length -= sz;
+	o.EncryptionVerifier = parse_EncryptionVerifier(blob, length);
+	return o;
+}
+/* [MS-OFFCRYPTO] 2.3.6.1 RC4 Encryption Header */
+function parse_RC4Header(blob, length) {
+	var o = {};
+	var vers = o.EncryptionVersionInfo = parse_Version(blob, 4); length -= 4;
+	if(vers.Major != 1 || vers.Minor != 1) throw 'unrecognized version code ' + vers.Major + ' : ' + vers.Minor;
+	o.Salt = blob.read_shift(16);
+	o.EncryptedVerifier = blob.read_shift(16);
+	o.EncryptedVerifierHash = blob.read_shift(16);
+	return o;
+}
+/* 2.4.117 */
+function parse_FilePassHeader(blob, length) {
+	var o = {Type: blob.read_shift(2) }; blob.l -= 2;
+	switch(o.Type) {
+		case 1: o.Data = parse_RC4Header(blob, length); break;
+		case 2: case 3: case 4: o.Data = parse_RC4CryptoHeader(blob, length); break;
+		default: throw 'Unrecognized encryptionInfo: ' + o.Type;
+	}
+	return o;
+}
+function parse_FilePass(blob, length) {
+	var filepass = {};
+	filepass.Type = blob.read_shift(2);/* wEncryptionType */
+	switch(filepass.Type) {
+		case 0: filepass.Info = parse_XORObfuscation(blob, length-2); break;
+		case 1: filepass.Info = parse_FilePassHeader(blob, length-2); break;
+		default: throw 'Unrecognized Encryption Type ' + filepass.Type;
+	}
+	return filepass;
+}
+
 
 /* 2.4.127 TODO*/
 function parse_Formula(blob, length) {
@@ -1377,6 +1435,7 @@ var parse_TopMargin = parse_Xnum; /* 2.4.328 */
 var parse_UsesELFs = parsebool; /* 2.4.337 -- should be 0 */
 var parse_VCenter = parsebool; /* 2.4.342 */
 var parse_WinProtect = parsebool; /* 2.4.347 */
+var parse_WriteProtect = parsenoop; /* 2.4.350 empty record */
 
 
 /* ---- */
@@ -1386,7 +1445,6 @@ var parse_HorizontalPageBreaks = parsenoop;
 var parse_Note = parsenoop;
 var parse_Selection = parsenoop;
 var parse_ExternName = parsenoop;
-var parse_FilePass = parsenoop;
 var parse_Continue = parsenoop;
 var parse_Pane = parsenoop;
 var parse_Pls = parsenoop;
@@ -1403,7 +1461,6 @@ var parse_Intl = parsenoop;
 var parse_ColInfo = parsenoop;
 var parse_Guts = parsenoop;
 var parse_WsBool = parsenoop;
-var parse_WriteProtect = parsenoop;
 var parse_Sort = parsenoop;
 var parse_Palette = parsenoop;
 var parse_Sync = parsenoop;

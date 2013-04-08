@@ -70,7 +70,7 @@ function s2a(s) {
 
 if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function() { return this.toString('hex'); };
-	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0005]/,'!');};
+	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
 	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 }
@@ -83,7 +83,7 @@ Array.prototype.readDoubleLE = function(idx) { return readIEEE754(this, idx||0);
 
 Array.prototype.hexlify = function() { return this.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
 
-Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(this.readUInt16LE(i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0005]/,'!'); };
+Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(this.readUInt16LE(i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
 Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
@@ -396,7 +396,7 @@ function parse_dictionary(blob,CodePage) {
 	for(var j = 0; j != cnt; ++j) {
 		var pid = read(4);
 		var len = read(4);
-		dict[pid] = read((CodePage === 0x4B0 ?'utf16le':'utf8'), len).replace(/\u0000/g,'').replace(/[\u0001-\u0005]/g,'!');
+		dict[pid] = read((CodePage === 0x4B0 ?'utf16le':'utf8'), len).replace(/\u0000/g,'').replace(/[\u0001-\u0006]/g,'!');
 	}
 	if(blob.l % 4) blob.l = (blob.l>>2+1)<<2;
 	return dict;
@@ -509,7 +509,6 @@ function parse_PSS(file, PIDSI) {
 function readFileSync(filename) {
 	var fs = require('fs');
 	var file = fs.readFileSync(filename);
-	//var file = s2a(Base64.decode(fs.readFileSync(filename).toString('base64')));
 	return parse(file);
 }
 
