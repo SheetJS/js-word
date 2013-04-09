@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"author": "Niggler",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [
