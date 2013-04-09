@@ -161,6 +161,7 @@ function parse_workbook(blob) {
 	var cur_sheet = "";
 	var Preamble = {};
 	function addline(line) { out.push(line); }
+	var enc = false;
 	while(blob.l < blob.length) {
 		var s = blob.l;
 		var RecordType = read(2);
@@ -169,7 +170,7 @@ function parse_workbook(blob) {
 		if(R && R.f) {
 			if(R.r === 2 || R.r == 12) {
 				var rt = read(2); length -= 2;
-				if(rt !== RecordType) throw "rt mismatch";
+				if(!enc && rt !== RecordType) throw "rt mismatch";
 				if(R.r == 12){ blob.l += 10; length -= 10; } // skip FRT
 			}
 			//console.error(R,blob.l,length,blob.length);
@@ -178,14 +179,18 @@ function parse_workbook(blob) {
 			else {
 				var next = (RecordEnum[blob.readUInt16LE(blob.l+length)]);
 				if(next && next.n === 'Continue') {
-					val = slurp(R, blob, length);
-				} else val = R.f(blob, length);
+					val = slurp(R, blob, length, enc);
+				} else {
+					if(enc) { parsenoop(blob, length); continue; }
+					val = R.f(blob, length);
+				}
 			}
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': console.error(val); break;
+				case 'FilePass': enc = val; break;
+				case 'WriteAccess': break;
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
@@ -257,6 +262,7 @@ function parse_workbook(blob) {
 	wb.Sheets=Sheets;
 	wb.Preamble=Preamble;
 	wb.Strings = sst;
+	if(enc) wb.Encryption = enc;
 	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);

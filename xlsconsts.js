@@ -1058,9 +1058,9 @@ function parse_XLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
 	var cch = read(2);
 	var fHighByte = read(1);
-	var retval;
+	var retval = undefined;
 	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
-	else { retval = blob.utf16le(blob.l, blob.l + 2*cch); blob.l += 2*cch; }
+	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;
 }
 
@@ -1164,7 +1164,8 @@ function parse_InterfaceHdr(blob, length) {
 /* 2.4.349 */
 function parse_WriteAccess(blob, length) {
 	var l = blob.l;
-	var UserName = parse_XLUnicodeString(blob);
+	// TODO: make sure XLUnicodeString doesnt overrun
+	var UserName = ""; //parse_XLUnicodeString(blob);
 	blob.read_shift(length + l - blob.l);
 	return { WriteAccess: UserName };
 }
@@ -1315,7 +1316,21 @@ function parse_Version(blob, length) {
 }
 /* [MS-OFFCRYPTO] 2.3.2 Encryption Header */
 function parse_EncryptionHeader(blob, length) {
-	return parsenoop(blob, length);
+	var read = blob.read_shift.bind(blob);
+	var o = {};
+	o.Flags = read(4);
+	
+	// Check if SizeExtra is 0x00000000
+	var tmp = read(4);
+	if(tmp != 0) throw 'Unrecognized SizeExtra: ' + tmp;
+
+	o.AlgID = read(4);
+	switch(o.AlgID) {
+		case 0: case 0x6801: case 0x660E: case 0x660F: case 0x6610: break;
+		default: throw 'Unrecognized encryption algorithm: ' + o.AlgID;
+	}
+	parsenoop(blob, length-12);
+	return o;
 }
 /* [MS-OFFCRYPTO] 2.3.3 Encryption Verifier */
 function parse_EncryptionVerifier(blob, length) {
@@ -1344,9 +1359,9 @@ function parse_RC4Header(blob, length) {
 	return o;
 }
 /* 2.4.117 */
-function parse_FilePassHeader(blob, length) {
-	var o = {Type: blob.read_shift(2) }; blob.l -= 2;
-	switch(o.Type) {
+function parse_FilePassHeader(blob, length, oo) {
+	var o = oo || {}; o.Info = blob.read_shift(2); blob.l -= 2;
+	switch(o.Info) {
 		case 1: o.Data = parse_RC4Header(blob, length); break;
 		case 2: case 3: case 4: o.Data = parse_RC4CryptoHeader(blob, length); break;
 		default: throw 'Unrecognized encryptionInfo: ' + o.Type;
@@ -1354,14 +1369,13 @@ function parse_FilePassHeader(blob, length) {
 	return o;
 }
 function parse_FilePass(blob, length) {
-	var filepass = {};
-	filepass.Type = blob.read_shift(2);/* wEncryptionType */
-	switch(filepass.Type) {
-		case 0: filepass.Info = parse_XORObfuscation(blob, length-2); break;
-		case 1: filepass.Info = parse_FilePassHeader(blob, length-2); break;
+	var o = { Type: blob.read_shift(2) }; /* wEncryptionType */
+	switch(o.Type) {
+		case 0: parse_XORObfuscation(blob, length-2, o); break;
+		case 1: parse_FilePassHeader(blob, length-2, o); break;
 		default: throw 'Unrecognized Encryption Type ' + filepass.Type;
 	}
-	return filepass;
+	return o;
 }
 
 
