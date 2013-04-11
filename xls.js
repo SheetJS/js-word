@@ -189,7 +189,7 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': enc = val; break;
+				case 'FilePass': enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
 				case 'WriteAccess': break;
 
 				case 'BoundSheet8': {
