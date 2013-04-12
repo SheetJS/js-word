@@ -40,10 +40,17 @@ function parse_formula(formula, range) {
 	range = range || {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, sht;
 	if(!formula[0] || !formula[0][0]) return "";
+	//console.log("--",formula[0])
 	formula[0].forEach(function(f) {
-		//console.log("++",f, formula[0])
+		//console.log("++",f)
 		switch(f[0]) {
-			/* Control Tokens -- ignore */
+			/* 2.2.2.1 Unary Operator Tokens */
+			/* 2.5.198.93 PtgUminus */
+			case 'PtgUminus': stack.push("-" + stack.pop()); break;
+			/* 2.5.198.95 PtgUplus */
+			case 'PtgUplus': stack.push("+" + stack.pop()); break;
+
+			/* 2.2.2.3 Control Tokens "can be ignored" */
 			case 'PtgAttrIf': case 'PtgAttrChoose': case 'PtgAttrGoto': break;
 
 			case 'PtgRef':
@@ -122,6 +129,9 @@ function parse_formula(formula, range) {
 			case 'PtgAttrSum':
 				stack.push("SUM(" + stack.pop() + ")");
 				break;
+
+			/* 2.2.2.4 Display Tokens */
+			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
 		}
 	});
 	//console.log("--",stack);
