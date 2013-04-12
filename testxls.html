@@ -9,11 +9,9 @@
 	font:20pt bold,"Vollkorn";color:#bbb
 }
 </style>
-<div id="drop">Drop an XLS or DOC file here to see sheet data.</div>
+<div id="drop">Drop an XLS file here to see sheet data.</div>
 <pre id="out"></pre>
 <br />
-<script src="xlsconsts.js"></script>
-<script src="cfb.js"></script>
 <script src="xls.js"></script>
 <script>
 if(!window.cfbs) window.cfbs = {};
@@ -30,7 +28,6 @@ function handleDrop(e) {
 			var data = e.target.result;
 			var cfb = CFB.read(data, {type:'binary'})
 			window.cfbs[name] = cfb;
-			//cfb.Paths.forEach(function(x){console.log(x); out.innerText+=x+"\n";});
 			var wb = parse_xlscfb(cfb);
 			var ws = wb.Sheets[wb.Directory[0]] 
 			var csv = make_csv(ws);  

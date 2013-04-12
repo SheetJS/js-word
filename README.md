@@ -10,8 +10,6 @@ This has been tested on some basic XLS files generated from Excel 2011 (using co
 
 In the browser:
 
-    <script src="xlsconsts.js"></script>
-    <script src="cfb.js"></script>
     <script src="xls.js"></script>
 
 In node:
