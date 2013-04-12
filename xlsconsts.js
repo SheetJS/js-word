@@ -841,6 +841,11 @@ var PtgDataType = {
 	0x3: "ARRAY" // array of values
 };
 
+/* Small helpers */
+function parseread5(blob, length) { blob.l+=5; return; }
+function parseread4(blob, length) { blob.l+=4; return; }
+function parseread1(blob, length) { blob.l+=1; return; }
+
 /* 2.5.198.105 RgceArea */
 function parse_RgceArea(blob, length) {
 	var read = blob.read_shift.bind(blob);
@@ -851,7 +856,7 @@ function parse_RgceArea(blob, length) {
 	return {s:{r:r,c:c,cRel:cRel, rRel:rRel},e:{r:R,c:C,cRel:CRel,rRel:RRel}};
 }
 
-/* 2.5.198.27 TODO */
+/* 2.5.198.27 */
 function parse_PtgArea(blob, length) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
 	var area = parse_RgceArea(blob, 8);
@@ -887,10 +892,6 @@ function parse_PtgRef3d(blob, length) {
 }
 
 
-function parseread5(blob, length) { blob.l+=5; return; }
-function parseread4(blob, length) { blob.l+=4; return; }
-function parseread1(blob, length) { blob.l+=1; return; }
-
 /* 2.5.198.35 TODO */
 function parse_PtgAttrGoto(blob, length) {
 	blob.l += 2;
@@ -909,44 +910,65 @@ function parsetab(blob, length) {
 	return [blob[blob.l+1]>>7, blob.read_shift(2) & 0x7FFF];
 }
 
-
 /* 2.5.198.36 */
 var parse_PtgAttrIf = parseread4;
 /* 2.5.198.41 */
 var parse_PtgAttrSum = parseread4;
+/* 2.5.198.43 */
+var parse_PtgConcat = parseread1;
+
+/* 2.5.198.58 TODO */
+var parse_PtgExp = parseread5;
+
+/* 2.5.198.66 TODO */
+var parse_PtgInt = function(blob, length){blob.l++; return blob.read_shift(2);};
+
+/* 2.5.198.42 */
+var parse_PtgBool = function(blob, length){blob.l++; return blob.read_shift(1) !=0; };
 
 /* 2.5.198.26 */
 var parse_PtgAdd = parseread1;
-/* 2.5.198.43 */
-var parse_PtgConcat = parseread1;
 /* 2.5.198.45 */
 var parse_PtgDiv = parseread1;
 /* 2.5.198.56 */
 var parse_PtgEq = parseread1;
-/* 2.5.198.58 TODO */
-var parse_PtgExp = parseread5;
 /* 2.5.198.64 */
 var parse_PtgGe = parseread1;
 /* 2.5.198.65 */
 var parse_PtgGt = parseread1;
-/* 2.5.198.66 TODO */
-var parse_PtgInt = function(blob, length){blob.l++; return blob.read_shift(2);};
+/* 2.5.198.67 */
+var parse_PtgIsect = parseread1;
 /* 2.5.198.68 */
 var parse_PtgLe = parseread1;
 /* 2.5.198.69 */
 var parse_PtgLt = parseread1;
+/* 2.5.198.74 */
+var parse_PtgMissArg = parseread1;
 /* 2.5.198.75 */
 var parse_PtgMul = parseread1;
+/* 2.5.198.78 */
+var parse_PtgNe = parseread1;
 /* 2.5.198.80 */
 var parse_PtgParen = parseread1;
+/* 2.5.198.81 */
+var parse_PtgPercent = parseread1;
 /* 2.5.198.82 */
 var parse_PtgPower = parseread1;
+/* 2.5.198.83 */
+var parse_PtgRange = parseread1;
 /* 2.5.198.90 */
 var parse_PtgSub = parseread1;
+/* 2.5.198.93 */
+var parse_PtgUminus = parseread1;
+/* 2.5.198.94 */
+var parse_PtgUnion = parseread1;
+/* 2.5.198.95 */
+var parse_PtgUplus = parseread1;
 
 /* 2.5.198.25 */
 var PtgTypes = {
 	0x01: { n:'PtgExp', f:parse_PtgExp },
+	//0x02: { n:'PtgTbl', f:parse_PtgTbl },
 	0x03: { n:'PtgAdd', f:parse_PtgAdd },
 	0x04: { n:'PtgSub', f:parse_PtgSub },
 	0x05: { n:'PtgMul', f:parse_PtgMul },
@@ -958,17 +980,64 @@ var PtgTypes = {
 	0x0B: { n:'PtgEq', f:parse_PtgEq },
 	0x0C: { n:'PtgGe', f:parse_PtgGe },
 	0x0D: { n:'PtgGt', f:parse_PtgGt },
+	0x0E: { n:'PtgNe', f:parse_PtgNe },
+	0x0F: { n:'PtgIsect', f:parse_PtgIsect },
+	0x10: { n:'PtgUnion', f:parse_PtgUnion },
+	0x11: { n:'PtgRange', f:parse_PtgRange },
+	0x12: { n:'PtgUplus', f:parse_PtgUplus },
+	0x13: { n:'PtgUminus', f:parse_PtgUminus },
+	0x14: { n:'PtgPercent', f:parse_PtgPercent },
 	0x15: { n:'PtgParen', f:parse_PtgParen },
+	0x16: { n:'PtgMissArg', f:parse_PtgMissArg },
+	//0x17: { n:'PtgStr', f:parse_PtgStr },
+	//0x1C: { n:'PtgErr', f:parse_PtgErr },
+	0x1D: { n:'PtgBool', f:parse_PtgBool },
 	0x1E: { n:'PtgInt', f:parse_PtgInt },
+	//0x1F: { n:'PtgNum', f:parse_PtgNum },
+	//0x20: { n:'PtgArray', f:parse_PtgArray },
+	//0x21: { n:'PtgFunc', f:parse_PtgFunc },
 	0x22: { n:'PtgFuncVar', f:parse_PtgFuncVar },
+	//0x23: { n:'PtgName', f:parse_PtgName },
 	0x24: { n:'PtgRef', f:parse_PtgRef },
 	0x25: { n:'PtgArea', f:parse_PtgArea },
-	0x42: { n:'PtgFuncVar', f:parse_PtgFuncVar },
-	0x44: { n:'PtgRef', f:parse_PtgRef },
-	0x5A: { n:'PtgRef3d', f:parse_PtgRef3d },
-
+	//0x26: { n:'PtgMemArea', f:parse_PtgMemArea },
+	//0x27: { n:'PtgMemErr', f:parse_PtgMemErr },
+	//0x28: { n:'PtgMemNoMem', f:parse_PtgMemNoMem },
+	//0x29: { n:'PtgMemFunc', f:parse_PtgMemFunc },
+	//0x2A: { n:'PtgRefErr', f:parse_PtgRefErr },
+	//0x2B: { n:'PtgAreaErr', f:parse_PtgAreaErr },
+	//0x2C: { n:'PtgRefN', f:parse_PtgRefN },
+	//0x2D: { n:'PtgAreaN', f:parse_PtgAreaN },
+	//0x39: { n:'PtgNameX', f:parse_PtgNameX },
+	0x3A: { n:'PtgRef3d', f:parse_PtgRef3d },
+	//0x3B: { n:'PtgArea3d', f:parse_PtgArea3d },
+	//0x3C: { n:'PtgRefErr3d', f:parse_PtgRefErr3d },
+	//0x3D: { n:'PtgAreaErr3d', f:parse_PtgAreaErr3d },
 	0xFF: {}
 };
+/* These are duplicated in the PtgTypes table */
+var PtgDupes = {
+	0x40: 0x20, 0x60: 0x20,
+	0x41: 0x21, 0x61: 0x21,
+	0x42: 0x22, 0x62: 0x22,
+	0x43: 0x23, 0x63: 0x23,
+	0x44: 0x24, 0x64: 0x24,
+	0x45: 0x25, 0x65: 0x25,
+	0x46: 0x26, 0x66: 0x26,
+	0x47: 0x27, 0x67: 0x27,
+	0x48: 0x28, 0x68: 0x28,
+	0x49: 0x29, 0x69: 0x29,
+	0x4A: 0x2A, 0x6A: 0x2A,
+	0x4B: 0x2B, 0x6B: 0x2B,
+	0x4C: 0x2C, 0x6C: 0x2C,
+	0x4D: 0x2D, 0x6D: 0x2D,
+	0x59: 0x39, 0x79: 0x39,
+	0x5A: 0x3A, 0x7A: 0x3A,
+	0x5B: 0x3B, 0x7B: 0x3B,
+	0x5C: 0x3C, 0x7C: 0x3C,
+	0x5D: 0x3D, 0x7D: 0x3D,
+};
+for(y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
 
 var Ptg18 = {};
 var Ptg19 = {
@@ -1129,7 +1198,7 @@ var parse_Rgce = function(blob, length) {
 	return ptgs;
 };
 
-/* */
+/* 2.5.198.103 */
 var parse_RgbExtra = parsenoop;
 
 /* 2.5.198.3 TODO */
