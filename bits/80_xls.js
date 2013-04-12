@@ -28,108 +28,6 @@ var Summary = cfb.Directory['!SummaryInformation'];
 var Workbook = cfb.Directory.Workbook; // OLE
 var CompObjP, SummaryP, WorkbookP;
 
-/* 2.2.2 + Magic TODO */
-function parse_formula(formula, range) {
-	range = range || {s:{c:0, r:0}};
-	var stack = [], e1, e2, type, c, sht;
-	if(!formula[0] || !formula[0][0]) return "";
-	//console.log("--",formula[0])
-	formula[0].forEach(function(f) {
-		//console.log("++",f)
-		switch(f[0]) {
-			/* 2.2.2.1 Unary Operator Tokens */
-			/* 2.5.198.93 PtgUminus */
-			case 'PtgUminus': stack.push("-" + stack.pop()); break;
-			/* 2.5.198.95 PtgUplus */
-			case 'PtgUplus': stack.push("+" + stack.pop()); break;
-
-			/* 2.2.2.3 Control Tokens "can be ignored" */
-			case 'PtgAttrIf': case 'PtgAttrChoose': case 'PtgAttrGoto': break;
-
-			case 'PtgRef':
-				type = f[1][0], c = shift_cell(f[1][1], range);
-				stack.push(encode_cell(c));
-				break;
-			case 'PtgRef3d': // TODO: lots of stuff
-				type = f[1][0], sht = f[1][1], c = shift_cell(f[1][2], range);
-				stack.push("!"+encode_cell(c));
-				break;
-
-			/* Function Call */
-			case 'PtgFuncVar':
-				var argc = f[1][0], func = f[1][1];
-				var args = stack.slice(-argc);
-				stack.length -= argc;
-				stack.push(func + "(" + args.join(",") + ")");
-				break;
-
-			/* Binary Operators -- pop 2 push 1*/
-			case 'PtgAdd':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"+"+e1);
-				break;
-			case 'PtgSub':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"-"+e1);
-				break;
-			case 'PtgMul':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"*"+e1);
-				break;
-			case 'PtgDiv':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"/"+e1);
-				break;
-			case 'PtgPower':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"^"+e1);
-				break;
-			case 'PtgConcat':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"&"+e1);
-				break;
-			case 'PtgLt':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"<"+e1);
-				break;
-			case 'PtgLe':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"<="+e1);
-				break;
-			case 'PtgEq':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"="+e1);
-				break;
-			case 'PtgGe':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+">="+e1);
-				break;
-			case 'PtgGt':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+">"+e1);
-				break;
-			case 'PtgNe':
-				e1 = stack.pop(); e2 = stack.pop();
-				stack.push(e2+"<>"+e1);
-				break;
-
-			case 'PtgInt':
-				stack.push(f[1]); break;
-			case 'PtgArea':
-				type = f[1][0], r = shift_range(f[1][1], range);
-				stack.push(encode_range(r));
-				break;
-			case 'PtgAttrSum':
-				stack.push("SUM(" + stack.pop() + ")");
-				break;
-
-			/* 2.2.2.4 Display Tokens */
-			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
-		}
-	});
-	//console.log("--",stack);
-	return stack[0];
-}
 
 /* 2.4.58 Continue logic */
 function slurp(R, blob, length) {
@@ -223,12 +121,12 @@ function parse_workbook(blob) {
 					if(val.val === "String") {
 						last_formula = val;
 					}
-					else addline({cell:val.cell, ixfe: val.cell.ixfe, val:val.val, formula:parse_formula(val.formula, range)});
+					else addline({cell:val.cell, ixfe: val.cell.ixfe, val:val.val, formula:stringify_formula(val.formula, range)});
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline({cell:last_formula.cell, ixfe: last_formula.cell.ixfe, val:JSON.stringify(last_formula.val), formula:parse_formula(last_formula.formula, range)});
+						addline({cell:last_formula.cell, ixfe: last_formula.cell.ixfe, val:JSON.stringify(last_formula.val), formula:stringify_formula(last_formula.formula, range)});
 						last_formula = null;
 					}
 				} break;
