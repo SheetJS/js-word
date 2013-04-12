@@ -1,7 +1,7 @@
 /* vim: set ts=2: */
 /*jshint eqnull:true */
 
-var Buffers;
+var Buffers = Array;
 
 function readIEEE754(buf, idx, isLE, nl, ml) {
 	if(isLE === undefined) isLE = true;
@@ -443,7 +443,7 @@ function parse_PSet(blob, PIDSI) {
 	}
 	var PropH = {};
 	for(i = 0; i != NumProps; ++i) {
-		if(blob.l !== Props[i][1]) throw "Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' (' + i;
+		if(blob.l !== Props[i][1]) throw "Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i;
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_property(blob, piddsi.t);

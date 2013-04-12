@@ -1,10 +1,3 @@
-if(typeof require !== 'undefined') {
-	var CFB= require('./cfb');
-	var vm = require('vm'), fs = require('fs');
-	vm.runInThisContext(fs.readFileSync(__dirname+'/xlsconsts.js'));
-}
-var prep_blob = CFB.prep_blob;
-
 /* MS-OLEDS 2.3.8 CompObjStream TODO */
 function parse_compobj(obj) {
 	var v = {};
