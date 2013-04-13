@@ -7,18 +7,18 @@ function readIEEE754(buf, idx, isLE, nl, ml) {
 	if(isLE === undefined) isLE = true;
 	if(!nl) nl = 8;
 	if(!ml && nl === 8) ml = 52;
-  var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1,
-      bits = -7, d = isLE ? -1 : 1, i = isLE ? (nl - 1) : 0, s = buf[idx + i];
+	var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1;
+	var bits = -7, d = isLE ? -1 : 1, i = isLE ? (nl - 1) : 0, s = buf[idx + i];
 
-  i += d;
-  e = s & ((1 << (-bits)) - 1); s >>>= (-bits); bits += el;
-  for (; bits > 0; e = e * 256 + buf[idx + i], i += d, bits -= 8);
-  m = e & ((1 << (-bits)) - 1); e >>>= (-bits); bits += ml;
-  for (; bits > 0; m = m * 256 + buf[idx + i], i += d, bits -= 8);
-  if (e === eMax) return m ? NaN : ((s ? -1 : 1) * Infinity);
+	i += d;
+	e = s & ((1 << (-bits)) - 1); s >>>= (-bits); bits += el;
+	for (; bits > 0; e = e * 256 + buf[idx + i], i += d, bits -= 8);
+	m = e & ((1 << (-bits)) - 1); e >>>= (-bits); bits += ml;
+	for (; bits > 0; m = m * 256 + buf[idx + i], i += d, bits -= 8);
+	if (e === eMax) return m ? NaN : ((s ? -1 : 1) * Infinity);
 	else if (e === 0) e = 1 - eBias;
-  else { m = m + Math.pow(2, ml); e = e - eBias; }
-  return (s ? -1 : 1) * m * Math.pow(2, e - ml);
+	else { m = m + Math.pow(2, ml); e = e - eBias; }
+	return (s ? -1 : 1) * m * Math.pow(2, e - ml);
 }
 
 var Base64 = (function(){
@@ -102,7 +102,7 @@ function ReadShift(size, t) {
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 		case 'utf8': size = t; o = this.utf8(this.l, this.l + size); break;
 		case 'utf16le': size = 2*t; o = this.utf16le(this.l, this.l + size); break;
-		case 'dbcs': size = 2*t; o = ""; 
+		case 'dbcs': size = 2*t; o = "";
 			for(var i = 0; i != t; ++i) {
 					//console.error(this.readUInt8(this.l+2*i),this.l,i)
 					o += String.fromCharCode(this.readUInt8(this.l+2*i));
@@ -1970,7 +1970,7 @@ function stringify_formula(formula, range) {
 				e1 = stack.pop(); e2 = stack.pop();
 				stack.push(e2+" "+e1);
 				break;
-			case 'PtgUnion': 
+			case 'PtgUnion':
 			case 'PtgRange': break;
 
 		/* 2.2.2.3 Control Tokens "can be ignored" */
@@ -1993,7 +1993,7 @@ function stringify_formula(formula, range) {
 
 		/* Function Call */
 			/* 2.5.198.62 */
-			case 'PtgFunc': 
+			case 'PtgFunc':
 			/* 2.5.198.63 */
 			case 'PtgFuncVar':
 				/* f[1] = [argc, func] */
@@ -2822,7 +2822,7 @@ var Ftab = {
 };
 var FtabArgc = {
 	0x0002: 1, /* ISNA */
-	0x0010: 1, /* COS */ 
+	0x0010: 1, /* COS */
 	0x0178: 1, /* ROUNDBAHTDOWN */
 	0x0179: 1, /* THAIYEAR */
 	0x017A: 1, /* THAIYEAR */
@@ -3251,7 +3251,9 @@ function parse_workbook(blob) {
 	var sst = [];
 	var cur_sheet = "";
 	var Preamble = {};
-	function addline(line) { out.push(line); }
+	function addline(cell, line) {
+		out[encode_cell(cell)] = line;
+	}
 	var enc = false;
 	while(blob.l < blob.length) {
 		var s = blob.l;
@@ -3287,50 +3289,52 @@ function parse_workbook(blob) {
 					Directory[val.pos] = val;
 				} break;
 				case 'EOF': {
-					var nout = [];
+					var nout = {};
+					if(range.e) {
+						out["!range"] = range;
+						if(range.e.r > 0 && range.e.c > 0) {
+							range.e.r--; range.e.c--;
+							out["!ref"] = encode_range(range);
+							range.e.r++; range.e.c++;
+						}
+					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
 				} break;
 				case 'BOF': {
-					out = [];
+					out = {};
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
 				} break;
 				case 'Number': {
-					addline({cell:{c:val.c + range.s.c, r:val.r + range.s.r}, val:val.val});
+					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val});
 				} break;
 				case 'RK': {
-					addline({cell:{c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, ixfe: val.ixfe, val:val.rknum});
+					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum});
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
-						addline({cell:{c:j/*+range.s.c*/, r:val.r/* + range.s.r*/}, ixfe: val.rkrec[j-val.c][0], val:val.rkrec[j-val.c][1]});
+						addline({c:j/*+range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1]});
 					}
 				} break;
 				case 'Formula': {
 					if(val.val === "String") {
 						last_formula = val;
 					}
-					else addline({cell:val.cell, ixfe: val.cell.ixfe, val:val.val, formula:stringify_formula(val.formula, range)});
+					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range), ixfe: val.cell.ixfe});
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline({cell:last_formula.cell, ixfe: last_formula.cell.ixfe, val:JSON.stringify(last_formula.val), formula:stringify_formula(last_formula.formula, range)});
+						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range), ixfe: last_formula.cell.ixfe});
 						last_formula = null;
 					}
 				} break;
 				case 'LabelSst': {
-					addline({cell:{c:val.c, r:val.r}, ixfe:val.ixfe, val:JSON.stringify(sst[val.isst])});
+					addline({c:val.c, r:val.r}, {v:JSON.stringify(sst[val.isst]), ixfe:val.ixfe});
 				} break;
 				case 'Dimensions': {
 					range = val;
-					out.range = range;
-					if(range.e.r > 0 && range.e.c > 0) {
-						range.e.r--; range.e.c--;
-						out["!ref"] = encode_range(range);
-						range.e.r++; range.e.c++;
-					}
 				} break;
 				case 'SST': {
 					sst = val;
@@ -3367,48 +3371,102 @@ if(CompObj) CompObjP = parse_compobj(CompObj);
 return WorkbookP;
 }
 
-function make_csv(ws) {
-	var blob = [];
-	for(var i = 0; i != ws.range.e.r; ++i) blob[i] = new Array(ws.range.e.c);
-	ws.forEach(function(x) {
-		var o = {v:x.val};
-		if(x.formula) o.f = x.formula;
-		blob[x.cell.r][x.cell.c] = o;
-	});
-	return blob.map(function(r) {return r.map(function(x){return x.v;}).join(",");}).join("\n");
+function sheet_to_row_object_array(sheet){
+	var val, rowObject, range, columnHeaders, emptyRow, C;
+	var outSheet = [];
+	if (sheet["!ref"]) {
+		range = decode_range(sheet["!ref"]);
+
+		columnHeaders = {};
+		for (C = range.s.c; C <= range.e.c; ++C) {
+			val = sheet[encode_cell({
+				c: C,
+				r: range.s.r
+			})];
+			if(val){
+				switch(val.t) {
+					case 's': case 'str': columnHeaders[C] = val.v; break;
+					case 'n': columnHeaders[C] = val.v; break;
+				}
+			}
+		}
+
+		for (var R = range.s.r + 1; R <= range.e.r; ++R) {
+			emptyRow = true;
+			//Row number is recorded in the prototype
+			//so that it doesn't appear when stringified.
+			rowObject = Object.create({ __rowNum__ : R });
+			for (C = range.s.c; C <= range.e.c; ++C) {
+				val = sheet[encode_cell({
+					c: C,
+					r: R
+				})];
+				if(val !== undefined) switch(val.t){
+					case 's': case 'str': case 'b': case 'n':
+						if(val.v !== undefined) {
+							rowObject[columnHeaders[C]] = val.v;
+							emptyRow = false;
+						}
+						break;
+					case 'e': break; /* throw */
+					default: throw 'unrecognized type ' + val.t;
+				}
+			}
+			if(!emptyRow) {
+				outSheet.push(rowObject);
+			}
+		}
+	}
+	return outSheet;
 }
+
+function sheet_to_csv(sheet) {
+	var out = "";
+	if(sheet["!ref"]) {
+		var r = utils.decode_range(sheet["!ref"]);
+		for(var R = r.s.r; R <= r.e.r; ++R) {
+			var row = [];
+			for(var C = r.s.c; C <= r.e.c; ++C) {
+				var val = sheet[utils.encode_cell({c:C,r:R})];
+				row.push(val ? String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\") : "");
+			}
+			out += row.join(",") + "\n";
+		}
+	}
+	return out;
+}
+var make_csv = sheet_to_csv;
 
 function get_formulae(ws) {
 	var cmds = [];
-	ws.forEach(function(x) {
+	for(y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) (function(y,x) {
 		var val = "";
-		if(x.formula) val = x.formula;
-		else if(typeof x.val === 'number') val = x.val;
-		else val = x.val;
-		cmds.push(encode_cell(x.cell) + "=" + val);
-	});
+		if(x.f) val = x.f;
+		else if(typeof x.v === 'number') val = x.v;
+		else val = x.v;
+		cmds.push(y + "=" + val);
+	})(y,ws[y]);
 	return cmds;
 }
 
 var utils = {
-	make_csv: make_csv,
-	get_formulae: get_formulae
+	encode_col: encode_col,
+	encode_row: encode_row,
+	encode_cell: encode_cell,
+	encode_range: encode_range,
+	decode_col: decode_col,
+	decode_row: decode_row,
+	split_cell: split_cell,
+	decode_cell: decode_cell,
+	decode_range: decode_range,
+	sheet_to_csv: sheet_to_csv,
+	make_csv: sheet_to_csv,
+	sheet_to_csv: sheet_to_csv,
+	get_formulae: get_formulae,
+	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
 var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); }
-if(typeof exports !== 'undefined') {
-	exports.readFile = readFile;
-	exports.utils = utils;
-	if(typeof module !== 'undefined' && require.main === module ) {
-		var wb = readFile(process.argv[2] || 'Book1.xls');
-		var target_sheet = process.argv[3] || '';
-		if(target_sheet === '') target_sheet = wb.Directory[0];
-		var ws = wb.Sheets[target_sheet];
-		console.log(target_sheet);
-		console.log(make_csv(ws));
-		//console.log(get_formulae(ws));
-	}
-}
 function decode_row(rowstr) { return Number(unfix_row(rowstr)) - 1; }
 function encode_row(row) { return "" + (row + 1); }
 function fix_row(cstr) { return cstr.replace(/([A-Z]|^)([0-9]+)$/,"$1$$$2"); }
@@ -3446,5 +3504,19 @@ function shift_range(cell, range) {
 	cell.s = shift_cell(cell.s, range);
 	cell.e = shift_cell(cell.e, range);
 	return cell;
+}
+
+if(typeof exports !== 'undefined') {
+	exports.readFile = readFile;
+	exports.utils = utils;
+	if(typeof module !== 'undefined' && require.main === module ) {
+		var wb = readFile(process.argv[2] || 'Book1.xls');
+		var target_sheet = process.argv[3] || '';
+		if(target_sheet === '') target_sheet = wb.Directory[0];
+		var ws = wb.Sheets[target_sheet];
+		console.log(target_sheet);
+		console.log(make_csv(ws));
+		//console.log(get_formulae(ws));
+	}
 }
 

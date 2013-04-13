@@ -5,18 +5,18 @@ function readIEEE754(buf, idx, isLE, nl, ml) {
 	if(isLE === undefined) isLE = true;
 	if(!nl) nl = 8;
 	if(!ml && nl === 8) ml = 52;
-  var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1,
-      bits = -7, d = isLE ? -1 : 1, i = isLE ? (nl - 1) : 0, s = buf[idx + i];
+	var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1;
+	var bits = -7, d = isLE ? -1 : 1, i = isLE ? (nl - 1) : 0, s = buf[idx + i];
 
-  i += d;
-  e = s & ((1 << (-bits)) - 1); s >>>= (-bits); bits += el;
-  for (; bits > 0; e = e * 256 + buf[idx + i], i += d, bits -= 8);
-  m = e & ((1 << (-bits)) - 1); e >>>= (-bits); bits += ml;
-  for (; bits > 0; m = m * 256 + buf[idx + i], i += d, bits -= 8);
-  if (e === eMax) return m ? NaN : ((s ? -1 : 1) * Infinity);
+	i += d;
+	e = s & ((1 << (-bits)) - 1); s >>>= (-bits); bits += el;
+	for (; bits > 0; e = e * 256 + buf[idx + i], i += d, bits -= 8);
+	m = e & ((1 << (-bits)) - 1); e >>>= (-bits); bits += ml;
+	for (; bits > 0; m = m * 256 + buf[idx + i], i += d, bits -= 8);
+	if (e === eMax) return m ? NaN : ((s ? -1 : 1) * Infinity);
 	else if (e === 0) e = 1 - eBias;
-  else { m = m + Math.pow(2, ml); e = e - eBias; }
-  return (s ? -1 : 1) * m * Math.pow(2, e - ml);
+	else { m = m + Math.pow(2, ml); e = e - eBias; }
+	return (s ? -1 : 1) * m * Math.pow(2, e - ml);
 }
 
 var Base64 = (function(){
@@ -100,7 +100,7 @@ function ReadShift(size, t) {
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 		case 'utf8': size = t; o = this.utf8(this.l, this.l + size); break;
 		case 'utf16le': size = 2*t; o = this.utf16le(this.l, this.l + size); break;
-		case 'dbcs': size = 2*t; o = ""; 
+		case 'dbcs': size = 2*t; o = "";
 			for(var i = 0; i != t; ++i) {
 					//console.error(this.readUInt8(this.l+2*i),this.l,i)
 					o += String.fromCharCode(this.readUInt8(this.l+2*i));

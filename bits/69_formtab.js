@@ -795,7 +795,7 @@ var Ftab = {
 };
 var FtabArgc = {
 	0x0002: 1, /* ISNA */
-	0x0010: 1, /* COS */ 
+	0x0010: 1, /* COS */
 	0x0178: 1, /* ROUNDBAHTDOWN */
 	0x0179: 1, /* THAIYEAR */
 	0x017A: 1, /* THAIYEAR */
