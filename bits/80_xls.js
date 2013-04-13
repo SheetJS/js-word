@@ -136,13 +136,17 @@ function parse_workbook(blob) {
 				case 'Dimensions': {
 					range = val;
 					out.range = range;
+					if(range.e.r > 0 && range.e.c > 0) {
+						range.e.r--; range.e.c--;
+						out["!ref"] = encode_range(range);
+						range.e.r++; range.e.c++;
+					}
 				} break;
 				case 'SST': {
 					sst = val;
 				} break;
-				case 'Format': {
-					// TODO: SSF
-					//console.error(val);
+				case 'Format': { /* val = [id, fmt] */
+					SSF.load(val[1], val[0]);
 				}
 				case 'Scl': {
 					//console.log("Zoom Level:", val[0]/val[1],val);
