@@ -138,7 +138,7 @@ function stringify_formula(formula, range) {
 				e1 = stack.pop(); e2 = stack.pop();
 				stack.push(e2+" "+e1);
 				break;
-			case 'PtgUnion': 
+			case 'PtgUnion':
 			case 'PtgRange': break;
 
 		/* 2.2.2.3 Control Tokens "can be ignored" */
@@ -161,7 +161,7 @@ function stringify_formula(formula, range) {
 
 		/* Function Call */
 			/* 2.5.198.62 */
-			case 'PtgFunc': 
+			case 'PtgFunc':
 			/* 2.5.198.63 */
 			case 'PtgFuncVar':
 				/* f[1] = [argc, func] */
