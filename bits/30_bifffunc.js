@@ -185,7 +185,7 @@ function parse_LabelSst(blob, length) {
 /* 2.4.126 Number Formats */
 function parse_Format(blob, length) {
 	var ifmt = blob.read_shift(2);
-	var fmtstr = parse_XLUnicodeString(blob)
+	var fmtstr = parse_XLUnicodeString(blob);
 	return [ifmt, fmtstr];
 }
 

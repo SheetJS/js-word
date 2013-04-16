@@ -274,12 +274,13 @@ function get_next_sector(idx) { return get_buffer_u32(idx); }
 
 /** Chains */
 var chkd = new Array(sectors.length), sector_list = [];
+var get_sector = function get_sector(k) { return sectors[k]; };
 for(i=0; i != sectors.length; ++i) {
 	var buf = [];
 	if(chkd[i]) continue;
 	for(j=i; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
 	sector_list[i] = {nodes: buf};
-	sector_list[i].data = Buffers(buf.map(function(k){return sectors[k];})).toBuffer();
+	sector_list[i].data = Buffers(buf.map(get_sector)).toBuffer();
 }
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0) sector_list[minifat_start].name = "!MiniFAT";
@@ -499,7 +500,7 @@ function parse_PSS(file, PIDSI) {
 	//rval.PSet0 = PSet0;
 	if(NumSets === 1) return rval;
 	var PSet1 = parse_PSet(blob, null);
-	for(var y in PSet1) rval[y] = PSet1[y];
+	for(y in PSet1) rval[y] = PSet1[y];
 	rval.FMTID = [FMTID0, FMTID1]; // TODO: verify FMTID0/1
 	return rval;
 }

@@ -61,7 +61,7 @@ function parse_XLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
 	var cch = read(2);
 	var fHighByte = read(1);
-	var retval = undefined;
+	var retval;
 	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;

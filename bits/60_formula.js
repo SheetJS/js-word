@@ -92,13 +92,13 @@ var parse_PtgExp = parseread(5);
 function parse_PtgInt(blob, length) { blob.l++; return blob.read_shift(2); }
 
 /* 2.5.198.42 */
-function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!=0; }
+function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!==0;}
 
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
 
 /* 2.5.198.77 TODO */
-var parse_PtgNameX = function(blob, length) {
+function parse_PtgNameX(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	var ixti = blob.read_shift(2); // XtiIndex
 	var nameindex = blob.read_shift(4);
@@ -214,9 +214,9 @@ var PtgDupes = {
 	0x5A: 0x3A, 0x7A: 0x3A,
 	0x5B: 0x3B, 0x7B: 0x3B,
 	0x5C: 0x3C, 0x7C: 0x3C,
-	0x5D: 0x3D, 0x7D: 0x3D,
+	0x5D: 0x3D, 0x7D: 0x3D
 };
-for(y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
+for(var y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
 
 var Ptg18 = {};
 var Ptg19 = {
