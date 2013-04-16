@@ -276,12 +276,13 @@ function get_next_sector(idx) { return get_buffer_u32(idx); }
 
 /** Chains */
 var chkd = new Array(sectors.length), sector_list = [];
+var get_sector = function get_sector(k) { return sectors[k]; };
 for(i=0; i != sectors.length; ++i) {
 	var buf = [];
 	if(chkd[i]) continue;
 	for(j=i; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
 	sector_list[i] = {nodes: buf};
-	sector_list[i].data = Buffers(buf.map(function(k){return sectors[k];})).toBuffer();
+	sector_list[i].data = Buffers(buf.map(get_sector)).toBuffer();
 }
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0) sector_list[minifat_start].name = "!MiniFAT";
@@ -501,7 +502,7 @@ function parse_PSS(file, PIDSI) {
 	//rval.PSet0 = PSet0;
 	if(NumSets === 1) return rval;
 	var PSet1 = parse_PSet(blob, null);
-	for(var y in PSet1) rval[y] = PSet1[y];
+	for(y in PSet1) rval[y] = PSet1[y];
 	rval.FMTID = [FMTID0, FMTID1]; // TODO: verify FMTID0/1
 	return rval;
 }
@@ -669,10 +670,10 @@ function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d){var t=String(v);return t.length>=d?t:(fill(0,d-t.length)+t);}
 /* Options */
 var opts_fmt = {};
-function fixopts(o){for(y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
+function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
 SSF.opts = opts_fmt;
 opts_fmt.date1904 = 0;
-opts_fmt.output = ""
+opts_fmt.output = "";
 opts_fmt.mode = "";
 var table_fmt = {
 	1:  '0',
@@ -724,17 +725,17 @@ var months = [
 	['S', 'Sep', 'September'],
 	['O', 'Oct', 'October'],
 	['N', 'Nov', 'November'],
-	['D', 'Dec', 'December'],
+	['D', 'Dec', 'December']
 ];
 var general_fmt = function(v) {
 	if(typeof v === 'boolean') return v ? "TRUE" : "FALSE";
-}
+};
 SSF._general = general_fmt;
 var parse_date_code = function parse_date_code(v,opts) {
 	var date = Math.floor(v), time = Math.round(86400 * (v - date)), dow=0;
 	var dout=[], out={D:date, T:time}; fixopts(opts = (opts||{}));
 	if(opts.date1904) date += 1462;
-	if(date === 60) dout = [1900,2,29], dow=3;
+	if(date === 60) (dout = [1900,2,29], dow=3); /* JSHint bug (issue #1010) */
 	else {
 		if(date > 60) --date;
 		/* 1 = Jan 1 1900 */
@@ -757,7 +758,7 @@ var write_date = function(type, fmt, val) {
 		case 'y': switch(fmt) { /* year */
 			case 'y': case 'yy': return pad(val.y % 100,2);
 			default: return val.y;
-		}; break;
+		} break;
 		case 'm': switch(fmt) { /* month */
 			case 'm': return val.m;
 			case 'mm': return pad(val.m,2);
@@ -765,34 +766,34 @@ var write_date = function(type, fmt, val) {
 			case 'mmmm': return months[val.m-1][2];
 			case 'mmmmm': return months[val.m-1][0];
 			default: throw 'bad month format: ' + fmt;
-		}; break;
+		} break;
 		case 'd': switch(fmt) { /* day */
 			case 'd': return val.d;
 			case 'dd': return pad(val.d,2);
 			case 'ddd': return days[val.q][0];
 			case 'dddd': return days[val.q][1];
 			default: throw 'bad day format: ' + fmt;
-		}; break;
+		} break;
 		case 'h': switch(fmt) { /* 12-hour */
 			case 'h': return 1+(val.H+11)%12;
 			case 'hh': return pad(1+(val.H+11)%12, 2);
 			default: throw 'bad hour format: ' + fmt;
-		}; break;
+		} break;
 		case 'H': switch(fmt) { /* 24-hour */
 			case 'h': return val.H;
 			case 'hh': return pad(val.H, 2);
 			default: throw 'bad hour format: ' + fmt;
-		}; break;
+		} break;
 		case 'M': switch(fmt) { /* minutes */
 			case 'm': return val.M;
 			case 'mm': return pad(val.M, 2);
 			default: throw 'bad minute format: ' + fmt;
-		}; break;
+		} break;
 		case 's': switch(fmt) { /* seconds */
 			case 's': return val.S;
 			case 'ss': return pad(val.S, 2);
 			default: throw 'bad second format: ' + fmt;
-		}; break;
+		} break;
 		/* TODO: handle the ECMA spec format ee -> yy */
 		case 'e': { return val.y; } break;
 		case 'A': return (val.h>=12 ? 'P' : 'A') + fmt.substr(1);
@@ -806,10 +807,10 @@ SSF._split = split_fmt;
 function eval_fmt(fmt, v, opts) {
 	var out = [], o = "", i = 0, c = "", lst='t', q = {}, dt;
 	fixopts(opts = (opts || {}));
-	var hr='H'
+	var hr='H';
 	/* Tokenize */
 	while(i < fmt.length) {
-		switch(c = fmt[i]) {
+		switch((c = fmt[i])) {
 			case '"': /* Literal text */
 				for(o="";fmt[++i] !== '"';) o += fmt[(fmt[i] === '\\' ? ++i : i)];
 				out.push({t:'t', v:o}); break;
@@ -825,8 +826,8 @@ function eval_fmt(fmt, v, opts) {
 				q={t:c, v:o}; out.push(q); lst = c; break;
 			case 'A':
 				q={t:c,v:"A"};
-				if(fmt.substr(i, 3) === "A/P") hr = 'h',i+=3;
-				else if(fmt.substr(i,5) === "AM/PM") { q.v = "AM"; i+=5; hr = 'h' }
+				if(fmt.substr(i, 3) === "A/P") (hr = 'h',i+=3);
+				else if(fmt.substr(i,5) === "AM/PM") { q.v = "AM"; i+=5; hr = 'h'; }
 				else q.t = "t";
 				out.push(q); lst = c; break;
 			case '[': /* TODO: Fix this -- ignore all conditionals and formatting */
@@ -858,12 +859,12 @@ function eval_fmt(fmt, v, opts) {
 		}
 	}
 
-	return out.map(function(x){return x.v}).join("");
+	return out.map(function(x){return x.v;}).join("");
 }
 SSF._eval = eval_fmt;
 function choose_fmt(fmt, v) {
 	if(typeof fmt === "string") fmt = split_fmt(fmt);
-	if(!(typeof v === "number")) return fmt[3];
+	if(typeof v !== "number") return fmt[3];
 	return v > 0 ? fmt[0] : v < 0 ? fmt[1] : fmt[2];
 }
 
@@ -873,7 +874,7 @@ var format = function format(fmt,v,o) {
 	if(typeof fmt === 'number') fmt = table_fmt[fmt];
 	var f = choose_fmt(fmt, v, o);
 	return eval_fmt(f, v, o);
-}
+};
 
 SSF._choose = choose_fmt;
 SSF._table = table_fmt;
@@ -945,7 +946,7 @@ function parse_XLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
 	var cch = read(2);
 	var fHighByte = read(1);
-	var retval = undefined;
+	var retval;
 	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;
@@ -1141,7 +1142,7 @@ function parse_LabelSst(blob, length) {
 /* 2.4.126 Number Formats */
 function parse_Format(blob, length) {
 	var ifmt = blob.read_shift(2);
-	var fmtstr = parse_XLUnicodeString(blob)
+	var fmtstr = parse_XLUnicodeString(blob);
 	return [ifmt, fmtstr];
 }
 
@@ -1537,7 +1538,7 @@ function parse_EncryptionHeader(blob, length) {
 	
 	// Check if SizeExtra is 0x00000000
 	var tmp = read(4);
-	if(tmp != 0) throw 'Unrecognized SizeExtra: ' + tmp;
+	if(tmp !== 0) throw 'Unrecognized SizeExtra: ' + tmp;
 
 	o.AlgID = read(4);
 	switch(o.AlgID) {
@@ -1691,13 +1692,13 @@ var parse_PtgExp = parseread(5);
 function parse_PtgInt(blob, length) { blob.l++; return blob.read_shift(2); }
 
 /* 2.5.198.42 */
-function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!=0; }
+function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!==0;}
 
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
 
 /* 2.5.198.77 TODO */
-var parse_PtgNameX = function(blob, length) {
+function parse_PtgNameX(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	var ixti = blob.read_shift(2); // XtiIndex
 	var nameindex = blob.read_shift(4);
@@ -1813,9 +1814,9 @@ var PtgDupes = {
 	0x5A: 0x3A, 0x7A: 0x3A,
 	0x5B: 0x3B, 0x7B: 0x3B,
 	0x5C: 0x3C, 0x7C: 0x3C,
-	0x5D: 0x3D, 0x7D: 0x3D,
+	0x5D: 0x3D, 0x7D: 0x3D
 };
-for(y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
+for(var y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
 
 var Ptg18 = {};
 var Ptg19 = {
@@ -3341,7 +3342,7 @@ function parse_workbook(blob) {
 				} break;
 				case 'Format': { /* val = [id, fmt] */
 					SSF.load(val[1], val[0]);
-				}
+				} break;
 				case 'Scl': {
 					//console.log("Zoom Level:", val[0]/val[1],val);
 				} break;
@@ -3439,13 +3440,14 @@ var make_csv = sheet_to_csv;
 
 function get_formulae(ws) {
 	var cmds = [];
-	for(y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) (function(y,x) {
+	for(var y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) {
+		var x = ws[y];
 		var val = "";
 		if(x.f) val = x.f;
 		else if(typeof x.v === 'number') val = x.v;
 		else val = x.v;
 		cmds.push(y + "=" + val);
-	})(y,ws[y]);
+	}
 	return cmds;
 }
 
@@ -3461,12 +3463,11 @@ var utils = {
 	decode_range: decode_range,
 	sheet_to_csv: sheet_to_csv,
 	make_csv: sheet_to_csv,
-	sheet_to_csv: sheet_to_csv,
 	get_formulae: get_formulae,
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
-var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); }
+var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); };
 function decode_row(rowstr) { return Number(unfix_row(rowstr)) - 1; }
 function encode_row(row) { return "" + (row + 1); }
 function fix_row(cstr) { return cstr.replace(/([A-Z]|^)([0-9]+)$/,"$1$$$2"); }

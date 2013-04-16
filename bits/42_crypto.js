@@ -13,7 +13,7 @@ function parse_EncryptionHeader(blob, length) {
 	
 	// Check if SizeExtra is 0x00000000
 	var tmp = read(4);
-	if(tmp != 0) throw 'Unrecognized SizeExtra: ' + tmp;
+	if(tmp !== 0) throw 'Unrecognized SizeExtra: ' + tmp;
 
 	o.AlgID = read(4);
 	switch(o.AlgID) {

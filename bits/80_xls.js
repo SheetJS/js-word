@@ -151,7 +151,7 @@ function parse_workbook(blob) {
 				} break;
 				case 'Format': { /* val = [id, fmt] */
 					SSF.load(val[1], val[0]);
-				}
+				} break;
 				case 'Scl': {
 					//console.log("Zoom Level:", val[0]/val[1],val);
 				} break;
@@ -249,13 +249,14 @@ var make_csv = sheet_to_csv;
 
 function get_formulae(ws) {
 	var cmds = [];
-	for(y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) (function(y,x) {
+	for(var y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) {
+		var x = ws[y];
 		var val = "";
 		if(x.f) val = x.f;
 		else if(typeof x.v === 'number') val = x.v;
 		else val = x.v;
 		cmds.push(y + "=" + val);
-	})(y,ws[y]);
+	}
 	return cmds;
 }
 
@@ -271,9 +272,8 @@ var utils = {
 	decode_range: decode_range,
 	sheet_to_csv: sheet_to_csv,
 	make_csv: sheet_to_csv,
-	sheet_to_csv: sheet_to_csv,
 	get_formulae: get_formulae,
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
-var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); }
+var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); };
