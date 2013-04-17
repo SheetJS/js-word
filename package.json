@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.2.0",
+	"version": "0.2.2",
 	"author": "Niggler",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [
@@ -11,11 +11,12 @@
 	},
 	"main": "./xls",
 	"dependencies": {
+		"commander":""
 	},
 	"repository": {
 		"type":"git",
 		"url": "git://github.com/Niggler/js-xls.git"
 	},
 	"bugs": { "url": "https://github.com/Niggler/js-xls/issues" },
-	"engines": { "node": ">=0.8" }
+	"engines": { "node": ">=0.4" }
 }
