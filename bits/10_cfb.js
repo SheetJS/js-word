@@ -166,7 +166,8 @@ chk(HEADER_SIGNATURE, 'Header Signature: ');
 chk(HEADER_CLSID, 'CLSID: ');
 
 // minor version 2
-wrn(HEADER_MINOR_VERSION, 'Minor Version: ');
+//wrn(HEADER_MINOR_VERSION, 'Minor Version: ');
+read(2);
 
 // major version 3
 mver = read(2);
