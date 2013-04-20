@@ -84,6 +84,7 @@ Array.prototype.hexlify = function() { return this.map(function(x){return (x<16?
 Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(this.readUInt16LE(i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
 Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
+
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
 
@@ -97,13 +98,17 @@ function ReadShift(size, t) {
 		case 8: if(t === 'f') { o = this.readDoubleLE(this.l); break; }
 		/* falls through */
 		case 16: o = this.toString('hex', this.l,this.l+size); break;
-		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
+
 		case 'utf8': size = t; o = this.utf8(this.l, this.l + size); break;
 		case 'utf16le': size = 2*t; o = this.utf16le(this.l, this.l + size); break;
+
+		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
+		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
+
+		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
 		case 'dbcs': size = 2*t; o = "";
 			for(var i = 0; i != t; ++i) {
-					//console.error(this.readUInt8(this.l+2*i),this.l,i)
-					o += String.fromCharCode(this.readUInt8(this.l+2*i));
+				o += String.fromCharCode(this.readUInt8(this.l+2*i));
 			} break;
 	}
 	this.l+=size; return o;
@@ -129,7 +134,7 @@ function prep_blob(blob, pos) {
 	return [read, chk];
 }
 
-// Implements [MS-CFB] v20120705
+/* [MS-CFB] v20120705 */
 var CFB = (function(){
 
 function parse(file) {
@@ -152,7 +157,7 @@ var minifat_size = 0; // size of minifat data
 
 var fat_addrs = []; // locations of FAT sectors
 
-/** Parse Header [MS-CFB] 2.2 */
+/* [MS-CFB] 2.2 Compound File Header */
 var blob = file.slice(0,512);
 prep_blob(blob);
 var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
@@ -342,9 +347,11 @@ var rval = {
 
 for(var name in files) {
 	switch(name) {
-		case '!DocumentSummaryInformation': /* MS-OSHARED 2.3.3.2.2 */
+		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
+		case '!DocumentSummaryInformation':
 			rval.DocSummary = parse_PSS(files[name],DocSummaryPIDDSI); break;
-		case '!SummaryInformation': /* MS-OSHARED 2.3.3.2.1 */
+		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
+		case '!SummaryInformation':
 			rval.Summary = parse_PSS(files[name], SummaryPIDSI); break;
 	}
 }
@@ -353,13 +360,14 @@ return rval;
 } // parse
 
 
-// 2.3.3.1.4
+/* [MS-OSHARED] 2.3.3.1.4 Lpstr */
 function parse_lpstr(blob) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var str = read('lpstr');
 	return str;
 }
 
+/* [MS-OSHARED] 2.3.3.1.11 VtString */
 function parse_string(blob, type) {
 	switch(type) {
 		case VT_LPSTR: return parse_lpstr(blob);
@@ -368,7 +376,8 @@ function parse_string(blob, type) {
 	}
 }
 
-function parse_unaligned_vec_lpstr(blob) {
+/* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
+function parse_VtVecUnalignedLpstrValue(blob) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var length = read(4);
 	var ret = [];
@@ -376,19 +385,19 @@ function parse_unaligned_vec_lpstr(blob) {
 	return ret;
 }
 
-/* 2.3.3.1.14 VtVecHeadingPairValue */
-function parse_heading_pair_vec(blob) {
+/* [MS-OSHARED] 2.3.3.1.14 VtVecHeadingPairValue */
+function parse_VtVecHeadingPairValue(blob) {
 	// TODO:
 }
 
-/* [MS-OLEPS] 2.8 FILETIME */
-function parse_datetime(blob) {
+/* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
+function parse_FILETIME(blob) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var dwLowDateTime = read(4), dwHighDateTime = read(4);
 	return [dwLowDateTime, dwHighDateTime];
 }
 
-/* [MS-OLEPS] 2.18.1 Dictionary (2.17, 2.16) */
+/* [MS-OLEPS] 2.18.1 Dictionary (uses 2.17, 2.16) */
 function parse_dictionary(blob,CodePage) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var cnt = read(4);
@@ -402,15 +411,16 @@ function parse_dictionary(blob,CodePage) {
 	return dict;
 }
 
-/* [MS-OLEPS] 2.9 */
-function parse_blob(blob) {
+/* [MS-OLEPS] 2.9 BLOB */
+function parse_BLOB(blob) {
 	var size = blob.read_shift(4);
 	var bytes = blob.slice(blob.l,blob.l+size);
 	if(blob.l % 4) blob.l = (blob.l>>2+1)<<2;
 	return bytes;
 }
 
-function parse_property(blob, type) {
+/* [MS-OLEPS] 2.15 TypedPropertyValue */
+function parse_TypedPropertyValue(blob, type) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var t = read(2), ret;
 	read(2);
@@ -421,13 +431,13 @@ function parse_property(blob, type) {
 		case VT_LPSTR: return parse_lpstr(blob, t).replace(/\u0000/g,'');
 		case VT_STRING: return parse_string(blob, t).replace(/\u0000/g,'');
 		case VT_BOOL: return read(4) !== 0x0;
-		case VT_FILETIME: return parse_datetime(blob);
-		case VT_VECTOR | VT_LPSTR: return parse_unaligned_vec_lpstr(blob);
-		case VT_VECTOR | VT_VARIANT: return parse_heading_pair_vec(blob);
+		case VT_FILETIME: return parse_FILETIME(blob);
+		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstrValue(blob);
+		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPairValue(blob);
 	}
 }
 
-/* 2.20 PropertySet */
+/* [MS-OLEPS] 2.20 PropertySet */
 function parse_PSet(blob, PIDSI) {
 	var start_addr = blob.l;
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
@@ -446,10 +456,10 @@ function parse_PSet(blob, PIDSI) {
 		if(blob.l !== Props[i][1]) throw "Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i;
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
-			PropH[piddsi.n] = parse_property(blob, piddsi.t);
+			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
 		} else {
 			if(Props[i][0] === 0x1) {
-				CodePage = PropH.CodePage = parse_property(blob, VT_I2);
+				CodePage = PropH.CodePage = parse_TypedPropertyValue(blob, VT_I2);
 				if(Dictionary !== -1) {
 					var oldpos = blob.l;
 					blob.l = Props[Dictionary][1];
@@ -464,7 +474,7 @@ function parse_PSet(blob, PIDSI) {
 				var val;
 				switch(blob[blob.l]) {
 					//TODO
-					case 0x41: val = parse_blob(blob); break;
+					case 0x41: val = parse_BLOB(blob); break;
 				}
 				PropH[name] = val;
 			}

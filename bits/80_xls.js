@@ -1,11 +1,13 @@
-/* MS-OLEDS 2.3.8 CompObjStream TODO */
+/* [MS-OLEDS] 2.3.8 CompObjStream */
 function parse_compobj(obj) {
 	var v = {};
 	var o = obj.content;
-	var l = 28, m; // skip the 28 bytes
+	
+	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
+	var l = 28, m;
 	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
 
-	/* MS-OLEDS 2.3.1 ClipboardFormatOrAnsiString */
+	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
 	switch(m) {
 		case 0x00000000: break;
