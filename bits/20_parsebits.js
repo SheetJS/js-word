@@ -26,10 +26,10 @@ function parseuint16a(blob, length) { return parslurp(blob,length,parseuint16);}
 
 /* --- 2.5 Structures --- */
 
-/* 2.5.14 */
+/* [MS-XLS] 2.5.14 Boolean */
 var parse_Boolean = parsebool;
 
-/* 2.5.240 */
+/* [MS-XLS] 2.5.240 ShortXLUnicodeString */
 function parse_ShortXLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
 	var cch = read(1);
@@ -40,7 +40,7 @@ function parse_ShortXLUnicodeString(blob) {
 	return retval;
 }
 
-/* 2.5.293 */
+/* 2.5.293 XLUnicodeRichExtendedString */
 function parse_XLUnicodeRichExtendedString(blob) {
 	var read_shift = blob.read_shift.bind(blob);
 	var cch = read_shift(2), flags = read_shift(1);
@@ -56,7 +56,7 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	return msg;
 }
 
-/* 2.5.294 */
+/* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
 	var cch = read(2);
@@ -67,6 +67,6 @@ function parse_XLUnicodeString(blob) {
 	return retval;
 }
 
-/* 2.5.342 */
+/* 2.5.342 Xnum */
 function parse_Xnum(blob, length) { return blob.read_shift('ieee754'); }
 

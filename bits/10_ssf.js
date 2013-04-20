@@ -1,4 +1,4 @@
-/* Spreadsheet Format -- jump to XLSX for the XLSX code */
+/* Spreadsheet Format */
 var SSF = (function() {
 	var SSF = {};
 String.prototype.reverse=function(){return this.split("").reverse().join("");};

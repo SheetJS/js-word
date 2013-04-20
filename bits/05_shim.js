@@ -10,19 +10,19 @@ Buffer.concat = function(list, length) {
 	} else if (list.length === 1) {
 		return list[0];
 	}
-
+	var i, buf;
 	if (typeof length !== 'number') {
 		length = 0;
-		for (var i = 0; i < list.length; i++) {
-			var buf = list[i];
+		for (i = 0; i < list.length; i++) {
+			buf = list[i];
 			length += buf.length;
 		}
 	}
 
 	var buffer = new Buffer(length);
 	var pos = 0;
-	for (var i = 0; i < list.length; i++) {
-		var buf = list[i];
+	for (i = 0; i < list.length; i++) {
+		buf = list[i];
 		buf.copy(buffer, pos);
 		pos += buf.length;
 	}
