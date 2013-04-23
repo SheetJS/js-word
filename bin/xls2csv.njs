@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-var XLS = require('../xls'); 
+/* vim: set ts=2: */
+var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.2.2')
+	.version('0.2.5')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
@@ -24,7 +25,7 @@ if(!filename) {
 
 if(!fs.existsSync(filename)) {
 	console.error("xls2csv: " + filename + ": No such file or directory");
-	process.exit(2); 
+	process.exit(2);
 }
 
 var wb;

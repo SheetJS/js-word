@@ -1,7 +1,7 @@
 /* vim: set ts=2: */
 /*jshint eqnull:true */
 /* Buffer.concat was added in the 0.8 series, so this is for older versions */
-if(typeof Buffer !== "undefined" && !Buffer.concat) 
+if(typeof Buffer !== "undefined" && !Buffer.concat)
 Buffer.concat = function(list, length) {
 	if (!Array.isArray(list)) {
 		throw new TypeError('Usage: Buffer.concat(list, [length])');
@@ -482,6 +482,15 @@ var SummaryPIDSI = {
 	0xFF: {}
 };
 
+/* [MS-DTYP] 2.3.1 FILETIME */
+/* [MS-OLEDS] 2.1.3 FILETIME (Packet Version) */
+/* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
+function parse_FILETIME(blob) {
+	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var dwLowDateTime = read(4), dwHighDateTime = read(4);
+	return [dwLowDateTime, dwHighDateTime];
+}
+
 /* [MS-OSHARED] 2.3.3.1.4 Lpstr */
 function parse_lpstr(blob) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
@@ -490,12 +499,13 @@ function parse_lpstr(blob) {
 }
 
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
-function parse_string(blob, type) {
-	switch(type) {
+function parse_VtString(blob, stringType) {
+	if(stringType) switch(stringType) {
 		case VT_LPSTR: return parse_lpstr(blob);
 		case VT_LPWSTR: return parse_lpwstr(blob);
-		default: throw "Unrecognized string type " + type;
+		default: throw "Unrecognized string type " + stringType;
 	}
+	else return parse_VtString(blob, blob.read_shift(2));
 }
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
@@ -510,13 +520,6 @@ function parse_VtVecUnalignedLpstrValue(blob) {
 /* [MS-OSHARED] 2.3.3.1.14 VtVecHeadingPairValue */
 function parse_VtVecHeadingPairValue(blob) {
 	// TODO:
-}
-
-/* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
-function parse_FILETIME(blob) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var dwLowDateTime = read(4), dwHighDateTime = read(4);
-	return [dwLowDateTime, dwHighDateTime];
 }
 
 /* [MS-OLEPS] 2.18.1 Dictionary (uses 2.17, 2.16) */
@@ -551,7 +554,7 @@ function parse_TypedPropertyValue(blob, type) {
 		case VT_I2: ret = read(2, 'i'); read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_LPSTR: return parse_lpstr(blob, t).replace(/\u0000/g,'');
-		case VT_STRING: return parse_string(blob, t).replace(/\u0000/g,'');
+		case VT_STRING: return parse_VtString(blob, t).replace(/\u0000/g,'');
 		case VT_BOOL: return read(4) !== 0x0;
 		case VT_FILETIME: return parse_FILETIME(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstrValue(blob);

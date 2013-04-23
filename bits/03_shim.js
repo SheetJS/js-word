@@ -1,5 +1,5 @@
 /* Buffer.concat was added in the 0.8 series, so this is for older versions */
-if(typeof Buffer !== "undefined" && !Buffer.concat) 
+if(typeof Buffer !== "undefined" && !Buffer.concat)
 Buffer.concat = function(list, length) {
 	if (!Array.isArray(list)) {
 		throw new TypeError('Usage: Buffer.concat(list, [length])');
