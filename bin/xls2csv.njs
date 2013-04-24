@@ -4,10 +4,11 @@
 var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.2.5')
+	.version('0.2.6')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
+	.option('-F, --formulae', 'print formulae')
 	.parse(process.argv);
 
 var filename, sheetname = '';
@@ -49,4 +50,5 @@ try {
 }
 
 console.error(target_sheet);
-console.log(XLS.utils.make_csv(ws));
+if(program.formulae) console.log(XLS.utils.get_formulae(ws).join("\n"));
+else console.log(XLS.utils.make_csv(ws));

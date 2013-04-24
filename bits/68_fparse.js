@@ -24,6 +24,15 @@ function parse_FormulaValue(blob) {
 /* 2.5.198.103 */
 var parse_RgbExtra = parsenoop;
 
+/* 2.5.198.21 */
+function parse_NameParsedFormula(blob, length, cce) {
+	var target = blob.l + length;
+	var rgce = parse_Rgce(blob, cce);
+	var rgcb;
+	if(target !== blob.l) rgcb = parse_RgbExtra(blob, target - blob.l, rgce);
+	return [rgce, rgcb];
+}
+
 /* 2.5.198.3 TODO */
 function parse_CellParsedFormula(blob, length) {
 	var target = blob.l + length;
@@ -54,7 +63,7 @@ var parse_Rgce = function(blob, length) {
 };
 
 /* 2.2.2 + Magic TODO */
-function stringify_formula(formula, range) {
+function stringify_formula(formula, range, supbooks) {
 	range = range || {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, sht;
 	if(!formula[0] || !formula[0][0]) return "";
@@ -144,12 +153,12 @@ function stringify_formula(formula, range) {
 		/* 2.2.2.3 Control Tokens "can be ignored" */
 			/* 2.5.198.34 */
 			case 'PtgAttrChoose': break;
-			/* 2.5.198.36 */
-			case 'PtgAttrIf': break;
 			/* 2.5.198.35 */
 			case 'PtgAttrGoto': break;
+			/* 2.5.198.36 */
+			case 'PtgAttrIf': break;
 
-		
+
 			case 'PtgRef':
 				type = f[1][0], c = shift_cell(f[1][1], range);
 				stack.push(encode_cell(c));
@@ -166,8 +175,10 @@ function stringify_formula(formula, range) {
 			case 'PtgFuncVar':
 				/* f[1] = [argc, func] */
 				var argc = f[1][0], func = f[1][1];
+				if(!argc) argc = 0;
 				var args = stack.slice(-argc);
 				stack.length -= argc;
+				if(func === 'User') func = args.shift();
 				stack.push(func + "(" + args.join(",") + ")");
 				break;
 
@@ -184,7 +195,30 @@ function stringify_formula(formula, range) {
 				stack.push("SUM(" + stack.pop() + ")");
 				break;
 
-			/* 2.2.2.4 Display Tokens */
+		/* Expression Prefixes */
+			/* 2.5.198.37 */
+			case 'PtgAttrSemi': break;
+
+			/* 2.5.97.60 TODO: do something different for revisions */
+			case 'PtgName':
+				/* f[1] = type, 0, nameindex */
+				var nameidx = f[1][2];
+				var lbl = supbooks[0][nameidx];
+				var name = lbl.Name;
+				if(name in XLSXFutureFunctions) name = XLSXFutureFunctions[name];
+				stack.push(name);
+				break;
+
+			/* 2.5.97.61 TODO: do something different for revisions */
+			case 'PtgNameX':
+				/* f[1] = type, ixti, nameindex */
+				var bookidx = f[1][1], nameidx = f[1][2];
+				var externbook = supbooks[bookidx+1][nameidx];
+				stack.push(externbook.body);
+				break;
+
+		/* 2.2.2.4 Display Tokens */
+			/* 2.5.198.80 */
 			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;

@@ -795,9 +795,294 @@ var Ftab = {
 };
 var FtabArgc = {
 	0x0002: 1, /* ISNA */
+	0x0003: 1, /* ISERROR */
+	0x000F: 1, /* SIN */
 	0x0010: 1, /* COS */
+	0x0011: 1, /* TAN */
+	0x0012: 1, /* ATAN */
+	0x0014: 1, /* SQRT */
+	0x0015: 1, /* EXP */
+	0x0016: 1, /* LN */
+	0x0017: 1, /* LOG10 */
+	0x0018: 1, /* ABS */
+	0x0019: 1, /* INT */
+	0x001A: 1, /* SIGN */
+	0x001B: 2, /* ROUND */
+	0x001E: 2, /* REPT */
+	0x001F: 3, /* MID */
+	0x0020: 1, /* LEN */
+	0x0021: 1, /* VALUE */
+	0x0026: 1, /* NOT */
+	0x0027: 2, /* MOD */
+	0x0030: 2, /* TEXT */
+	0x0035: 1, /* GOTO */
+	0x003D: 3, /* MIRR */
+	0x0041: 3, /* DATE */
+	0x0042: 3, /* TIME */
+	0x0043: 1, /* DAY */
+	0x0044: 1, /* MONTH */
+	0x0045: 1, /* YEAR */
+	0x0047: 1, /* HOUR */
+	0x0048: 1, /* MINUTE */
+	0x0049: 1, /* SECOND */
+	0x004B: 1, /* AREAS */
+	0x004C: 1, /* ROWS */
+	0x004D: 1, /* COLUMNS */
+	0x004F: 2, /* ABSREF */
+	0x0050: 2, /* RELREF */
+	0x0053: 1, /* TRANSPOSE */
+	0x005A: 1, /* DEREF */
+	0x0061: 2, /* ATAN2 */
+	0x0062: 1, /* ASIN */
+	0x0063: 1, /* ACOS */
+	0x0069: 1, /* ISREF */
+	0x006F: 1, /* CHAR */
+	0x0070: 1, /* LOWER */
+	0x0071: 1, /* UPPER */
+	0x0072: 1, /* PROPER */
+	0x0075: 2, /* EXACT */
+	0x0076: 1, /* TRIM */
+	0x0077: 4, /* REPLACE */
+	0x0079: 1, /* CODE */
+	0x007E: 1, /* ISERR */
+	0x007F: 1, /* ISTEXT */
+	0x0080: 1, /* ISNUMBER */
+	0x0081: 1, /* ISBLANK */
+	0x0082: 1, /* T */
+	0x0083: 1, /* N */
+	0x0085: 1, /* FCLOSE */
+	0x0086: 1, /* FSIZE */
+	0x0087: 1, /* FREADLN */
+	0x0088: 2, /* FREAD */
+	0x0089: 2, /* FWRITELN */
+	0x008A: 2, /* FWRITE */
+	0x008C: 1, /* DATEVALUE */
+	0x008D: 1, /* TIMEVALUE */
+	0x008E: 3, /* SLN */
+	0x008F: 4, /* SYD */
+	0x00A2: 1, /* CLEAN */
+	0x00A3: 1, /* MDETERM */
+	0x00A4: 1, /* MINVERSE */
+	0x00A5: 2, /* MMULT */
+	0x00AC: 1, /* WHILE */
+	0x00AF: 2, /* INITIATE */
+	0x00B0: 2, /* REQUEST */
+	0x00B1: 3, /* POKE */
+	0x00B2: 2, /* EXECUTE */
+	0x00B3: 1, /* TERMINATE */
+	0x00B8: 1, /* FACT */
+	0x00BD: 3, /* DPRODUCT */
+	0x00BE: 1, /* ISNONTEXT */
+	0x00C3: 3, /* DSTDEVP */
+	0x00C4: 3, /* DVARP */
+	0x00C6: 1, /* ISLOGICAL */
+	0x00C7: 3, /* DCOUNTA */
+	0x00C9: 1, /* UNREGISTER */
+	0x00CF: 4, /* REPLACEB */
+	0x00D2: 3, /* MIDB */
+	0x00D3: 1, /* LENB */
+	0x00D4: 2, /* ROUNDUP */
+	0x00D5: 2, /* ROUNDDOWN */
+	0x00D6: 1, /* ASC */
+	0x00D7: 1, /* DBCS */
+	0x00E5: 1, /* SINH */
+	0x00E6: 1, /* COSH */
+	0x00E7: 1, /* TANH */
+	0x00E8: 1, /* ASINH */
+	0x00E9: 1, /* ACOSH */
+	0x00EA: 1, /* ATANH */
+	0x00EB: 3, /* DGET */
+	0x00F4: 1, /* INFO */
+	0x00FC: 2, /* FREQUENCY */
+	0x0101: 1, /* EVALUATE */
+	0x010F: 1, /* GAMMALN */
+	0x0111: 4, /* BINOMDIST */
+	0x0112: 2, /* CHIDIST */
+	0x0113: 2, /* CHIINV */
+	0x0114: 2, /* COMBIN */
+	0x0115: 3, /* CONFIDENCE */
+	0x0116: 3, /* CRITBINOM */
+	0x0117: 1, /* EVEN */
+	0x0118: 3, /* EXPONDIST */
+	0x0119: 3, /* FDIST */
+	0x011A: 3, /* FINV */
+	0x011B: 1, /* FISHER */
+	0x011C: 1, /* FISHERINV */
+	0x011D: 2, /* FLOOR */
+	0x011E: 4, /* GAMMADIST */
+	0x011F: 3, /* GAMMAINV */
+	0x0120: 2, /* CEILING */
+	0x0121: 4, /* HYPGEOMDIST */
+	0x0122: 3, /* LOGNORMDIST */
+	0x0123: 3, /* LOGINV */
+	0x0124: 3, /* NEGBINOMDIST */
+	0x0125: 4, /* NORMDIST */
+	0x0126: 1, /* NORMSDIST */
+	0x0127: 3, /* NORMINV */
+	0x0128: 1, /* NORMSINV */
+	0x0129: 3, /* STANDARDIZE */
+	0x012A: 1, /* ODD */
+	0x012B: 2, /* PERMUT */
+	0x012C: 3, /* POISSON */
+	0x012D: 3, /* TDIST */
+	0x012E: 4, /* WEIBULL */
+	0x012F: 2, /* SUMXMY2 */
+	0x0130: 2, /* SUMX2MY2 */
+	0x0131: 2, /* SUMX2PY2 */
+	0x0132: 2, /* CHITEST */
+	0x0133: 2, /* CORREL */
+	0x0134: 2, /* COVAR */
+	0x0135: 3, /* FORECAST */
+	0x0136: 2, /* FTEST */
+	0x0137: 2, /* INTERCEPT */
+	0x0138: 2, /* PEARSON */
+	0x0139: 2, /* RSQ */
+	0x013A: 2, /* STEYX */
+	0x013B: 2, /* SLOPE */
+	0x013C: 4, /* TTEST */
+	0x0145: 2, /* LARGE */
+	0x0146: 2, /* SMALL */
+	0x0147: 2, /* QUARTILE */
+	0x0148: 2, /* PERCENTILE */
+	0x014B: 2, /* TRIMMEAN */
+	0x014C: 2, /* TINV */
+	0x0151: 2, /* POWER */
+	0x0156: 1, /* RADIANS */
+	0x0157: 1, /* DEGREES */
+	0x015A: 2, /* COUNTIF */
+	0x015B: 1, /* COUNTBLANK */
+	0x015E: 4, /* ISPMT */
+	0x015F: 3, /* DATEDIF */
+	0x0160: 1, /* DATESTRING */
+	0x0161: 2, /* NUMBERSTRING */
+	0x0168: 1, /* PHONETIC */
+	0x0170: 1, /* BAHTTEXT */
+	0x0171: 1, /* THAIDAYOFWEEK */
+	0x0172: 1, /* THAIDIGIT */
+	0x0173: 1, /* THAIMONTHOFYEAR */
+	0x0174: 1, /* THAINUMSOUND */
+	0x0175: 1, /* THAINUMSTRING */
+	0x0176: 1, /* THAISTRINGLENGTH */
+	0x0177: 1, /* ISTHAIDIGIT */
 	0x0178: 1, /* ROUNDBAHTDOWN */
-	0x0179: 1, /* THAIYEAR */
+	0x0179: 1, /* ROUNDBAHTUP */
 	0x017A: 1, /* THAIYEAR */
 	0xFFFF: 0
+};
+/* [MS-XLSX] 2.2.3 Functions */
+var XLSXFutureFunctions = {
+	"_xlfn.ACOT": "ACOT",
+	"_xlfn.ACOTH": "ACOTH",
+	"_xlfn.AGGREGATE": "AGGREGATE",
+	"_xlfn.ARABIC": "ARABIC",
+	"_xlfn.BASE": "BASE",
+	"_xlfn.BETA.DIST": "BETA.DIST",
+	"_xlfn.BETA.INV": "BETA.INV",
+	"_xlfn.BINOM.DIST": "BINOM.DIST",
+	"_xlfn.BINOM.DIST.RANGE": "BINOM.DIST.RANGE",
+	"_xlfn.BINOM.INV": "BINOM.INV",
+	"_xlfn.BITAND": "BITAND",
+	"_xlfn.BITLSHIFT": "BITLSHIFT",
+	"_xlfn.BITOR": "BITOR",
+	"_xlfn.BITRSHIFT": "BITRSHIFT",
+	"_xlfn.BITXOR": "BITXOR",
+	"_xlfn.CEILING.MATH": "CEILING.MATH",
+	"_xlfn.CEILING.PRECISE": "CEILING.PRECISE",
+	"_xlfn.CHISQ.DIST": "CHISQ.DIST",
+	"_xlfn.CHISQ.DIST.RT": "CHISQ.DIST.RT",
+	"_xlfn.CHISQ.INV": "CHISQ.INV",
+	"_xlfn.CHISQ.INV.RT": "CHISQ.INV.RT",
+	"_xlfn.CHISQ.TEST": "CHISQ.TEST",
+	"_xlfn.COMBINA": "COMBINA",
+	"_xlfn.CONFIDENCE.NORM": "CONFIDENCE.NORM",
+	"_xlfn.CONFIDENCE.T": "CONFIDENCE.T",
+	"_xlfn.COT": "COT",
+	"_xlfn.COTH": "COTH",
+	"_xlfn.COVARIANCE.P": "COVARIANCE.P",
+	"_xlfn.COVARIANCE.S": "COVARIANCE.S",
+	"_xlfn.CSC": "CSC",
+	"_xlfn.CSCH": "CSCH",
+	"_xlfn.DAYS": "DAYS",
+	"_xlfn.DECIMAL": "DECIMAL",
+	"ECMA.CEILING": "ECMA.CEILING",
+	"_xlfn.ERF.PRECISE": "ERF.PRECISE",
+	"_xlfn.ERFC.PRECISE": "ERFC.PRECISE",
+	"_xlfn.EXPON.DIST": "EXPON.DIST",
+	"_xlfn.F.DIST": "F.DIST",
+	"_xlfn.F.DIST.RT": "F.DIST.RT",
+	"_xlfn.F.INV": "F.INV",
+	"_xlfn.F.INV.RT": "F.INV.RT",
+	"_xlfn.F.TEST": "F.TEST",
+	"_xlfn.FILTERXML": "FILTERXML",
+	"_xlfn.FLOOR.MATH": "FLOOR.MATH",
+	"_xlfn.FLOOR.PRECISE": "FLOOR.PRECISE",
+	"_xlfn.FORMULATEXT": "FORMULATEXT",
+	"_xlfn.GAMMA": "GAMMA",
+	"_xlfn.GAMMA.DIST": "GAMMA.DIST",
+	"_xlfn.GAMMA.INV": "GAMMA.INV",
+	"_xlfn.GAMMALN.PRECISE": "GAMMALN.PRECISE",
+	"_xlfn.GAUSS": "GAUSS",
+	"_xlfn.HYPGEOM.DIST": "HYPGEOM.DIST",
+	"_xlfn.IFNA": "IFNA",
+	"_xlfn.IMCOSH": "IMCOSH",
+	"_xlfn.IMCOT": "IMCOT",
+	"_xlfn.IMCSC": "IMCSC",
+	"_xlfn.IMCSCH": "IMCSCH",
+	"_xlfn.IMSEC": "IMSEC",
+	"_xlfn.IMSECH": "IMSECH",
+	"_xlfn.IMSINH": "IMSINH",
+	"_xlfn.IMTAN": "IMTAN",
+	"_xlfn.ISFORMULA": "ISFORMULA",
+	"_xlfn.ISO.CEILING": "ISO.CEILING",
+	"_xlfn.ISOWEEKNUM": "ISOWEEKNUM",
+	"_xlfn.LOGNORM.DIST": "LOGNORM.DIST",
+	"_xlfn.LOGNORM.INV": "LOGNORM.INV",
+	"_xlfn.MODE.MULT": "MODE.MULT",
+	"_xlfn.MODE.SNGL": "MODE.SNGL",
+	"_xlfn.MUNIT": "MUNIT",
+	"_xlfn.NEGBINOM.DIST": "NEGBINOM.DIST",
+	"NETWORKDAYS.INTL": "NETWORKDAYS.INTL",
+	"_xlfn.NIGBINOM": "NIGBINOM",
+	"_xlfn.NORM.DIST": "NORM.DIST",
+	"_xlfn.NORM.INV": "NORM.INV",
+	"_xlfn.NORM.S.DIST": "NORM.S.DIST",
+	"_xlfn.NORM.S.INV": "NORM.S.INV",
+	"_xlfn.NUMBERVALUE": "NUMBERVALUE",
+	"_xlfn.PDURATION": "PDURATION",
+	"_xlfn.PERCENTILE.EXC": "PERCENTILE.EXC",
+	"_xlfn.PERCENTILE.INC": "PERCENTILE.INC",
+	"_xlfn.PERCENTRANK.EXC": "PERCENTRANK.EXC",
+	"_xlfn.PERCENTRANK.INC": "PERCENTRANK.INC",
+	"_xlfn.PERMUTATIONA": "PERMUTATIONA",
+	"_xlfn.PHI": "PHI",
+	"_xlfn.POISSON.DIST": "POISSON.DIST",
+	"_xlfn.QUARTILE.EXC": "QUARTILE.EXC",
+	"_xlfn.QUARTILE.INC": "QUARTILE.INC",
+	"_xlfn.QUERYSTRING": "QUERYSTRING",
+	"_xlfn.RANK.AVG": "RANK.AVG",
+	"_xlfn.RANK.EQ": "RANK.EQ",
+	"_xlfn.RRI": "RRI",
+	"_xlfn.SEC": "SEC",
+	"_xlfn.SECH": "SECH",
+	"_xlfn.SHEET": "SHEET",
+	"_xlfn.SHEETS": "SHEETS",
+	"_xlfn.SKEW.P": "SKEW.P",
+	"_xlfn.STDEV.P": "STDEV.P",
+	"_xlfn.STDEV.S": "STDEV.S",
+	"_xlfn.SUMIFS": "SUMIFS",
+	"_xlfn.T.DIST": "T.DIST",
+	"_xlfn.T.DIST.2T": "T.DIST.2T",
+	"_xlfn.T.DIST.RT": "T.DIST.RT",
+	"_xlfn.T.INV": "T.INV",
+	"_xlfn.T.INV.2T": "T.INV.2T",
+	"_xlfn.T.TEST": "T.TEST",
+	"_xlfn.UNICHAR": "UNICHAR",
+	"_xlfn.UNICODE": "UNICODE",
+	"_xlfn.VAR.P": "VAR.P",
+	"_xlfn.VAR.S": "VAR.S",
+	"_xlfn.WEBSERVICE": "WEBSERVICE",
+	"_xlfn.WEIBULL.DIST": "WEIBULL.DIST",
+	"WORKDAY.INTL": "WORKDAY.INTL",
+	"_xlfn.XOR": "XOR",
+	"_xlfn.Z.TEST": "Z.TEST",
 };
