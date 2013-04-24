@@ -51,6 +51,18 @@ function parse_RkRec(blob, length) {
 	return [ixfe, RK];
 }
 
+/* 2.5.1 */
+function parse_AddinUdf(blob, length) {
+	blob.l += 4; length -= 4;
+	var l = blob.l + length;
+	var udfName = parse_ShortXLUnicodeString(blob, length);
+	var cb = blob.read_shift(2);
+	l -= blob.l;
+	if(cb !== l) throw "Malformed AddinUdf: padding = " + l + " != " + cb;
+	blob.l += cb;
+	return udfName;
+}
+
 
 /* --- 2.4 Records --- */
 
@@ -230,6 +242,56 @@ function parse_Number(blob, length) {
 
 var parse_XLHeaderFooter = parse_OptXLUnicodeString; // TODO: parse 2.4.136
 
+/* 2.4.271 */
+function parse_SupBook(blob, length, opts) {
+	var end = blob.l + length;
+	var ctab = blob.read_shift(2);
+	var cch = blob.read_shift(2);
+	var virtPath;
+	if(cch >=0x01 && cch <=0xff) virtPath = parse_XLUnicodeStringNoCch(blob, cch);
+	var rgst = blob.read_shift(end - blob.l);
+	opts.sbcch = cch;
+	return [cch, ctab, virtPath, rgst];
+}
+
+/* 2.4.105 TODO */
+function parse_ExternName(blob, length, opts) {
+	var flags = blob.read_shift(2);
+	var body;
+	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
+	else throw "unsupported SupBook cch: " + opts.sbcch;
+	return {
+		fBuiltIn: flags & 0x01,
+		fWantAdvise: (flags >>> 1) & 0x01,
+		fWantPict: (flags >>> 2) & 0x01,
+		fOle: (flags >>> 3) & 0x01,
+		fOleLink: (flags >>> 4) & 0x01,
+		cf: (flags >>> 5) & 0x3FF,
+		fIcon: flags >>> 15 & 0x01,
+		body: body
+	};
+}
+
+/* 2.4.150 TODO */
+function parse_Lbl(blob, length, opts) {
+	var target = blob.l + length;
+	var flags = blob.read_shift(2);
+	var chKey = blob.read_shift(1);
+	var cch = blob.read_shift(1);
+	var cce = blob.read_shift(2);
+	blob.l += 2;
+	var itab = blob.read_shift(2);
+	blob.l += 4;
+	var name = parse_XLUnicodeStringNoCch(blob, cch);
+	var rgce = parse_NameParsedFormula(blob, target - blob.l, cce);
+	return {
+		chKey: chKey,
+		Name: name,
+		rgce: rgce
+	};
+}
+
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -284,12 +346,10 @@ var parse_WriteProtect = parsenoop; /* 2.4.350 empty record */
 
 
 /* ---- */
-var parse_Lbl = parsenoop;
 var parse_VerticalPageBreaks = parsenoop;
 var parse_HorizontalPageBreaks = parsenoop;
 var parse_Note = parsenoop;
 var parse_Selection = parsenoop;
-var parse_ExternName = parsenoop;
 var parse_Continue = parsenoop;
 var parse_Pane = parsenoop;
 var parse_Pls = parsenoop;
@@ -398,7 +458,6 @@ var parse_UserSViewBegin = parsenoop; // overloaded
 var parse_UserSViewEnd = parsenoop;
 var parse_RRDUserView = parsenoop;
 var parse_Qsi = parsenoop;
-var parse_SupBook = parsenoop;
 var parse_CondFmt = parsenoop;
 var parse_CF = parsenoop;
 var parse_DVal = parsenoop;

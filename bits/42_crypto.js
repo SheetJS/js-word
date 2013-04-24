@@ -10,7 +10,7 @@ function parse_EncryptionHeader(blob, length) {
 	var read = blob.read_shift.bind(blob);
 	var o = {};
 	o.Flags = read(4);
-	
+
 	// Check if SizeExtra is 0x00000000
 	var tmp = read(4);
 	if(tmp !== 0) throw 'Unrecognized SizeExtra: ' + tmp;

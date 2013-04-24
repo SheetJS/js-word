@@ -2,7 +2,7 @@
 function parse_compobj(obj) {
 	var v = {};
 	var o = obj.content;
-	
+
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
 	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
@@ -32,7 +32,7 @@ var CompObjP, SummaryP, WorkbookP;
 
 
 /* 2.4.58 Continue logic */
-function slurp(R, blob, length) {
+function slurp(R, blob, length, opts) {
 	var read = blob.read_shift.bind(blob);
 	var l = length;
 	var bufs = [blob.slice(blob.l,blob.l+l)];
@@ -46,7 +46,7 @@ function slurp(R, blob, length) {
 	}
 	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
 	prep_blob(b);
-	return R.f(b, b.length);
+	return R.f(b, b.length, opts);
 }
 
 // 2.3.2
@@ -66,7 +66,13 @@ function parse_workbook(blob) {
 	function addline(cell, line) {
 		out[encode_cell(cell)] = line;
 	}
-	var enc = false;
+	var opts = {
+		enc: false, // encrypted
+		sbcch: 0, // cch in the preceding SupBook
+		wtf: false
+	};
+	var supbooks = [[]]; // 1-indexed, will hold extern names
+	var sbc = 0, sbci = 0;
 	while(blob.l < blob.length) {
 		var s = blob.l;
 		var RecordType = read(2);
@@ -75,7 +81,7 @@ function parse_workbook(blob) {
 		if(R && R.f) {
 			if(R.r === 2 || R.r == 12) {
 				var rt = read(2); length -= 2;
-				if(!enc && rt !== RecordType) throw "rt mismatch";
+				if(!opts.enc && rt !== RecordType) throw "rt mismatch";
 				if(R.r == 12){ blob.l += 10; length -= 10; } // skip FRT
 			}
 			//console.error(R,blob.l,length,blob.length);
@@ -84,18 +90,23 @@ function parse_workbook(blob) {
 			else {
 				var next = (RecordEnum[blob.readUInt16LE(blob.l+length)]);
 				if(next && next.n === 'Continue') {
-					val = slurp(R, blob, length, enc);
+					val = slurp(R, blob, length, opts);
 				} else {
-					if(enc) { parsenoop(blob, length); continue; }
-					val = R.f(blob, length);
+					if(opts.enc) { parsenoop(blob, length); continue; }
+					val = R.f(blob, length, opts);
 				}
 			}
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
+				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
 				case 'WriteAccess': break;
+
+				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
+				case 'ExternName': supbooks[sbc][++sbci] = val; break;
+				case 'Lbl': supbooks[0][++sbci] = val; break;
+				//case 'ExternSheet': supbooks[++sbc] = val; console.error(val); break;
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
@@ -133,12 +144,12 @@ function parse_workbook(blob) {
 					if(val.val === "String") {
 						last_formula = val;
 					}
-					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range), ixfe: val.cell.ixfe});
+					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, supbooks), ixfe: val.cell.ixfe});
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range), ixfe: last_formula.cell.ixfe});
+						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, supbooks), ixfe: last_formula.cell.ixfe});
 						last_formula = null;
 					}
 				} break;
@@ -173,7 +184,7 @@ function parse_workbook(blob) {
 	wb.Sheets=Sheets;
 	wb.Preamble=Preamble;
 	wb.Strings = sst;
-	if(enc) wb.Encryption = enc;
+	if(opts.enc) wb.Encryption = opts.enc;
 	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);

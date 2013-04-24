@@ -51,6 +51,7 @@ XLSX is not supported in this module.  Due to Licensing issues [that are discuss
 
  - [MS-CFB]: Compound File Binary File Format
  - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification
+ - [MS-XLSX]: Excel (.xlsx) Extensions to the Office Open XML SpreadsheetML File Format
  - [MS-ODATA]: Open Data Protocol (OData)
  - [MS-OFFCRYPTO]: Office Document Cryptography Structure
  - [MS-OLEDS]: Object Linking and Embedding (OLE) Data Structures

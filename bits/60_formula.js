@@ -80,6 +80,8 @@ function parsetab(blob, length) {
 
 /* 2.5.198.36 */
 var parse_PtgAttrIf = parseread(4);
+/* 2.5.198.37 */
+var parse_PtgAttrSemi = parseread(4);
 /* 2.5.198.41 */
 var parse_PtgAttrSum = parseread(4);
 /* 2.5.198.43 */
@@ -97,7 +99,17 @@ function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!==0;}
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
 
-/* 2.5.198.77 TODO */
+/* 2.5.198.57 */
+function parse_PtgErr(blob, length) { blob.l++; return BERR[blob.read_shift(1)]; }
+
+/* 2.5.198.76 */
+function parse_PtgName(blob, length) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	var nameindex = blob.read_shift(4);
+	return [type, 0, nameindex];
+}
+
+/* 2.5.198.77 */
 function parse_PtgNameX(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	var ixti = blob.read_shift(2); // XtiIndex
@@ -169,14 +181,14 @@ var PtgTypes = {
 	0x15: { n:'PtgParen', f:parse_PtgParen },
 	0x16: { n:'PtgMissArg', f:parse_PtgMissArg },
 	0x17: { n:'PtgStr', f:parse_PtgStr },
-	//0x1C: { n:'PtgErr', f:parse_PtgErr },
+	0x1C: { n:'PtgErr', f:parse_PtgErr },
 	0x1D: { n:'PtgBool', f:parse_PtgBool },
 	0x1E: { n:'PtgInt', f:parse_PtgInt },
 	//0x1F: { n:'PtgNum', f:parse_PtgNum },
 	//0x20: { n:'PtgArray', f:parse_PtgArray },
 	0x21: { n:'PtgFunc', f:parse_PtgFunc },
 	0x22: { n:'PtgFuncVar', f:parse_PtgFuncVar },
-	//0x23: { n:'PtgName', f:parse_PtgName },
+	0x23: { n:'PtgName', f:parse_PtgName },
 	0x24: { n:'PtgRef', f:parse_PtgRef },
 	0x25: { n:'PtgArea', f:parse_PtgArea },
 	//0x26: { n:'PtgMemArea', f:parse_PtgMemArea },
@@ -220,7 +232,7 @@ for(var y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
 
 var Ptg18 = {};
 var Ptg19 = {
-	//0x01: { n:'PtgAttrSemi', f:parse_PtgAttrSemi },
+	0x01: { n:'PtgAttrSemi', f:parse_PtgAttrSemi },
 	0x02: { n:'PtgAttrIf', f:parse_PtgAttrIf },
 	//0x04: { n:'PtgAttrChoose', f:parse_PtgAttrChoose },
 	0x08: { n:'PtgAttrGoto', f:parse_PtgAttrGoto },

@@ -56,15 +56,20 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	return msg;
 }
 
-/* 2.5.294 XLUnicodeString */
-function parse_XLUnicodeString(blob) {
+/* 2.5.296 XLUnicodeStringNoCch */
+function parse_XLUnicodeStringNoCch(blob, cch) {
 	var read = blob.read_shift.bind(blob);
-	var cch = read(2);
 	var fHighByte = read(1);
 	var retval;
 	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;
+}
+
+/* 2.5.294 XLUnicodeString */
+function parse_XLUnicodeString(blob) {
+	var cch = blob.read_shift(2);
+	return parse_XLUnicodeStringNoCch(blob, cch);
 }
 
 /* 2.5.342 Xnum */
