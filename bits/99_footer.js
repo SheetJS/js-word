@@ -1,4 +1,5 @@
 if(typeof exports !== 'undefined') {
+	exports.read = xlsread;
 	exports.readFile = readFile;
 	exports.utils = utils;
 	if(typeof module !== 'undefined' && require.main === module ) {
