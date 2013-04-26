@@ -63,16 +63,24 @@ function parse_workbook(blob) {
 	var sst = [];
 	var cur_sheet = "";
 	var Preamble = {};
+	var lastcell, last_cell;
+	var shared_formulae = {};
 	function addline(cell, line) {
-		out[encode_cell(cell)] = line;
+		lastcell = cell;
+		last_cell = encode_cell(cell);
+		out[last_cell] = line;
 	}
 	var opts = {
 		enc: false, // encrypted
 		sbcch: 0, // cch in the preceding SupBook
+		snames: [], // sheetnames
+		sharedf: shared_formulae, // shared formulae by address
 		wtf: false
 	};
 	var supbooks = [[]]; // 1-indexed, will hold extern names
-	var sbc = 0, sbci = 0;
+	var sbc = 0, sbci = 0, sbcli = 0;
+	supbooks.SheetNames = opts.snames;
+	supbooks.sharedf = opts.sharedf;
 	while(blob.l < blob.length) {
 		var s = blob.l;
 		var RecordType = read(2);
@@ -105,11 +113,12 @@ function parse_workbook(blob) {
 
 				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
 				case 'ExternName': supbooks[sbc][++sbci] = val; break;
-				case 'Lbl': supbooks[0][++sbci] = val; break;
-				//case 'ExternSheet': supbooks[++sbc] = val; console.error(val); break;
+				case 'Lbl': supbooks[0][++sbcli] = val; break;
+				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
+					opts.snames.push(val.name);
 				} break;
 				case 'EOF': {
 					var nout = {};
@@ -144,14 +153,18 @@ function parse_workbook(blob) {
 					if(val.val === "String") {
 						last_formula = val;
 					}
-					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, supbooks), ixfe: val.cell.ixfe});
+					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe});
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, supbooks), ixfe: last_formula.cell.ixfe});
+						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe});
 						last_formula = null;
 					}
+				} break;
+				case 'ShrFmla': {
+					out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
+					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
 					addline({c:val.c, r:val.r}, {v:JSON.stringify(sst[val.isst]), ixfe:val.ixfe});

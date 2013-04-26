@@ -4,7 +4,7 @@
 var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.2.6')
+	.version('0.2.7')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')

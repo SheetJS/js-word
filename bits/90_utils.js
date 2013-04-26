@@ -24,16 +24,23 @@ function encode_range(cs,ce) {
 	return cs == ce ? cs : cs + ":" + ce;
 }
 
-function shift_cell(cell, range) {
-	if(cell.cRel) cell.c += range.s.c;
-	if(cell.rRel) cell.r += range.s.r;
+function shift_cell(cell, tgt) {
+	if(tgt.s) {
+		if(cell.cRel) cell.c += tgt.s.c;
+		if(cell.rRel) cell.r += tgt.s.r;
+	} else {
+		cell.c += tgt.c;
+		cell.r += tgt.r;
+	}
 	cell.cRel = cell.rRel = 0;
+	while(cell.c >= 0x100) cell.c -= 0x100;
+	while(cell.r >= 0x10000) cell.r -= 0x10000;
 	return cell;
 }
 
 function shift_range(cell, range) {
-	cell.s = shift_cell(cell.s, range);
-	cell.e = shift_cell(cell.e, range);
+	cell.s = shift_cell(cell.s, range.s);
+	cell.e = shift_cell(cell.e, range.s);
 	return cell;
 }
 

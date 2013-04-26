@@ -5,23 +5,36 @@ function parseread1(blob, length) { blob.l+=1; return; }
 
 /* Rgce Helpers */
 
-/* 2.5.198.105 RgceArea */
+/* 2.5.51 */
+function parse_ColRelU(blob, length) {
+	var c = blob.read_shift(2);
+	return [c & 0x3FFF, (c >> 14) & 1, (c >> 15) & 1];
+}
+
+/* 2.5.198.105 */
 function parse_RgceArea(blob, length) {
 	var read = blob.read_shift.bind(blob);
-	var r=read(2), R=read(2), c=read(2), C=read(2);
-	var cRel = (c >> 14) & 1, rRel = (c >> 15 & 1);
-	var CRel = (C >> 14) & 1, RRel = (C >> 15 & 1);
-	c &= 0xFF; C &= 0xFF;
-	return {s:{r:r,c:c,cRel:cRel, rRel:rRel},e:{r:R,c:C,cRel:CRel,rRel:RRel}};
+	var r=read(2), R=read(2);
+	var c=parse_ColRelU(blob, 2);
+	var C=parse_ColRelU(blob, 2);
+	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };
 }
 
 /* 2.5.198.109 */
 function parse_RgceLoc(blob, length) {
-	var rw = blob.read_shift(2);
+	var r = blob.read_shift(2);
+	var c = parse_ColRelU(blob, 2);
+	return {r:r, c:c[0], cRel:c[1], rRel:c[2]};
+}
+
+/* 2.5.198.111 */
+function parse_RgceLocRel(blob, length) {
+	var r = blob.read_shift(2);
 	var cl = blob.read_shift(2);
-	var cRel = cl & 0x80, rRel = cl & 0x40;
-	cl &= 0x3F;
-	return {r:rw,c:cl,cRel:cRel,rRel:rRel};
+	var cRel = (cl & 0x8000) >> 15, rRel = (cl & 0x4000) >> 14;
+	cl &= 0x3FFF;
+	if(cRel !== 0) while(cl >= 0x100) cl -= 0x100;
+	return {r:r,c:cl,cRel:cRel,rRel:rRel};
 }
 
 /* Ptg Tokens */
@@ -33,6 +46,14 @@ function parse_PtgArea(blob, length) {
 	return [type, area];
 }
 
+/* 2.5.198.27 */
+function parse_PtgArea3d(blob, length) {
+	var type = (blob[blob.l++] & 0x60) >> 5;
+	var ixti = blob.read_shift(2);
+	var area = parse_RgceArea(blob, 8);
+	return [type, ixti, area];
+}
+
 /* 2.5.198.84 TODO */
 function parse_PtgRef(blob, length) {
 	var ptg = blob[blob.l] & 0x1F;
@@ -42,7 +63,16 @@ function parse_PtgRef(blob, length) {
 	return [type, loc];
 }
 
-/* 2.5.198.84 TODO */
+/* 2.5.198.88 TODO */
+function parse_PtgRefN(blob, length) {
+	var ptg = blob[blob.l] & 0x1F;
+	var type = (blob[blob.l] & 0x60)>>5;
+	blob.l += 1;
+	var loc = parse_RgceLocRel(blob,4);
+	return [type, loc];
+}
+
+/* 2.5.198.85 TODO */
 function parse_PtgRef3d(blob, length) {
 	var ptg = blob[blob.l] & 0x1F;
 	var type = (blob[blob.l] & 0x60)>>5;
@@ -87,14 +117,22 @@ var parse_PtgAttrSum = parseread(4);
 /* 2.5.198.43 */
 var parse_PtgConcat = parseread1;
 
-/* 2.5.198.58 TODO */
-var parse_PtgExp = parseread(5);
+/* 2.5.198.58 */
+function parse_PtgExp(blob, length) {
+	blob.l++;
+	var row = blob.read_shift(2);
+	var col = blob.read_shift(2);
+	return [row, col];
+}
 
 /* 2.5.198.66 TODO */
 function parse_PtgInt(blob, length) { blob.l++; return blob.read_shift(2); }
 
 /* 2.5.198.42 */
 function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!==0;}
+
+/* 2.5.198.79 */
+function parse_PtgNum(blob, length) { blob.l++; return parse_Xnum(blob, 8); }
 
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
@@ -156,10 +194,41 @@ var parse_PtgUnion = parseread1;
 /* 2.5.198.95 */
 var parse_PtgUplus = parseread1;
 
+/* 2.5.198.29 */
+var parse_PtgAreaErr = parsenoop;
+/* 2.5.198.30 */
+var parse_PtgAreaErr3d = parsenoop;
+/* 2.5.198.31 */
+var parse_PtgAreaN = parsenoop;
+/* 2.5.198.32 */
+var parse_PtgArray = parsenoop;
+/* 2.5.198.33 */
+var parse_PtgAttrBaxcel = parsenoop;
+/* 2.5.198.34 */
+var parse_PtgAttrChoose = parsenoop;
+/* 2.5.198.38 */
+var parse_PtgAttrSpace = parsenoop;
+/* 2.5.198.39 */
+var parse_PtgAttrSpaceSemi = parsenoop;
+/* 2.5.198.70 */
+var parse_PtgMemArea = parsenoop;
+/* 2.5.198.71 */
+var parse_PtgMemErr = parsenoop;
+/* 2.5.198.72 */
+var parse_PtgMemFunc = parsenoop;
+/* 2.5.198.73 */
+var parse_PtgMemNoMem = parsenoop;
+/* 2.5.198.86 */
+var parse_PtgRefErr = parsenoop;
+/* 2.5.198.87 */
+var parse_PtgRefErr3d = parsenoop;
+/* 2.5.198.92 */
+var parse_PtgTbl = parsenoop;
+
 /* 2.5.198.25 */
 var PtgTypes = {
 	0x01: { n:'PtgExp', f:parse_PtgExp },
-	//0x02: { n:'PtgTbl', f:parse_PtgTbl },
+	0x02: { n:'PtgTbl', f:parse_PtgTbl },
 	0x03: { n:'PtgAdd', f:parse_PtgAdd },
 	0x04: { n:'PtgSub', f:parse_PtgSub },
 	0x05: { n:'PtgMul', f:parse_PtgMul },
@@ -184,26 +253,26 @@ var PtgTypes = {
 	0x1C: { n:'PtgErr', f:parse_PtgErr },
 	0x1D: { n:'PtgBool', f:parse_PtgBool },
 	0x1E: { n:'PtgInt', f:parse_PtgInt },
-	//0x1F: { n:'PtgNum', f:parse_PtgNum },
-	//0x20: { n:'PtgArray', f:parse_PtgArray },
+	0x1F: { n:'PtgNum', f:parse_PtgNum },
+	0x20: { n:'PtgArray', f:parse_PtgArray },
 	0x21: { n:'PtgFunc', f:parse_PtgFunc },
 	0x22: { n:'PtgFuncVar', f:parse_PtgFuncVar },
 	0x23: { n:'PtgName', f:parse_PtgName },
 	0x24: { n:'PtgRef', f:parse_PtgRef },
 	0x25: { n:'PtgArea', f:parse_PtgArea },
-	//0x26: { n:'PtgMemArea', f:parse_PtgMemArea },
-	//0x27: { n:'PtgMemErr', f:parse_PtgMemErr },
-	//0x28: { n:'PtgMemNoMem', f:parse_PtgMemNoMem },
-	//0x29: { n:'PtgMemFunc', f:parse_PtgMemFunc },
-	//0x2A: { n:'PtgRefErr', f:parse_PtgRefErr },
-	//0x2B: { n:'PtgAreaErr', f:parse_PtgAreaErr },
-	//0x2C: { n:'PtgRefN', f:parse_PtgRefN },
-	//0x2D: { n:'PtgAreaN', f:parse_PtgAreaN },
+	0x26: { n:'PtgMemArea', f:parse_PtgMemArea },
+	0x27: { n:'PtgMemErr', f:parse_PtgMemErr },
+	0x28: { n:'PtgMemNoMem', f:parse_PtgMemNoMem },
+	0x29: { n:'PtgMemFunc', f:parse_PtgMemFunc },
+	0x2A: { n:'PtgRefErr', f:parse_PtgRefErr },
+	0x2B: { n:'PtgAreaErr', f:parse_PtgAreaErr },
+	0x2C: { n:'PtgRefN', f:parse_PtgRefN },
+	0x2D: { n:'PtgAreaN', f:parse_PtgAreaN },
 	0x39: { n:'PtgNameX', f:parse_PtgNameX },
 	0x3A: { n:'PtgRef3d', f:parse_PtgRef3d },
-	//0x3B: { n:'PtgArea3d', f:parse_PtgArea3d },
-	//0x3C: { n:'PtgRefErr3d', f:parse_PtgRefErr3d },
-	//0x3D: { n:'PtgAreaErr3d', f:parse_PtgAreaErr3d },
+	0x3B: { n:'PtgArea3d', f:parse_PtgArea3d },
+	0x3C: { n:'PtgRefErr3d', f:parse_PtgRefErr3d },
+	0x3D: { n:'PtgAreaErr3d', f:parse_PtgAreaErr3d },
 	0xFF: {}
 };
 /* These are duplicated in the PtgTypes table */
@@ -234,12 +303,12 @@ var Ptg18 = {};
 var Ptg19 = {
 	0x01: { n:'PtgAttrSemi', f:parse_PtgAttrSemi },
 	0x02: { n:'PtgAttrIf', f:parse_PtgAttrIf },
-	//0x04: { n:'PtgAttrChoose', f:parse_PtgAttrChoose },
+	0x04: { n:'PtgAttrChoose', f:parse_PtgAttrChoose },
 	0x08: { n:'PtgAttrGoto', f:parse_PtgAttrGoto },
 	0x10: { n:'PtgAttrSum', f:parse_PtgAttrSum },
-	//0x20: { n:'PtgAttrBaxcel', f:parse_PtgAttrBaxcel },
-	//0x40: { n:'PtgAttrSpace', f:parse_PtgAttrSpace },
-	//0x41: { n:'PtgAttrSpaceSemi', f:parse_PtgAttrSpaceSemi },
+	0x20: { n:'PtgAttrBaxcel', f:parse_PtgAttrBaxcel },
+	0x40: { n:'PtgAttrSpace', f:parse_PtgAttrSpace },
+	0x41: { n:'PtgAttrSpaceSemi', f:parse_PtgAttrSpaceSemi },
 	0xFF: {}
 };
 
