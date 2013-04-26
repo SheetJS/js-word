@@ -25,12 +25,12 @@ function parse_OptXLUnicodeString(blob, length) { return length === 0 ? "" : par
 var HIDEOBJENUM = ['SHOWALL', 'SHOWPLACEHOLDER', 'HIDEALL'];
 var parse_HideObjEnum = parseuint16;
 
+/* 2.5.344 */
 function parse_XTI(blob, length) {
 	var read = blob.read_shift.bind(blob);
 	var iSupBook = read(2), itabFirst = read(2,'i'), itabLast = read(2,'i');
 	return [iSupBook, itabFirst, itabLast];
 }
-function parse_XTI2(blob, length) { return parslurp2(blob,length,parse_XTI);}
 
 /* 2.5.217 */
 function parse_RkNumber(blob) {
@@ -61,6 +61,15 @@ function parse_AddinUdf(blob, length) {
 	if(cb !== l) throw "Malformed AddinUdf: padding = " + l + " != " + cb;
 	blob.l += cb;
 	return udfName;
+}
+
+/* 2.5.211 */
+function parse_RefU(blob, length) {
+	var rwFirst = blob.read_shift(2);
+	var rwLast = blob.read_shift(2);
+	var colFirst = blob.read_shift(1);
+	var colLast = blob.read_shift(1);
+	return {s:{c:colFirst, r:rwFirst}, e:{c:colLast,r:rwLast}};
 }
 
 
@@ -291,6 +300,25 @@ function parse_Lbl(blob, length, opts) {
 	};
 }
 
+/* 2.4.106 TODO: verify supbook manipulation */
+function parse_ExternSheet(blob, length, opts) {
+	var o = parslurp2(blob,length,parse_XTI);
+	var oo = [];
+	if(opts.sbcch === 0x0401) {
+		for(var i = 0; i != o.length; ++i) oo.push(opts.snames[o[i][1]]);
+		return oo;
+	}
+	else return o;
+}
+
+/* 2.4.260 */
+function parse_ShrFmla(blob, length, opts) {
+	var ref = parse_RefU(blob, 6);
+	blob.l++;
+	var cUse = blob.read_shift(1);
+	length -= 8;
+	return [parse_SharedParsedFormula(blob, length, opts), cUse];
+}
 
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
@@ -312,7 +340,6 @@ var parse_DSF = parsenoop2; /* 2.4.94 -- MUST be ignored */
 var parse_EntExU2 = parsenoop2; /* 2.4.102 -- Explicitly says to ignore */
 var parse_EOF = parsenoop2; /* 2.4.103 */
 var parse_Excel9File = parsenoop2; /* 2.4.104 -- Optional and unused */
-var parse_ExternSheet = parse_XTI2; /* 2.4.106 */
 var parse_FeatHdr = parsenoop2; /* 2.4.112 */
 var parse_FontX = parseuint16; /* 2.4.123 */
 var parse_Footer = parse_XLHeaderFooter; /* 2.4.124 */
@@ -478,7 +505,6 @@ var parse_Window2 = parsenoop;
 var parse_Style = parsenoop;
 var parse_BigName = parsenoop;
 var parse_ContinueBigName = parsenoop;
-var parse_ShrFmla = parsenoop;
 var parse_HLinkTooltip = parsenoop;
 var parse_WebPub = parsenoop;
 var parse_QsiSXTag = parsenoop;

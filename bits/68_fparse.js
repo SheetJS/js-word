@@ -1,4 +1,4 @@
-/* 2.4.127 TODO*/
+/* 2.4.127 TODO */
 function parse_Formula(blob, length) {
 	var cell = parse_Cell(blob, 6);
 	var val = parse_FormulaValue(blob,8);
@@ -43,6 +43,16 @@ function parse_CellParsedFormula(blob, length) {
 	return [rgce, rgcb];
 }
 
+/* 2.5.198.118 TODO */
+function parse_SharedParsedFormula(blob, length) {
+	var target = blob.l + length;
+	var rgcb, cce = blob.read_shift(2); // length of rgce
+	var rgce = parse_Rgce(blob, cce);
+	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	return [rgce, rgcb];
+}
+
 /* 2.5.198.104 */
 var parse_Rgce = function(blob, length) {
 	var target = blob.l + length;
@@ -63,9 +73,9 @@ var parse_Rgce = function(blob, length) {
 };
 
 /* 2.2.2 + Magic TODO */
-function stringify_formula(formula, range, supbooks) {
+function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
-	var stack = [], e1, e2, type, c, sht;
+	var stack = [], e1, e2, type, c, ixti;
 	if(!formula[0] || !formula[0][0]) return "";
 	//console.log("--",formula[0])
 	formula[0].forEach(function(f) {
@@ -159,13 +169,19 @@ function stringify_formula(formula, range, supbooks) {
 			case 'PtgAttrIf': break;
 
 
+			/* 2.5.198.84 */
 			case 'PtgRef':
-				type = f[1][0], c = shift_cell(f[1][1], range);
+				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
+				stack.push(encode_cell(c));
+				break;
+			/* 2.5.198.88 */
+			case 'PtgRefN':
+				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), cell);
 				stack.push(encode_cell(c));
 				break;
 			case 'PtgRef3d': // TODO: lots of stuff
-				type = f[1][0], sht = f[1][1], c = shift_cell(f[1][2], range);
-				stack.push("!"+encode_cell(c));
+				type = f[1][0], ixti = f[1][1], c = shift_cell(f[1][2], range);
+				stack.push(supbooks[1][ixti+1]+"!"+encode_cell(c));
 				break;
 
 		/* Function Call */
@@ -184,13 +200,22 @@ function stringify_formula(formula, range, supbooks) {
 
 			/* 2.5.198.66 */
 			case 'PtgInt': stack.push(f[1]); break;
+			/* 2.5.198.79 TODO: precision? */
+			case 'PtgNum': stack.push(String(f[1])); break;
 			/* 2.5.198.89 */
 			case 'PtgStr': stack.push('"' + f[1] + '"'); break;
 
+			/* 2.5.198.27 */
 			case 'PtgArea':
 				type = f[1][0], r = shift_range(f[1][1], range);
 				stack.push(encode_range(r));
 				break;
+			/* 2.5.198.28 */
+			case 'PtgArea3d': // TODO: lots of stuff
+				type = f[1][0], ixti = f[1][1], r = f[1][2];
+				stack.push(supbooks[1][ixti+1]+"!"+encode_range(r));
+				break;
+			/* 2.5.198.41 */
 			case 'PtgAttrSum':
 				stack.push("SUM(" + stack.pop() + ")");
 				break;
@@ -220,6 +245,18 @@ function stringify_formula(formula, range, supbooks) {
 		/* 2.2.2.4 Display Tokens */
 			/* 2.5.198.80 */
 			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
+
+		/* */
+			/* 2.5.198.58 TODO */
+			case 'PtgExp':
+				var c = {c:f[1][1],r:f[1][0]};
+				if(supbooks.sharedf[encode_cell(c)]) {
+					var parsedf = (supbooks.sharedf[encode_cell(c)]);
+					var q = {c: cell.c, r:cell.r};
+					stack.push(stringify_formula(parsedf, range, q, supbooks));
+				}
+				else stack.push(f[1]);
+				break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
