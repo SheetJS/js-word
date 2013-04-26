@@ -302,4 +302,7 @@ var utils = {
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
+function xlsread(f, options) {
+	return parse_xlscfb(CFB.read(f, options));
+}
 var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); };

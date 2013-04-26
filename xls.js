@@ -94,6 +94,7 @@ var Base64 = (function(){
 })();
 
 function s2a(s) {
+	if(typeof Buffer !== 'undefined') return new Buffer(s, "binary");
 	var w = s.split("").map(function(x){return x.charCodeAt(0);});
 	return w;
 }
@@ -4064,6 +4065,9 @@ var utils = {
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
+function xlsread(f, options) {
+	return parse_xlscfb(CFB.read(f, options));
+}
 var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); };
 function decode_row(rowstr) { return Number(unfix_row(rowstr)) - 1; }
 function encode_row(row) { return "" + (row + 1); }
@@ -4112,6 +4116,7 @@ function shift_range(cell, range) {
 }
 
 if(typeof exports !== 'undefined') {
+	exports.read = xlsread;
 	exports.readFile = readFile;
 	exports.utils = utils;
 	if(typeof module !== 'undefined' && require.main === module ) {
