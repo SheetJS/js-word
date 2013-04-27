@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <style>
 #drop{
 	border:2px dashed #bbb;
@@ -8,13 +9,74 @@
 	text-align:center;
 	font:20pt bold,"Vollkorn";color:#bbb
 }
+#b64data{
+	width:100%;
+}
 </style>
+<b>JS-XLS Live Demo</b><br />
+<input type="radio" name="format" value="csv" checked> CSV<br>
+<input type="radio" name="format" value="json"> JSON<br>
+
 <div id="drop">Drop an XLS file here to see sheet data.</div>
+<!--
+<textarea id="b64data">... or paste a base64-encoding here</textarea>
+<input type="button" id="dotext" value="Click here to process the base64 text" onclick="b64it();"/>
+-->
 <pre id="out"></pre>
 <br />
 <script src="xls.js"></script>
 <script>
-if(!window.cfbs) window.cfbs = {};
+function get_radio_value( radioName ) {
+	var radios = document.getElementsByName( radioName );
+	for( var i = 0; i < radios.length; i++ ) {
+		if( radios[i].checked ) {
+			return radios[i].value;
+		}
+	}
+}
+
+function to_json(workbook) {
+	var result = {};
+	workbook.SheetNames.forEach(function(sheetName) {
+		var roa = sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		if(roa.length > 0){
+			result[sheetName] = roa;
+		}
+	});
+	return result;
+}
+
+function to_csv(workbook) {
+	var result = [];
+	workbook.SheetNames.forEach(function(sheetName) {
+		var csv = make_csv(workbook.Sheets[sheetName]);
+		if(csv.length > 0){
+			result.push("SHEET: " + sheetName);
+			result.push("");
+			result.push(csv);
+		}
+	});
+	return result.join("\n");
+}
+
+var tarea = document.getElementById('b64data');
+function b64it() {
+	var cfb = CFB.read(tarea.value, {type: 'base64'});
+	var wb = parse_xlscfb(cfb);
+	process_wb(wb);
+}
+
+function process_wb(wb) {
+	var output = "";
+	if(get_radio_value("format") === "json"){
+		output = JSON.stringify(to_json(wb), 2, 2);
+	} else {
+		output = to_csv(wb);
+	}
+	if(out.innerText === undefined) out.textContent = output;
+	else out.innerText = output;
+}
+
 var drop = document.getElementById('drop');
 function handleDrop(e) {
 	e.stopPropagation();
@@ -26,16 +88,14 @@ function handleDrop(e) {
 		var name = f.name;
 		reader.onload = function(e) {
 			var data = e.target.result;
-			var cfb = CFB.read(data, {type:'binary'})
-			window.cfbs[name] = cfb;
+			var cfb = CFB.read(data, {type: 'binary'});
+			//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
+			//var cfb = CFB.read(btoa(arr), {type: 'base64'});
 			var wb = parse_xlscfb(cfb);
-			var ws = wb.Sheets[wb.Directory[0]] 
-			var csv = make_csv(ws);  
-			var cmds = get_formulae(ws).join("\n");
-			out.innerText+=csv+"\n";
-
+			process_wb(wb);
 		};
 		reader.readAsBinaryString(f);
+		//reader.readAsArrayBuffer(f);
 	}
 }
 
@@ -44,7 +104,10 @@ function handleDragover(e) {
 	e.preventDefault();
 	e.dataTransfer.dropEffect = 'copy';
 }
-drop.addEventListener('dragover', handleDragover, false);
-drop.addEventListener('drop', handleDrop, false);
-</script>
 
+if(drop.addEventListener) {
+	drop.addEventListener('dragenter', handleDragover, false);
+	drop.addEventListener('dragover', handleDragover, false);
+	drop.addEventListener('drop', handleDrop, false);
+}
+</script>
