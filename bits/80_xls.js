@@ -139,26 +139,26 @@ function parse_workbook(blob) {
 					lst.push([R.n, s, val, Directory[s]]);
 				} break;
 				case 'Number': {
-					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val});
+					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:'n'});
 				} break;
 				case 'RK': {
-					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum});
+					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
-						addline({c:j/*+range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1]});
+						addline({c:j/*+range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1], t:'n'});
 					}
 				} break;
 				case 'Formula': {
 					if(val.val === "String") {
 						last_formula = val;
 					}
-					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe});
+					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe});
+						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
 						last_formula = null;
 					}
 				} break;
@@ -167,7 +167,7 @@ function parse_workbook(blob) {
 					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
-					addline({c:val.c, r:val.r}, {v:JSON.stringify(sst[val.isst]), ixfe:val.ixfe});
+					addline({c:val.c, r:val.r}, {v:JSON.stringify(sst[val.isst]), ixfe:val.ixfe, t:'s'});
 				} break;
 				case 'Dimensions': {
 					range = val;
@@ -221,7 +221,7 @@ function sheet_to_row_object_array(sheet){
 			})];
 			if(val){
 				switch(val.t) {
-					case 's': case 'str': columnHeaders[C] = val.v; break;
+					case 's': case 'str': columnHeaders[C] = JSON.parse(val.v); break;
 					case 'n': columnHeaders[C] = val.v; break;
 				}
 			}
@@ -238,7 +238,10 @@ function sheet_to_row_object_array(sheet){
 					r: R
 				})];
 				if(val !== undefined) switch(val.t){
-					case 's': case 'str': case 'b': case 'n':
+					case 's': case 'str':
+						if(val.v !== undefined) val.v = JSON.parse(val.v);
+					/* falls through */
+					case 'b': case 'n':
 						if(val.v !== undefined) {
 							rowObject[columnHeaders[C]] = val.v;
 							emptyRow = false;
