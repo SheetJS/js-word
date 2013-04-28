@@ -22,7 +22,22 @@ function parse_FormulaValue(blob) {
 }
 
 /* 2.5.198.103 */
-var parse_RgbExtra = parsenoop;
+function parse_RgbExtra(blob, length, rgce) {
+	var target = blob.l + length;
+	var o = [];
+	for(var i = 0; i !== rgce.length; ++i) {
+		switch(rgce[i][0]) {
+			case 'PtgArray': /* PtgArray -> PtgExtraArray */
+				rgce[i][1] = parse_PtgExtraArray(blob);
+				o.push(rgce[i][1]);
+				break;
+			default: break;
+		}
+	}
+	length = target - blob.l;
+	if(length !== 0) o.push(parsenoop(blob, length));
+	return o;
+}
 
 /* 2.5.198.21 */
 function parse_NameParsedFormula(blob, length, cce) {
@@ -39,7 +54,7 @@ function parse_CellParsedFormula(blob, length) {
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	var rgce = parse_Rgce(blob, cce);
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
-	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, length - cce - 2, rgce);
 	return [rgce, rgcb];
 }
 
@@ -54,7 +69,7 @@ function parse_SharedParsedFormula(blob, length) {
 }
 
 /* 2.5.198.104 */
-var parse_Rgce = function(blob, length) {
+function parse_Rgce(blob, length) {
 	var target = blob.l + length;
 	var R, id, ptgs = [];
 	while(target != blob.l) {
@@ -256,6 +271,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 					stack.push(stringify_formula(parsedf, range, q, supbooks));
 				}
 				else stack.push(f[1]);
+				break;
+
+			/* 2.5.198.32 TODO */
+			case 'PtgArray':
+				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
 				break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;

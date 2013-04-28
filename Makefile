@@ -5,4 +5,9 @@ $(TARGET): $(DEPS)
 
 .PHONY: clean
 clean:
-	rm $(TARGET) 
+	rm $(TARGET)
+
+.PHONY: init
+init:
+	git submodule init
+	git submodule update 
