@@ -1872,6 +1872,46 @@ function parse_PtgNum(blob, length) { blob.l++; return parse_Xnum(blob, 8); }
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
 
+/* 2.5.198.32 -- ignore this and look in PtgExtraArray for shape + values */
+var parse_PtgArray = parseread(8);
+
+/* 2.5.192.112 + 2.5.192.11{3,4,5,6,7} */
+function parse_SerAr(blob) {
+	var val = [];
+	switch((val[0] = blob.read_shift(1))) {
+		/* 2.5.192.113 */
+		case 0x04: /* SerBool -- boolean */
+			val[1] = parsebool(blob, 1) ? 'TRUE' : 'FALSE';
+			blob.l += 7; break;
+		/* 2.5.192.114 */
+		case 0x10: /* SerErr -- error */
+			val[1] = BERR[blob.l];
+			blob.l += 8; break;
+		/* 2.5.192.115 */
+		case 0x00: /* SerNil -- honestly, I'm not sure how to reproduce this */
+			blob.l += 8; break;
+		/* 2.5.192.116 */
+		case 0x01: /* SerNum -- Xnum */
+			val[1] = parse_Xnum(blob, 8); break;
+		/* 2.5.192.117 */
+		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
+			val[1] = parse_XLUnicodeString(blob); break;
+		default:
+			throw "Bad SerAr: " + type; 
+	}
+	return val;
+}
+
+
+/* 2.5.198.59 */
+function parse_PtgExtraArray(blob) {
+	var cols = 1 + blob.read_shift(1); //DColByteU
+	var rows = 1 + blob.read_shift(2); //DRw
+	for(var i = 0, o=[]; i != rows && (o[i] = []); ++i)
+		for(var j = 0; j != cols; ++j) o[i][j] = parse_SerAr(blob);
+	return o;
+}
+
 /* 2.5.198.57 */
 function parse_PtgErr(blob, length) { blob.l++; return BERR[blob.read_shift(1)]; }
 
@@ -1889,6 +1929,7 @@ function parse_PtgNameX(blob, length) {
 	var nameindex = blob.read_shift(4);
 	return [type, ixti, nameindex];
 }
+
 
 /* 2.5.198.26 */
 var parse_PtgAdd = parseread1;
@@ -1935,8 +1976,6 @@ var parse_PtgAreaErr = parsenoop;
 var parse_PtgAreaErr3d = parsenoop;
 /* 2.5.198.31 */
 var parse_PtgAreaN = parsenoop;
-/* 2.5.198.32 */
-var parse_PtgArray = parsenoop;
 /* 2.5.198.33 */
 var parse_PtgAttrBaxcel = parsenoop;
 /* 2.5.198.34 */
@@ -2071,7 +2110,22 @@ function parse_FormulaValue(blob) {
 }
 
 /* 2.5.198.103 */
-var parse_RgbExtra = parsenoop;
+function parse_RgbExtra(blob, length, rgce) {
+	var target = blob.l + length;
+	var o = [];
+	for(var i = 0; i !== rgce.length; ++i) {
+		switch(rgce[i][0]) {
+			case 'PtgArray': /* PtgArray -> PtgExtraArray */
+				rgce[i][1] = parse_PtgExtraArray(blob);
+				o.push(rgce[i][1]);
+				break;
+			default: break;
+		}
+	}
+	length = target - blob.l;
+	if(length !== 0) o.push(parsenoop(blob, length));
+	return o;
+}
 
 /* 2.5.198.21 */
 function parse_NameParsedFormula(blob, length, cce) {
@@ -2088,7 +2142,7 @@ function parse_CellParsedFormula(blob, length) {
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	var rgce = parse_Rgce(blob, cce);
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
-	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, length - cce - 2, rgce);
 	return [rgce, rgcb];
 }
 
@@ -2103,7 +2157,7 @@ function parse_SharedParsedFormula(blob, length) {
 }
 
 /* 2.5.198.104 */
-var parse_Rgce = function(blob, length) {
+function parse_Rgce(blob, length) {
 	var target = blob.l + length;
 	var R, id, ptgs = [];
 	while(target != blob.l) {
@@ -2305,6 +2359,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 					stack.push(stringify_formula(parsedf, range, q, supbooks));
 				}
 				else stack.push(f[1]);
+				break;
+
+			/* 2.5.198.32 TODO */
+			case 'PtgArray':
+				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
 				break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;

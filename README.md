@@ -34,6 +34,12 @@ The mechanism is split into a CFB parser (which scans through the file and produ
 
 `.Sheets[sheetname][address].val` returns the value of the cell.  Types are currently not recorded (but Number and RkNumber show up as javascript Numbers).
 
+## Test Files
+
+Test files are housed in [another repo](https://github.com/Niggler/test_files).
+
+Running `make init` will refresh the `test_files` submodule and get the files.
+
 ## License
 
 Please consult the attached LICENSE file for details.  All rights not explicitly granted by the Apache 2.0 license are reserved by the Original Author.
