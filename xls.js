@@ -3188,6 +3188,13 @@ var FtabArgc = {
 	0x0021: 1, /* VALUE */
 	0x0026: 1, /* NOT */
 	0x0027: 2, /* MOD */
+	0x0028: 3, /* DCOUNT */
+	0x0029: 3, /* DSUM */
+	0x002A: 3, /* DAVERAGE */
+	0x002B: 3, /* DMIN */
+	0x002C: 3, /* DMAX */
+	0x002D: 3, /* DSTDEV */
+	0x002F: 3, /* DVAR */
 	0x0030: 2, /* TEXT */
 	0x0035: 1, /* GOTO */
 	0x003D: 3, /* MIRR */
