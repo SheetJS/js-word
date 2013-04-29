@@ -2094,17 +2094,17 @@ function parse_Formula(blob, length) {
 	blob.read_shift(1);
 	var chn = blob.read_shift(4);
 	var cbf = parse_CellParsedFormula(blob, length-20);
-	return {cell:cell, val:val, formula:cbf};
+	return {cell:cell, val:val, formula:cbf, shared: (flags >> 3) & 1};
 }
 
 /* 2.5.133 */
 function parse_FormulaValue(blob) {
 	var b;
 	if(blob.readUInt16LE(blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
-	switch(blob[blob.l+2]) {
+	switch(blob[blob.l]) {
 		case 0x00: blob.l += 8; return "String";
 		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return b;
-		case 0x02: b = BERR[blob.l+2]; blob.l += 8; return b;
+		case 0x02: b = BERR[blob[blob.l+2]]; blob.l += 8; return b;
 		case 0x03: blob.l += 8; return "";
 	}
 }
@@ -2140,8 +2140,8 @@ function parse_NameParsedFormula(blob, length, cce) {
 function parse_CellParsedFormula(blob, length) {
 	var target = blob.l + length;
 	var rgcb, cce = blob.read_shift(2); // length of rgce
-	var rgce = parse_Rgce(blob, cce);
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
+	var rgce = parse_Rgce(blob, cce);
 	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, length - cce - 2, rgce);
 	return [rgce, rgcb];
 }
