@@ -219,7 +219,8 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgNum': stack.push(String(f[1])); break;
 			/* 2.5.198.89 */
 			case 'PtgStr': stack.push('"' + f[1] + '"'); break;
-
+			/* 2.5.198.57 */
+			case 'PtgErr': stack.push(f[1]); break;
 			/* 2.5.198.27 */
 			case 'PtgArea':
 				type = f[1][0], r = shift_range(f[1][1], range);
