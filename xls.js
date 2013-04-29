@@ -1070,6 +1070,15 @@ function parse_AddinUdf(blob, length) {
 	return udfName;
 }
 
+/* 2.5.209 TODO: Check sizes */
+function parse_Ref8U(blob, length) {
+	var rwFirst = blob.read_shift(2);
+	var rwLast = blob.read_shift(2);
+	var colFirst = blob.read_shift(2);
+	var colLast = blob.read_shift(2);
+	return {s:{c:colFirst, r:rwFirst}, e:{c:colLast,r:rwLast}};
+}
+
 /* 2.5.211 */
 function parse_RefU(blob, length) {
 	var rwFirst = blob.read_shift(2);
@@ -1860,6 +1869,9 @@ function parse_PtgExp(blob, length) {
 	return [row, col];
 }
 
+/* 2.5.198.57 */
+function parse_PtgErr(blob, length) { blob.l++; return BERR[blob.read_shift(1)]; }
+
 /* 2.5.198.66 TODO */
 function parse_PtgInt(blob, length) { blob.l++; return blob.read_shift(2); }
 
@@ -1897,11 +1909,18 @@ function parse_SerAr(blob) {
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
 			val[1] = parse_XLUnicodeString(blob); break;
 		default:
-			throw "Bad SerAr: " + type; 
+			throw "Bad SerAr: " + type;
 	}
 	return val;
 }
 
+/* 2.5.198.61 */
+function parse_PtgExtraMem(blob, cce) {
+	var count = blob.read_shift(2);
+	var out = [];
+	for(var i = 0; i != count; ++i) out.push(parse_Ref8U(blob, 8));
+	return out;
+}
 
 /* 2.5.198.59 */
 function parse_PtgExtraArray(blob) {
@@ -1911,9 +1930,6 @@ function parse_PtgExtraArray(blob) {
 		for(var j = 0; j != cols; ++j) o[i][j] = parse_SerAr(blob);
 	return o;
 }
-
-/* 2.5.198.57 */
-function parse_PtgErr(blob, length) { blob.l++; return BERR[blob.read_shift(1)]; }
 
 /* 2.5.198.76 */
 function parse_PtgName(blob, length) {
@@ -1930,6 +1946,29 @@ function parse_PtgNameX(blob, length) {
 	return [type, ixti, nameindex];
 }
 
+/* 2.5.198.70 */
+function parse_PtgMemArea(blob, length) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	blob.l += 4;
+	var cce = blob.read_shift(2);
+	return [type, cce];
+}
+
+/* 2.5.198.34 */
+function parse_PtgAttrChoose(blob, length) {
+	blob.l +=2;
+	var offset = blob.read_shift(2);
+	var o = [];
+	for(var i = 0; i <= offset; ++i) o.push(blob.read_shift(2));
+	return o;
+}
+
+/* 2.5.198.86 */
+function parse_PtgRefErr(blob, length) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	blob.l += 4;
+	return [type];
+}
 
 /* 2.5.198.26 */
 var parse_PtgAdd = parseread1;
@@ -1978,22 +2017,16 @@ var parse_PtgAreaErr3d = parsenoop;
 var parse_PtgAreaN = parsenoop;
 /* 2.5.198.33 */
 var parse_PtgAttrBaxcel = parsenoop;
-/* 2.5.198.34 */
-var parse_PtgAttrChoose = parsenoop;
 /* 2.5.198.38 */
 var parse_PtgAttrSpace = parsenoop;
 /* 2.5.198.39 */
 var parse_PtgAttrSpaceSemi = parsenoop;
-/* 2.5.198.70 */
-var parse_PtgMemArea = parsenoop;
 /* 2.5.198.71 */
 var parse_PtgMemErr = parsenoop;
 /* 2.5.198.72 */
 var parse_PtgMemFunc = parsenoop;
 /* 2.5.198.73 */
 var parse_PtgMemNoMem = parsenoop;
-/* 2.5.198.86 */
-var parse_PtgRefErr = parsenoop;
 /* 2.5.198.87 */
 var parse_PtgRefErr3d = parsenoop;
 /* 2.5.198.92 */
@@ -2118,6 +2151,10 @@ function parse_RgbExtra(blob, length, rgce) {
 			case 'PtgArray': /* PtgArray -> PtgExtraArray */
 				rgce[i][1] = parse_PtgExtraArray(blob);
 				o.push(rgce[i][1]);
+				break;
+			case 'PtgMemArea': /* PtgMemArea -> PtgExtraMem */
+				rgce[i][2] = parse_PtgExtraMem(blob, rgce[i][1]);
+				o.push(rgce[i][2]);
 				break;
 			default: break;
 		}
@@ -2261,6 +2298,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push(e2+" "+e1);
 				break;
 			case 'PtgUnion':
+				e1 = stack.pop(); e2 = stack.pop();
+				stack.push(e2+","+e1);
+				break;
 			case 'PtgRange': break;
 
 		/* 2.2.2.3 Control Tokens "can be ignored" */
@@ -2301,6 +2341,8 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push(func + "(" + args.join(",") + ")");
 				break;
 
+			/* 2.5.198.42 */
+			case 'PtgBool': stack.push(f[1] ? "TRUE" : "FALSE"); break;
 			/* 2.5.198.66 */
 			case 'PtgInt': stack.push(f[1]); break;
 			/* 2.5.198.79 TODO: precision? */
@@ -2350,6 +2392,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.198.80 */
 			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
 
+			/* 2.5.198.86 */
+			case 'PtgRefErr': stack.push('#REF!'); break;
+
 		/* */
 			/* 2.5.198.58 TODO */
 			case 'PtgExp':
@@ -2365,6 +2410,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.198.32 TODO */
 			case 'PtgArray':
 				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
+				break;
+
+			/* 2.5.198.70 TODO: confirm this is a non-display */
+			case 'PtgMemArea':
+				//stack.push("(" + f[2].map(encode_range).join(",") + ")");
 				break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;
@@ -4165,7 +4215,7 @@ function unfix_cell(cstr) { return unfix_col(unfix_row(cstr)); }
 /* ranges can be individual cells -- magic happens here */
 function decode_range(range) { var x =range.split(":").map(decode_cell); return {s:x[0],e:x[x.length-1]}; }
 function encode_range(cs,ce) {
-	if(ce === undefined) return encode_range(cs.s, cs.e);
+	if(typeof ce === 'undefined' || typeof ce === 'number') return encode_range(cs.s, cs.e);
 	if(typeof cs !== 'string') cs = encode_cell(cs); if(typeof ce !== 'string') ce = encode_cell(ce);
 	return cs == ce ? cs : cs + ":" + ce;
 }

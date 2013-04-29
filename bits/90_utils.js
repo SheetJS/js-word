@@ -19,7 +19,7 @@ function unfix_cell(cstr) { return unfix_col(unfix_row(cstr)); }
 /* ranges can be individual cells -- magic happens here */
 function decode_range(range) { var x =range.split(":").map(decode_cell); return {s:x[0],e:x[x.length-1]}; }
 function encode_range(cs,ce) {
-	if(ce === undefined) return encode_range(cs.s, cs.e);
+	if(typeof ce === 'undefined' || typeof ce === 'number') return encode_range(cs.s, cs.e);
 	if(typeof cs !== 'string') cs = encode_cell(cs); if(typeof ce !== 'string') ce = encode_cell(ce);
 	return cs == ce ? cs : cs + ":" + ce;
 }
