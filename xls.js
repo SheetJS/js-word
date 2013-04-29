@@ -2307,7 +2307,8 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgNum': stack.push(String(f[1])); break;
 			/* 2.5.198.89 */
 			case 'PtgStr': stack.push('"' + f[1] + '"'); break;
-
+			/* 2.5.198.57 */
+			case 'PtgErr': stack.push(f[1]); break;
 			/* 2.5.198.27 */
 			case 'PtgArea':
 				type = f[1][0], r = shift_range(f[1][1], range);
@@ -3212,6 +3213,7 @@ var FtabArgc = {
 	0x004F: 2, /* ABSREF */
 	0x0050: 2, /* RELREF */
 	0x0053: 1, /* TRANSPOSE */
+	0x0056: 1, /* TYPE */
 	0x005A: 1, /* DEREF */
 	0x0061: 2, /* ATAN2 */
 	0x0062: 1, /* ASIN */
@@ -3276,6 +3278,7 @@ var FtabArgc = {
 	0x00F4: 1, /* INFO */
 	0x00FC: 2, /* FREQUENCY */
 	0x0101: 1, /* EVALUATE */
+	0x0105: 1, /* ERROR.TYPE */
 	0x010F: 1, /* GAMMALN */
 	0x0111: 4, /* BINOMDIST */
 	0x0112: 2, /* CHIDIST */
