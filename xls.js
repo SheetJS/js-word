@@ -3398,6 +3398,7 @@ var XLSXFutureFunctions = {
 	"_xlfn.GAUSS": "GAUSS",
 	"_xlfn.HYPGEOM.DIST": "HYPGEOM.DIST",
 	"_xlfn.IFNA": "IFNA",
+	"_xlfn.IFERROR": "IFERROR",
 	"_xlfn.IMCOSH": "IMCOSH",
 	"_xlfn.IMCOT": "IMCOT",
 	"_xlfn.IMCSC": "IMCSC",
@@ -4089,7 +4090,9 @@ function sheet_to_csv(sheet) {
 			var row = [];
 			for(var C = r.s.c; C <= r.e.c; ++C) {
 				var val = sheet[utils.encode_cell({c:C,r:R})];
-				row.push(val ? String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\") : "");
+				if(!val) { row.push(""); continue; }
+				if(typeof val.v === 'boolean') val.v = val.v ? "TRUE" : "FALSE";
+				row.push(String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\"));
 			}
 			out += row.join(",") + "\n";
 		}

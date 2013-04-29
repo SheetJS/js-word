@@ -1024,6 +1024,7 @@ var XLSXFutureFunctions = {
 	"_xlfn.GAUSS": "GAUSS",
 	"_xlfn.HYPGEOM.DIST": "HYPGEOM.DIST",
 	"_xlfn.IFNA": "IFNA",
+	"_xlfn.IFERROR": "IFERROR",
 	"_xlfn.IMCOSH": "IMCOSH",
 	"_xlfn.IMCOT": "IMCOT",
 	"_xlfn.IMCSC": "IMCSC",
