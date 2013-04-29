@@ -31,6 +31,10 @@ function parse_RgbExtra(blob, length, rgce) {
 				rgce[i][1] = parse_PtgExtraArray(blob);
 				o.push(rgce[i][1]);
 				break;
+			case 'PtgMemArea': /* PtgMemArea -> PtgExtraMem */
+				rgce[i][2] = parse_PtgExtraMem(blob, rgce[i][1]);
+				o.push(rgce[i][2]);
+				break;
 			default: break;
 		}
 	}
@@ -173,6 +177,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push(e2+" "+e1);
 				break;
 			case 'PtgUnion':
+				e1 = stack.pop(); e2 = stack.pop();
+				stack.push(e2+","+e1);
+				break;
 			case 'PtgRange': break;
 
 		/* 2.2.2.3 Control Tokens "can be ignored" */
@@ -213,6 +220,8 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push(func + "(" + args.join(",") + ")");
 				break;
 
+			/* 2.5.198.42 */
+			case 'PtgBool': stack.push(f[1] ? "TRUE" : "FALSE"); break;
 			/* 2.5.198.66 */
 			case 'PtgInt': stack.push(f[1]); break;
 			/* 2.5.198.79 TODO: precision? */
@@ -262,6 +271,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.198.80 */
 			case 'PtgParen': stack.push('(' + stack.pop() + ')'); break;
 
+			/* 2.5.198.86 */
+			case 'PtgRefErr': stack.push('#REF!'); break;
+
 		/* */
 			/* 2.5.198.58 TODO */
 			case 'PtgExp':
@@ -277,6 +289,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.198.32 TODO */
 			case 'PtgArray':
 				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
+				break;
+
+			/* 2.5.198.70 TODO: confirm this is a non-display */
+			case 'PtgMemArea':
+				//stack.push("(" + f[2].map(encode_range).join(",") + ")");
 				break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;
