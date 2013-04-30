@@ -81,6 +81,8 @@ function parse_RefU(blob, length) {
 	return {s:{c:colFirst, r:rwFirst}, e:{c:colLast,r:rwLast}};
 }
 
+/* 2.5.207 */
+var parse_Ref = parse_RefU;
 
 /* --- 2.4 Records --- */
 
@@ -329,6 +331,13 @@ function parse_ShrFmla(blob, length, opts) {
 	return [parse_SharedParsedFormula(blob, length, opts), cUse];
 }
 
+/* 2.4.4 TODO */
+function parse_Array(blob, length, opts) {
+	var ref = parse_Ref(blob, 6);
+	blob.l += 6; length -= 12; /* TODO: fAlwaysCalc */
+	return [ref, parse_ArrayParsedFormula(blob, length, opts, ref)];
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -508,7 +517,6 @@ var parse_Dv = parsenoop;
 var parse_Label = parsenoop;
 var parse_BoolErr = parsenoop;
 var parse_Index = parsenoop;
-var parse_Array = parsenoop;
 var parse_Table = parsenoop;
 var parse_Window2 = parsenoop;
 var parse_Style = parsenoop;

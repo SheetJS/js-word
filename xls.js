@@ -1088,6 +1088,8 @@ function parse_RefU(blob, length) {
 	return {s:{c:colFirst, r:rwFirst}, e:{c:colLast,r:rwLast}};
 }
 
+/* 2.5.207 */
+var parse_Ref = parse_RefU;
 
 /* --- 2.4 Records --- */
 
@@ -1336,6 +1338,13 @@ function parse_ShrFmla(blob, length, opts) {
 	return [parse_SharedParsedFormula(blob, length, opts), cUse];
 }
 
+/* 2.4.4 TODO */
+function parse_Array(blob, length, opts) {
+	var ref = parse_Ref(blob, 6);
+	blob.l += 6; length -= 12; /* TODO: fAlwaysCalc */
+	return [ref, parse_ArrayParsedFormula(blob, length, opts, ref)];
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -1515,7 +1524,6 @@ var parse_Dv = parsenoop;
 var parse_Label = parsenoop;
 var parse_BoolErr = parsenoop;
 var parse_Index = parsenoop;
-var parse_Array = parsenoop;
 var parse_Table = parsenoop;
 var parse_Window2 = parsenoop;
 var parse_Style = parsenoop;
@@ -2189,6 +2197,16 @@ function parse_SharedParsedFormula(blob, length) {
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	var rgce = parse_Rgce(blob, cce);
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	return [rgce, rgcb];
+}
+
+/* 2.5.198.1 TODO */
+function parse_ArrayParsedFormula(blob, length, opts, ref) {
+	var target = blob.l + length;
+	var rgcb, cce = blob.read_shift(2); // length of rgce
+	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
+	var rgce = parse_Rgce(blob, cce);
 	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
 	return [rgce, rgcb];
 }
@@ -4036,10 +4054,11 @@ function parse_workbook(blob) {
 					}
 				} break;
 				case 'Formula': {
-					if(val.val === "String") {
-						last_formula = val;
+					switch(val.val) {
+						case 'String': last_formula = val; break;
+						case 'Array Formula': throw "Array Formula unsupported";
+						default: addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
 					}
-					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
 				} break;
 				case 'String': {
 					if(last_formula) {
@@ -4047,6 +4066,9 @@ function parse_workbook(blob) {
 						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
 						last_formula = null;
 					}
+				} break;
+				case 'Array': {
+					/* console.error(val); */
 				} break;
 				case 'ShrFmla': {
 					out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
