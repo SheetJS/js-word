@@ -72,6 +72,16 @@ function parse_SharedParsedFormula(blob, length) {
 	return [rgce, rgcb];
 }
 
+/* 2.5.198.1 TODO */
+function parse_ArrayParsedFormula(blob, length, opts, ref) {
+	var target = blob.l + length;
+	var rgcb, cce = blob.read_shift(2); // length of rgce
+	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
+	var rgce = parse_Rgce(blob, cce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	return [rgce, rgcb];
+}
+
 /* 2.5.198.104 */
 function parse_Rgce(blob, length) {
 	var target = blob.l + length;

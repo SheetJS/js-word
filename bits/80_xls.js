@@ -150,10 +150,11 @@ function parse_workbook(blob) {
 					}
 				} break;
 				case 'Formula': {
-					if(val.val === "String") {
-						last_formula = val;
+					switch(val.val) {
+						case 'String': last_formula = val; break;
+						case 'Array Formula': throw "Array Formula unsupported";
+						default: addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
 					}
-					else addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
 				} break;
 				case 'String': {
 					if(last_formula) {
@@ -161,6 +162,9 @@ function parse_workbook(blob) {
 						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
 						last_formula = null;
 					}
+				} break;
+				case 'Array': {
+					/* console.error(val); */
 				} break;
 				case 'ShrFmla': {
 					out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
