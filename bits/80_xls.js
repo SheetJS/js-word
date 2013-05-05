@@ -273,7 +273,7 @@ function sheet_to_csv(sheet) {
 				var val = sheet[utils.encode_cell({c:C,r:R})];
 				if(!val) { row.push(""); continue; }
 				if(typeof val.v === 'boolean') val.v = val.v ? "TRUE" : "FALSE";
-				row.push(String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\"));
+				row.push(String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\""));
 			}
 			out += row.join(",") + "\n";
 		}
