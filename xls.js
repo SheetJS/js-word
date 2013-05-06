@@ -959,6 +959,12 @@ function parseuint16a(blob, length) { return parslurp(blob,length,parseuint16);}
 /* [MS-XLS] 2.5.14 Boolean */
 var parse_Boolean = parsebool;
 
+/* [MS-XLS] 2.5.10 Bes (boolean or error) */
+function parse_Bes(blob) {
+	var v = blob.read_shift(1), t = blob.read_shift(1);
+	return t === 0x01 ? BERR[v] : v === 0x01; 
+}
+
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
 function parse_ShortXLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
@@ -1114,9 +1120,9 @@ function parse_InterfaceHdr(blob, length) {
 function parse_WriteAccess(blob, length) {
 	var l = blob.l;
 	// TODO: make sure XLUnicodeString doesnt overrun
-	var UserName = ""; //parse_XLUnicodeString(blob);
+	var UserName = parse_XLUnicodeString(blob);
 	blob.read_shift(length + l - blob.l);
-	return { WriteAccess: UserName };
+	return UserName;
 }
 
 /* 2.4.28 */
@@ -1258,8 +1264,26 @@ function parse_MulRk(blob, length) {
 /* 2.4.353 */
 var parse_XF = parsenoop;
 
+/* 2.4.134 */
+function parse_Guts(blob, length) {
+	blob.l += 4;
+	var out = [blob.read_shift(2), blob.read_shift(2)];
+	if(out[0] != 0) out[0]--;
+	if(out[1] != 0) out[1]--;
+	if(out[0] > 7 || out[1] > 7) throw "Bad Gutters: " + out;
+	return out;
+}
 
+/* 2.4.24 */
+function parse_BoolErr(blob, length) {
+	var cell = parse_Cell(blob, 6);
+	var val = parse_Bes(blob, 2);
+	cell.val = val;
+	cell.t = (val === true || val === false) ? 'b' : 'e';
+	return cell;
+}
 
+/* 2.4.180 Number */
 function parse_Number(blob, length) {
 	var cell = parse_Cell(blob, 6);
 	var xnum = parse_Xnum(blob, 8);
@@ -1348,7 +1372,7 @@ function parse_Array(blob, length, opts) {
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
-var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10*/
+var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10 but excel 2011 generates 0x11? */
 var parse_CalcCount = parseuint16; /* 2.4.31 #Iterations */
 var parse_CalcDelta = parse_Xnum; /* 2.4.32 */
 var parse_CalcIter = parsebool;  /* 2.4.33 1=iterative calc */
@@ -1374,7 +1398,7 @@ var parse_Header = parse_XLHeaderFooter; /* 2.4.136 */
 var parse_HideObj = parse_HideObjEnum; /* 2.4.139 */
 var parse_InterfaceEnd = parsenoop2; /* 2.4.145 -- noop */
 var parse_LeftMargin = parse_Xnum; /* 2.4.151 */
-var parse_Mms = parsenoop2; /* 2.4.169 */
+var parse_Mms = parsenoop2; /* 2.4.169 -- Explicitly says to ignore */
 var parse_ObjProtect = parsebool; /* 2.4.183 -- must be 1 if present */
 var parse_Password = parseuint16; /* 2.4.191 */
 var parse_PrintGrid = parsebool; /* 2.4.202 */
@@ -1416,7 +1440,6 @@ var parse_Uncalced = parsenoop;
 var parse_Template = parsenoop;
 var parse_Intl = parsenoop;
 var parse_ColInfo = parsenoop;
-var parse_Guts = parsenoop;
 var parse_WsBool = parsenoop;
 var parse_Sort = parsenoop;
 var parse_Palette = parsenoop;
@@ -1522,7 +1545,6 @@ var parse_SXFDBType = parsenoop;
 var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
 var parse_Label = parsenoop;
-var parse_BoolErr = parsenoop;
 var parse_Index = parsenoop;
 var parse_Table = parsenoop;
 var parse_Window2 = parsenoop;
@@ -2457,6 +2479,7 @@ var BERR = {
 	0x1D: "#NAME?",
 	0x24: "#NUM!",
 	0x2A: "#N/A",
+	0x2B: "#GETTING_DATA", /* Noted in 2.5.10 but not in 2.5.198.2 */
 	0xFF: "#WTF?"
 };
 
@@ -3979,6 +4002,10 @@ function parse_workbook(blob) {
 		sbcch: 0, // cch in the preceding SupBook
 		snames: [], // sheetnames
 		sharedf: shared_formulae, // shared formulae by address
+		rrtabid: [], // RRTabId
+		lastuser: "", // Last User from WriteAccess
+		codepage: 0, // CP from CodePage record
+		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
 	var supbooks = [[]]; // 1-indexed, will hold extern names
@@ -4013,12 +4040,19 @@ function parse_workbook(blob) {
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
 				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
-				case 'WriteAccess': break;
+				case 'WriteAccess': opts.lastuser = val; break;
+				case 'CodePage': opts.codepage = val; break;
+				case 'RRTabId': opts.rrtabid = val; break;
+				case 'WinProtect': opts.winlocked = val; break;
 
 				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
 				case 'ExternName': supbooks[sbc][++sbci] = val; break;
 				case 'Lbl': supbooks[0][++sbcli] = val; break;
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
+
+				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
+				case 'Password': if(val !== 0) throw "Password protection unsupported";
+				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
@@ -4044,6 +4078,9 @@ function parse_workbook(blob) {
 				} break;
 				case 'Number': {
 					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:'n'});
+				} break;
+				case 'BoolErr': {
+					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:val.t});
 				} break;
 				case 'RK': {
 					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
@@ -4096,7 +4133,7 @@ function parse_workbook(blob) {
 		lst.push(['Unrecognized', Number(RecordType).toString(16), RecordType]);
 		read(length);
 	}
-	var sheetnamesraw = Object.keys(Directory).map(Number).sort().map(function(x){return Directory[x].name;});
+	var sheetnamesraw = Object.keys(Directory).sort(function(a,b) { return Number(a) - Number(b); }).map(function(x){return Directory[x].name;});
 	var sheetnames = []; sheetnamesraw.forEach(function(x){sheetnames.push(x);});
 	//console.log(lst);
 	//lst.filter(function(x) { return x[0] === 'Formula';}).forEach(function(x){console.log(x[2].cell,x[2].formula);});

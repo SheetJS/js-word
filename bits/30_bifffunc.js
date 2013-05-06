@@ -107,9 +107,9 @@ function parse_InterfaceHdr(blob, length) {
 function parse_WriteAccess(blob, length) {
 	var l = blob.l;
 	// TODO: make sure XLUnicodeString doesnt overrun
-	var UserName = ""; //parse_XLUnicodeString(blob);
+	var UserName = parse_XLUnicodeString(blob);
 	blob.read_shift(length + l - blob.l);
-	return { WriteAccess: UserName };
+	return UserName;
 }
 
 /* 2.4.28 */
@@ -251,8 +251,26 @@ function parse_MulRk(blob, length) {
 /* 2.4.353 */
 var parse_XF = parsenoop;
 
+/* 2.4.134 */
+function parse_Guts(blob, length) {
+	blob.l += 4;
+	var out = [blob.read_shift(2), blob.read_shift(2)];
+	if(out[0] != 0) out[0]--;
+	if(out[1] != 0) out[1]--;
+	if(out[0] > 7 || out[1] > 7) throw "Bad Gutters: " + out;
+	return out;
+}
 
+/* 2.4.24 */
+function parse_BoolErr(blob, length) {
+	var cell = parse_Cell(blob, 6);
+	var val = parse_Bes(blob, 2);
+	cell.val = val;
+	cell.t = (val === true || val === false) ? 'b' : 'e';
+	return cell;
+}
 
+/* 2.4.180 Number */
 function parse_Number(blob, length) {
 	var cell = parse_Cell(blob, 6);
 	var xnum = parse_Xnum(blob, 8);
@@ -341,7 +359,7 @@ function parse_Array(blob, length, opts) {
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
-var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10*/
+var parse_BuiltInFnGroupCount = parseuint16; /* 2.4.30 0x0E or 0x10 but excel 2011 generates 0x11? */
 var parse_CalcCount = parseuint16; /* 2.4.31 #Iterations */
 var parse_CalcDelta = parse_Xnum; /* 2.4.32 */
 var parse_CalcIter = parsebool;  /* 2.4.33 1=iterative calc */
@@ -367,7 +385,7 @@ var parse_Header = parse_XLHeaderFooter; /* 2.4.136 */
 var parse_HideObj = parse_HideObjEnum; /* 2.4.139 */
 var parse_InterfaceEnd = parsenoop2; /* 2.4.145 -- noop */
 var parse_LeftMargin = parse_Xnum; /* 2.4.151 */
-var parse_Mms = parsenoop2; /* 2.4.169 */
+var parse_Mms = parsenoop2; /* 2.4.169 -- Explicitly says to ignore */
 var parse_ObjProtect = parsebool; /* 2.4.183 -- must be 1 if present */
 var parse_Password = parseuint16; /* 2.4.191 */
 var parse_PrintGrid = parsebool; /* 2.4.202 */
@@ -409,7 +427,6 @@ var parse_Uncalced = parsenoop;
 var parse_Template = parsenoop;
 var parse_Intl = parsenoop;
 var parse_ColInfo = parsenoop;
-var parse_Guts = parsenoop;
 var parse_WsBool = parsenoop;
 var parse_Sort = parsenoop;
 var parse_Palette = parsenoop;
@@ -515,7 +532,6 @@ var parse_SXFDBType = parsenoop;
 var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
 var parse_Label = parsenoop;
-var parse_BoolErr = parsenoop;
 var parse_Index = parsenoop;
 var parse_Table = parsenoop;
 var parse_Window2 = parsenoop;

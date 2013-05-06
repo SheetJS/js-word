@@ -29,6 +29,12 @@ function parseuint16a(blob, length) { return parslurp(blob,length,parseuint16);}
 /* [MS-XLS] 2.5.14 Boolean */
 var parse_Boolean = parsebool;
 
+/* [MS-XLS] 2.5.10 Bes (boolean or error) */
+function parse_Bes(blob) {
+	var v = blob.read_shift(1), t = blob.read_shift(1);
+	return t === 0x01 ? BERR[v] : v === 0x01; 
+}
+
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
 function parse_ShortXLUnicodeString(blob) {
 	var read = blob.read_shift.bind(blob);
