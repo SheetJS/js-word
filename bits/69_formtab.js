@@ -14,6 +14,7 @@ var BERR = {
 	0x1D: "#NAME?",
 	0x24: "#NUM!",
 	0x2A: "#N/A",
+	0x2B: "#GETTING_DATA", /* Noted in 2.5.10 but not in 2.5.198.2 */
 	0xFF: "#WTF?"
 };
 

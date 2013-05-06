@@ -75,6 +75,10 @@ function parse_workbook(blob) {
 		sbcch: 0, // cch in the preceding SupBook
 		snames: [], // sheetnames
 		sharedf: shared_formulae, // shared formulae by address
+		rrtabid: [], // RRTabId
+		lastuser: "", // Last User from WriteAccess
+		codepage: 0, // CP from CodePage record
+		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
 	var supbooks = [[]]; // 1-indexed, will hold extern names
@@ -109,12 +113,19 @@ function parse_workbook(blob) {
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
 				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
-				case 'WriteAccess': break;
+				case 'WriteAccess': opts.lastuser = val; break;
+				case 'CodePage': opts.codepage = val; break;
+				case 'RRTabId': opts.rrtabid = val; break;
+				case 'WinProtect': opts.winlocked = val; break;
 
 				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
 				case 'ExternName': supbooks[sbc][++sbci] = val; break;
 				case 'Lbl': supbooks[0][++sbcli] = val; break;
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
+
+				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
+				case 'Password': if(val !== 0) throw "Password protection unsupported";
+				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
 					Directory[val.pos] = val;
@@ -140,6 +151,9 @@ function parse_workbook(blob) {
 				} break;
 				case 'Number': {
 					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:'n'});
+				} break;
+				case 'BoolErr': {
+					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:val.t});
 				} break;
 				case 'RK': {
 					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
@@ -192,7 +206,7 @@ function parse_workbook(blob) {
 		lst.push(['Unrecognized', Number(RecordType).toString(16), RecordType]);
 		read(length);
 	}
-	var sheetnamesraw = Object.keys(Directory).map(Number).sort().map(function(x){return Directory[x].name;});
+	var sheetnamesraw = Object.keys(Directory).sort(function(a,b) { return Number(a) - Number(b); }).map(function(x){return Directory[x].name;});
 	var sheetnames = []; sheetnamesraw.forEach(function(x){sheetnames.push(x);});
 	//console.log(lst);
 	//lst.filter(function(x) { return x[0] === 'Formula';}).forEach(function(x){console.log(x[2].cell,x[2].formula);});
