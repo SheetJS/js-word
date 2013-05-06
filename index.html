@@ -16,6 +16,7 @@
 <b>JS-XLS Live Demo</b><br />
 <input type="radio" name="format" value="csv" checked> CSV<br>
 <input type="radio" name="format" value="json"> JSON<br>
+<input type="radio" name="format" value="form"> FORMULAE<br>
 
 <div id="drop">Drop an XLS file here to see sheet data.</div>
 <!--
@@ -59,6 +60,19 @@ function to_csv(workbook) {
 	return result.join("\n");
 }
 
+function to_formulae(workbook) {
+	var result = [];
+	workbook.SheetNames.forEach(function(sheetName) {
+		var formulae = get_formulae(workbook.Sheets[sheetName]);
+		if(formulae.length > 0){
+			result.push("SHEET: " + sheetName);
+			result.push("");
+			result.push(formulae.join("\n"));
+		}
+	});
+	return result.join("\n");
+}
+
 var tarea = document.getElementById('b64data');
 function b64it() {
 	var cfb = CFB.read(tarea.value, {type: 'base64'});
@@ -68,10 +82,15 @@ function b64it() {
 
 function process_wb(wb) {
 	var output = "";
-	if(get_radio_value("format") === "json"){
-		output = JSON.stringify(to_json(wb), 2, 2);
-	} else {
-		output = to_csv(wb);
+	switch(get_radio_value("format")) {
+		case "json":
+			output = JSON.stringify(to_json(wb), 2, 2);
+			break;
+		case "form":
+			output = to_formulae(wb);
+			break; 
+		default:
+			output = to_csv(wb);
 	}
 	if(out.innerText === undefined) out.textContent = output;
 	else out.innerText = output;
