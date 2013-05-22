@@ -234,7 +234,8 @@ function readSync(blob, options) {
 	var o = options || {};
 	switch((o.type || "base64")) {
 		case "file": return readFileSync(blob);
-		case "base64": blob = Base64.decode(blob); break;
+		case "base64": blob = Base64.decode(blob);
+		/* falls through */
 		case "binary": blob = s2a(blob); break;
 	}
 	return parse(blob);
