@@ -2,6 +2,7 @@ if(typeof exports !== 'undefined') {
 	exports.read = xlsread;
 	exports.readFile = readFile;
 	exports.utils = utils;
+	exports.CFB = CFB;
 	if(typeof module !== 'undefined' && require.main === module ) {
 		var wb = readFile(process.argv[2] || 'Book1.xls');
 		var target_sheet = process.argv[3] || '';

@@ -99,12 +99,12 @@ function parse_Rgce(blob, length) {
 		else { ptgs.push([R.n, R.f(blob, length)]); }
 	}
 	return ptgs;
-};
+}
 
 /* 2.2.2 + Magic TODO */
 function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
-	var stack = [], e1, e2, type, c, ixti;
+	var stack = [], e1, e2, type, c, ixti, nameidx;
 	if(!formula[0] || !formula[0][0]) return "";
 	//console.log("--",formula[0])
 	formula[0].forEach(function(f) {
@@ -262,7 +262,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.97.60 TODO: do something different for revisions */
 			case 'PtgName':
 				/* f[1] = type, 0, nameindex */
-				var nameidx = f[1][2];
+				nameidx = f[1][2];
 				var lbl = supbooks[0][nameidx];
 				var name = lbl.Name;
 				if(name in XLSXFutureFunctions) name = XLSXFutureFunctions[name];
@@ -272,7 +272,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.97.61 TODO: do something different for revisions */
 			case 'PtgNameX':
 				/* f[1] = type, ixti, nameindex */
-				var bookidx = f[1][1], nameidx = f[1][2];
+				var bookidx = f[1][1]; nameidx = f[1][2];
 				var externbook = supbooks[bookidx+1][nameidx];
 				stack.push(externbook.body);
 				break;
@@ -287,7 +287,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 		/* */
 			/* 2.5.198.58 TODO */
 			case 'PtgExp':
-				var c = {c:f[1][1],r:f[1][0]};
+				c = {c:f[1][1],r:f[1][0]};
 				if(supbooks.sharedf[encode_cell(c)]) {
 					var parsedf = (supbooks.sharedf[encode_cell(c)]);
 					var q = {c: cell.c, r:cell.r};
