@@ -493,16 +493,17 @@ function parse_FILETIME(blob) {
 }
 
 /* [MS-OSHARED] 2.3.3.1.4 Lpstr */
-function parse_lpstr(blob) {
+function parse_lpstr(blob, type, pad) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var str = read('lpstr');
+	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
 	return str;
 }
 
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
 function parse_VtString(blob, stringType) {
 	if(stringType) switch(stringType) {
-		case VT_LPSTR: return parse_lpstr(blob);
+		case VT_LPSTR: return parse_lpstr(blob, stringType, 4);
 		case VT_LPWSTR: return parse_lpwstr(blob);
 		default: throw "Unrecognized string type " + stringType;
 	}
@@ -541,8 +542,29 @@ function parse_dictionary(blob,CodePage) {
 function parse_BLOB(blob) {
 	var size = blob.read_shift(4);
 	var bytes = blob.slice(blob.l,blob.l+size);
-	if(blob.l % 4) blob.l = (blob.l>>2+1)<<2;
+	if(blob.l % 4) blob.l += (4 - (blob.l % 4)) % 4;
 	return bytes;
+}
+
+/* [MS-OLEPS] 2.11 ClipboardData */
+function parse_ClipboardData(blob) {
+	// TODO
+	var o = {};
+	o.Size = blob.read_shift(4);
+	//o.Format = blob.read_shift(4);
+	blob.l += o.Size;
+	return o;
+}
+
+/* [MS-OLEPS] 2.14 Vector and Array Property Types */
+function parse_VtVector(blob, cb) {
+	/* [MS-OLEPS] 2.14.2 VectorHeader */
+	var Length = blob.read_shift(4);
+	var o = [];
+	for(var i = 0; i != Length; ++i) {
+		o.push(cb(blob));
+	}
+	return o;	
 }
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
@@ -550,17 +572,31 @@ function parse_TypedPropertyValue(blob, type) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var t = read(2), ret;
 	read(2);
+	if(type !== VT_VARIANT)
 	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw 'Expected type ' + type + ' saw ' + t;
-	switch(type) {
+	switch(type === VT_VARIANT ? t : type) {
 		case VT_I2: ret = read(2, 'i'); read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
-		case VT_LPSTR: return parse_lpstr(blob, t).replace(/\u0000/g,'');
-		case VT_STRING: return parse_VtString(blob, t).replace(/\u0000/g,'');
 		case VT_BOOL: return read(4) !== 0x0;
+		case VT_LPSTR: return parse_lpstr(blob, t).replace(/\u0000/g,'');
 		case VT_FILETIME: return parse_FILETIME(blob);
+		case VT_CF: return parse_ClipboardData(blob);
+		case VT_STRING: return parse_VtString(blob, t).replace(/\u0000/g,'');
+		case VT_VECTOR | VT_VARIANT: return parse_VTVectorVariant(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstrValue(blob);
-		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPairValue(blob);
+		default: throw "TypedPropertyValue unrecognized type " + type;
 	}
+}
+function parse_VTVectorVariant(blob) {
+	/* [MS-OLEPS] 2.14.2 VectorHeader */
+	var Length = blob.read_shift(4);
+
+	if(Length % 2 !== 0) throw new Error("VectorHeader Length=" + Length + " must be even");
+	var o = [];
+	for(var i = 0; i != Length; ++i) {
+		o.push(parse_TypedPropertyValue(blob, VT_VARIANT));
+	}
+	return o;
 }
 
 /* [MS-OLEPS] 2.20 PropertySet */
@@ -579,10 +615,15 @@ function parse_PropertySet(blob, PIDSI) {
 	}
 	var PropH = {};
 	for(i = 0; i != NumProps; ++i) {
-		if(blob.l !== Props[i][1]) throw "Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i;
+		if(blob.l !== Props[i][1]) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
+			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
+				case 10000: break; // OSX Roman
+				case 1252: break; // Windows Latin
+				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
+			}
 		} else {
 			if(Props[i][0] === 0x1) {
 				CodePage = PropH.CodePage = parse_TypedPropertyValue(blob, VT_I2);
@@ -600,7 +641,7 @@ function parse_PropertySet(blob, PIDSI) {
 				var val;
 				switch(blob[blob.l]) {
 					//TODO
-					case 0x41: val = parse_BLOB(blob); break;
+					case VT_BLOB: blob.l += 4; val = parse_BLOB(blob); break;
 				}
 				PropH[name] = val;
 			}
@@ -963,7 +1004,7 @@ var parse_Boolean = parsebool;
 /* [MS-XLS] 2.5.10 Bes (boolean or error) */
 function parse_Bes(blob) {
 	var v = blob.read_shift(1), t = blob.read_shift(1);
-	return t === 0x01 ? BERR[v] : v === 0x01; 
+	return t === 0x01 ? BERR[v] : v === 0x01;
 }
 
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
@@ -981,15 +1022,15 @@ function parse_ShortXLUnicodeString(blob) {
 function parse_XLUnicodeRichExtendedString(blob) {
 	var read_shift = blob.read_shift.bind(blob);
 	var cch = read_shift(2), flags = read_shift(1);
-	var width = 1 + (flags & 0x1);
-	// fRichSt
-	if(flags & 0x08) {
-		// TODO: cRun
-		// TODO: cbExtRst
-		read_shift(6);
-	}
+	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
+	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
+	var cRun, cbExtRst;
+	if(fRichSt) cRun = read_shift(2);
+	if(fExtSt) cbExtRst = read_shift(4);
 	var encoding = (flags & 0x1) ? 'dbcs' : 'utf8';
-	var msg = read_shift(encoding, cch);
+	var msg = cch == 0 ? "" : read_shift(encoding, cch);
+	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
+	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	return msg;
 }
 
