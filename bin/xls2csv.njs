@@ -9,6 +9,7 @@ program
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
 	.option('-F, --formulae', 'print formulae')
+	.option('--dev', 'development mode')
 	.parse(process.argv);
 
 var filename, sheetname = '';
@@ -30,6 +31,7 @@ if(!fs.existsSync(filename)) {
 }
 
 var wb;
+if(program.dev) wb = XLS.readFile(filename);
 try {
 	wb = XLS.readFile(filename);
 } catch(e) {

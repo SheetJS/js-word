@@ -32,7 +32,7 @@ var parse_Boolean = parsebool;
 /* [MS-XLS] 2.5.10 Bes (boolean or error) */
 function parse_Bes(blob) {
 	var v = blob.read_shift(1), t = blob.read_shift(1);
-	return t === 0x01 ? BERR[v] : v === 0x01; 
+	return t === 0x01 ? BERR[v] : v === 0x01;
 }
 
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
@@ -50,15 +50,15 @@ function parse_ShortXLUnicodeString(blob) {
 function parse_XLUnicodeRichExtendedString(blob) {
 	var read_shift = blob.read_shift.bind(blob);
 	var cch = read_shift(2), flags = read_shift(1);
-	var width = 1 + (flags & 0x1);
-	// fRichSt
-	if(flags & 0x08) {
-		// TODO: cRun
-		// TODO: cbExtRst
-		read_shift(6);
-	}
+	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
+	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
+	var cRun, cbExtRst;
+	if(fRichSt) cRun = read_shift(2);
+	if(fExtSt) cbExtRst = read_shift(4);
 	var encoding = (flags & 0x1) ? 'dbcs' : 'utf8';
-	var msg = read_shift(encoding, cch);
+	var msg = cch == 0 ? "" : read_shift(encoding, cch);
+	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
+	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	return msg;
 }
 
