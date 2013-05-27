@@ -40,7 +40,7 @@ function slurp(R, blob, length, opts) {
 	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	while(next && next.n === 'Continue') {
 		l = blob.readUInt16LE(blob.l+2);
-		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
+		bufs.push(blob.slice(blob.l+5,blob.l+4+l));
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
@@ -98,16 +98,8 @@ function parse_workbook(blob) {
 			}
 			//console.error(R,blob.l,length,blob.length);
 			var val;
-			if(blob.l+length+2 >= blob.length) val = R.f(blob, length);
-			else {
-				var next = (RecordEnum[blob.readUInt16LE(blob.l+length)]);
-				if(next && next.n === 'Continue') {
-					val = slurp(R, blob, length, opts);
-				} else {
-					if(opts.enc) { parsenoop(blob, length); continue; }
-					val = R.f(blob, length, opts);
-				}
-			}
+			if(R.n === 'EOF') val = R.f(blob, length);
+			else val = slurp(R, blob, length, opts);
 			switch(R.n) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
