@@ -268,10 +268,10 @@ if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
 		return Buffer.concat(this[0]);
 	};
 	var fs = require('fs');
-	exports.read = CFB.read;
-	exports.parse = CFB.parse;
-	exports.ReadShift = ReadShift;
-	exports.prep_blob = prep_blob;
+	//exports.read = CFB.read;
+	//exports.parse = CFB.parse;
+	//exports.ReadShift = ReadShift;
+	//exports.prep_blob = prep_blob;
 	exports.main = function(args) {
 		var cfb = CFB.read(args[0], {type:'file'});
 		console.log(cfb);

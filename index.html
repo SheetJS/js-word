@@ -50,7 +50,7 @@ function to_json(workbook) {
 function to_csv(workbook) {
 	var result = [];
 	workbook.SheetNames.forEach(function(sheetName) {
-		var csv = make_csv(workbook.Sheets[sheetName]);
+		var csv = XLS.utils.make_csv(workbook.Sheets[sheetName]);
 		if(csv.length > 0){
 			result.push("SHEET: " + sheetName);
 			result.push("");
@@ -75,8 +75,8 @@ function to_formulae(workbook) {
 
 var tarea = document.getElementById('b64data');
 function b64it() {
-	var cfb = CFB.read(tarea.value, {type: 'base64'});
-	var wb = parse_xlscfb(cfb);
+	var cfb = XLS.CFB.read(tarea.value, {type: 'base64'});
+	var wb = XLS.parse_xlscfb(cfb);
 	process_wb(wb);
 }
 
@@ -107,10 +107,10 @@ function handleDrop(e) {
 		var name = f.name;
 		reader.onload = function(e) {
 			var data = e.target.result;
-			var cfb = CFB.read(data, {type: 'binary'});
+			var cfb = XLS.CFB.read(data, {type: 'binary'});
 			//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
-			//var cfb = CFB.read(btoa(arr), {type: 'base64'});
-			var wb = parse_xlscfb(cfb);
+			//var cfb = XLS.CFB.read(btoa(arr), {type: 'base64'});
+			var wb = XLS.parse_xlscfb(cfb);
 			process_wb(wb);
 		};
 		reader.readAsBinaryString(f);
