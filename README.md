@@ -22,6 +22,8 @@ The command-line utility `xls2csv` shows how to generate a CSV from an XLS.
 
 See http://niggler.github.com/js-xls/ for a browser example.
 
+See `bin/xls2csv` for a node example.
+
 ## Notes
 
 `CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.

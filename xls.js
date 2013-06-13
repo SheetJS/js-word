@@ -1,5 +1,7 @@
 /* vim: set ts=2: */
 /*jshint eqnull:true */
+var XLS = {};
+(function(XLS){
 /* Buffer.concat was added in the 0.8 series, so this is for older versions */
 if(typeof Buffer !== "undefined" && !Buffer.concat)
 Buffer.concat = function(list, length) {
@@ -971,10 +973,10 @@ if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
 		return Buffer.concat(this[0]);
 	};
 	var fs = require('fs');
-	exports.read = CFB.read;
-	exports.parse = CFB.parse;
-	exports.ReadShift = ReadShift;
-	exports.prep_blob = prep_blob;
+	//exports.read = CFB.read;
+	//exports.parse = CFB.parse;
+	//exports.ReadShift = ReadShift;
+	//exports.prep_blob = prep_blob;
 	exports.main = function(args) {
 		var cfb = CFB.read(args[0], {type:'file'});
 		console.log(cfb);
@@ -4541,19 +4543,18 @@ function shift_range(cell, range) {
 	return cell;
 }
 
-if(typeof exports !== 'undefined') {
-	exports.read = xlsread;
-	exports.readFile = readFile;
-	exports.utils = utils;
-	exports.CFB = CFB;
-	if(typeof module !== 'undefined' && require.main === module ) {
-		var wb = readFile(process.argv[2] || 'Book1.xls');
-		var target_sheet = process.argv[3] || '';
-		if(target_sheet === '') target_sheet = wb.Directory[0];
-		var ws = wb.Sheets[target_sheet];
-		console.log(target_sheet);
-		console.log(make_csv(ws));
-		//console.log(get_formulae(ws));
-	}
+XLS.parse_xlscfb = parse_xlscfb;
+XLS.read = xlsread;
+XLS.readFile = readFile;
+XLS.utils = utils;
+XLS.CFB = CFB;
+if(typeof module !== 'undefined' && require.main === module ) {
+	var wb = readFile(process.argv[2] || 'Book1.xls');
+	var target_sheet = process.argv[3] || '';
+	if(target_sheet === '') target_sheet = wb.Directory[0];
+	var ws = wb.Sheets[target_sheet];
+	console.log(target_sheet);
+	console.log(make_csv(ws));
+	//console.log(get_formulae(ws));
 }
-
+})(typeof exports !== 'undefined' ? exports : XLS);
