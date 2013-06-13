@@ -4,12 +4,13 @@
 var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.2.10')
+	.version('0.2.12')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
 	.option('-F, --formulae', 'print formulae')
 	.option('--dev', 'development mode')
+	.option('-q, --quiet', 'quiet mode')
 	.parse(process.argv);
 
 var filename, sheetname = '';
@@ -35,7 +36,9 @@ if(program.dev) wb = XLS.readFile(filename);
 try {
 	wb = XLS.readFile(filename);
 } catch(e) {
-	console.error("xls2csv: error parsing " + filename + ": " + e);
+	var msg = (program.quiet) ? "" : "xls2csv: error parsing ";
+	msg += filename + ": " + e;
+	console.error(msg);
 	process.exit(3);
 }
 
@@ -51,6 +54,6 @@ try {
 	process.exit(4);
 }
 
-console.error(target_sheet);
+if(!program.quiet) console.error(target_sheet);
 if(program.formulae) console.log(XLS.utils.get_formulae(ws).join("\n"));
 else console.log(XLS.utils.make_csv(ws));

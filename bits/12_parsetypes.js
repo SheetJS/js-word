@@ -135,8 +135,27 @@ function parse_PropertySet(blob, PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
 			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
+				/* TODO: Generate files under every codepage */
 				case 10000: break; // OSX Roman
 				case 1252: break; // Windows Latin
+
+				case 874: // SB Windows Thai
+				case 1250: // SB Windows Central Europe
+				case 1251: // SB Windows Cyrillic
+				case 1254: // SB Windows Turkish
+				case 1255: // SB Windows Hebrew
+				case 1256: // SB Windows Arabic
+
+				case 932: // DB Windows Japanese Shift-JIS
+				case 936: // DB Windows Simplified Chinese GBK
+				case 949: // DB Windows Korean
+				case 950: // DB Windows Traditional Chinese Big5
+
+				case 1200: // UTF16LE
+				case 1201: // UTF16BE
+				case 65000: // UTF-7
+				case 65001: // UTF-7
+
 				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
 			}
 		} else {

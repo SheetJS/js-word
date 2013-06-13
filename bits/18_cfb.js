@@ -1,6 +1,6 @@
 /* [MS-CFB] v20120705 */
 var CFB = (function(){
-
+var exports = {};
 function parse(file) {
 
 
@@ -241,9 +241,9 @@ function readSync(blob, options) {
 	return parse(blob);
 }
 
-this.read = readSync;
-this.parse = parse;
-return this;
+exports.read = readSync;
+exports.parse = parse;
+return exports;
 })();
 
 /** CFB Constants */
