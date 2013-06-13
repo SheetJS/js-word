@@ -168,7 +168,7 @@ function parse_ForceFullCalculation(blob, length) {
 	var header = parse_frtHeader(blob);
 	if(header.type != 0x08A3) throw "Invalid Future Record " + header.type;
 	var fullcalc = blob.read_shift(4);
-	return { FullCalc: fullcalc };
+	return fullcalc !== 0x0;
 }
 
 
@@ -356,6 +356,14 @@ function parse_Array(blob, length, opts) {
 	return [ref, parse_ArrayParsedFormula(blob, length, opts, ref)];
 }
 
+/* 2.4.173 */
+function parse_MTRSettings(blob, length) {
+	var fMTREnabled = blob.read_shift(4) !== 0x00;
+	var fUserSetThreadCount = blob.read_shift(4) !== 0x00;
+	var cUserThreadCount = blob.read_shift(4);
+	return [fMTREnabled, fUserSetThreadCount, cUserThreadCount];
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -527,7 +535,7 @@ var parse_DConBin = parsenoop;
 var parse_TxO = parsenoop;
 var parse_HLink = parsenoop;
 var parse_Lel = parsenoop;
-var parse_CodeName = parsenoop;
+var parse_CodeName = parse_XLUnicodeString;
 var parse_SXFDBType = parsenoop;
 var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
@@ -610,7 +618,6 @@ var parse_Theme = parsenoop;
 var parse_GUIDTypeLib = parsenoop;
 var parse_FnGrp12 = parsenoop;
 var parse_NameFnGrp12 = parsenoop;
-var parse_MTRSettings = parsenoop;
 var parse_HeaderFooter = parsenoop;
 var parse_CrtLayout12 = parsenoop;
 var parse_CrtMlFrt = parsenoop;

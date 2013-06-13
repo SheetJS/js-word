@@ -620,8 +620,27 @@ function parse_PropertySet(blob, PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
 			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
+				/* TODO: Generate files under every codepage */
 				case 10000: break; // OSX Roman
 				case 1252: break; // Windows Latin
+
+				case 874: // SB Windows Thai
+				case 1250: // SB Windows Central Europe
+				case 1251: // SB Windows Cyrillic
+				case 1254: // SB Windows Turkish
+				case 1255: // SB Windows Hebrew
+				case 1256: // SB Windows Arabic
+
+				case 932: // DB Windows Japanese Shift-JIS
+				case 936: // DB Windows Simplified Chinese GBK
+				case 949: // DB Windows Korean
+				case 950: // DB Windows Traditional Chinese Big5
+
+				case 1200: // UTF16LE
+				case 1201: // UTF16BE
+				case 65000: // UTF-7
+				case 65001: // UTF-7
+
 				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
 			}
 		} else {
@@ -684,7 +703,7 @@ function parse_PropertySetStream(file, PIDSI) {
 }
 /* [MS-CFB] v20120705 */
 var CFB = (function(){
-
+var exports = {};
 function parse(file) {
 
 
@@ -925,9 +944,9 @@ function readSync(blob, options) {
 	return parse(blob);
 }
 
-this.read = readSync;
-this.parse = parse;
-return this;
+exports.read = readSync;
+exports.parse = parse;
+return exports;
 })();
 
 /** CFB Constants */
@@ -1223,7 +1242,7 @@ function parse_ForceFullCalculation(blob, length) {
 	var header = parse_frtHeader(blob);
 	if(header.type != 0x08A3) throw "Invalid Future Record " + header.type;
 	var fullcalc = blob.read_shift(4);
-	return { FullCalc: fullcalc };
+	return fullcalc !== 0x0;
 }
 
 
@@ -1411,6 +1430,14 @@ function parse_Array(blob, length, opts) {
 	return [ref, parse_ArrayParsedFormula(blob, length, opts, ref)];
 }
 
+/* 2.4.173 */
+function parse_MTRSettings(blob, length) {
+	var fMTREnabled = blob.read_shift(4) !== 0x00;
+	var fUserSetThreadCount = blob.read_shift(4) !== 0x00;
+	var cUserThreadCount = blob.read_shift(4);
+	return [fMTREnabled, fUserSetThreadCount, cUserThreadCount];
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -1582,7 +1609,7 @@ var parse_DConBin = parsenoop;
 var parse_TxO = parsenoop;
 var parse_HLink = parsenoop;
 var parse_Lel = parsenoop;
-var parse_CodeName = parsenoop;
+var parse_CodeName = parse_XLUnicodeString;
 var parse_SXFDBType = parsenoop;
 var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
@@ -1665,7 +1692,6 @@ var parse_Theme = parsenoop;
 var parse_GUIDTypeLib = parsenoop;
 var parse_FnGrp12 = parsenoop;
 var parse_NameFnGrp12 = parsenoop;
-var parse_MTRSettings = parsenoop;
 var parse_HeaderFooter = parsenoop;
 var parse_CrtLayout12 = parsenoop;
 var parse_CrtMlFrt = parsenoop;
@@ -3892,7 +3918,7 @@ var RecordEnum = {
 	0x0897: { n:"GUIDTypeLib", f:parse_GUIDTypeLib },
 	0x0898: { n:"FnGrp12", f:parse_FnGrp12 },
 	0x0899: { n:"NameFnGrp12", f:parse_NameFnGrp12 },
-	0x089a: { n:"MTRSettings", f:parse_MTRSettings },
+	0x089a: { n:"MTRSettings", f:parse_MTRSettings, r:12 },
 	0x089c: { n:"HeaderFooter", f:parse_HeaderFooter },
 	0x089d: { n:"CrtLayout12", f:parse_CrtLayout12 },
 	0x089e: { n:"CrtMlFrt", f:parse_CrtMlFrt },
@@ -4075,12 +4101,90 @@ function parse_workbook(blob) {
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
 				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
 				case 'WriteAccess': opts.lastuser = val; break;
+				case 'FileSharing': break; //TODO
 				case 'CodePage': opts.codepage = val; break;
 				case 'RRTabId': opts.rrtabid = val; break;
 				case 'WinProtect': opts.winlocked = val; break;
+				case 'Template': break; // TODO
+				case 'RefreshAll': wb.opts.RefreshAll = val; break;
+				case 'BookBool': break; // TODO
+				case 'UsesELFs': if(val) throw "Unsupported ELFs"; break;
+				case 'MTRSettings': {
+					if(val[0] && val[1]) throw "Unsupported threads: " + val;
+				} break; // TODO: actually support threads
+				case 'CalcCount': wb.opts.CalcCount = val; break;
+				case 'CalcDelta': wb.opts.CalcDelta = val; break;
+				case 'CalcIter': wb.opts.CalcIter = val; break;
+				case 'CalcMode': wb.opts.CalcMode = val; break;
+				case 'CalcPrecision': wb.opts.CalcPrecision = val; break;
+				case 'CalcSaveRecalc': wb.opts.CalcSaveRecalc = val; break;
+				case 'CalcRefMode': opts.CalcRefMode = val; break; // TODO: implement R1C1
+				case 'Uncalced': break;
+				case 'ForceFullCalculation': wb.opts.FullCalc = val; break;
+				case 'WsBool': break; // TODO
+
+				case 'Header': break; // TODO
+				case 'Footer': break; // TODO
+				case 'HCenter': break; // TODO
+				case 'VCenter': break; // TODO
+				case 'Pls': break; // TODO
+				case 'Setup': break; // TODO
+				case 'DefColWidth': break; // TODO
+				case 'ColInfo': break; // TODO
+				case 'Row': break; // TODO
+				case 'DBCell': break; // TODO
+				case 'MulBlank': break; // TODO
+				case 'EntExU2': break; // TODO
+				case 'SxView': break; // TODO
+				case 'Sxvd': break; // TODO
+				case 'SXVI': break; // TODO
+				case 'SXVDEx': break; // TODO
+				case 'SxIvd': break; // TODO
+				case 'SXDI': break; // TODO
+				case 'SXLI': break; // TODO
+				case 'SXEx': break; // TODO
+				case 'QsiSXTag': break; // TODO
+				case 'Selection': break;
+				case 'Feat': break;
+				case 'FeatHdr': break;
+				case 'Blank': break;
+
+				case 'Country': break; // TODO: international support
+				case 'RecalcId': break;
+
+				case 'DefaultRowHeight': case 'DxGCol': break; // TODO: htmlify
+				case 'Fbi': case 'Fbi2': case 'GelFrame': break;
+				case 'Font': break; // TODO
+				case 'XF': break; // TODO
+				case 'XFCRC': break; // TODO
+				case 'XFExt': break; // TODO
+				case 'Style': break; // TODO
+				case 'StyleExt': break; // TODO
+				case 'TableStyles': break; // TODO
+				case 'Palette': break; // TODO
+				case 'ClrtClient': break; // TODO
+				case 'Theme': break; // TODO
+
+				case 'ExtSST': break; // TODO
+				case 'BookExt': break; // TODO
+
+				/* PivotTable */
+				case 'SXStreamID': break; // TODO
+				case 'SXVS': break; // TODO
+				case 'DConRef': break; // TODO
+				case 'SXAddl': break; // TODO
+
+				/* Print Settings */
+				case 'PrintRowCol': break;
+				case 'PrintGrid': break;
+				case 'PrintSize': break;
 
 				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
 				case 'ExternName': supbooks[sbc][++sbci] = val; break;
+				case 'XCT': break;
+				case 'CRN': break;
+
+				case 'Index': break; // TODO
 				case 'Lbl': supbooks[0][++sbcli] = val; break;
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
@@ -4160,6 +4264,107 @@ function parse_workbook(blob) {
 				case 'Scl': {
 					//console.log("Zoom Level:", val[0]/val[1],val);
 				} break;
+				case 'SheetExt': {
+
+				} break;
+				case 'SheetExtOptional': {
+
+				} break;
+
+				/* VBA */
+				case 'ObNoMacros': {
+
+				} break;
+				case 'ObProj': {
+					
+				} break;
+				case 'CodeName': {
+
+				} break;
+				case 'GUIDTypeLib': {
+
+				} break;
+				case 'Note': break;
+
+				case 'MergeCells': break;
+
+				case 'WOpt': break; // TODO: WTF?
+				case 'HLink': case 'HLinkTooltip': break;
+
+				case 'PhoneticInfo': break;
+
+				case 'OleObjectSize': break;
+
+				case 'TxO': break;
+
+				/* Differential Formatting */
+				case 'DXF': case 'DXFN': case 'DXFN12': case 'DXFN12List': case 'DXFN12NoCB': break;
+
+				/* Data Validation */
+				case 'Dv': case 'DVal': break;
+
+				/* Data Series */
+				case 'BRAI': case 'Series': case 'SeriesText': break;
+
+				/* Chart */
+				case 'Begin': case 'End':
+				case 'StartBlock': case 'EndBlock':
+				case 'Frame': case 'Area':
+				case 'Axis': case 'AxisLine': case 'Tick': break;
+				case 'AxesUsed':
+				case 'CrtLayout12': case 'CrtLayout12A': case 'CrtLink': case 'CrtLine': case 'CrtMlFrt': break;
+				case 'LineFormat': case 'AreaFormat':
+				case 'Chart': case 'Chart3d': case 'Chart3DBarShape': case 'ChartFormat': case 'ChartFrtInfo': break;
+				case 'PlotArea': case 'PlotGrowth': break;
+				case 'SeriesList': break;
+				case 'DataFormat': case 'SerToCrt': case 'FontX': break;
+				case 'CatSerRange': case 'AxcExt': case 'SerFmt': break;
+				case 'ShtProps': break;
+				case 'DefaultText': case 'Text': case 'Label': case 'CatLab': break;
+				case 'DataLabExtContents': break;
+				case 'Legend': case 'LegendException': break;
+				case 'Pie': case 'Scatter': break;
+				case 'PieFormat': case 'MarkerFormat': break;
+				case 'StartObject': case 'EndObject': break;
+				case 'AlRuns': case 'ObjectLink': break;
+				case 'SIIndex': break;
+				/* Axis Group */
+				case 'AxisParent': break;
+				case 'Pos': break;
+				case 'ValueRange': break;
+				/* Pivot Chart */
+				case 'SXViewEx9': break; // TODO
+				case 'SXViewLink': break;
+				case 'PivotChartBits': break;
+				case 'SBaseRef': break;
+				case 'TextPropsStream': break;
+
+				/* Filter */
+				case 'FilterMode': break;
+				case 'AutoFilter': case 'AutoFilterInfo': break;
+				case 'DropDownObjIds': break;
+				case 'Sort': break;
+
+				/* Drawing */
+				case 'ShapePropsStream': break;
+				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
+				case 'Obj': break;
+				/* Explicitly Ignored */
+				case 'Excel9File': break;
+				case 'Units': break;
+				case 'InterfaceHdr': case 'Mms': case 'InterfaceEnd': case 'DSF': case 'BuiltInFnGroupCount':
+				/* View Stuff */
+				case 'Window1': case 'Window2': case 'HideObj': case 'GridSet': case 'Guts':
+				case 'UserBView': case 'UserSViewBegin':
+				case 'Pane':
+				/* Print Stuff */
+				case 'RightMargin': case 'LeftMargin': case 'TopMargin': case 'BottomMargin':
+				case 'HeaderFooter': case 'HFPicture': case 'PLV':
+				case 'HorizontalPageBreaks': case 'VerticalPageBreaks':
+				/* Behavioral */
+				case 'Backup': case 'CompressPictures': case 'Compat12': break;
+				/* Uncomment next line in development */
+				default: throw 'Unrecognized Record ' + R.n;
 			}
 			lst.push([R.n, s, val]);
 			continue;

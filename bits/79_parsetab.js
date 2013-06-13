@@ -283,7 +283,7 @@ var RecordEnum = {
 	0x0897: { n:"GUIDTypeLib", f:parse_GUIDTypeLib },
 	0x0898: { n:"FnGrp12", f:parse_FnGrp12 },
 	0x0899: { n:"NameFnGrp12", f:parse_NameFnGrp12 },
-	0x089a: { n:"MTRSettings", f:parse_MTRSettings },
+	0x089a: { n:"MTRSettings", f:parse_MTRSettings, r:12 },
 	0x089c: { n:"HeaderFooter", f:parse_HeaderFooter },
 	0x089d: { n:"CrtLayout12", f:parse_CrtLayout12 },
 	0x089e: { n:"CrtMlFrt", f:parse_CrtMlFrt },
