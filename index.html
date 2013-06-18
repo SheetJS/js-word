@@ -39,7 +39,7 @@ function get_radio_value( radioName ) {
 function to_json(workbook) {
 	var result = {};
 	workbook.SheetNames.forEach(function(sheetName) {
-		var roa = sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		var roa = XLS.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
 		if(roa.length > 0){
 			result[sheetName] = roa;
 		}
@@ -63,7 +63,7 @@ function to_csv(workbook) {
 function to_formulae(workbook) {
 	var result = [];
 	workbook.SheetNames.forEach(function(sheetName) {
-		var formulae = get_formulae(workbook.Sheets[sheetName]);
+		var formulae = XLS.utils.get_formulae(workbook.Sheets[sheetName]);
 		if(formulae.length > 0){
 			result.push("SHEET: " + sheetName);
 			result.push("");
