@@ -4085,7 +4085,8 @@ function parse_workbook(blob) {
 	while(blob.l < blob.length) {
 		var s = blob.l;
 		var RecordType = read(2);
-		var length = read(2), y;
+		/* In an effort to save two bytes, implied zero length for EOF */
+		var length = (blob.l === blob.length ? 0 : read(2)), y;
 		var R = RecordEnum[RecordType];
 		if(R && R.f) {
 			if(R.r === 2 || R.r == 12) {
