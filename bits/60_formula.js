@@ -226,6 +226,18 @@ function parse_PtgRefErr(blob, length) {
 	return [type];
 }
 
+/* 2.5.198.40 */
+function parse_PtgAttrSpaceType(blob, length) {
+	var type = blob.read_shift(1), cch = blob.read_shift(1);
+	return [type, cch];
+}
+
+/* 2.5.198.38 */
+function parse_PtgAttrSpace(blob, length) {
+	blob.read_shift(2);
+	return parse_PtgAttrSpaceType(blob, 2);
+}
+
 /* 2.5.198.26 */
 var parse_PtgAdd = parseread1;
 /* 2.5.198.45 */
@@ -273,8 +285,6 @@ var parse_PtgAreaErr3d = parsenoop;
 var parse_PtgAreaN = parsenoop;
 /* 2.5.198.33 */
 var parse_PtgAttrBaxcel = parsenoop;
-/* 2.5.198.38 */
-var parse_PtgAttrSpace = parsenoop;
 /* 2.5.198.39 */
 var parse_PtgAttrSpaceSemi = parsenoop;
 /* 2.5.198.71 */

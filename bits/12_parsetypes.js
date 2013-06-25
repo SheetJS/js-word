@@ -79,7 +79,7 @@ function parse_VtVector(blob, cb) {
 	for(var i = 0; i != Length; ++i) {
 		o.push(cb(blob));
 	}
-	return o;	
+	return o;
 }
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
