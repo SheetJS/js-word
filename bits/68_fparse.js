@@ -306,6 +306,12 @@ function stringify_formula(formula, range, cell, supbooks) {
 				//stack.push("(" + f[2].map(encode_range).join(",") + ")");
 				break;
 
+			/* 2.5.198.38 TODO */
+			case 'PtgAttrSpace': break;
+
+			/* 2.5.198.92 TODO */
+			case 'PtgTbl': break;
+
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
 	});

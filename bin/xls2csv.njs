@@ -10,6 +10,7 @@ program
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
 	.option('-F, --formulae', 'print formulae')
 	.option('--dev', 'development mode')
+	.option('--read', 'read but do not print out contents')
 	.option('-q, --quiet', 'quiet mode')
 	.parse(process.argv);
 
@@ -41,6 +42,7 @@ try {
 	console.error(msg);
 	process.exit(3);
 }
+if(program.read) process.exit(0);
 
 var target_sheet = sheetname || '';
 if(target_sheet === '') target_sheet = wb.Directory[0];

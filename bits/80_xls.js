@@ -152,7 +152,8 @@ function parse_workbook(blob) {
 				case 'QsiSXTag': break; // TODO
 				case 'Selection': break;
 				case 'Feat': break;
-				case 'FeatHdr': break;
+				case 'FeatHdr': case 'FeatHdr11': break;
+				case 'Feature11': case 'Feature12': case 'List12': break;
 				case 'Blank': break;
 
 				case 'Country': break; // TODO: international support
@@ -166,13 +167,18 @@ function parse_workbook(blob) {
 				case 'XFExt': break; // TODO
 				case 'Style': break; // TODO
 				case 'StyleExt': break; // TODO
-				case 'TableStyles': break; // TODO
 				case 'Palette': break; // TODO
 				case 'ClrtClient': break; // TODO
 				case 'Theme': break; // TODO
 
 				case 'ExtSST': break; // TODO
 				case 'BookExt': break; // TODO
+				case 'RichTextStream': break;
+				case 'BkHim': break;
+
+				/* Table */
+				case 'Table': break; // TODO
+				case 'TableStyles': break; // TODO
 
 				/* PivotTable */
 				case 'SXStreamID': break; // TODO
@@ -282,7 +288,7 @@ function parse_workbook(blob) {
 
 				} break;
 				case 'ObProj': {
-					
+
 				} break;
 				case 'CodeName': {
 
@@ -312,6 +318,18 @@ function parse_workbook(blob) {
 				/* Data Series */
 				case 'BRAI': case 'Series': case 'SeriesText': break;
 
+				/* Data Connection */
+				case 'DConn': break;
+				case 'DbOrParamQry': break;
+				case 'DBQueryExt': break;
+
+				/* Formatting */
+				case 'IFmtRecord': break;
+				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
+
+				/* Comments */
+				case 'NameCmt': break;
+
 				/* Chart */
 				case 'Begin': case 'End':
 				case 'StartBlock': case 'EndBlock':
@@ -334,6 +352,10 @@ function parse_workbook(blob) {
 				case 'StartObject': case 'EndObject': break;
 				case 'AlRuns': case 'ObjectLink': break;
 				case 'SIIndex': break;
+				case 'AttachedLabel': break;
+				/* Chart Group */
+				case 'Line': case 'Bar': break;
+				case 'Surf': break;
 				/* Axis Group */
 				case 'AxisParent': break;
 				case 'Pos': break;
@@ -345,12 +367,16 @@ function parse_workbook(blob) {
 				case 'SBaseRef': break;
 				case 'TextPropsStream': break;
 
+				/* Query Table */
+				case 'Qsi': case 'Qsif': case 'Qsir': case 'QsiSXTag': break;
+				case 'TxtQry': break;
+
 				/* Filter */
 				case 'FilterMode': break;
 				case 'AutoFilter': case 'AutoFilterInfo': break;
 				case 'DropDownObjIds': break;
 				case 'Sort': break;
-
+				case 'SortData': break;
 				/* Drawing */
 				case 'ShapePropsStream': break;
 				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
@@ -361,7 +387,7 @@ function parse_workbook(blob) {
 				case 'InterfaceHdr': case 'Mms': case 'InterfaceEnd': case 'DSF': case 'BuiltInFnGroupCount':
 				/* View Stuff */
 				case 'Window1': case 'Window2': case 'HideObj': case 'GridSet': case 'Guts':
-				case 'UserBView': case 'UserSViewBegin':
+				case 'UserBView': case 'UserSViewBegin': case 'UserSViewEnd':
 				case 'Pane':
 				/* Print Stuff */
 				case 'RightMargin': case 'LeftMargin': case 'TopMargin': case 'BottomMargin':
@@ -369,6 +395,9 @@ function parse_workbook(blob) {
 				case 'HorizontalPageBreaks': case 'VerticalPageBreaks':
 				/* Behavioral */
 				case 'Backup': case 'CompressPictures': case 'Compat12': break;
+
+				/* Should not Happen */
+				case 'Continue': case 'ContinueFrt12': break;
 				/* Uncomment next line in development */
 				default: throw 'Unrecognized Record ' + R.n;
 			}
