@@ -40,12 +40,14 @@ function slurp(R, blob, length, opts) {
 	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	while(next && next.n === 'Continue') {
 		l = blob.readUInt16LE(blob.l+2);
-		bufs.push(blob.slice(blob.l+5,blob.l+4+l));
+		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
 	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
 	prep_blob(b);
+	var ll = 0; b.lens = [];
+	bufs.forEach(function(x) { b.lens.push(ll); ll += x.length; });
 	return R.f(b, b.length, opts);
 }
 

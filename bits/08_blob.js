@@ -90,7 +90,7 @@ Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return thi
 
 
 function ReadShift(size, t) {
-	var o; t = t || 'u';
+	var o, w, vv; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = this.readUInt8(this.l); break;
@@ -106,10 +106,30 @@ function ReadShift(size, t) {
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 
+		/* cstr and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
-		case 'dbcs': size = 2*t; o = "";
+		case 'dbcs': size = 2*t; o = "", loc = this.l;
 			for(var i = 0; i != t; ++i) {
-				o += String.fromCharCode(this.readUInt8(this.l+2*i));
+				if(this.lens && this.lens.indexOf(loc) !== -1) {
+					w = this.readUInt8(loc);
+					this.l = loc + 1;
+					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					return o + vv;
+				}
+				o += String.fromCharCode(this.readUInt16LE(loc));
+				loc+=2;
+			} break;
+	
+		case 'cstr': size = t; o = "", loc = this.l;
+			for(var i = 0; i != t; ++i) {
+				if(this.lens && this.lens.indexOf(loc) !== -1) {
+					w = this.readUInt8(loc);
+					this.l = loc + 1;
+					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					return o + vv;
+				}
+				o += String.fromCharCode(this.readUInt8(loc));
+				loc+=1;
 			} break;
 	}
 	this.l+=size; return o;

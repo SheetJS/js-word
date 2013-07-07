@@ -124,7 +124,7 @@ Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return thi
 
 
 function ReadShift(size, t) {
-	var o; t = t || 'u';
+	var o, w, vv; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = this.readUInt8(this.l); break;
@@ -140,10 +140,30 @@ function ReadShift(size, t) {
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 
+		/* cstr and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
-		case 'dbcs': size = 2*t; o = "";
+		case 'dbcs': size = 2*t; o = "", loc = this.l;
 			for(var i = 0; i != t; ++i) {
-				o += String.fromCharCode(this.readUInt8(this.l+2*i));
+				if(this.lens && this.lens.indexOf(loc) !== -1) {
+					w = this.readUInt8(loc);
+					this.l = loc + 1;
+					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					return o + vv;
+				}
+				o += String.fromCharCode(this.readUInt16LE(loc));
+				loc+=2;
+			} break;
+	
+		case 'cstr': size = t; o = "", loc = this.l;
+			for(var i = 0; i != t; ++i) {
+				if(this.lens && this.lens.indexOf(loc) !== -1) {
+					w = this.readUInt8(loc);
+					this.l = loc + 1;
+					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					return o + vv;
+				}
+				o += String.fromCharCode(this.readUInt8(loc));
+				loc+=1;
 			} break;
 	}
 	this.l+=size; return o;
@@ -1048,7 +1068,7 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	var cRun, cbExtRst;
 	if(fRichSt) cRun = read_shift(2);
 	if(fExtSt) cbExtRst = read_shift(4);
-	var encoding = (flags & 0x1) ? 'dbcs' : 'utf8';
+	var encoding = (flags & 0x1) ? 'dbcs' : 'cstr';
 	var msg = cch == 0 ? "" : read_shift(encoding, cch);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
@@ -4053,12 +4073,14 @@ function slurp(R, blob, length, opts) {
 	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	while(next && next.n === 'Continue') {
 		l = blob.readUInt16LE(blob.l+2);
-		bufs.push(blob.slice(blob.l+5,blob.l+4+l));
+		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
 	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
 	prep_blob(b);
+	var ll = 0; b.lens = [];
+	bufs.forEach(function(x) { b.lens.push(ll); ll += x.length; });
 	return R.f(b, b.length, opts);
 }
 
