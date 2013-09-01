@@ -203,6 +203,8 @@ read_directory(dir_start);
 
 var root_name = Paths.shift();
 
+if(files.VBA) console.error("VBA will not be processed");
+
 var rval = {
 	raw: {header: header, sectors: sectors},
 	Paths: Paths,
