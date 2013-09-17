@@ -1141,12 +1141,11 @@ function parse_XTI(blob, length) {
 /* 2.5.217 */
 function parse_RkNumber(blob) {
 	var b = blob.slice(blob.l, blob.l+4);
-	var div100 = b[0] & 1, fInt = b[0] & 2;
+	var fX100 = b[0] & 1, fInt = b[0] & 2;
 	blob.l+=4;
 	b[0] &= ~3;
-	var RK = [0,0,0,0,b[0],b[1],b[2],b[3]].readDoubleLE(0);
-	// 30 most significant bits ..
-	return div100 ? RK/100 : RK;
+	var RK = fInt === 0 ? [0,0,0,0,b[0],b[1],b[2],b[3]].readDoubleLE(0) : b.readInt32LE(0)>>2;
+	return fX100 ? RK/100 : RK;
 }
 
 /* 2.5.218 */
