@@ -90,6 +90,7 @@ function parse_workbook(blob) {
 	while(blob.l < blob.length) {
 		var s = blob.l;
 		var RecordType = read(2);
+		if(RecordType === 0) break; /* TODO: can padding occur before EOF ? */
 		/* In an effort to save two bytes, implied zero length for EOF */
 		var length = (blob.l === blob.length ? 0 : read(2)), y;
 		var R = RecordEnum[RecordType];
@@ -101,7 +102,7 @@ function parse_workbook(blob) {
 			}
 			//console.error(R,blob.l,length,blob.length);
 			var val;
-			if(R.n === 'EOF') val = R.f(blob, length);
+			if(R.n === 'EOF') val = R.f(blob, length, opts);
 			else val = slurp(R, blob, length, opts);
 			switch(R.n) {
 				/* Workbook Options */
@@ -116,7 +117,7 @@ function parse_workbook(blob) {
 				case 'Template': break; // TODO
 				case 'RefreshAll': wb.opts.RefreshAll = val; break;
 				case 'BookBool': break; // TODO
-				case 'UsesELFs': if(val) throw "Unsupported ELFs"; break;
+				case 'UsesELFs': if(val) console.error("Unsupported ELFs"); break;
 				case 'MTRSettings': {
 					if(val[0] && val[1]) throw "Unsupported threads: " + val;
 				} break; // TODO: actually support threads
@@ -187,6 +188,15 @@ function parse_workbook(blob) {
 				case 'SXVS': break; // TODO
 				case 'DConRef': break; // TODO
 				case 'SXAddl': break; // TODO
+
+				/* Scenario Manager */
+				case 'ScenMan': break;
+
+				/* Data Consolidation */
+				case 'DCon': break;
+
+				/* Watched Cell */
+				case 'CellWatch': break; 
 
 				/* Print Settings */
 				case 'PrintRowCol': break;

@@ -106,11 +106,12 @@ for(j = 0; blob.l != 512; ) {
 
 
 /** Break the file up into sectors */
-if(file.length%ssz!==0) throw "File Length: Expected multiple of "+ssz;
+if(file.length%ssz!==0) console.error("CFB: size " + file.length + " % "+ssz);
 
-var nsectors = (file.length - ssz)/ssz;
+var nsectors = Math.ceil((file.length - ssz)/ssz);
 var sectors = [];
-for(var i=1; i != nsectors + 1; ++i) sectors[i-1] = file.slice(i*ssz,(i+1)*ssz);
+for(var i=1; i != nsectors; ++i) sectors[i-1] = file.slice(i*ssz,(i+1)*ssz);
+sectors[nsectors-1] = file.slice((nsectors)*ssz);
 
 /** Chase down the rest of the DIFAT chain to build a comprehensive list
     DIFAT chains by storing the next sector number as the last 32 bytes */
@@ -187,8 +188,14 @@ function read_directory(idx) {
 			minifat_size = o.size;
 		} else if(o.size >= ms_cutoff_size) {
 			o.storage = 'fat';
-			sector_list[o.start].name = o.name;
-			o.content = sector_list[o.start].data.slice(0,o.size);
+			try {
+				sector_list[o.start].name = o.name;
+				o.content = sector_list[o.start].data.slice(0,o.size);
+			} catch(e) {
+				o.start = o.start - 1; 
+				sector_list[o.start].name = o.name;
+				o.content = sector_list[o.start].data.slice(0,o.size);
+			}
 			prep_blob(o.content);
 		} else {
 			o.storage = 'minifat';

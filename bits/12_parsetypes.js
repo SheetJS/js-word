@@ -16,14 +16,18 @@ function parse_lpstr(blob, type, pad) {
 }
 
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
-function parse_VtString(blob, stringType) {
+/* [MS-OSHARED] 2.3.3.1.12 VtUnalignedString */
+function parse_VtStringBase(blob, stringType, pad) {
 	if(stringType) switch(stringType) {
-		case VT_LPSTR: return parse_lpstr(blob, stringType, 4);
+		case VT_LPSTR: return parse_lpstr(blob, stringType, pad);
 		case VT_LPWSTR: return parse_lpwstr(blob);
 		default: throw "Unrecognized string type " + stringType;
 	}
-	else return parse_VtString(blob, blob.read_shift(2));
+	else return parse_VtStringBase(blob, blob.read_shift(2), pad);
 }
+
+function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, 4); }
+function parse_VtUnalignedString(blob, t) { if(!t) throw new Error("dafuq?"); return parse_VtStringBase(blob, t, 0); }
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
 function parse_VtVecUnalignedLpstrValue(blob) {
@@ -34,9 +38,30 @@ function parse_VtVecUnalignedLpstrValue(blob) {
 	return ret;
 }
 
+/* [MS-OSHARED] 2.3.3.1.10 VtVecUnalignedLpstr */
+function parse_VtVecUnalignedLpstr(blob) {
+	return parse_VtVecUnalignedLpstrValue(blob);
+}
+
+/* [MS-OSHARED] 2.3.3.1.13 VtHeadingPair */
+function parse_VtHeadingPair(blob) {
+	var headingString = parse_TypedPropertyValue(blob, VT_USTR);
+	var headerParts = parse_TypedPropertyValue(blob, VT_I4);
+	return [headingString, headerParts];
+}
+
 /* [MS-OSHARED] 2.3.3.1.14 VtVecHeadingPairValue */
 function parse_VtVecHeadingPairValue(blob) {
-	// TODO:
+	var cElements = blob.read_shift(4);
+	var out = [];
+	for(var i = 0; i != cElements / 2; ++i) out.push(parse_VtHeadingPair(blob));
+	return out;
+}
+
+/* [MS-OSHARED] 2.3.3.1.15 VtVecHeadingPair */
+function parse_VtVecHeadingPair(blob) {
+	// NOTE: When invoked, wType & padding were already consumed
+	return parse_VtVecHeadingPairValue(blob);
 }
 
 /* [MS-OLEPS] 2.18.1 Dictionary (uses 2.17, 2.16) */
@@ -93,12 +118,13 @@ function parse_TypedPropertyValue(blob, type) {
 		case VT_I2: ret = read(2, 'i'); read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_BOOL: return read(4) !== 0x0;
-		case VT_LPSTR: return parse_lpstr(blob, t).replace(/\u0000/g,'');
+		case VT_LPSTR: return parse_lpstr(blob, t, 4).replace(/\u0000/g,'');
 		case VT_FILETIME: return parse_FILETIME(blob);
 		case VT_CF: return parse_ClipboardData(blob);
-		case VT_STRING: return parse_VtString(blob, t).replace(/\u0000/g,'');
-		case VT_VECTOR | VT_VARIANT: return parse_VTVectorVariant(blob);
-		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstrValue(blob);
+		case VT_STRING: return parse_VtString(blob, t, 4).replace(/\u0000/g,'');
+		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
+		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
+		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
 		default: throw "TypedPropertyValue unrecognized type " + type;
 	}
 }
@@ -142,6 +168,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
 				case 1251: // SB Windows Cyrillic
+				case 1253: // SB Windows Greek 
 				case 1254: // SB Windows Turkish
 				case 1255: // SB Windows Hebrew
 				case 1256: // SB Windows Arabic
@@ -153,10 +180,10 @@ function parse_PropertySet(blob, PIDSI) {
 
 				case 1200: // UTF16LE
 				case 1201: // UTF16BE
-				case 65000: // UTF-7
-				case 65001: // UTF-7
+				case 65000: case -536: // UTF-7
+				case 65001: case -535: // UTF-8
 				/* falls through */
-				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
+				default: console.error("Unsupported CodePage: " + PropH[piddsi.n]);
 			}
 		} else {
 			if(Props[i][0] === 0x1) {

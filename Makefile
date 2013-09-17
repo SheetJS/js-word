@@ -13,6 +13,10 @@ init:
 	git submodule update
 	git submodule foreach git pull origin master 
 
+.PHONY: test
+test:
+	bin/test.sh
+
 .PHONY: lint
 lint: $(TARGET)
 	jshint --show-non-errors $(TARGET)

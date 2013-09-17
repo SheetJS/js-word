@@ -4,7 +4,7 @@
 var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.3')
+	.version('0.4')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
@@ -34,7 +34,7 @@ if(!fs.existsSync(filename)) {
 
 var wb;
 if(program.dev) wb = XLS.readFile(filename);
-try {
+else try {
 	wb = XLS.readFile(filename);
 } catch(e) {
 	var msg = (program.quiet) ? "" : "xls2csv: error parsing ";

@@ -78,6 +78,7 @@ Array.prototype.readUInt8 = function(idx) { return this[idx]; };
 Array.prototype.readUInt16LE = function(idx) { return this[idx+1]*(1<<8)+this[idx]; };
 Array.prototype.readInt16LE = function(idx) { var u = this.readUInt16LE(idx); if(!(u & 0x8000)) return u; return (0xffff - u + 1) * -1; };
 Array.prototype.readUInt32LE = function(idx) { return this[idx+3]*(1<<24)+this[idx+2]*(1<<16)+this[idx+1]*(1<<8)+this[idx]; };
+Array.prototype.readInt32LE = function(idx) { var u = this.readUInt32LE(idx); if(!(u & 0x80000000)) return u; return (0xffffffff - u + 1) * -1; };
 Array.prototype.readDoubleLE = function(idx) { return readIEEE754(this, idx||0);};
 
 Array.prototype.hexlify = function() { return this.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
