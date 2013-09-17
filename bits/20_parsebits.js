@@ -55,8 +55,8 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	var cRun, cbExtRst;
 	if(fRichSt) cRun = read_shift(2);
 	if(fExtSt) cbExtRst = read_shift(4);
-	var encoding = (flags & 0x1) ? 'dbcs' : 'cstr';
-	var msg = cch == 0 ? "" : read_shift(encoding, cch);
+	var encoding = (flags & 0x1) ? 'dbcs' : 'sbcs';
+	var msg = cch === 0 ? "" : read_shift(encoding, cch);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	return msg;

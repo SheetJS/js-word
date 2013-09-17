@@ -155,7 +155,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1201: // UTF16BE
 				case 65000: // UTF-7
 				case 65001: // UTF-7
-
+				/* falls through */
 				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
 			}
 		} else {

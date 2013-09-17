@@ -88,9 +88,10 @@ Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str 
 
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
+function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
 function ReadShift(size, t) {
-	var o, w, vv; t = t || 'u';
+	var o, w, vv, i, loc; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = this.readUInt8(this.l); break;
@@ -106,31 +107,38 @@ function ReadShift(size, t) {
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 
-		/* cstr and dbcs support continue records in the SST way TODO codepages */
+		/* sbcs and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
-		case 'dbcs': size = 2*t; o = "", loc = this.l;
-			for(var i = 0; i != t; ++i) {
+		case 'dbcs': size = 2*t; o = ""; loc = this.l;
+			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = this.readUInt8(loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
 				o += String.fromCharCode(this.readUInt16LE(loc));
 				loc+=2;
 			} break;
-	
-		case 'cstr': size = t; o = "", loc = this.l;
-			for(var i = 0; i != t; ++i) {
+
+		case 'sbcs': size = t; o = ""; loc = this.l;
+			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = this.readUInt8(loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
 				o += String.fromCharCode(this.readUInt8(loc));
 				loc+=1;
 			} break;
+
+		case 'cstr': size = 0; o = "";
+			while((w=this.readUInt8(this.l + size++))!==0) o+= String.fromCharCode(w);
+			break;
+		case 'wstr': size = 0; o = "";
+			while((w=this.readUInt16LE(this.l +size))!==0){o+= String.fromCharCode(w);size+=2;}
+			size+=2; break;
 	}
 	this.l+=size; return o;
 }

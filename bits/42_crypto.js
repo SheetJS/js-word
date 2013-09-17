@@ -68,7 +68,7 @@ function parse_FilePass(blob, length) {
 	switch(o.Type) {
 		case 0: parse_XORObfuscation(blob, length-2, o); break;
 		case 1: parse_FilePassHeader(blob, length-2, o); break;
-		default: throw 'Unrecognized Encryption Type ' + filepass.Type;
+		default: throw 'Unrecognized Encryption Type ' + o.Type;
 	}
 	return o;
 }

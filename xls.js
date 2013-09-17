@@ -1,5 +1,5 @@
 /* vim: set ts=2: */
-/*jshint eqnull:true */
+/*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
 /* Buffer.concat was added in the 0.8 series, so this is for older versions */
@@ -122,9 +122,10 @@ Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str 
 
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
+function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
 function ReadShift(size, t) {
-	var o, w, vv; t = t || 'u';
+	var o, w, vv, i, loc; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = this.readUInt8(this.l); break;
@@ -140,31 +141,38 @@ function ReadShift(size, t) {
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
 
-		/* cstr and dbcs support continue records in the SST way TODO codepages */
+		/* sbcs and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
-		case 'dbcs': size = 2*t; o = "", loc = this.l;
-			for(var i = 0; i != t; ++i) {
+		case 'dbcs': size = 2*t; o = ""; loc = this.l;
+			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = this.readUInt8(loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
 				o += String.fromCharCode(this.readUInt16LE(loc));
 				loc+=2;
 			} break;
-	
-		case 'cstr': size = t; o = "", loc = this.l;
-			for(var i = 0; i != t; ++i) {
+
+		case 'sbcs': size = t; o = ""; loc = this.l;
+			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = this.readUInt8(loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, w ? 'dbcs' : 'cstr', t-i);
+					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
 				o += String.fromCharCode(this.readUInt8(loc));
 				loc+=1;
 			} break;
+
+		case 'cstr': size = 0; o = "";
+			while((w=this.readUInt8(this.l + size++))!==0) o+= String.fromCharCode(w);
+			break;
+		case 'wstr': size = 0; o = "";
+			while((w=this.readUInt16LE(this.l +size))!==0){o+= String.fromCharCode(w);size+=2;}
+			size+=2; break;
 	}
 	this.l+=size; return o;
 }
@@ -263,7 +271,7 @@ var parse_date_code = function parse_date_code(v,opts) {
 	var date = Math.floor(v), time = Math.round(86400 * (v - date)), dow=0;
 	var dout=[], out={D:date, T:time}; fixopts(opts = (opts||{}));
 	if(opts.date1904) date += 1462;
-	if(date === 60) (dout = [1900,2,29], dow=3); /* JSHint bug (issue #1010) */
+	if(date === 60) {dout = [1900,2,29]; dow=3;}
 	else {
 		if(date > 60) --date;
 		/* 1 = Jan 1 1900 */
@@ -273,7 +281,7 @@ var parse_date_code = function parse_date_code(v,opts) {
 		dow = d.getDay();
 		if(opts.mode === 'excel' && date < 60) dow = (dow + 6) % 7;
 	}
-	out.y = dout[0], out.m = dout[1], out.d = dout[2];
+	out.y = dout[0]; out.m = dout[1]; out.d = dout[2];
 	out.S = time % 60; time = Math.floor(time / 60);
 	out.M = time % 60; time = Math.floor(time / 60);
 	out.H = time;
@@ -354,7 +362,7 @@ function eval_fmt(fmt, v, opts) {
 				q={t:c, v:o}; out.push(q); lst = c; break;
 			case 'A':
 				q={t:c,v:"A"};
-				if(fmt.substr(i, 3) === "A/P") (hr = 'h',i+=3);
+				if(fmt.substr(i, 3) === "A/P") {hr = 'h'; i+=3;}
 				else if(fmt.substr(i,5) === "AM/PM") { q.v = "AM"; i+=5; hr = 'h'; }
 				else q.t = "t";
 				out.push(q); lst = c; break;
@@ -662,7 +670,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1201: // UTF16BE
 				case 65000: // UTF-7
 				case 65001: // UTF-7
-
+				/* falls through */
 				default: throw "Unsupported CodePage: " + PropH[piddsi.n];
 			}
 		} else {
@@ -723,7 +731,7 @@ function parse_PropertySetStream(file, PIDSI) {
 	rval.FMTID = [FMTID0, FMTID1]; // TODO: verify FMTID0/1
 	return rval;
 }
-/* [MS-CFB] v20120705 */
+/* [MS-CFB] v20130118 */
 var CFB = (function(){
 var exports = {};
 function parse(file) {
@@ -750,8 +758,8 @@ var fat_addrs = []; // locations of FAT sectors
 var blob = file.slice(0,512);
 prep_blob(blob);
 var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-var wrn = WarnField.bind(blob);
-var j = 0;
+//var wrn = WarnField.bind(blob);
+var j = 0, q;
 
 // header signature 8
 chk(HEADER_SIGNATURE, 'Header Signature: ');
@@ -884,9 +892,9 @@ sector_list[fat_addrs[0]].name = "!FAT";
 /** read directory structure */
 var files = {}, Paths = [];
 function read_directory(idx) {
-	var blob, read;
+	var blob, read, w;
 	var sector = sector_list[idx].data;
-	for(var i = 0; i != sector.length; i+= 128, l = 64) {
+	for(var i = 0; i != sector.length; i+= 128) {
 		blob = sector.slice(i, i+128);
 		prep_blob(blob, 64);
 		read = ReadShift.bind(blob);
@@ -1070,8 +1078,8 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	var cRun, cbExtRst;
 	if(fRichSt) cRun = read_shift(2);
 	if(fExtSt) cbExtRst = read_shift(4);
-	var encoding = (flags & 0x1) ? 'dbcs' : 'cstr';
-	var msg = cch == 0 ? "" : read_shift(encoding, cch);
+	var encoding = (flags & 0x1) ? 'dbcs' : 'sbcs';
+	var msg = cch === 0 ? "" : read_shift(encoding, cch);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	return msg;
@@ -1196,6 +1204,7 @@ function parse_BOF(blob, length) {
 
 /* 2.4.146 */
 function parse_InterfaceHdr(blob, length) {
+	var q;
 	if((q=blob.read_shift(2))!==0x04b0) throw 'InterfaceHdr codePage ' + q;
 	return 0x04b0;
 }
@@ -1859,7 +1868,7 @@ function parse_FilePass(blob, length) {
 	switch(o.Type) {
 		case 0: parse_XORObfuscation(blob, length-2, o); break;
 		case 1: parse_FilePassHeader(blob, length-2, o); break;
-		default: throw 'Unrecognized Encryption Type ' + filepass.Type;
+		default: throw 'Unrecognized Encryption Type ' + o.Type;
 	}
 	return o;
 }
@@ -2031,7 +2040,7 @@ function parse_SerAr(blob) {
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
 			val[1] = parse_XLUnicodeString(blob); break;
 		default:
-			throw "Bad SerAr: " + type;
+			throw "Bad SerAr: " + val[0];
 	}
 	return val;
 }
@@ -2357,7 +2366,7 @@ function parse_Rgce(blob, length) {
 /* 2.2.2 + Magic TODO */
 function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
-	var stack = [], e1, e2, type, c, ixti, nameidx;
+	var stack = [], e1, e2, type, c, ixti, nameidx, r;
 	if(!formula[0] || !formula[0][0]) return "";
 	//console.log("--",formula[0])
 	formula[0].forEach(function(f) {
@@ -2456,16 +2465,16 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			/* 2.5.198.84 */
 			case 'PtgRef':
-				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
+				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
 				stack.push(encode_cell(c));
 				break;
 			/* 2.5.198.88 */
 			case 'PtgRefN':
-				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), cell);
+				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), cell);
 				stack.push(encode_cell(c));
 				break;
 			case 'PtgRef3d': // TODO: lots of stuff
-				type = f[1][0], ixti = f[1][1], c = shift_cell(f[1][2], range);
+				type = f[1][0]; ixti = f[1][1]; c = shift_cell(f[1][2], range);
 				stack.push(supbooks[1][ixti+1]+"!"+encode_cell(c));
 				break;
 
@@ -2495,12 +2504,12 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgErr': stack.push(f[1]); break;
 			/* 2.5.198.27 */
 			case 'PtgArea':
-				type = f[1][0], r = shift_range(f[1][1], range);
+				type = f[1][0]; r = shift_range(f[1][1], range);
 				stack.push(encode_range(r));
 				break;
 			/* 2.5.198.28 */
 			case 'PtgArea3d': // TODO: lots of stuff
-				type = f[1][0], ixti = f[1][1], r = f[1][2];
+				type = f[1][0]; ixti = f[1][1]; r = f[1][2];
 				stack.push(supbooks[1][ixti+1]+"!"+encode_range(r));
 				break;
 			/* 2.5.198.41 */
@@ -4060,9 +4069,9 @@ function parse_compobj(obj) {
 
 
 function parse_xlscfb(cfb) {
-var CompObj = cfb.Directory['!CompObj']; // OLE
+var CompObj = cfb.Directory['!CompObj'];
 var Summary = cfb.Directory['!SummaryInformation'];
-var Workbook = cfb.Directory.Workbook; // OLE
+var Workbook = cfb.Directory.Workbook;
 var CompObjP, SummaryP, WorkbookP;
 
 
@@ -4079,7 +4088,7 @@ function slurp(R, blob, length, opts) {
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
-	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
+	var b = bconcat(bufs);
 	prep_blob(b);
 	var ll = 0; b.lens = [];
 	bufs.forEach(function(x) { b.lens.push(ll); ll += x.length; });

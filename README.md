@@ -65,4 +65,5 @@ XLSX is not supported in this module.  Due to Licensing issues [that are discuss
  - [MS-OLEDS]: Object Linking and Embedding (OLE) Data Structures
  - [MS-OLEPS]: Object Linking and Embedding (OLE) Property Set Data Structures
  - [MS-OSHARED]: Office Common Data Types and Objects Structures
+ - [MS-OVBA]: Office VBA File Format Structure 
 

@@ -1,4 +1,4 @@
-/* [MS-CFB] v20120705 */
+/* [MS-CFB] v20130118 */
 var CFB = (function(){
 var exports = {};
 function parse(file) {
@@ -25,8 +25,8 @@ var fat_addrs = []; // locations of FAT sectors
 var blob = file.slice(0,512);
 prep_blob(blob);
 var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-var wrn = WarnField.bind(blob);
-var j = 0;
+//var wrn = WarnField.bind(blob);
+var j = 0, q;
 
 // header signature 8
 chk(HEADER_SIGNATURE, 'Header Signature: ');
@@ -159,9 +159,9 @@ sector_list[fat_addrs[0]].name = "!FAT";
 /** read directory structure */
 var files = {}, Paths = [];
 function read_directory(idx) {
-	var blob, read;
+	var blob, read, w;
 	var sector = sector_list[idx].data;
-	for(var i = 0; i != sector.length; i+= 128, l = 64) {
+	for(var i = 0; i != sector.length; i+= 128) {
 		blob = sector.slice(i, i+128);
 		prep_blob(blob, 64);
 		read = ReadShift.bind(blob);

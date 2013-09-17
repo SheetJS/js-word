@@ -25,9 +25,9 @@ function parse_compobj(obj) {
 
 
 function parse_xlscfb(cfb) {
-var CompObj = cfb.Directory['!CompObj']; // OLE
+var CompObj = cfb.Directory['!CompObj'];
 var Summary = cfb.Directory['!SummaryInformation'];
-var Workbook = cfb.Directory.Workbook; // OLE
+var Workbook = cfb.Directory.Workbook;
 var CompObjP, SummaryP, WorkbookP;
 
 
@@ -44,7 +44,7 @@ function slurp(R, blob, length, opts) {
 		blob.l += 4+l;
 		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
 	}
-	var b = (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs);
+	var b = bconcat(bufs);
 	prep_blob(b);
 	var ll = 0; b.lens = [];
 	bufs.forEach(function(x) { b.lens.push(ll); ll += x.length; });
