@@ -40,7 +40,8 @@
 	var VT_ARRAY    = 0x2000;
 
 	var VT_STRING   = 0x0050; // 2.3.3.1.11 VtString
-	var VT_CUSTOM   = [VT_STRING];
+	var VT_USTR     = 0x0051; // 2.3.3.1.12 VtUnalignedString
+	var VT_CUSTOM   = [VT_STRING, VT_USTR];
 }
 
 /* [MS-OSHARED] 2.3.3.2.2.1 Document Summary Information PIDDSI */
