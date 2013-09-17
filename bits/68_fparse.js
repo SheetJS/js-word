@@ -104,7 +104,7 @@ function parse_Rgce(blob, length) {
 /* 2.2.2 + Magic TODO */
 function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
-	var stack = [], e1, e2, type, c, ixti, nameidx;
+	var stack = [], e1, e2, type, c, ixti, nameidx, r;
 	if(!formula[0] || !formula[0][0]) return "";
 	//console.log("--",formula[0])
 	formula[0].forEach(function(f) {
@@ -203,16 +203,16 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			/* 2.5.198.84 */
 			case 'PtgRef':
-				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
+				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
 				stack.push(encode_cell(c));
 				break;
 			/* 2.5.198.88 */
 			case 'PtgRefN':
-				type = f[1][0], c = shift_cell(decode_cell(encode_cell(f[1][1])), cell);
+				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), cell);
 				stack.push(encode_cell(c));
 				break;
 			case 'PtgRef3d': // TODO: lots of stuff
-				type = f[1][0], ixti = f[1][1], c = shift_cell(f[1][2], range);
+				type = f[1][0]; ixti = f[1][1]; c = shift_cell(f[1][2], range);
 				stack.push(supbooks[1][ixti+1]+"!"+encode_cell(c));
 				break;
 
@@ -242,12 +242,12 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgErr': stack.push(f[1]); break;
 			/* 2.5.198.27 */
 			case 'PtgArea':
-				type = f[1][0], r = shift_range(f[1][1], range);
+				type = f[1][0]; r = shift_range(f[1][1], range);
 				stack.push(encode_range(r));
 				break;
 			/* 2.5.198.28 */
 			case 'PtgArea3d': // TODO: lots of stuff
-				type = f[1][0], ixti = f[1][1], r = f[1][2];
+				type = f[1][0]; ixti = f[1][1]; r = f[1][2];
 				stack.push(supbooks[1][ixti+1]+"!"+encode_range(r));
 				break;
 			/* 2.5.198.41 */

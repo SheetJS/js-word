@@ -165,7 +165,7 @@ function parse_SerAr(blob) {
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
 			val[1] = parse_XLUnicodeString(blob); break;
 		default:
-			throw "Bad SerAr: " + type;
+			throw "Bad SerAr: " + val[0];
 	}
 	return val;
 }
