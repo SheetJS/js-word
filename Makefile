@@ -17,6 +17,10 @@ init:
 test:
 	bin/test.sh
 
+.PHONY: mocha
+mocha:
+	mocha -R spec
+
 .PHONY: lint
 lint: $(TARGET)
 	jshint --show-non-errors $(TARGET)
