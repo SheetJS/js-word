@@ -105,7 +105,8 @@ if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function() { return this.toString('hex'); };
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
-	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
+	Buffer.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 }
 
 Array.prototype.readUInt8 = function(idx) { return this[idx]; };
@@ -122,6 +123,7 @@ Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) 
 Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
 
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+Array.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
@@ -141,6 +143,8 @@ function ReadShift(size, t) {
 
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
+
+		case 'lpwstr': o = this.lpwstr(this.l); size = 5 + o.length; if(o[o.length-1] == '\u0000') size += 2; break;
 
 		/* sbcs and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
@@ -494,14 +498,14 @@ var DocSummaryPIDDSI = {
 /* [MS-OSHARED] 2.3.3.2.1.1 Summary Information Property Set PIDSI */
 var SummaryPIDSI = {
 	0x01: { n: 'CodePage', t: VT_I2 },
-	0x02: { n: 'Title', t: VT_LPSTR },
-	0x03: { n: 'Subject', t: VT_LPSTR },
-	0x04: { n: 'Author', t: VT_LPSTR },
-	0x05: { n: 'Keywords', t: VT_LPSTR },
-	0x06: { n: 'Comments', t: VT_LPSTR },
-	0x07: { n: 'Template', t: VT_LPSTR },
-	0x08: { n: 'LastAuthor', t: VT_LPSTR },
-	0x09: { n: 'RevNumber', t: VT_LPSTR },
+	0x02: { n: 'Title', t: VT_STRING },
+	0x03: { n: 'Subject', t: VT_STRING },
+	0x04: { n: 'Author', t: VT_STRING },
+	0x05: { n: 'Keywords', t: VT_STRING },
+	0x06: { n: 'Comments', t: VT_STRING },
+	0x07: { n: 'Template', t: VT_STRING },
+	0x08: { n: 'LastAuthor', t: VT_STRING },
+	0x09: { n: 'RevNumber', t: VT_STRING },
 	0x0A: { n: 'EditTime', t: VT_FILETIME },
 	0x0B: { n: 'LastPrinted', t: VT_FILETIME },
 	0x0C: { n: 'CreateTime', t: VT_FILETIME },
@@ -531,6 +535,15 @@ function parse_lpstr(blob, type, pad) {
 	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
 	return str;
 }
+
+/* [MS-OSHARED] 2.3.3.1.6 Lpwstr */
+function parse_lpwstr(blob, type, pad) {
+	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var str = read('lpwstr');
+	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
+	return str;
+}
+
 
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
 /* [MS-OSHARED] 2.3.3.1.12 VtUnalignedString */
@@ -685,7 +698,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
 				case 1251: // SB Windows Cyrillic
-				case 1253: // SB Windows Greek 
+				case 1253: // SB Windows Greek
 				case 1254: // SB Windows Turkish
 				case 1255: // SB Windows Hebrew
 				case 1256: // SB Windows Arabic
@@ -954,7 +967,7 @@ function read_directory(idx) {
 				sector_list[o.start].name = o.name;
 				o.content = sector_list[o.start].data.slice(0,o.size);
 			} catch(e) {
-				o.start = o.start - 1; 
+				o.start = o.start - 1;
 				sector_list[o.start].name = o.name;
 				o.content = sector_list[o.start].data.slice(0,o.size);
 			}
@@ -4258,6 +4271,13 @@ function parse_workbook(blob) {
 				case 'RichTextStream': break;
 				case 'BkHim': break;
 
+				/* Protection */
+				case 'ScenarioProtect': break;
+				case 'ObjProtect': break;
+
+				/* Conditional Formatting */
+				case 'CondFmt12': break;
+
 				/* Table */
 				case 'Table': break; // TODO
 				case 'TableStyles': break; // TODO
@@ -4275,7 +4295,7 @@ function parse_workbook(blob) {
 				case 'DCon': break;
 
 				/* Watched Cell */
-				case 'CellWatch': break; 
+				case 'CellWatch': break;
 
 				/* Print Settings */
 				case 'PrintRowCol': break;

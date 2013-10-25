@@ -15,6 +15,15 @@ function parse_lpstr(blob, type, pad) {
 	return str;
 }
 
+/* [MS-OSHARED] 2.3.3.1.6 Lpwstr */
+function parse_lpwstr(blob, type, pad) {
+	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var str = read('lpwstr');
+	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
+	return str;
+}
+
+
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
 /* [MS-OSHARED] 2.3.3.1.12 VtUnalignedString */
 function parse_VtStringBase(blob, stringType, pad) {
@@ -168,7 +177,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
 				case 1251: // SB Windows Cyrillic
-				case 1253: // SB Windows Greek 
+				case 1253: // SB Windows Greek
 				case 1254: // SB Windows Turkish
 				case 1255: // SB Windows Hebrew
 				case 1256: // SB Windows Arabic

@@ -71,7 +71,8 @@ if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function() { return this.toString('hex'); };
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
-	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
+	Buffer.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 }
 
 Array.prototype.readUInt8 = function(idx) { return this[idx]; };
@@ -88,6 +89,7 @@ Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) 
 Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
 
 Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+Array.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
@@ -107,6 +109,8 @@ function ReadShift(size, t) {
 
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
+
+		case 'lpwstr': o = this.lpwstr(this.l); size = 5 + o.length; if(o[o.length-1] == '\u0000') size += 2; break;
 
 		/* sbcs and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
