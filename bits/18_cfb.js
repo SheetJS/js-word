@@ -192,7 +192,7 @@ function read_directory(idx) {
 				sector_list[o.start].name = o.name;
 				o.content = sector_list[o.start].data.slice(0,o.size);
 			} catch(e) {
-				o.start = o.start - 1; 
+				o.start = o.start - 1;
 				sector_list[o.start].name = o.name;
 				o.content = sector_list[o.start].data.slice(0,o.size);
 			}

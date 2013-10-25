@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"author": "Niggler",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [
@@ -11,6 +11,7 @@
 	},
 	"main": "./xls",
 	"dependencies": {
+		"codepage":"",
 		"commander":""
 	},
 	"devDependencies": {
@@ -19,6 +20,9 @@
 	"repository": {
 		"type":"git",
 		"url": "git://github.com/Niggler/js-xls.git"
+	},
+	"scripts": {
+		"test": "make mocha"
 	},
 	"bugs": { "url": "https://github.com/Niggler/js-xls/issues" },
 	"engines": { "node": ">=0.4" }

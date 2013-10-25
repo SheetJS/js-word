@@ -179,6 +179,13 @@ function parse_workbook(blob) {
 				case 'RichTextStream': break;
 				case 'BkHim': break;
 
+				/* Protection */
+				case 'ScenarioProtect': break;
+				case 'ObjProtect': break;
+
+				/* Conditional Formatting */
+				case 'CondFmt12': break;
+
 				/* Table */
 				case 'Table': break; // TODO
 				case 'TableStyles': break; // TODO
@@ -196,7 +203,7 @@ function parse_workbook(blob) {
 				case 'DCon': break;
 
 				/* Watched Cell */
-				case 'CellWatch': break; 
+				case 'CellWatch': break;
 
 				/* Print Settings */
 				case 'PrintRowCol': break;

@@ -4,10 +4,11 @@
 var XLS = require('../xls');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.4')
+	.version('0.4.1')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
+	.option('-l, --list-sheets', 'list sheet names and exit')
 	.option('-F, --formulae', 'print formulae')
 	.option('--dev', 'development mode')
 	.option('--read', 'read but do not print out contents')
@@ -32,6 +33,8 @@ if(!fs.existsSync(filename)) {
 	process.exit(2);
 }
 
+if(program.dev) XLS.verbose = 2;
+
 var wb;
 if(program.dev) wb = XLS.readFile(filename);
 else try {
@@ -43,6 +46,11 @@ else try {
 	process.exit(3);
 }
 if(program.read) process.exit(0);
+
+if(program.listSheets) {
+	console.log(wb.Directory.join("\n"));
+	process.exit(0);
+}
 
 var target_sheet = sheetname || '';
 if(target_sheet === '') target_sheet = wb.Directory[0];
