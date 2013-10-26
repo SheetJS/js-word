@@ -191,8 +191,8 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1201: // UTF16BE
 				case 65000: case -536: // UTF-7
 				case 65001: case -535: // UTF-8
-				/* falls through */
-				default: console.error("Unsupported CodePage: " + PropH[piddsi.n]);
+					break;
+				default: throw new Error("Unsupported CodePage: " + PropH[piddsi.n]);
 			}
 		} else {
 			if(Props[i][0] === 0x1) {
@@ -209,9 +209,17 @@ function parse_PropertySet(blob, PIDSI) {
 			} else {
 				var name = DictObj[Props[i][0]];
 				var val;
+				/* [MS-OSHARED] 2.3.3.2.3.1.2 + PROPVARIANT */
 				switch(blob[blob.l]) {
-					//TODO
 					case VT_BLOB: blob.l += 4; val = parse_BLOB(blob); break;
+					case VT_LPSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case VT_LPWSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case VT_I4: blob.l += 4; val = read(4, 'i'); break;
+					case VT_UI4: blob.l += 4; val = read(4); break;
+					case VT_R8: blob.l += 4; val = read(8, 'f'); break;
+					case VT_BOOL: blob.l += 4; val = parsebool(blob, 4); break;
+					case VT_FILETIME: blob.l += 4; val = parse_FILETIME(blob); break;
+					default: throw new Error("unparsed value: " + blob[blob.l]);
 				}
 				PropH[name] = val;
 			}

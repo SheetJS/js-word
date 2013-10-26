@@ -2,6 +2,10 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
+if(typeof require !== 'undefined') {
+	if(typeof cptable === 'undefined') var cptable = require('codepage');
+	var current_codepage = 1252, current_cptable = cptable[1252];
+}
 /* Buffer.concat was added in the 0.8 series, so this is for older versions */
 if(typeof Buffer !== "undefined" && !Buffer.concat)
 Buffer.concat = function(list, length) {
@@ -107,6 +111,27 @@ if(typeof Buffer !== "undefined") {
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
 	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
 	Buffer.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+	if(typeof cptable !== "undefined") Buffer.prototype.lpstr = function(i) {
+		var len = this.readUInt32LE(i);
+		if(len === 0) return "";
+		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
+		var t = Array(this.slice(i+4,i+4+len-1));
+		//1console.log("start", this.l, len, t);
+		var c, j = i+4, o = "", cc;
+		for(;j!=i+4+len;++j) {
+			c = this.readUInt8(j);
+			cc = current_cptable.dec[c];
+			if(typeof cc === 'undefined') {
+				c = c*256 + this.readUInt8(++j);
+				cc = current_cptable.dec[c];
+			}
+			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
+			if(c === 0) break;
+			o += cc;
+		//1console.log(cc, cc.charCodeAt(0), o, this.l);
+		}
+		return o;
+	};
 }
 
 Array.prototype.readUInt8 = function(idx) { return this[idx]; };
@@ -712,8 +737,8 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1201: // UTF16BE
 				case 65000: case -536: // UTF-7
 				case 65001: case -535: // UTF-8
-				/* falls through */
-				default: console.error("Unsupported CodePage: " + PropH[piddsi.n]);
+					break;
+				default: throw new Error("Unsupported CodePage: " + PropH[piddsi.n]);
 			}
 		} else {
 			if(Props[i][0] === 0x1) {
@@ -730,9 +755,17 @@ function parse_PropertySet(blob, PIDSI) {
 			} else {
 				var name = DictObj[Props[i][0]];
 				var val;
+				/* [MS-OSHARED] 2.3.3.2.3.1.2 + PROPVARIANT */
 				switch(blob[blob.l]) {
-					//TODO
 					case VT_BLOB: blob.l += 4; val = parse_BLOB(blob); break;
+					case VT_LPSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case VT_LPWSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case VT_I4: blob.l += 4; val = read(4, 'i'); break;
+					case VT_UI4: blob.l += 4; val = read(4); break;
+					case VT_R8: blob.l += 4; val = read(8, 'f'); break;
+					case VT_BOOL: blob.l += 4; val = parsebool(blob, 4); break;
+					case VT_FILETIME: blob.l += 4; val = parse_FILETIME(blob); break;
+					default: throw new Error("unparsed value: " + blob[blob.l]);
 				}
 				PropH[name] = val;
 			}
@@ -1900,7 +1933,9 @@ function parse_RC4Header(blob, length) {
 }
 
 /* 2.5.343 */
-function parse_XORObfuscation(blob, length) { return parsenoop(blob, length); }
+function parse_XORObfuscation(blob, length) {
+	return { key: parseuint16(blob), verificationBytes: parseuint16(blob) };
+}
 /* 2.4.117 */
 function parse_FilePassHeader(blob, length, oo) {
 	var o = oo || {}; o.Info = blob.read_shift(2); blob.l -= 2;
@@ -2125,13 +2160,17 @@ function parse_PtgNameX(blob, length) {
 	return [type, ixti, nameindex];
 }
 
-/* 2.5.198.70 */
-function parse_PtgMemArea(blob, length) {
+function parse_PtgWithCCE(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	var cce = blob.read_shift(2);
 	return [type, cce];
 }
+
+/* 2.5.198.70 */
+var parse_PtgMemArea = parse_PtgWithCCE;
+/* 2.5.198.72 */
+var parse_PtgMemFunc = parse_PtgWithCCE;
 
 /* 2.5.198.34 */
 function parse_PtgAttrChoose(blob, length) {
@@ -2212,8 +2251,6 @@ var parse_PtgAttrBaxcel = parsenoop;
 var parse_PtgAttrSpaceSemi = parsenoop;
 /* 2.5.198.71 */
 var parse_PtgMemErr = parsenoop;
-/* 2.5.198.72 */
-var parse_PtgMemFunc = parsenoop;
 /* 2.5.198.73 */
 var parse_PtgMemNoMem = parsenoop;
 /* 2.5.198.87 */
@@ -4097,7 +4134,7 @@ function parse_compobj(obj) {
 
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
-	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
+	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
@@ -4109,7 +4146,7 @@ function parse_compobj(obj) {
 			l += m;
 	}
 
-	m = o.lpstr(l); l += 5 + m.length; v.Reserved1 = m;
+	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
 
 	if((m = o.readUInt32LE(l)) !== 0x71b2e9f4) return v;
 	throw "Unsupported Unicode Extension";
@@ -4200,10 +4237,14 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
+				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); console.error(val); break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
-				case 'CodePage': opts.codepage = val; break;
+				case 'CodePage':
+					opts.codepage = val;
+					if(typeof current_codepage !== 'undefined') current_codepage = val;
+					if(typeof current_cptable !== 'undefined') current_cptable = cptable[val];
+					break;
 				case 'RRTabId': opts.rrtabid = val; break;
 				case 'WinProtect': opts.winlocked = val; break;
 				case 'Template': break; // TODO

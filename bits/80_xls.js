@@ -5,7 +5,7 @@ function parse_compobj(obj) {
 
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
-	m = o.lpstr(l); l += 5 + m.length; v.UserType = m;
+	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
@@ -17,7 +17,7 @@ function parse_compobj(obj) {
 			l += m;
 	}
 
-	m = o.lpstr(l); l += 5 + m.length; v.Reserved1 = m;
+	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
 
 	if((m = o.readUInt32LE(l)) !== 0x71b2e9f4) return v;
 	throw "Unsupported Unicode Extension";
@@ -108,10 +108,14 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); break;
+				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); console.error(val); break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
-				case 'CodePage': opts.codepage = val; break;
+				case 'CodePage':
+					opts.codepage = val;
+					if(typeof current_codepage !== 'undefined') current_codepage = val;
+					if(typeof current_cptable !== 'undefined') current_cptable = cptable[val];
+					break;
 				case 'RRTabId': opts.rrtabid = val; break;
 				case 'WinProtect': opts.winlocked = val; break;
 				case 'Template': break; // TODO

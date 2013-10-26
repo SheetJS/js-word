@@ -73,6 +73,27 @@ if(typeof Buffer !== "undefined") {
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
 	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
 	Buffer.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+	if(typeof cptable !== "undefined") Buffer.prototype.lpstr = function(i) {
+		var len = this.readUInt32LE(i);
+		if(len === 0) return "";
+		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
+		var t = Array(this.slice(i+4,i+4+len-1));
+		//1console.log("start", this.l, len, t);
+		var c, j = i+4, o = "", cc;
+		for(;j!=i+4+len;++j) {
+			c = this.readUInt8(j);
+			cc = current_cptable.dec[c];
+			if(typeof cc === 'undefined') {
+				c = c*256 + this.readUInt8(++j);
+				cc = current_cptable.dec[c];
+			}
+			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
+			if(c === 0) break;
+			o += cc;
+		//1console.log(cc, cc.charCodeAt(0), o, this.l);
+		}
+		return o;
+	};
 }
 
 Array.prototype.readUInt8 = function(idx) { return this[idx]; };
