@@ -202,13 +202,17 @@ function parse_PtgNameX(blob, length) {
 	return [type, ixti, nameindex];
 }
 
-/* 2.5.198.70 */
-function parse_PtgMemArea(blob, length) {
+function parse_PtgWithCCE(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	var cce = blob.read_shift(2);
 	return [type, cce];
 }
+
+/* 2.5.198.70 */
+var parse_PtgMemArea = parse_PtgWithCCE;
+/* 2.5.198.72 */
+var parse_PtgMemFunc = parse_PtgWithCCE;
 
 /* 2.5.198.34 */
 function parse_PtgAttrChoose(blob, length) {
@@ -289,8 +293,6 @@ var parse_PtgAttrBaxcel = parsenoop;
 var parse_PtgAttrSpaceSemi = parsenoop;
 /* 2.5.198.71 */
 var parse_PtgMemErr = parsenoop;
-/* 2.5.198.72 */
-var parse_PtgMemFunc = parsenoop;
 /* 2.5.198.73 */
 var parse_PtgMemNoMem = parsenoop;
 /* 2.5.198.87 */
