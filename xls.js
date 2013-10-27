@@ -807,7 +807,8 @@ function parse_PropertySetStream(file, PIDSI) {
 	return rval;
 }
 /* [MS-CFB] v20130118 */
-var CFB = (function(){
+if(typeof require !== "undefined") CFB = require('cfb');
+else var CFB = (function(){
 var exports = {};
 function parse(file) {
 
@@ -914,12 +915,10 @@ for(j = 0; blob.l != 512; ) {
 
 
 /** Break the file up into sectors */
-if(file.length%ssz!==0) console.error("CFB: size " + file.length + " % "+ssz);
-
 var nsectors = Math.ceil((file.length - ssz)/ssz);
 var sectors = [];
 for(var i=1; i != nsectors; ++i) sectors[i-1] = file.slice(i*ssz,(i+1)*ssz);
-sectors[nsectors-1] = file.slice((nsectors)*ssz);
+sectors[nsectors-1] = file.slice(nsectors*ssz);
 
 /** Chase down the rest of the DIFAT chain to build a comprehensive list
     DIFAT chains by storing the next sector number as the last 32 bytes */
@@ -928,12 +927,14 @@ function sleuth_fat(idx, cnt) {
 		if(cnt !== 0) throw "DIFAT chain shorter than expected";
 		return;
 	}
-	var sector = sectors[idx];
-	for(var i = 0; i != ssz/4-1; ++i) {
-		if((q = sector.readUInt32LE(i*4)) === ENDOFCHAIN) break;
-		fat_addrs.push(q);
+	if(idx !== FREESECT) {
+		var sector = sectors[idx];
+		for(var i = 0; i != ssz/4-1; ++i) {
+			if((q = sector.readUInt32LE(i*4)) === ENDOFCHAIN) break;
+			fat_addrs.push(q);
+		}
+		sleuth_fat(sector.readUInt32LE(ssz-4),cnt - 1);
 	}
-	sleuth_fat(sector.readUInt32LE(ssz-4),cnt - 1);
 }
 sleuth_fat(difat_start, ndfs);
 
@@ -955,18 +956,18 @@ function get_next_sector(idx) { return get_buffer_u32(idx); }
 var chkd = new Array(sectors.length), sector_list = [];
 var get_sector = function get_sector(k) { return sectors[k]; };
 for(i=0; i != sectors.length; ++i) {
-	var buf = [];
-	if(chkd[i]) continue;
-	for(j=i; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
-	sector_list[i] = {nodes: buf};
-	sector_list[i].data = Buffers(buf.map(get_sector)).toBuffer();
+	var buf = [], k = (i + dir_start) % sectors.length;
+	if(chkd[k]) continue;
+	for(j=k; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
+	sector_list[k] = {nodes: buf};
+	sector_list[k].data = Buffers(buf.map(get_sector)).toBuffer();
 }
 sector_list[dir_start].name = "!Directory";
-if(nmfs > 0) sector_list[minifat_start].name = "!MiniFAT";
+if(nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
 sector_list[fat_addrs[0]].name = "!FAT";
 
-/** read directory structure */
-var files = {}, Paths = [];
+/* [MS-CFB] 2.6.1 Compound File Directory Entry */
+var files = {}, Paths = [], FileIndex = [], FullPaths = [], FullPathDir = {};
 function read_directory(idx) {
 	var blob, read, w;
 	var sector = sector_list[idx].data;
@@ -986,13 +987,13 @@ function read_directory(idx) {
 		o.child = read(4); if(o.child === NOSTREAM) delete o.child;
 		o.clsid = read(16);
 		o.state = read(4);
-		o.ctime = read(8);
-		o.mtime = read(8);
+		var ctime = read(8); if(ctime != "0000000000000000") o.ctime = ctime;
+		var mtime = read(8); if(mtime != "0000000000000000") o.mtime = mtime;
 		o.start = read(4);
 		o.size = read(4);
 		if(o.type === 'root') { //root entry
 			minifat_store = o.start;
-			if(nmfs > 0) sector_list[minifat_store].name = "!StreamData";
+			if(nmfs > 0 && minifat_store !== ENDOFCHAIN) sector_list[minifat_store].name = "!StreamData";
 			minifat_size = o.size;
 		} else if(o.size >= ms_cutoff_size) {
 			o.storage = 'fat';
@@ -1008,21 +1009,67 @@ function read_directory(idx) {
 		} else {
 			o.storage = 'minifat';
 			w = o.start * mssz;
-			o.content = sector_list[minifat_store].data.slice(w,w+o.size);
-			prep_blob(o.content);
+			if(minifat_store !== ENDOFCHAIN && o.start !== ENDOFCHAIN) {
+				o.content = sector_list[minifat_store].data.slice(w,w+o.size);
+				prep_blob(o.content);
+			}
+		}
+		if(o.ctime) {
+			var ct = blob.slice(blob.l-24, blob.l-16);
+			var c2 = (ct.readUInt32LE(4)/1e7)*Math.pow(2,32)+ct.readUInt32LE(0)/1e7;
+			o.ct = new Date((c2 - 11644473600)*1000);
+		}
+		if(o.mtime) {
+			var mt = blob.slice(blob.l-16, blob.l-8);
+			var m2 = (mt.readUInt32LE(4)/1e7)*Math.pow(2,32)+mt.readUInt32LE(0)/1e7;
+			o.mt = new Date((m2 - 11644473600)*1000);
 		}
 		files[name] = o;
+		FileIndex.push(o);
 	}
 }
 read_directory(dir_start);
 
-var root_name = Paths.shift();
+function build_full_paths(Dir, pathobj, paths, patharr) {
+	var i;
+	var dad = new Array(patharr.length);
 
-if(files.VBA) console.error("VBA will not be processed");
+	var q = new Array(patharr.length);
+
+	for(i=0; i != dad.length; ++i) { dad[i]=q[i]=i; paths[i]=patharr[i]; }
+
+	for(i = q[0]; typeof i !== "undefined"; i = q.shift()) {
+		if(Dir[i].child) dad[Dir[i].child] = i;
+		if(Dir[i].left) { dad[Dir[i].left] = dad[i]; q.push(Dir[i].left); }
+		if(Dir[i].right) { dad[Dir[i].right] = dad[i]; q.push(Dir[i].right); }
+	}
+
+	for(i=1; i !== paths.length; ++i) {
+		if(Dir[i].type === "unknown") continue;
+		var j = dad[i];
+		if(j === 0) paths[i] = paths[0] + "/" + paths[i];
+		else while(j !== 0) {
+			paths[i] = paths[j] + "/" + paths[i];
+			j = dad[j];
+		}
+		dad[i] = 0;
+	}
+
+	paths[0] += "/";
+	for(i=1; i !== paths.length; ++i) if(Dir[i].type !== 'stream') paths[i] += "/";
+	for(i=0; i !== paths.length; ++i) pathobj[paths[i]] = FileIndex[i];
+}
+build_full_paths(FileIndex, FullPathDir, FullPaths, Paths);
+
+var root_name = Paths.shift();
+Paths.root = root_name;
 
 var rval = {
 	raw: {header: header, sectors: sectors},
 	Paths: Paths,
+	FileIndex: FileIndex,
+	FullPaths: FullPaths,
+	FullPathDir: FullPathDir,
 	Directory: files
 };
 
@@ -1065,18 +1112,20 @@ return exports;
 
 /** CFB Constants */
 {
+	/* 2.1 Compund File Sector Numbers and Types */
 	var MAXREGSECT = 0xFFFFFFFA;
 	var DIFSECT = 0xFFFFFFFC;
 	var FATSECT = 0xFFFFFFFD;
 	var ENDOFCHAIN = 0xFFFFFFFE;
 	var FREESECT = 0xFFFFFFFF;
+	/* 2.2 Compound File Header */
 	var HEADER_SIGNATURE = 'd0cf11e0a1b11ae1';
 	var HEADER_MINOR_VERSION = '3e00';
 	var MAXREGSID = 0xFFFFFFFA;
 	var NOSTREAM = 0xFFFFFFFF;
 	var HEADER_CLSID = '00000000000000000000000000000000';
-
-	var EntryTypes = ['unknown','storage','stream',null,null,'root'];
+	/* 2.6.1 Compound File Directory Entry */
+	var EntryTypes = ['unknown','storage','stream','lockbytes','property','root'];
 }
 
 if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
@@ -4483,6 +4532,7 @@ function parse_workbook(blob) {
 				case 'NameCmt': break;
 
 				/* Chart */
+				case 'Dat':
 				case 'Begin': case 'End':
 				case 'StartBlock': case 'EndBlock':
 				case 'Frame': case 'Area':

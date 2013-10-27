@@ -354,6 +354,7 @@ function parse_workbook(blob) {
 				case 'NameCmt': break;
 
 				/* Chart */
+				case 'Dat':
 				case 'Begin': case 'End':
 				case 'StartBlock': case 'EndBlock':
 				case 'Frame': case 'Area':
