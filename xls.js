@@ -1341,7 +1341,8 @@ function parse_InterfaceHdr(blob, length) {
 
 
 /* 2.4.349 */
-function parse_WriteAccess(blob, length) {
+function parse_WriteAccess(blob, length, opts) {
+	if(opts.enc) { blob.l += length; return ""; }
 	var l = blob.l;
 	// TODO: make sure XLUnicodeString doesnt overrun
 	var UserName = parse_XLUnicodeString(blob);
@@ -1985,6 +1986,7 @@ function parse_RC4Header(blob, length) {
 function parse_XORObfuscation(blob, length) {
 	return { key: parseuint16(blob), verificationBytes: parseuint16(blob) };
 }
+
 /* 2.4.117 */
 function parse_FilePassHeader(blob, length, oo) {
 	var o = oo || {}; o.Info = blob.read_shift(2); blob.l -= 2;
@@ -2491,7 +2493,7 @@ function parse_Rgce(blob, length) {
 			id = blob[blob.l + 1];
 			R = (id === 0x18 ? Ptg18 : Ptg19)[id];
 		}
-		if(!R) { ptgs.push(parsenoop(blob, length)); }
+		if(!R || !R.f) { ptgs.push(parsenoop(blob, length)); }
 		else { ptgs.push([R.n, R.f(blob, length)]); }
 	}
 	return ptgs;
@@ -2697,6 +2699,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
 				break;
 
+		/* 2.2.2.5 Mem Tokens */
 			/* 2.5.198.70 TODO: confirm this is a non-display */
 			case 'PtgMemArea':
 				//stack.push("(" + f[2].map(encode_range).join(",") + ")");
@@ -2707,6 +2710,26 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			/* 2.5.198.92 TODO */
 			case 'PtgTbl': break;
+
+			/* 2.5.198.71 */
+			case 'PtgMemErr': break;
+
+			/* 2.5.198.74 */
+			case 'PtgMissArg':
+				stack.push("");
+				break;
+
+			/* 2.5.198.29 TODO */
+			case 'PtgAreaErr': break;
+
+			/* 2.5.198.31 TODO */
+			case 'PtgAreaN': break;
+
+			/* 2.5.198.87 TODO */
+			case 'PtgRefErr3d': break;
+
+			/* 2.5.198.72 */
+			case 'PtgMemFunc': break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
@@ -4402,7 +4425,7 @@ function parse_workbook(blob) {
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
-				case 'Password': if(val !== 0) throw "Password protection unsupported"; break;
+				case 'Password': if(val !== 0) throw new Error("Password protection unsupported"); break;
 				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
