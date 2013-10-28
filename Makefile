@@ -13,12 +13,12 @@ init:
 	git submodule update
 	git submodule foreach git pull origin master 
 
-.PHONY: test
-test:
+.PHONY: oldtest
+oldtest:
 	bin/test.sh
 
-.PHONY: mocha
-mocha:
+.PHONY: test mocha
+test mocha:
 	mocha -R spec
 
 .PHONY: lint

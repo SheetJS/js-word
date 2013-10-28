@@ -55,6 +55,7 @@ function parse_RC4Header(blob, length) {
 function parse_XORObfuscation(blob, length) {
 	return { key: parseuint16(blob), verificationBytes: parseuint16(blob) };
 }
+
 /* 2.4.117 */
 function parse_FilePassHeader(blob, length, oo) {
 	var o = oo || {}; o.Info = blob.read_shift(2); blob.l -= 2;

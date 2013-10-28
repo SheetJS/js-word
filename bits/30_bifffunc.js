@@ -104,7 +104,8 @@ function parse_InterfaceHdr(blob, length) {
 
 
 /* 2.4.349 */
-function parse_WriteAccess(blob, length) {
+function parse_WriteAccess(blob, length, opts) {
+	if(opts.enc) { blob.l += length; return ""; }
 	var l = blob.l;
 	// TODO: make sure XLUnicodeString doesnt overrun
 	var UserName = parse_XLUnicodeString(blob);
