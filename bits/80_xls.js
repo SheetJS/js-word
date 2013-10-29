@@ -28,6 +28,9 @@ function parse_xlscfb(cfb) {
 var CompObj = cfb.Directory['!CompObj'];
 var Summary = cfb.Directory['!SummaryInformation'];
 var Workbook = cfb.Directory.Workbook;
+if(!Workbook) Workbook = cfb.Directory.WORKBOOK;
+if(!Workbook) Workbook = cfb.Directory.Book;
+if(!Workbook) Workbook = cfb.Directory.BOOK;
 var CompObjP, SummaryP, WorkbookP;
 
 
@@ -87,7 +90,7 @@ function parse_workbook(blob) {
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
 	supbooks.sharedf = opts.sharedf;
-	while(blob.l < blob.length) {
+	while(blob.l < blob.length - 1) {
 		var s = blob.l;
 		var RecordType = read(2);
 		if(RecordType === 0) break; /* TODO: can padding occur before EOF ? */
@@ -444,7 +447,7 @@ function parse_workbook(blob) {
 	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);
-
+else throw new Error("Cannot find Workbook stream");
 if(CompObj) CompObjP = parse_compobj(CompObj);
 
 return WorkbookP;

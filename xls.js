@@ -1229,6 +1229,7 @@ function parse_XLUnicodeStringNoCch(blob, cch) {
 /* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob) {
 	var cch = blob.read_shift(2);
+	if(cch == 0) { blob.l++; return ""; }
 	return parse_XLUnicodeStringNoCch(blob, cch);
 }
 
@@ -1535,7 +1536,7 @@ function parse_ExternName(blob, length, opts) {
 	var flags = blob.read_shift(2);
 	var body;
 	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
-	else throw "unsupported SupBook cch: " + opts.sbcch;
+	else throw new Error("unsupported SupBook cch: " + opts.sbcch);
 	return {
 		fBuiltIn: flags & 0x01,
 		fWantAdvise: (flags >>> 1) & 0x01,
@@ -2211,17 +2212,20 @@ function parse_PtgNameX(blob, length) {
 	return [type, ixti, nameindex];
 }
 
-function parse_PtgWithCCE(blob, length) {
+/* 2.5.198.70 */
+function parse_PtgMemArea(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	var cce = blob.read_shift(2);
 	return [type, cce];
 }
 
-/* 2.5.198.70 */
-var parse_PtgMemArea = parse_PtgWithCCE;
 /* 2.5.198.72 */
-var parse_PtgMemFunc = parse_PtgWithCCE;
+function parse_PtgMemFunc(blob, length) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	var cce = blob.read_shift(2);
+	return [type, cce];
+}
 
 /* 2.5.198.34 */
 function parse_PtgAttrChoose(blob, length) {
@@ -4229,6 +4233,9 @@ function parse_xlscfb(cfb) {
 var CompObj = cfb.Directory['!CompObj'];
 var Summary = cfb.Directory['!SummaryInformation'];
 var Workbook = cfb.Directory.Workbook;
+if(!Workbook) Workbook = cfb.Directory.WORKBOOK;
+if(!Workbook) Workbook = cfb.Directory.Book;
+if(!Workbook) Workbook = cfb.Directory.BOOK;
 var CompObjP, SummaryP, WorkbookP;
 
 
@@ -4288,7 +4295,7 @@ function parse_workbook(blob) {
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
 	supbooks.sharedf = opts.sharedf;
-	while(blob.l < blob.length) {
+	while(blob.l < blob.length - 1) {
 		var s = blob.l;
 		var RecordType = read(2);
 		if(RecordType === 0) break; /* TODO: can padding occur before EOF ? */
@@ -4645,7 +4652,7 @@ function parse_workbook(blob) {
 	return wb;
 }
 if(Workbook) WorkbookP = parse_workbook(Workbook.content);
-
+else throw new Error("Cannot find Workbook stream");
 if(CompObj) CompObjP = parse_compobj(CompObj);
 
 return WorkbookP;
