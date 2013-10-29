@@ -1229,7 +1229,7 @@ function parse_XLUnicodeStringNoCch(blob, cch) {
 /* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob) {
 	var cch = blob.read_shift(2);
-	if(cch == 0) { blob.l++; return ""; }
+	if(cch === 0) { blob.l++; return ""; }
 	return parse_XLUnicodeStringNoCch(blob, cch);
 }
 
@@ -1535,18 +1535,19 @@ function parse_SupBook(blob, length, opts) {
 function parse_ExternName(blob, length, opts) {
 	var flags = blob.read_shift(2);
 	var body;
-	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
-	else throw new Error("unsupported SupBook cch: " + opts.sbcch);
-	return {
+	var o = {
 		fBuiltIn: flags & 0x01,
 		fWantAdvise: (flags >>> 1) & 0x01,
 		fWantPict: (flags >>> 2) & 0x01,
 		fOle: (flags >>> 3) & 0x01,
 		fOleLink: (flags >>> 4) & 0x01,
 		cf: (flags >>> 5) & 0x3FF,
-		fIcon: flags >>> 15 & 0x01,
-		body: body
+		fIcon: flags >>> 15 & 0x01
 	};
+	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
+	//else throw new Error("unsupported SupBook cch: " + opts.sbcch);
+	o.body = blob.read_shift(length-2);
+	return o;
 }
 
 /* 2.4.150 TODO */
@@ -2674,8 +2675,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.97.61 TODO: do something different for revisions */
 			case 'PtgNameX':
 				/* f[1] = type, ixti, nameindex */
-				var bookidx = f[1][1]; nameidx = f[1][2];
-				var externbook = supbooks[bookidx+1][nameidx];
+				var bookidx = f[1][1]; nameidx = f[1][2]; var externbook;
+				/* TODO: Properly handle missing values */
+				if(supbooks[bookidx+1]) externbook = supbooks[bookidx+1][nameidx];
+				else if(supbooks[bookidx-1]) externbook = supbooks[bookidx-1][nameidx];
+				if(!externbook) externbook = {body: "??NAMEX??"};
 				stack.push(externbook.body);
 				break;
 
@@ -4316,7 +4320,7 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); console.error(val); break;
+				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
@@ -4329,7 +4333,7 @@ function parse_workbook(blob) {
 				case 'Template': break; // TODO
 				case 'RefreshAll': wb.opts.RefreshAll = val; break;
 				case 'BookBool': break; // TODO
-				case 'UsesELFs': if(val) console.error("Unsupported ELFs"); break;
+				case 'UsesELFs': /* if(val) console.error("Unsupported ELFs"); */ break;
 				case 'MTRSettings': {
 					if(val[0] && val[1]) throw "Unsupported threads: " + val;
 				} break; // TODO: actually support threads
@@ -4432,7 +4436,7 @@ function parse_workbook(blob) {
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
-				case 'Password': if(val !== 0) throw new Error("Password protection unsupported"); break;
+				case 'Password': if(val !== 0) throw new Error("Password protection unsupported: " + val); break;
 				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
