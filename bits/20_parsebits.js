@@ -75,6 +75,7 @@ function parse_XLUnicodeStringNoCch(blob, cch) {
 /* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob) {
 	var cch = blob.read_shift(2);
+	if(cch == 0) { blob.l++; return ""; }
 	return parse_XLUnicodeStringNoCch(blob, cch);
 }
 

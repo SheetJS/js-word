@@ -202,17 +202,20 @@ function parse_PtgNameX(blob, length) {
 	return [type, ixti, nameindex];
 }
 
-function parse_PtgWithCCE(blob, length) {
+/* 2.5.198.70 */
+function parse_PtgMemArea(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	var cce = blob.read_shift(2);
 	return [type, cce];
 }
 
-/* 2.5.198.70 */
-var parse_PtgMemArea = parse_PtgWithCCE;
 /* 2.5.198.72 */
-var parse_PtgMemFunc = parse_PtgWithCCE;
+function parse_PtgMemFunc(blob, length) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	var cce = blob.read_shift(2);
+	return [type, cce];
+}
 
 /* 2.5.198.34 */
 function parse_PtgAttrChoose(blob, length) {

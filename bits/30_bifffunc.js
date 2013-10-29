@@ -298,7 +298,7 @@ function parse_ExternName(blob, length, opts) {
 	var flags = blob.read_shift(2);
 	var body;
 	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
-	else throw "unsupported SupBook cch: " + opts.sbcch;
+	else throw new Error("unsupported SupBook cch: " + opts.sbcch);
 	return {
 		fBuiltIn: flags & 0x01,
 		fWantAdvise: (flags >>> 1) & 0x01,
