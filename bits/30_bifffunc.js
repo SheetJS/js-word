@@ -297,18 +297,19 @@ function parse_SupBook(blob, length, opts) {
 function parse_ExternName(blob, length, opts) {
 	var flags = blob.read_shift(2);
 	var body;
-	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
-	else throw new Error("unsupported SupBook cch: " + opts.sbcch);
-	return {
+	var o = {
 		fBuiltIn: flags & 0x01,
 		fWantAdvise: (flags >>> 1) & 0x01,
 		fWantPict: (flags >>> 2) & 0x01,
 		fOle: (flags >>> 3) & 0x01,
 		fOleLink: (flags >>> 4) & 0x01,
 		cf: (flags >>> 5) & 0x3FF,
-		fIcon: flags >>> 15 & 0x01,
-		body: body
+		fIcon: flags >>> 15 & 0x01
 	};
+	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
+	//else throw new Error("unsupported SupBook cch: " + opts.sbcch);
+	o.body = blob.read_shift(length-2);
+	return o;
 }
 
 /* 2.4.150 TODO */

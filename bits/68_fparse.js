@@ -272,8 +272,11 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.97.61 TODO: do something different for revisions */
 			case 'PtgNameX':
 				/* f[1] = type, ixti, nameindex */
-				var bookidx = f[1][1]; nameidx = f[1][2];
-				var externbook = supbooks[bookidx+1][nameidx];
+				var bookidx = f[1][1]; nameidx = f[1][2]; var externbook;
+				/* TODO: Properly handle missing values */
+				if(supbooks[bookidx+1]) externbook = supbooks[bookidx+1][nameidx];
+				else if(supbooks[bookidx-1]) externbook = supbooks[bookidx-1][nameidx];
+				if(!externbook) externbook = {body: "??NAMEX??"};
 				stack.push(externbook.body);
 				break;
 

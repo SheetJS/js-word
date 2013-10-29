@@ -111,7 +111,7 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; console.error("File is password-protected -- Cannot extract files (yet)"); console.error(val); break;
+				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
@@ -124,7 +124,7 @@ function parse_workbook(blob) {
 				case 'Template': break; // TODO
 				case 'RefreshAll': wb.opts.RefreshAll = val; break;
 				case 'BookBool': break; // TODO
-				case 'UsesELFs': if(val) console.error("Unsupported ELFs"); break;
+				case 'UsesELFs': /* if(val) console.error("Unsupported ELFs"); */ break;
 				case 'MTRSettings': {
 					if(val[0] && val[1]) throw "Unsupported threads: " + val;
 				} break; // TODO: actually support threads
@@ -227,7 +227,7 @@ function parse_workbook(blob) {
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
-				case 'Password': if(val !== 0) throw new Error("Password protection unsupported"); break;
+				case 'Password': if(val !== 0) throw new Error("Password protection unsupported: " + val); break;
 				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
