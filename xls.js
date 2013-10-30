@@ -147,7 +147,7 @@ Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) 
 
 Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
 
-Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
 Array.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
 
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
@@ -1030,6 +1030,7 @@ function read_directory(idx) {
 }
 read_directory(dir_start);
 
+/* [MS-CFB] 2.6.4 Red-Black Tree */
 function build_full_paths(Dir, pathobj, paths, patharr) {
 	var i;
 	var dad = new Array(patharr.length);
@@ -1064,13 +1065,24 @@ build_full_paths(FileIndex, FullPathDir, FullPaths, Paths);
 var root_name = Paths.shift();
 Paths.root = root_name;
 
+/* [MS-CFB] 2.6.4 (Unicode 3.0.1 case conversion) */
+function find_path(path) {
+	if(path[0] === "/") path = root_name + path;
+	var UCNames = (path.indexOf("/") !== -1 ? FullPaths : Paths).map(function(x) { return x.toUpperCase(); });
+	var UCPath = path.toUpperCase();
+	var w = UCNames.indexOf(UCPath);
+	if(w === -1) return null;
+	return path.indexOf("/") !== -1 ? FileIndex[w] : files[Paths[w]];
+}
+
 var rval = {
 	raw: {header: header, sectors: sectors},
 	Paths: Paths,
 	FileIndex: FileIndex,
 	FullPaths: FullPaths,
 	FullPathDir: FullPathDir,
-	Directory: files
+	Directory: files,
+	find: find_path
 };
 
 for(var name in files) {
@@ -4222,7 +4234,7 @@ function parse_compobj(obj) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
 		default:
-			if(m > 0x190) throw "Unsupported Clipboard: " + m;
+			if(m > 0x190) throw "Unsupported Clipboard: " + m.toString(16);
 			l += m;
 	}
 
@@ -4236,10 +4248,8 @@ function parse_compobj(obj) {
 function parse_xlscfb(cfb) {
 var CompObj = cfb.Directory['!CompObj'];
 var Summary = cfb.Directory['!SummaryInformation'];
-var Workbook = cfb.Directory.Workbook;
-if(!Workbook) Workbook = cfb.Directory.WORKBOOK;
-if(!Workbook) Workbook = cfb.Directory.Book;
-if(!Workbook) Workbook = cfb.Directory.BOOK;
+var Workbook = cfb.find('/Workbook');
+if(!Workbook) Workbook = cfb.find('/Book');
 var CompObjP, SummaryP, WorkbookP;
 
 
@@ -4299,14 +4309,16 @@ function parse_workbook(blob) {
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
 	supbooks.sharedf = opts.sharedf;
+	var last_Rn = '';
+	var file_depth = 0; /* TODO: make a real stack */
 	while(blob.l < blob.length - 1) {
 		var s = blob.l;
 		var RecordType = read(2);
-		if(RecordType === 0) break; /* TODO: can padding occur before EOF ? */
-		/* In an effort to save two bytes, implied zero length for EOF */
+		if(RecordType === 0 && last_Rn === 'EOF') break;
 		var length = (blob.l === blob.length ? 0 : read(2)), y;
 		var R = RecordEnum[RecordType];
 		if(R && R.f) {
+			last_Rn = R.n;
 			if(R.r === 2 || R.r == 12) {
 				var rt = read(2); length -= 2;
 				if(!opts.enc && rt !== RecordType) throw "rt mismatch";
@@ -4320,7 +4332,7 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); break;
+				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); throw new Error("Password protection unsupported"); break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
@@ -4436,7 +4448,7 @@ function parse_workbook(blob) {
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
-				case 'Password': if(val !== 0) throw new Error("Password protection unsupported: " + val); break;
+				case 'Password': if(val !== 0 && XLS.verbose >= 2) console.error("Password verifier: " + val); break;
 				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
@@ -4444,6 +4456,7 @@ function parse_workbook(blob) {
 					opts.snames.push(val.name);
 				} break;
 				case 'EOF': {
+					if(--file_depth) break;
 					var nout = {};
 					if(range.e) {
 						out["!range"] = range;
@@ -4457,6 +4470,7 @@ function parse_workbook(blob) {
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
 				} break;
 				case 'BOF': {
+					if(file_depth++) break;
 					out = {};
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
@@ -4576,7 +4590,7 @@ function parse_workbook(blob) {
 				case 'LineFormat': case 'AreaFormat':
 				case 'Chart': case 'Chart3d': case 'Chart3DBarShape': case 'ChartFormat': case 'ChartFrtInfo': break;
 				case 'PlotArea': case 'PlotGrowth': break;
-				case 'SeriesList': break;
+				case 'SeriesList': case 'SerParent': case 'SerAuxTrend': break;
 				case 'DataFormat': case 'SerToCrt': case 'FontX': break;
 				case 'CatSerRange': case 'AxcExt': case 'SerFmt': break;
 				case 'ShtProps': break;
