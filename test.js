@@ -3,7 +3,7 @@ var XLS;
 var fs = require('fs'), assert = require('assert');
 describe('source', function() { it('should load', function() { XLS = require('./'); }); });
 
-var files = fs.readdirSync('test_files').filter(function(x){return x.substr(-4)==".xls";});
+var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(function(x){return x.substr(-4)==".xls";});
 
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
@@ -31,7 +31,7 @@ function parsetest(x, wb) {
 
 describe('should parse test files', function() {
 	files.forEach(function(x) {
-		it(x, function() {
+		it(x, x.substr(-8) == ".pending" ? null : function() {
 			var wb = XLS.readFile('./test_files/' + x);
 			parsetest(x, wb);
 		});
