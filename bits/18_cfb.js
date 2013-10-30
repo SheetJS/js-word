@@ -222,6 +222,7 @@ function read_directory(idx) {
 }
 read_directory(dir_start);
 
+/* [MS-CFB] 2.6.4 Red-Black Tree */
 function build_full_paths(Dir, pathobj, paths, patharr) {
 	var i;
 	var dad = new Array(patharr.length);
@@ -256,13 +257,24 @@ build_full_paths(FileIndex, FullPathDir, FullPaths, Paths);
 var root_name = Paths.shift();
 Paths.root = root_name;
 
+/* [MS-CFB] 2.6.4 (Unicode 3.0.1 case conversion) */
+function find_path(path) {
+	if(path[0] === "/") path = root_name + path;
+	var UCNames = (path.indexOf("/") !== -1 ? FullPaths : Paths).map(function(x) { return x.toUpperCase(); });
+	var UCPath = path.toUpperCase();
+	var w = UCNames.indexOf(UCPath);
+	if(w === -1) return null;
+	return path.indexOf("/") !== -1 ? FileIndex[w] : files[Paths[w]];
+}
+
 var rval = {
 	raw: {header: header, sectors: sectors},
 	Paths: Paths,
 	FileIndex: FileIndex,
 	FullPaths: FullPaths,
 	FullPathDir: FullPathDir,
-	Directory: files
+	Directory: files,
+	find: find_path
 };
 
 for(var name in files) {
