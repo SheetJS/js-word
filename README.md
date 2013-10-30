@@ -46,9 +46,6 @@ Running `make init` will refresh the `test_files` submodule and get the files.
 
 Please consult the attached LICENSE file for details.  All rights not explicitly granted by the Apache 2.0 license are reserved by the Original Author.
 
-All code shared between this and the XLSX project (of the same author) fall 
-under the licensing of the latter project.
-
 It is the opinion of the Original Author that this code conforms to the terms of the Microsoft Open Specifications Promise, falling under the same terms as OpenOffice (which is governed by the Apache License v2).  Given the vagaries of the promise, the Original Author makes no legal claim that in fact end users are protected from future actions.  It is highly recommended that, for commercial uses, you consult a lawyer before proceeding.
 
 ## XLSX Support

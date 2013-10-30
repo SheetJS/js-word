@@ -5,7 +5,10 @@ function parse_compobj(obj) {
 
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
-	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.UserType = m;
+	m = o.lpstr(l);
+	l += 4 + o.readUInt32LE(l);
+	//l += m.length === 0 ? 0 : 5 + m.length;
+	v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
 	m = o.readUInt32LE(l); l+= 4;
