@@ -16,7 +16,7 @@ function parse_compobj(obj) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
 		default:
-			if(m > 0x190) throw "Unsupported Clipboard: " + m.toString(16);
+			if(m > 0x190) throw new Error("Unsupported Clipboard: " + m.toString(16));
 			l += m;
 	}
 

@@ -277,16 +277,16 @@ var rval = {
 	find: find_path
 };
 
-for(var name in files) {
-	switch(name) {
-		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
-		case '!DocumentSummaryInformation':
-			rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); break;
-		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
-		case '!SummaryInformation':
-			rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); break;
-	}
-}
+//for(var name in files) {
+//	switch(name) {
+//		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
+//		case '!DocumentSummaryInformation':
+//			rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); break;
+//		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
+//		case '!SummaryInformation':
+//			rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); break;
+//	}
+//}
 
 return rval;
 } // parse
