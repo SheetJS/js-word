@@ -544,6 +544,18 @@ var SummaryPIDSI = {
 	0xFF: {}
 };
 
+/* [MS-OLEPS] 2.18 */
+var SpecialProperties = {
+	0x80000000: { n: 'Locale', t: VT_UI4 },
+	0x80000003: { n: 'Behavior', t: VT_UI4 },
+	0x69696969: {}
+};
+
+(function() {
+	for(var y in SpecialProperties) if(SpecialProperties.hasOwnProperty(y))
+	DocSummaryPIDDSI[y] = SummaryPIDSI[y] = SpecialProperties[y];
+})();
+
 /* [MS-DTYP] 2.3.1 FILETIME */
 /* [MS-OLEDS] 2.1.3 FILETIME (Packet Version) */
 /* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
@@ -668,19 +680,22 @@ function parse_TypedPropertyValue(blob, type) {
 	var t = read(2), ret;
 	read(2);
 	if(type !== VT_VARIANT)
-	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw 'Expected type ' + type + ' saw ' + t;
+	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw new Error('Expected type ' + type + ' saw ' + t);
 	switch(type === VT_VARIANT ? t : type) {
 		case VT_I2: ret = read(2, 'i'); read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_BOOL: return read(4) !== 0x0;
+		case VT_UI4: ret = read(4); return ret;
 		case VT_LPSTR: return parse_lpstr(blob, t, 4).replace(/\u0000/g,'');
+		case VT_LPWSTR: return parse_lpwstr(blob);
 		case VT_FILETIME: return parse_FILETIME(blob);
+		case VT_BLOB: return parse_BLOB(blob);
 		case VT_CF: return parse_ClipboardData(blob);
 		case VT_STRING: return parse_VtString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
-		default: throw "TypedPropertyValue unrecognized type " + type;
+		default: throw new Error("TypedPropertyValue unrecognized type " + type + " " + t);
 	}
 }
 function parse_VTVectorVariant(blob) {
@@ -1085,16 +1100,16 @@ var rval = {
 	find: find_path
 };
 
-for(var name in files) {
-	switch(name) {
-		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
-		case '!DocumentSummaryInformation':
-			rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); break;
-		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
-		case '!SummaryInformation':
-			rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); break;
-	}
-}
+//for(var name in files) {
+//	switch(name) {
+//		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
+//		case '!DocumentSummaryInformation':
+//			rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); break;
+//		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
+//		case '!SummaryInformation':
+//			rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); break;
+//	}
+//}
 
 return rval;
 } // parse
@@ -4237,7 +4252,7 @@ function parse_compobj(obj) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
 		default:
-			if(m > 0x190) throw "Unsupported Clipboard: " + m.toString(16);
+			if(m > 0x190) throw new Error("Unsupported Clipboard: " + m.toString(16));
 			l += m;
 	}
 

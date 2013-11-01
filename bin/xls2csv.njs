@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /* vim: set ts=2: */
-var XLS = require('../xls');
+var XLS = require('../');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.4.1')
+	.version('0.4.8')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
@@ -48,12 +48,12 @@ else try {
 if(program.read) process.exit(0);
 
 if(program.listSheets) {
-	console.log(wb.Directory.join("\n"));
+	console.log(wb.SheetNames.join("\n"));
 	process.exit(0);
 }
 
 var target_sheet = sheetname || '';
-if(target_sheet === '') target_sheet = wb.Directory[0];
+if(target_sheet === '') target_sheet = wb.SheetNames[0];
 
 var ws;
 try {

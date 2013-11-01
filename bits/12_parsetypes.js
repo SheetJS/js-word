@@ -122,19 +122,22 @@ function parse_TypedPropertyValue(blob, type) {
 	var t = read(2), ret;
 	read(2);
 	if(type !== VT_VARIANT)
-	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw 'Expected type ' + type + ' saw ' + t;
+	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw new Error('Expected type ' + type + ' saw ' + t);
 	switch(type === VT_VARIANT ? t : type) {
 		case VT_I2: ret = read(2, 'i'); read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_BOOL: return read(4) !== 0x0;
+		case VT_UI4: ret = read(4); return ret;
 		case VT_LPSTR: return parse_lpstr(blob, t, 4).replace(/\u0000/g,'');
+		case VT_LPWSTR: return parse_lpwstr(blob);
 		case VT_FILETIME: return parse_FILETIME(blob);
+		case VT_BLOB: return parse_BLOB(blob);
 		case VT_CF: return parse_ClipboardData(blob);
 		case VT_STRING: return parse_VtString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
-		default: throw "TypedPropertyValue unrecognized type " + type;
+		default: throw new Error("TypedPropertyValue unrecognized type " + type + " " + t);
 	}
 }
 function parse_VTVectorVariant(blob) {

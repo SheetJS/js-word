@@ -93,3 +93,15 @@ var SummaryPIDSI = {
 	0xFF: {}
 };
 
+/* [MS-OLEPS] 2.18 */
+var SpecialProperties = {
+	0x80000000: { n: 'Locale', t: VT_UI4 },
+	0x80000003: { n: 'Behavior', t: VT_UI4 },
+	0x69696969: {}
+};
+
+(function() {
+	for(var y in SpecialProperties) if(SpecialProperties.hasOwnProperty(y))
+	DocSummaryPIDDSI[y] = SummaryPIDSI[y] = SpecialProperties[y];
+})();
+
