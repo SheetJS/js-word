@@ -4724,13 +4724,14 @@ function sheet_to_row_object_array(sheet){
 					c: C,
 					r: R
 				})];
+				var v = (val || {}).v;
 				if(val !== undefined) switch(val.t){
 					case 's': case 'str':
-						if(val.v !== undefined) val.v = JSON.parse(val.v);
+						if(v !== undefined) v = JSON.parse(v);
 					/* falls through */
 					case 'b': case 'n':
-						if(val.v !== undefined) {
-							rowObject[columnHeaders[C]] = val.v;
+						if(v !== undefined) {
+							rowObject[columnHeaders[C]] = v;
 							emptyRow = false;
 						}
 						break;
