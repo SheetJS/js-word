@@ -4657,6 +4657,8 @@ function parse_workbook(blob) {
 				case 'Window1': case 'Window2': case 'HideObj': case 'GridSet': case 'Guts':
 				case 'UserBView': case 'UserSViewBegin': case 'UserSViewEnd':
 				case 'Pane':
+				/* Pub Stuff */
+				case 'WebPub': case 'AutoWebPub':
 				/* Print Stuff */
 				case 'RightMargin': case 'LeftMargin': case 'TopMargin': case 'BottomMargin':
 				case 'HeaderFooter': case 'HFPicture': case 'PLV':
