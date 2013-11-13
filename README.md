@@ -20,7 +20,7 @@ The command-line utility `xls2csv` shows how to generate a CSV from an XLS.
 
 ## Usage
 
-See http://niggler.github.com/js-xls/ for a browser example.
+See http://oss.sheetjs.com/js-xls/ for a browser example.
 
 See `bin/xls2csv` for a node example.
 
@@ -38,7 +38,7 @@ The mechanism is split into a CFB parser (which scans through the file and produ
 
 ## Test Files
 
-Test files are housed in [another repo](https://github.com/Niggler/test_files).
+Test files are housed in [another repo](https://github.com/SheetJS/test_files).
 
 Running `make init` will refresh the `test_files` submodule and get the files.
 
@@ -50,7 +50,7 @@ It is the opinion of the Original Author that this code conforms to the terms of
 
 ## XLSX Support
 
-XLSX is not supported in this module.  Due to Licensing issues [that are discussed in more detail elsewhere](https://github.com/Niggler/js-xls/issues/1#issuecomment-13852286), the implementation cannot be released in a GPL or MIT-style license.  If you need XLSX support, consult [my js-xlsx project](https://github.com/Niggler/js-xlsx).
+XLSX is available in [my js-xlsx project](https://github.com/SheetJS/js-xlsx).
 
 ## References
 
