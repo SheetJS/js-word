@@ -4,7 +4,7 @@ Currently a parser for XLS files.  Cleanroom implementation from the Microsoft O
 
 This has been tested on some basic XLS files generated from Excel 2011 (using compatibility mode).
 
-*THIS WAS WHIPPED UP VERY QUICKLY TO SATISFY A VERY SPECIFIC NEED*.  If you need something that is not currently supported, file an issue and attach a sample file.  I will get to it :)
+If you need something that is not currently supported, file an issue and attach a sample file.  I will get to it :)
 
 ## Installation
 
