@@ -3,7 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
-if(typeof require !== 'undefined') {
+if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
 }
@@ -823,7 +823,7 @@ function parse_PropertySetStream(file, PIDSI) {
 	return rval;
 }
 /* [MS-CFB] v20130118 */
-if(typeof require !== "undefined") CFB = require('cfb');
+if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
 else var CFB = (function(){
 var exports = {};
 function parse(file) {
