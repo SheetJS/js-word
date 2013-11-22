@@ -278,6 +278,7 @@ excel_with_embeded.xls
 excelant.xls
 externalFunctionExample.xls
 finance.xls
+formula_stress_test.xls
 intercept.xls
 large_strings.xls
 mirrTest.xls
@@ -303,4 +304,12 @@ testRRaC.xls
 testRVA.xls
 text.xls
 unicodeNameRecord.xls
+xlrd_Formate.xls
+xlrd_formula_test_names.xls
+xlrd_formula_test_sjmachin.xls
+xlrd_issue20.xls
+xlrd_picture_in_cell.xls
+xlrd_profiles.xls
+xlrd_ragged.xls
+xlrd_xf_class.xls
 yearfracExamples.xls
