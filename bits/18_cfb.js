@@ -1,5 +1,5 @@
 /* [MS-CFB] v20130118 */
-if(typeof require !== "undefined") CFB = require('cfb');
+if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
 else var CFB = (function(){
 var exports = {};
 function parse(file) {
