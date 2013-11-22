@@ -27,6 +27,18 @@
 <br />
 <script src="xls.js"></script>
 <script>
+function xlsworker(data, cb) {
+	var worker = new Worker('./xlsworker.js');
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d);
+			case 'xls': cb(e.data.d); break;
+		}
+	};
+	worker.postMessage(data);
+}
+
 function get_radio_value( radioName ) {
 	var radios = document.getElementsByName( radioName );
 	for( var i = 0; i < radios.length; i++ ) {
@@ -107,11 +119,15 @@ function handleDrop(e) {
 		var name = f.name;
 		reader.onload = function(e) {
 			var data = e.target.result;
-			var cfb = XLS.CFB.read(data, {type: 'binary'});
-			//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
-			//var cfb = XLS.CFB.read(btoa(arr), {type: 'base64'});
-			var wb = XLS.parse_xlscfb(cfb);
-			process_wb(wb);
+			if(typeof Worker !== 'undefined') {
+				xlsworker(data, process_wb);
+			} else {
+				var cfb = XLS.CFB.read(data, {type: 'binary'});
+				//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
+				//var cfb = XLS.CFB.read(btoa(arr), {type: 'base64'});
+				var wb = XLS.parse_xlscfb(cfb);
+				process_wb(wb);
+			}
 		};
 		reader.readAsBinaryString(f);
 		//reader.readAsArrayBuffer(f);

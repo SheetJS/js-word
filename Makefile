@@ -1,5 +1,10 @@
 DEPS=$(wildcard bits/*.js)
 TARGET=xls.js
+WORKER=xlsworker.js
+
+$(WORKER): $(TARGET) misc/worker.js
+	cat $^ > $@
+
 $(TARGET): $(DEPS)
 	cat $^ > $@
 
