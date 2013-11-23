@@ -4495,17 +4495,17 @@ function parse_workbook(blob) {
 					lst.push([R.n, s, val, Directory[s]]);
 				} break;
 				case 'Number': {
-					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:'n'});
+					addline({c:val.c, r:val.r}, {v:val.val, t:'n'});
 				} break;
 				case 'BoolErr': {
-					addline({c:val.c + range.s.c, r:val.r + range.s.r}, {v:val.val, t:val.t});
+					addline({c:val.c, r:val.r}, {v:val.val, t:val.t});
 				} break;
 				case 'RK': {
-					addline({c:val.c/* + range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
+					addline({c:val.c, r:val.r}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
-						addline({c:j/*+range.s.c*/, r:val.r/* + range.s.r*/}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1], t:'n'});
+						addline({c:j, r:val.r}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1], t:'n'});
 					}
 				} break;
 				case 'Formula': {
