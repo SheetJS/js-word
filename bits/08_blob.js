@@ -63,7 +63,7 @@ var Base64 = (function(){
 
 function s2a(s) {
 	if(typeof Buffer !== 'undefined') return new Buffer(s, "binary");
-	var w = s.split("").map(function(x){return x.charCodeAt(0);});
+	var w = s.split("").map(function(x){ return x.charCodeAt(0) & 0xff; });
 	return w;
 }
 
