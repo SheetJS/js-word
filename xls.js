@@ -4265,8 +4265,8 @@ function parse_compobj(obj) {
 
 
 function parse_xlscfb(cfb) {
-var CompObj = cfb.Directory['!CompObj'];
-var Summary = cfb.Directory['!SummaryInformation'];
+var CompObj = cfb.find('!CompObj');
+var Summary = cfb.find('!SummaryInformation');
 var Workbook = cfb.find('/Workbook');
 if(!Workbook) Workbook = cfb.find('/Book');
 var CompObjP, SummaryP, WorkbookP;
