@@ -189,14 +189,9 @@ function read_directory(idx) {
 			minifat_size = o.size;
 		} else if(o.size >= ms_cutoff_size) {
 			o.storage = 'fat';
-			try {
-				sector_list[o.start].name = o.name;
-				o.content = sector_list[o.start].data.slice(0,o.size);
-			} catch(e) {
-				o.start = o.start - 1;
-				sector_list[o.start].name = o.name;
-				o.content = sector_list[o.start].data.slice(0,o.size);
-			}
+			if(!sector_list[o.start] && dir_start > 0) o.start = (o.start + dir_start) % sectors.length;
+			sector_list[o.start].name = o.name;
+			o.content = sector_list[o.start].data.slice(0,o.size);
 			prep_blob(o.content);
 		} else {
 			o.storage = 'minifat';
@@ -269,11 +264,9 @@ function find_path(path) {
 
 var rval = {
 	raw: {header: header, sectors: sectors},
-	Paths: Paths,
 	FileIndex: FileIndex,
 	FullPaths: FullPaths,
 	FullPathDir: FullPathDir,
-	Directory: files,
 	find: find_path
 };
 

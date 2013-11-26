@@ -1,18 +1,4 @@
-interface CFBFile {
-}
-
-interface CFB {
-  read;
-  parse;
-  utils: {
-    ReadShift;
-    WarnField;
-    CheckField;
-    prep_blob;
-    bconcat;
-  };
-  main;
-}
+///<reference path='cfb.d.ts'/>
 
 interface Cell {
   v;
@@ -31,8 +17,12 @@ interface CellRange {
   e: CellAddress;
 }
 
-interface Worksheet {
-  //'!range':CellRange;
+interface WorksheetBase {
+  '!range':CellRange;
+  '!ref':string;
+}
+
+interface Worksheet extends WorksheetBase {
   [key: string]: Cell;
 }
 
@@ -46,7 +36,7 @@ interface Workbook {
 }
 
 interface XLS {
-  parse_xlscfb(cfb:CFBFile): Workbook;
+  parse_xlscfb(cfb:CFBContainer): Workbook;
   read;
   readFile(filename: string): Workbook; 
   utils: {

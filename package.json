@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.4.11-a",
+	"version": "0.4.12",
 	"author": "sheetjs",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [ "xls", "office", "excel", "spreadsheet" ],
@@ -9,7 +9,7 @@
 	},
 	"main": "./xls",
 	"dependencies": {
-		"cfb":">=0.6.0",
+		"cfb":">=0.8.0",
 		"ssf":"",
 		"codepage":"",
 		"commander":""
