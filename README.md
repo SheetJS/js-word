@@ -54,6 +54,7 @@ XLSX is available in [my js-xlsx project](https://github.com/SheetJS/js-xlsx).
 
 ## References
 
+OSP-covered specifications:
  - [MS-CFB]: Compound File Binary File Format
  - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification
  - [MS-XLSX]: Excel (.xlsx) Extensions to the Office Open XML SpreadsheetML File Format
@@ -63,4 +64,8 @@ XLSX is available in [my js-xlsx project](https://github.com/SheetJS/js-xlsx).
  - [MS-OLEPS]: Object Linking and Embedding (OLE) Property Set Data Structures
  - [MS-OSHARED]: Office Common Data Types and Objects Structures
  - [MS-OVBA]: Office VBA File Format Structure 
+ - [XLS]: Microsoft Office Excel 97-2007 Binary File Format Specification
 
+Certain features are shared with the Office Open XML File Formats, covered in:
+
+ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"

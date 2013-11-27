@@ -143,7 +143,7 @@ function ReadShift(size, t) {
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
-				o += String.fromCharCode(this.readUInt16LE(loc));
+				o += _getchar(this.readUInt16LE(loc));
 				loc+=2;
 			} break;
 
@@ -155,15 +155,15 @@ function ReadShift(size, t) {
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
-				o += String.fromCharCode(this.readUInt8(loc));
+				o += _getchar(this.readUInt8(loc));
 				loc+=1;
 			} break;
 
 		case 'cstr': size = 0; o = "";
-			while((w=this.readUInt8(this.l + size++))!==0) o+= String.fromCharCode(w);
+			while((w=this.readUInt8(this.l + size++))!==0) o+= _getchar(w);
 			break;
 		case 'wstr': size = 0; o = "";
-			while((w=this.readUInt16LE(this.l +size))!==0){o+= String.fromCharCode(w);size+=2;}
+			while((w=this.readUInt16LE(this.l +size))!==0){o+= _getchar(w);size+=2;}
 			size+=2; break;
 	}
 	this.l+=size; return o;

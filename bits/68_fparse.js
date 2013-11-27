@@ -240,7 +240,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgStr': stack.push('"' + f[1] + '"'); break;
 			/* 2.5.198.57 */
 			case 'PtgErr': stack.push(f[1]); break;
-			/* 2.5.198.27 */
+			/* 2.5.198.27 TODO: fixed points */
 			case 'PtgArea':
 				type = f[1][0]; r = shift_range(f[1][1], range);
 				stack.push(encode_range(r));
@@ -333,7 +333,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			/* 2.5.198.87 TODO */
 			case 'PtgRefErr3d': break;
 
-			/* 2.5.198.72 */
+			/* 2.5.198.72 TODO */
 			case 'PtgMemFunc': break;
 
 			default: throw 'Unrecognized Formula Token: ' + f;

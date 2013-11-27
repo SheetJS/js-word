@@ -375,7 +375,7 @@ var PtgDupes = {
 	0x5C: 0x3C, 0x7C: 0x3C,
 	0x5D: 0x3D, 0x7D: 0x3D
 };
-for(var y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];
+(function(){for(var y in PtgDupes) PtgTypes[y] = PtgTypes[PtgDupes[y]];})();
 
 var Ptg18 = {};
 var Ptg19 = {

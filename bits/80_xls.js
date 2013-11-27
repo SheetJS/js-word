@@ -7,7 +7,6 @@ function parse_compobj(obj) {
 	var l = 28, m;
 	m = o.lpstr(l);
 	l += 4 + o.readUInt32LE(l);
-	//l += m.length === 0 ? 0 : 5 + m.length;
 	v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
@@ -28,6 +27,7 @@ function parse_compobj(obj) {
 
 
 function parse_xlscfb(cfb) {
+reset_cp();
 var CompObj = cfb.find('!CompObj');
 var Summary = cfb.find('!SummaryInformation');
 var Workbook = cfb.find('/Workbook');
@@ -114,7 +114,7 @@ function parse_workbook(blob) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); throw new Error("Password protection unsupported"); break;
+				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); throw new Error("Password protection unsupported"); /* break; */
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
@@ -149,6 +149,8 @@ function parse_workbook(blob) {
 				case 'Pls': break; // TODO
 				case 'Setup': break; // TODO
 				case 'DefColWidth': break; // TODO
+				case 'GCW': break;
+				case 'LHRecord': break;
 				case 'ColInfo': break; // TODO
 				case 'Row': break; // TODO
 				case 'DBCell': break; // TODO
@@ -398,7 +400,10 @@ function parse_workbook(blob) {
 				case 'PivotChartBits': break;
 				case 'SBaseRef': break;
 				case 'TextPropsStream': break;
-
+				/* Chart Misc */
+				case 'LnExt': break;
+				case 'MkrExt': break;
+				case 'CrtCoopt': break;
 				/* Query Table */
 				case 'Qsi': case 'Qsif': case 'Qsir': case 'QsiSXTag': break;
 				case 'TxtQry': break;
@@ -413,6 +418,7 @@ function parse_workbook(blob) {
 				case 'ShapePropsStream': break;
 				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
 				case 'Obj': break;
+				case 'ImData': break;
 				/* Explicitly Ignored */
 				case 'Excel9File': break;
 				case 'Units': break;

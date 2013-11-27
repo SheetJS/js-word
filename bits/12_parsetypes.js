@@ -168,7 +168,9 @@ function parse_PropertySet(blob, PIDSI) {
 	}
 	var PropH = {};
 	for(i = 0; i != NumProps; ++i) {
-		if(blob.l !== Props[i][1]) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
+		if(blob.l !== Props[i][1]) {
+			throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
+		}
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
