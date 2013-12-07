@@ -3,7 +3,7 @@ if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	var current_codepage = 1252, current_cptable = cptable[1252];
 }
 function reset_cp() {
-	current_codepage = 1252; current_cptable = cptable[1252];
+	current_codepage = 1252; if(typeof cptable !== 'undefined') current_cptable = cptable[1252];
 }
 function _getchar(x) { return String.fromCharCode(x); }
 

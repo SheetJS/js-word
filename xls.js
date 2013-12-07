@@ -8,7 +8,7 @@ if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	var current_codepage = 1252, current_cptable = cptable[1252];
 }
 function reset_cp() {
-	current_codepage = 1252; current_cptable = cptable[1252];
+	current_codepage = 1252; if(typeof cptable !== 'undefined') current_cptable = cptable[1252];
 }
 function _getchar(x) { return String.fromCharCode(x); }
 
@@ -3873,7 +3873,7 @@ var XLSXFutureFunctions = {
 	"_xlfn.WEIBULL.DIST": "WEIBULL.DIST",
 	"_xlfn.WORKDAY.INTL": "WORKDAY.INTL",
 	"_xlfn.XOR": "XOR",
-	"_xlfn.Z.TEST": "Z.TEST",
+	"_xlfn.Z.TEST": "Z.TEST"
 };
 var RecordEnum = {
 	0x0006: { n:"Formula", f:parse_Formula },
