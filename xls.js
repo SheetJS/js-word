@@ -2059,6 +2059,15 @@ function parse_RgceArea(blob, length) {
 	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };
 }
 
+/* 2.5.198.105 TODO */
+function parse_RgceAreaRel(blob, length) {
+	var read = blob.read_shift.bind(blob);
+	var r=read(2), R=read(2);
+	var c=parse_ColRelU(blob, 2);
+	var C=parse_ColRelU(blob, 2);
+	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };
+}
+
 /* 2.5.198.109 */
 function parse_RgceLoc(blob, length) {
 	var r = blob.read_shift(2);
@@ -2085,12 +2094,97 @@ function parse_PtgArea(blob, length) {
 	return [type, area];
 }
 
-/* 2.5.198.27 */
+/* 2.5.198.28 */
 function parse_PtgArea3d(blob, length) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
 	var ixti = blob.read_shift(2);
 	var area = parse_RgceArea(blob, 8);
 	return [type, ixti, area];
+}
+
+/* 2.5.198.29 */
+function parse_PtgAreaErr(blob, length) {
+	var type = (blob[blob.l++] & 0x60) >> 5;
+	blob.l += 8;
+	return [type];
+}
+/* 2.5.198.30 */
+function parse_PtgAreaErr3d(blob, length) {
+	var type = (blob[blob.l++] & 0x60) >> 5;
+	var ixti = blob.read_shift(2);
+	blob.l += 8;
+	return [type, ixti];
+}
+
+/* 2.5.198.31 */
+function parse_PtgAreaN(blob, length) {
+	var type = (blob[blob.l++] & 0x60) >> 5;
+	var area = parse_RgceAreaRel(blob, 8);
+	return [type, area];
+}
+
+/* 2.5.198.32 -- ignore this and look in PtgExtraArray for shape + values */
+function parse_PtgArray(blob, length) {
+	var type = (blob[blob.l++] & 0x60) >> 5;
+	blob.l += 7;
+	return [type];
+}
+
+/* 2.5.198.33 */
+function parse_PtgAttrBaxcel(blob, length) {
+	bitSemi = blob[blob.l+1] & 0x01; /* 1 = volatile */
+	bitBaxcel = 1;
+	blob.l += 4;
+	return [bitSemi, bitBaxcel]
+}
+
+/* 2.5.198.34 */
+function parse_PtgAttrChoose(blob, length) {
+	blob.l +=2;
+	var offset = blob.read_shift(2);
+	var o = [];
+	/* offset is 1 less than the number of elements */
+	for(var i = 0; i <= offset; ++i) o.push(blob.read_shift(2));
+	return o;
+}
+
+/* 2.5.198.35 */
+function parse_PtgAttrGoto(blob, length) {
+	bitGoto = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	blob.l += 2;
+	return [bitGoto, blob.read_shift(2)];
+}
+
+/* 2.5.198.36 */
+function parse_PtgAttrIf(blob, length) {
+	bitIf = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	blob.l += 2;
+	return [bitIf, blob.read_shift(2)];
+}
+
+/* 2.5.198.37 */
+function parse_PtgAttrSemi(blob, length) {
+	bitSemi = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	blob.l += 4;
+	return [bitSemi];
+}
+
+/* 2.5.198.40 (used by PtgAttrSpace and PtgAttrSpaceSemi) */
+function parse_PtgAttrSpaceType(blob, length) {
+	var type = blob.read_shift(1), cch = blob.read_shift(1);
+	return [type, cch];
+}
+
+/* 2.5.198.38 */
+function parse_PtgAttrSpace(blob, length) {
+	blob.read_shift(2);
+	return parse_PtgAttrSpaceType(blob, 2);
+}
+
+/* 2.5.198.39 */
+function parse_PtgAttrSpaceSemi(blob, length) {
+	blob.read_shift(2);
+	return parse_PtgAttrSpaceType(blob, 2);
 }
 
 /* 2.5.198.84 TODO */
@@ -2122,12 +2216,6 @@ function parse_PtgRef3d(blob, length) {
 }
 
 
-/* 2.5.198.35 TODO */
-function parse_PtgAttrGoto(blob, length) {
-	blob.l += 2;
-	return blob.read_shift(2);
-}
-
 /* 2.5.198.62 TODO */
 function parse_PtgFunc(blob, length) {
 	var ptg = blob[blob.l] & 0x1F;
@@ -2147,10 +2235,6 @@ function parsetab(blob, length) {
 	return [blob[blob.l+1]>>7, blob.read_shift(2) & 0x7FFF];
 }
 
-/* 2.5.198.36 */
-var parse_PtgAttrIf = parseread(4);
-/* 2.5.198.37 */
-var parse_PtgAttrSemi = parseread(4);
 /* 2.5.198.41 */
 var parse_PtgAttrSum = parseread(4);
 /* 2.5.198.43 */
@@ -2178,9 +2262,6 @@ function parse_PtgNum(blob, length) { blob.l++; return parse_Xnum(blob, 8); }
 
 /* 2.5.198.89 */
 function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
-
-/* 2.5.198.32 -- ignore this and look in PtgExtraArray for shape + values */
-var parse_PtgArray = parseread(8);
 
 /* 2.5.192.112 + 2.5.192.11{3,4,5,6,7} */
 function parse_SerAr(blob) {
@@ -2256,32 +2337,12 @@ function parse_PtgMemFunc(blob, length) {
 	return [type, cce];
 }
 
-/* 2.5.198.34 */
-function parse_PtgAttrChoose(blob, length) {
-	blob.l +=2;
-	var offset = blob.read_shift(2);
-	var o = [];
-	for(var i = 0; i <= offset; ++i) o.push(blob.read_shift(2));
-	return o;
-}
 
 /* 2.5.198.86 */
 function parse_PtgRefErr(blob, length) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	return [type];
-}
-
-/* 2.5.198.40 */
-function parse_PtgAttrSpaceType(blob, length) {
-	var type = blob.read_shift(1), cch = blob.read_shift(1);
-	return [type, cch];
-}
-
-/* 2.5.198.38 */
-function parse_PtgAttrSpace(blob, length) {
-	blob.read_shift(2);
-	return parse_PtgAttrSpaceType(blob, 2);
 }
 
 /* 2.5.198.26 */
@@ -2323,16 +2384,6 @@ var parse_PtgUnion = parseread1;
 /* 2.5.198.95 */
 var parse_PtgUplus = parseread1;
 
-/* 2.5.198.29 */
-var parse_PtgAreaErr = parsenoop;
-/* 2.5.198.30 */
-var parse_PtgAreaErr3d = parsenoop;
-/* 2.5.198.31 */
-var parse_PtgAreaN = parsenoop;
-/* 2.5.198.33 */
-var parse_PtgAttrBaxcel = parsenoop;
-/* 2.5.198.39 */
-var parse_PtgAttrSpaceSemi = parsenoop;
 /* 2.5.198.71 */
 var parse_PtgMemErr = parsenoop;
 /* 2.5.198.73 */
@@ -2537,9 +2588,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, ixti, nameidx, r;
 	if(!formula[0] || !formula[0][0]) return "";
-	//console.log("--",formula[0])
+	//console.log("--",cell,formula[0])
 	formula[0].forEach(function(f) {
-		//console.log("++",f)
+		//console.log("++",f, stack)
 		switch(f[0]) {
 		/* 2.2.2.1 Unary Operator Tokens */
 			/* 2.5.198.93 */
@@ -2759,7 +2810,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgAreaErr': break;
 
 			/* 2.5.198.31 TODO */
-			case 'PtgAreaN': break;
+			case 'PtgAreaN': stack.push(""); break;
 
 			/* 2.5.198.87 TODO */
 			case 'PtgRefErr3d': break;
@@ -2769,6 +2820,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
+		//console.log("::",f, stack)
 	});
 	//console.log("--",stack);
 	return stack[0];

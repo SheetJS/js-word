@@ -106,9 +106,9 @@ function stringify_formula(formula, range, cell, supbooks) {
 	range = range || {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, ixti, nameidx, r;
 	if(!formula[0] || !formula[0][0]) return "";
-	//console.log("--",formula[0])
+	//console.log("--",cell,formula[0])
 	formula[0].forEach(function(f) {
-		//console.log("++",f)
+		//console.log("++",f, stack)
 		switch(f[0]) {
 		/* 2.2.2.1 Unary Operator Tokens */
 			/* 2.5.198.93 */
@@ -328,7 +328,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgAreaErr': break;
 
 			/* 2.5.198.31 TODO */
-			case 'PtgAreaN': break;
+			case 'PtgAreaN': stack.push(""); break;
 
 			/* 2.5.198.87 TODO */
 			case 'PtgRefErr3d': break;
@@ -338,6 +338,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
+		//console.log("::",f, stack)
 	});
 	//console.log("--",stack);
 	return stack[0];
