@@ -1,9 +1,12 @@
 /* vim: set ts=2: */
 var XLS;
 var fs = require('fs'), assert = require('assert');
-describe('source', function() { it('should load', function() { XLS = require('./'); }); });
+describe('source',function(){ it('should load', function(){ XLS = require('./'); });});
 
 var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(function(x){return x.substr(-4)==".xls";});
+
+/* Excel enforces 31 character sheet limit, although technical file limit is 255 */
+function fixsheetname(x) { return x.substr(0,31); }
 
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
@@ -13,8 +16,8 @@ function parsetest(x, wb) {
 		});
 		it('should have the right sheet names', fs.existsSync(sname) ? function() {
 			var file = fs.readFileSync(sname, 'utf-8');
-			var names = wb.SheetNames.join("\n") + "\n";
-			assert.equal(file, names);
+			var names = wb.SheetNames.map(fixsheetname).join("\n") + "\n";
+			assert.equal(names, file);
 		} : null);
 	});
 	describe(x + ' should generate correct output', function() {
@@ -23,7 +26,7 @@ function parsetest(x, wb) {
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
-				assert.equal(file.replace(/"/g,""), csv.replace(/"/g,""), "CSV badness");
+				assert.equal(csv.replace(/"/g,""), file.replace(/"/g,""), "CSV badness");
 			} : null);
 		});
 	});
