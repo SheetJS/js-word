@@ -10,7 +10,7 @@ function fixsheetname(x) { return x.substr(0,31); }
 
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
-		var sname = './test_files/' + x + '.sheetnames';
+		var sname = './test_files/2011/' + x + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
 		});

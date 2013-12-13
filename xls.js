@@ -1223,8 +1223,8 @@ function parse_ShortXLUnicodeString(blob) {
 	var cch = read(1);
 	var fHighByte = read(1);
 	var retval;
-	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
-	else { retval = blob.utf16le(blob.l, blob.l + 2*cch); blob.l += 2*cch; }
+	var width = 1 + (fHighByte === 0 ? 0 : 1), encoding = fHighByte ? 'dbcs' : 'sbcs';
+	retval = cch ? read(encoding, cch) : "";
 	return retval;
 }
 
