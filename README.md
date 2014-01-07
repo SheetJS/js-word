@@ -42,6 +42,12 @@ Test files are housed in [another repo](https://github.com/SheetJS/test_files).
 
 Running `make init` will refresh the `test_files` submodule and get the files.
 
+Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
+
+ - <https://travis-ci.org/SheetJS/js-xls> for XLS module in node
+ - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
+ - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs 
+
 ## License
 
 Please consult the attached LICENSE file for details.  All rights not explicitly granted by the Apache 2.0 license are reserved by the Original Author.
@@ -69,3 +75,5 @@ OSP-covered specifications:
 Certain features are shared with the Office Open XML File Formats, covered in:
 
 ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/4ee4284bf2c638cff8ed705c4438a686 "githalytics.com")](http://githalytics.com/SheetJS/js-xls)
