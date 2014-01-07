@@ -8,6 +8,8 @@ var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').
 /* Excel enforces 31 character sheet limit, although technical file limit is 255 */
 function fixsheetname(x) { return x.substr(0,31); }
 
+function normalizecsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
+
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
 		var sname = './test_files/2011/' + x + '.sheetnames';
@@ -26,7 +28,7 @@ function parsetest(x, wb) {
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
-				assert.equal(csv.replace(/"/g,""), file.replace(/"/g,""), "CSV badness");
+				assert.equal(normalizecsv(csv), normalizecsv(file), "CSV badness");
 			} : null);
 		});
 	});

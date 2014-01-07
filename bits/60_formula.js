@@ -96,7 +96,7 @@ function parse_PtgAttrBaxcel(blob, length) {
 	bitSemi = blob[blob.l+1] & 0x01; /* 1 = volatile */
 	bitBaxcel = 1;
 	blob.l += 4;
-	return [bitSemi, bitBaxcel]
+	return [bitSemi, bitBaxcel];
 }
 
 /* 2.5.198.34 */

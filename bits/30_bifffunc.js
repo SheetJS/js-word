@@ -249,8 +249,21 @@ function parse_MulRk(blob, length) {
 	return {r:rw, c:col, C:lastcol, rkrec:rkrecs};
 }
 
-/* 2.4.353 */
-var parse_XF = parsenoop;
+/* 2.5.20 TODO */
+var parse_CellXF = parsenoop;
+/* 2.5.249 TODO */
+var parse_StyleXF = parsenoop;
+
+/* 2.4.353 TODO: actually do this right */
+function parse_XF(blob, length) {
+	var read = blob.read_shift.bind(blob);
+	var o = {};
+	o.ifnt = read(2); o.ifmt = read(2); o.flags = read(2);
+	o.fStyle = (o.flags >> 2) & 0x01;
+	length -= 6;
+	o.data = o.fStyle ? parse_StyleXF(blob, length) : parse_CellXF(blob, length); 
+	return o;
+}
 
 /* 2.4.134 */
 function parse_Guts(blob, length) {

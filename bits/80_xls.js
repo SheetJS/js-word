@@ -71,6 +71,8 @@ function parse_workbook(blob) {
 	var Preamble = {};
 	var lastcell, last_cell;
 	var shared_formulae = {};
+	var temp_val;
+	var XFs = []; /* XF records */
 	function addline(cell, line) {
 		lastcell = cell;
 		last_cell = encode_cell(cell);
@@ -177,7 +179,7 @@ function parse_workbook(blob) {
 				case 'DefaultRowHeight': case 'DxGCol': break; // TODO: htmlify
 				case 'Fbi': case 'Fbi2': case 'GelFrame': break;
 				case 'Font': break; // TODO
-				case 'XF': break; // TODO
+				case 'XF': XFs.push(val); break;
 				case 'XFCRC': break; // TODO
 				case 'XFExt': break; // TODO
 				case 'Style': break; // TODO
@@ -260,30 +262,34 @@ function parse_workbook(blob) {
 					lst.push([R.n, s, val, Directory[s]]);
 				} break;
 				case 'Number': {
-					addline({c:val.c, r:val.r}, {v:val.val, t:'n'});
+					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
+					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'BoolErr': {
-					addline({c:val.c, r:val.r}, {v:val.val, t:val.t});
+					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:val.t};
+					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'RK': {
-					addline({c:val.c, r:val.r}, {ixfe: val.ixfe, v:val.rknum, t:'n'});
+					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'}; 
+					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
-						addline({c:j, r:val.r}, {ixfe: val.rkrec[j-val.c][0], v:val.rkrec[j-val.c][1], t:'n'});
+						var ixfe = val.rkrec[j-val.c][0];
+						addline({c:j, r:val.r}, {ixfe: ixfe, XF: XFs[ixfe], v:val.rkrec[j-val.c][1], t:'n'});
 					}
 				} break;
 				case 'Formula': {
 					switch(val.val) {
 						case 'String': last_formula = val; break;
 						case 'Array Formula': throw "Array Formula unsupported";
-						default: addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, t:'n'}); // TODO: infer type from formula
+						default: addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, XF:XFs[val.cell.ixfe], t:'n'}); // TODO: infer type from formula
 					}
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline(last_formula.cell, {v:JSON.stringify(last_formula.val), f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
+						addline(last_formula.cell, {v:last_formula.val, f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
 						last_formula = null;
 					}
 				} break;
@@ -304,6 +310,7 @@ function parse_workbook(blob) {
 					sst = val;
 				} break;
 				case 'Format': { /* val = [id, fmt] */
+					//console.log(val);
 					SSF.load(val[1], val[0]);
 				} break;
 				case 'Scl': {
@@ -528,7 +535,11 @@ function sheet_to_csv(sheet) {
 			for(var C = r.s.c; C <= r.e.c; ++C) {
 				var val = sheet[utils.encode_cell({c:C,r:R})];
 				if(!val) { row.push(""); continue; }
-				if(typeof val.v === 'boolean') val.v = val.v ? "TRUE" : "FALSE";
+				var fmt = 0;
+				if(val.XF) {
+					//console.log(val.XF, SSF._table[val.XF.ifmt], val.v)
+					val.v = SSF.format(val.XF.ifmt||0, val.v);
+				}
 				row.push(String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\""));
 			}
 			out += row.join(",") + "\n";
