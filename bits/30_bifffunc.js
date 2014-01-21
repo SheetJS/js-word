@@ -38,7 +38,7 @@ function parse_RkNumber(blob) {
 	var fX100 = b[0] & 1, fInt = b[0] & 2;
 	blob.l+=4;
 	b[0] &= ~3;
-	var RK = fInt === 0 ? [0,0,0,0,b[0],b[1],b[2],b[3]].readDoubleLE(0) : b.readInt32LE(0)>>2;
+	var RK = fInt === 0 ? __readDoubleLE([0,0,0,0,b[0],b[1],b[2],b[3]],0) : __readInt32LE(b,0)>>2;
 	return fX100 ? RK/100 : RK;
 }
 

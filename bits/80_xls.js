@@ -5,12 +5,12 @@ function parse_compobj(obj) {
 
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
-	m = o.lpstr(l);
-	l += 4 + o.readUInt32LE(l);
+	m = __lpstr(o, l);
+	l += 4 + __readUInt32LE(o,l);
 	v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
-	m = o.readUInt32LE(l); l+= 4;
+	m = __readUInt32LE(o,l); l+= 4;
 	switch(m) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
@@ -19,9 +19,9 @@ function parse_compobj(obj) {
 			l += m;
 	}
 
-	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
+	m = __lpstr(o, l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
 
-	if((m = o.readUInt32LE(l)) !== 0x71b2e9f4) return v;
+	if((m = __readUInt32LE(o,l)) !== 0x71b2e9f4) return v;
 	throw "Unsupported Unicode Extension";
 }
 
@@ -41,12 +41,12 @@ function slurp(R, blob, length, opts) {
 	var l = length;
 	var bufs = [blob.slice(blob.l,blob.l+l)];
 	blob.l += length;
-	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+	var next = (RecordEnum[__readUInt16LE(blob,blob.l)]);
 	while(next && next.n === 'Continue') {
-		l = blob.readUInt16LE(blob.l+2);
+		l = __readUInt16LE(blob,blob.l+2);
 		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
-		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+		next = (RecordEnum[__readUInt16LE(blob, blob.l)]);
 	}
 	var b = bconcat(bufs);
 	prep_blob(b);

@@ -4,7 +4,7 @@
 var XLS = require('../');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.5.1')
+	.version(XLS.version)
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
@@ -16,8 +16,14 @@ program
 	.option('-R, --row-sep <sep>', 'CSV row separator', "\n")
 	.option('--dev', 'development mode')
 	.option('--read', 'read but do not print out contents')
-	.option('-q, --quiet', 'quiet mode')
-	.parse(process.argv);
+	.option('-q, --quiet', 'quiet mode');
+
+program.on('--help', function() {
+	console.log('  Support email: dev@sheetjs.com');
+	console.log('  Web Demo: http://oss.sheetjs.com/js-xls/');
+});
+
+program.parse(process.argv);
 
 var filename, sheetname = '';
 if(program.args[0]) {

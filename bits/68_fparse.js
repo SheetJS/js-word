@@ -12,7 +12,7 @@ function parse_Formula(blob, length) {
 /* 2.5.133 */
 function parse_FormulaValue(blob) {
 	var b;
-	if(blob.readUInt16LE(blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
+	if(__readUInt16LE(blob,blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
 	switch(blob[blob.l]) {
 		case 0x00: blob.l += 8; return "String";
 		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return b;

@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.5.1",
+	"version": "0.6.0",
 	"author": "sheetjs",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [ "xls", "office", "excel", "spreadsheet" ],
@@ -29,5 +29,5 @@
 	},
 	"bugs": { "url": "https://github.com/SheetJS/js-xls/issues" },
 	"license": "Apache-2.0",
-	"engines": { "node": ">=0.4" }
+	"engines": { "node": ">=0.8" }
 }

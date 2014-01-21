@@ -67,7 +67,7 @@ function parse_XLUnicodeStringNoCch(blob, cch) {
 	var read = blob.read_shift.bind(blob);
 	var fHighByte = read(1);
 	var retval;
-	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
+	if(fHighByte===0) { retval = __utf8(blob,blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;
 }

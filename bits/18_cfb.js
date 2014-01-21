@@ -1,6 +1,6 @@
 /* [MS-CFB] v20130118 */
-if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
-else var CFB = (function(){
+/*if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
+else*/ var CFB = (function(){
 var exports = {};
 function parse(file) {
 
@@ -122,10 +122,10 @@ function sleuth_fat(idx, cnt) {
 	if(idx !== FREESECT) {
 		var sector = sectors[idx];
 		for(var i = 0; i != ssz/4-1; ++i) {
-			if((q = sector.readUInt32LE(i*4)) === ENDOFCHAIN) break;
+			if((q = __readUInt32LE(sector,i*4)) === ENDOFCHAIN) break;
 			fat_addrs.push(q);
 		}
-		sleuth_fat(sector.readUInt32LE(ssz-4),cnt - 1);
+		sleuth_fat(__readUInt32LE(sector,ssz-4),cnt - 1);
 	}
 }
 sleuth_fat(difat_start, ndfs);
@@ -139,7 +139,7 @@ function get_buffer(byte_addr, bytes) {
 }
 
 function get_buffer_u32(byte_addr) {
-	return get_buffer(byte_addr,4).readUInt32LE(0);
+	return __readUInt32LE(get_buffer(byte_addr,4), 0);
 }
 
 function get_next_sector(idx) { return get_buffer_u32(idx); }
@@ -152,7 +152,7 @@ for(i=0; i != sectors.length; ++i) {
 	if(chkd[k]) continue;
 	for(j=k; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
 	sector_list[k] = {nodes: buf};
-	sector_list[k].data = Buffers(buf.map(get_sector)).toBuffer();
+	sector_list[k].data = __toBuffer(Array(buf.map(get_sector)));
 }
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
@@ -169,7 +169,7 @@ function read_directory(idx) {
 		read = ReadShift.bind(blob);
 		var namelen = read(2);
 		if(namelen === 0) return;
-		var name = blob.utf16le(0,namelen-(Paths.length?2:0)); // OLE
+		var name = __utf16le(blob,0,namelen-(Paths.length?2:0)); // OLE
 		Paths.push(name);
 		var o = { name: name };
 		o.type = EntryTypes[read(1)];
@@ -203,12 +203,12 @@ function read_directory(idx) {
 		}
 		if(o.ctime) {
 			var ct = blob.slice(blob.l-24, blob.l-16);
-			var c2 = (ct.readUInt32LE(4)/1e7)*Math.pow(2,32)+ct.readUInt32LE(0)/1e7;
+			var c2 = (__readUInt32LE(ct,4)/1e7)*Math.pow(2,32)+__readUInt32LE(ct,0)/1e7;
 			o.ct = new Date((c2 - 11644473600)*1000);
 		}
 		if(o.mtime) {
 			var mt = blob.slice(blob.l-16, blob.l-8);
-			var m2 = (mt.readUInt32LE(4)/1e7)*Math.pow(2,32)+mt.readUInt32LE(0)/1e7;
+			var m2 = (__readUInt32LE(mt,4)/1e7)*Math.pow(2,32)+__readUInt32LE(mt,0)/1e7;
 			o.mt = new Date((m2 - 11644473600)*1000);
 		}
 		files[name] = o;
@@ -326,10 +326,6 @@ return exports;
 }
 
 if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
-	Buffers = Array;
-	Buffers.prototype.toBuffer = function() {
-		return Buffer.concat(this[0]);
-	};
 	var fs = require('fs');
 	//exports.read = CFB.read;
 	//exports.parse = CFB.parse;
@@ -341,11 +337,4 @@ if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
 	};
 	if(typeof module !== 'undefined' && require.main === module)
 		exports.main(process.argv.slice(2));
-} else {
-	Buffers = Array;
-	Buffers.prototype.toBuffer = function() {
-		var x = [];
-		for(var i = 0; i != this[0].length; ++i) { x = x.concat(this[0][i]); }
-		return x;
-	};
 }

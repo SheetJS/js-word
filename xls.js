@@ -3,6 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
+XLS.version = '0.6.0';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -11,39 +12,6 @@ function reset_cp() {
 	current_codepage = 1252; if(typeof cptable !== 'undefined') current_cptable = cptable[1252];
 }
 function _getchar(x) { return String.fromCharCode(x); }
-
-/* Buffer.concat was added in the 0.8 series, so this is for older versions */
-if(typeof Buffer !== "undefined" && !Buffer.concat)
-Buffer.concat = function(list, length) {
-	if (!Array.isArray(list)) {
-		throw new TypeError('Usage: Buffer.concat(list, [length])');
-	}
-
-	if (list.length === 0) {
-		return new Buffer(0);
-	} else if (list.length === 1) {
-		return list[0];
-	}
-	var i, buf;
-	if (typeof length !== 'number') {
-		length = 0;
-		for (i = 0; i < list.length; i++) {
-			buf = list[i];
-			length += buf.length;
-		}
-	}
-
-	var buffer = new Buffer(length);
-	var pos = 0;
-	for (i = 0; i < list.length; i++) {
-		buf = list[i];
-		buf.copy(buffer, pos);
-		pos += buf.length;
-	}
-	return buffer;
-};
-
-var Buffers = Array;
 
 function readIEEE754(buf, idx, isLE, nl, ml) {
 	if(isLE === undefined) isLE = true;
@@ -111,6 +79,7 @@ function s2a(s) {
 	return w;
 }
 
+var __toBuffer;
 if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function() { return this.toString('hex'); };
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
@@ -138,23 +107,30 @@ if(typeof Buffer !== "undefined") {
 		}
 		return o;
 	};
+	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
+} else {
+	__toBuffer = function(bufs) {
+		var x = [];
+		for(var i = 0; i != bufs[0].length; ++i) { x = x.concat(bufs[0][i]); }
+		return x;
+	};
 }
 
-Array.prototype.readUInt8 = function(idx) { return this[idx]; };
-Array.prototype.readUInt16LE = function(idx) { return this[idx+1]*(1<<8)+this[idx]; };
-Array.prototype.readInt16LE = function(idx) { var u = this.readUInt16LE(idx); if(!(u & 0x8000)) return u; return (0xffff - u + 1) * -1; };
-Array.prototype.readUInt32LE = function(idx) { return this[idx+3]*(1<<24)+this[idx+2]*(1<<16)+this[idx+1]*(1<<8)+this[idx]; };
-Array.prototype.readInt32LE = function(idx) { var u = this.readUInt32LE(idx); if(!(u & 0x80000000)) return u; return (0xffffffff - u + 1) * -1; };
-Array.prototype.readDoubleLE = function(idx) { return readIEEE754(this, idx||0);};
+var __readUInt8 = function(b, idx) { return b.readUInt8 ? b.readUInt8(idx) : b[idx]; };
+var __readUInt16LE = function(b, idx) { return b.readUInt16LE ? b.readUInt16LE(idx) : b[idx+1]*(1<<8)+b[idx]; };
+var __readInt16LE = function(b, idx) { var u = __readUInt16LE(b,idx); if(!(u & 0x8000)) return u; return (0xffff - u + 1) * -1; };
+var __readUInt32LE = function(b, idx) { return b.readUInt32LE ? b.readUInt32LE(idx) : b[idx+3]*(1<<24)+b[idx+2]*(1<<16)+b[idx+1]*(1<<8)+b[idx]; };
+var __readInt32LE = function(b, idx) { if(b.readInt32LE) return b.readInt32LE(idx); var u = __readUInt32LE(b,idx); if(!(u & 0x80000000)) return u; return (0xffffffff - u + 1) * -1; };
+var __readDoubleLE = function(b, idx) { return b.readDoubleLE ? b.readDoubleLE(idx) : readIEEE754(b, idx||0);};
 
-Array.prototype.hexlify = function() { return this.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
+var __hexlify = function(b) { return b.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
 
-Array.prototype.utf16le = function(s,e) { var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(this.readUInt16LE(i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
+var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(__readUInt16LE(b,i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
-Array.prototype.utf8 = function(s,e) { var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(this.readUInt8(i)); return str; };
+var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(__readUInt8(b,i)); return str; };
 
-Array.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
-Array.prototype.lpwstr = function(i) { var len = 2*this.readUInt32LE(i); return this.utf8(i+4,i+4+len-1);};
+var __lpstr = function(b,i) { if(b.lpstr) return b.lpstr(i); var len = __readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
+var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return __utf8(b, i+4,i+4+len-1);};
 
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
@@ -162,65 +138,67 @@ function ReadShift(size, t) {
 	var o, w, vv, i, loc; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
-		case 1: o = this.readUInt8(this.l); break;
-		case 2: o=t==='u'?this.readUInt16LE(this.l):this.readInt16LE(this.l);break;
-		case 4: o = this.readUInt32LE(this.l); break;
-		case 8: if(t === 'f') { o = this.readDoubleLE(this.l); break; }
+		case 1: o = __readUInt8(this, this.l); break;
+		case 2: o=(t==='u' ? __readUInt16LE : __readInt16LE)(this, this.l); break;
+		case 4: o = __readUInt32LE(this, this.l); break;
+		case 8: if(t === 'f') { o = __readDoubleLE(this, this.l); break; }
 		/* falls through */
 		case 16: o = this.toString('hex', this.l,this.l+size); break;
 
-		case 'utf8': size = t; o = this.utf8(this.l, this.l + size); break;
-		case 'utf16le': size = 2*t; o = this.utf16le(this.l, this.l + size); break;
+		case 'utf8': size = t; o = __utf8(this, this.l, this.l + size); break;
+		case 'utf16le': size=2*t; o = __utf16le(this, this.l, this.l + size); break;
 
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
-		case 'lpstr': o = this.lpstr(this.l); size = 5 + o.length; break;
+		case 'lpstr': o = __lpstr(this, this.l); size = 5 + o.length; break;
 
-		case 'lpwstr': o = this.lpwstr(this.l); size = 5 + o.length; if(o[o.length-1] == '\u0000') size += 2; break;
+		case 'lpwstr': o = __lpwstr(this, this.l); size = 5 + o.length; if(o[o.length-1] == '\u0000') size += 2; break;
 
 		/* sbcs and dbcs support continue records in the SST way TODO codepages */
 		/* TODO: DBCS http://msdn.microsoft.com/en-us/library/cc194788.aspx */
 		case 'dbcs': size = 2*t; o = ""; loc = this.l;
 			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
-					w = this.readUInt8(loc);
+					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
-				o += _getchar(this.readUInt16LE(loc));
+				o += _getchar(__readUInt16LE(this, loc));
 				loc+=2;
 			} break;
 
 		case 'sbcs': size = t; o = ""; loc = this.l;
 			for(i = 0; i != t; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
-					w = this.readUInt8(loc);
+					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
 					return o + vv;
 				}
-				o += _getchar(this.readUInt8(loc));
+				o += _getchar(__readUInt8(this, loc));
 				loc+=1;
 			} break;
 
 		case 'cstr': size = 0; o = "";
-			while((w=this.readUInt8(this.l + size++))!==0) o+= _getchar(w);
+			while((w=__readUInt8(this, this.l + size++))!==0) o+= _getchar(w);
 			break;
 		case 'wstr': size = 0; o = "";
-			while((w=this.readUInt16LE(this.l +size))!==0){o+= _getchar(w);size+=2;}
+			while((w=__readUInt16LE(this,this.l +size))!==0){o+= _getchar(w);size+=2;}
 			size+=2; break;
 	}
 	this.l+=size; return o;
 }
 
 function CheckField(hexstr, fld) {
-	var m = this.slice(this.l, this.l+hexstr.length/2).hexlify('hex');
+	var b = this.slice(this.l, this.l+hexstr.length/2);
+	var m = b.hexlify ? b.hexlify() : __hexlify(b);
 	if(m !== hexstr) throw (fld||"") + 'Expected ' + hexstr + ' saw ' + m;
 	this.l += hexstr.length/2;
 }
 
 function WarnField(hexstr, fld) {
-	var m = this.slice(this.l, this.l+hexstr.length/2).hexlify('hex');
+	var b = this.slice(this.l, this.l+hexstr.length/2);
+	var m = b.hexlify ? b.hexlify() : __hexlify(b);
 	if(m !== hexstr) console.error((fld||"") + 'Expected ' + hexstr +' saw ' + m);
 	this.l += hexstr.length/2;
 }
@@ -1014,8 +992,8 @@ function parse_PropertySetStream(file, PIDSI) {
 	return rval;
 }
 /* [MS-CFB] v20130118 */
-if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
-else var CFB = (function(){
+/*if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
+else*/ var CFB = (function(){
 var exports = {};
 function parse(file) {
 
@@ -1137,10 +1115,10 @@ function sleuth_fat(idx, cnt) {
 	if(idx !== FREESECT) {
 		var sector = sectors[idx];
 		for(var i = 0; i != ssz/4-1; ++i) {
-			if((q = sector.readUInt32LE(i*4)) === ENDOFCHAIN) break;
+			if((q = __readUInt32LE(sector,i*4)) === ENDOFCHAIN) break;
 			fat_addrs.push(q);
 		}
-		sleuth_fat(sector.readUInt32LE(ssz-4),cnt - 1);
+		sleuth_fat(__readUInt32LE(sector,ssz-4),cnt - 1);
 	}
 }
 sleuth_fat(difat_start, ndfs);
@@ -1154,7 +1132,7 @@ function get_buffer(byte_addr, bytes) {
 }
 
 function get_buffer_u32(byte_addr) {
-	return get_buffer(byte_addr,4).readUInt32LE(0);
+	return __readUInt32LE(get_buffer(byte_addr,4), 0);
 }
 
 function get_next_sector(idx) { return get_buffer_u32(idx); }
@@ -1167,7 +1145,7 @@ for(i=0; i != sectors.length; ++i) {
 	if(chkd[k]) continue;
 	for(j=k; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
 	sector_list[k] = {nodes: buf};
-	sector_list[k].data = Buffers(buf.map(get_sector)).toBuffer();
+	sector_list[k].data = __toBuffer(Array(buf.map(get_sector)));
 }
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
@@ -1184,7 +1162,7 @@ function read_directory(idx) {
 		read = ReadShift.bind(blob);
 		var namelen = read(2);
 		if(namelen === 0) return;
-		var name = blob.utf16le(0,namelen-(Paths.length?2:0)); // OLE
+		var name = __utf16le(blob,0,namelen-(Paths.length?2:0)); // OLE
 		Paths.push(name);
 		var o = { name: name };
 		o.type = EntryTypes[read(1)];
@@ -1218,12 +1196,12 @@ function read_directory(idx) {
 		}
 		if(o.ctime) {
 			var ct = blob.slice(blob.l-24, blob.l-16);
-			var c2 = (ct.readUInt32LE(4)/1e7)*Math.pow(2,32)+ct.readUInt32LE(0)/1e7;
+			var c2 = (__readUInt32LE(ct,4)/1e7)*Math.pow(2,32)+__readUInt32LE(ct,0)/1e7;
 			o.ct = new Date((c2 - 11644473600)*1000);
 		}
 		if(o.mtime) {
 			var mt = blob.slice(blob.l-16, blob.l-8);
-			var m2 = (mt.readUInt32LE(4)/1e7)*Math.pow(2,32)+mt.readUInt32LE(0)/1e7;
+			var m2 = (__readUInt32LE(mt,4)/1e7)*Math.pow(2,32)+__readUInt32LE(mt,0)/1e7;
 			o.mt = new Date((m2 - 11644473600)*1000);
 		}
 		files[name] = o;
@@ -1341,10 +1319,6 @@ return exports;
 }
 
 if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
-	Buffers = Array;
-	Buffers.prototype.toBuffer = function() {
-		return Buffer.concat(this[0]);
-	};
 	var fs = require('fs');
 	//exports.read = CFB.read;
 	//exports.parse = CFB.parse;
@@ -1356,13 +1330,6 @@ if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
 	};
 	if(typeof module !== 'undefined' && require.main === module)
 		exports.main(process.argv.slice(2));
-} else {
-	Buffers = Array;
-	Buffers.prototype.toBuffer = function() {
-		var x = [];
-		for(var i = 0; i != this[0].length; ++i) { x = x.concat(this[0][i]); }
-		return x;
-	};
 }
 
 /* sections refer to MS-XLS unless otherwise stated */
@@ -1433,7 +1400,7 @@ function parse_XLUnicodeStringNoCch(blob, cch) {
 	var read = blob.read_shift.bind(blob);
 	var fHighByte = read(1);
 	var retval;
-	if(fHighByte===0) { retval = blob.utf8(blob.l, blob.l+cch); blob.l += cch; }
+	if(fHighByte===0) { retval = __utf8(blob,blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
 	return retval;
 }
@@ -1488,7 +1455,7 @@ function parse_RkNumber(blob) {
 	var fX100 = b[0] & 1, fInt = b[0] & 2;
 	blob.l+=4;
 	b[0] &= ~3;
-	var RK = fInt === 0 ? [0,0,0,0,b[0],b[1],b[2],b[3]].readDoubleLE(0) : b.readInt32LE(0)>>2;
+	var RK = fInt === 0 ? __readDoubleLE([0,0,0,0,b[0],b[1],b[2],b[3]],0) : __readInt32LE(b,0)>>2;
 	return fX100 ? RK/100 : RK;
 }
 
@@ -2691,7 +2658,7 @@ function parse_Formula(blob, length) {
 /* 2.5.133 */
 function parse_FormulaValue(blob) {
 	var b;
-	if(blob.readUInt16LE(blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
+	if(__readUInt16LE(blob,blob.l + 6) !== 0xFFFF) return parse_Xnum(blob);
 	switch(blob[blob.l]) {
 		case 0x00: blob.l += 8; return "String";
 		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return b;
@@ -4530,12 +4497,12 @@ function parse_compobj(obj) {
 
 	/* [MS-OLEDS] 2.3.7 CompObjHeader -- All fields MUST be ignored */
 	var l = 28, m;
-	m = o.lpstr(l);
-	l += 4 + o.readUInt32LE(l);
+	m = __lpstr(o, l);
+	l += 4 + __readUInt32LE(o,l);
 	v.UserType = m;
 
 	/* [MS-OLEDS] 2.3.1 ClipboardFormatOrAnsiString */
-	m = o.readUInt32LE(l); l+= 4;
+	m = __readUInt32LE(o,l); l+= 4;
 	switch(m) {
 		case 0x00000000: break;
 		case 0xffffffff: case 0xfffffffe: l+=4; break;
@@ -4544,9 +4511,9 @@ function parse_compobj(obj) {
 			l += m;
 	}
 
-	m = o.lpstr(l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
+	m = __lpstr(o, l); l += m.length === 0 ? 0 : 5 + m.length; v.Reserved1 = m;
 
-	if((m = o.readUInt32LE(l)) !== 0x71b2e9f4) return v;
+	if((m = __readUInt32LE(o,l)) !== 0x71b2e9f4) return v;
 	throw "Unsupported Unicode Extension";
 }
 
@@ -4566,12 +4533,12 @@ function slurp(R, blob, length, opts) {
 	var l = length;
 	var bufs = [blob.slice(blob.l,blob.l+l)];
 	blob.l += length;
-	var next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+	var next = (RecordEnum[__readUInt16LE(blob,blob.l)]);
 	while(next && next.n === 'Continue') {
-		l = blob.readUInt16LE(blob.l+2);
+		l = __readUInt16LE(blob,blob.l+2);
 		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
-		next = (RecordEnum[blob.readUInt16LE(blob.l)]);
+		next = (RecordEnum[__readUInt16LE(blob, blob.l)]);
 	}
 	var b = bconcat(bufs);
 	prep_blob(b);

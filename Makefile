@@ -4,6 +4,9 @@ TARGET=xls.js
 $(TARGET): $(DEPS)
 	cat $^ > $@
 
+bits/01_version.js: package.json
+	echo "XLS.version = '"`grep version package.json | awk '{gsub(/[^0-9\.]/,"",$$2); print $$2}'`"';" > bits/01_version.js
+
 .PHONY: clean
 clean:
 	rm $(TARGET)
