@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"author": "sheetjs",
 	"description": "(one day) a full-featured XLS parser and writer.  For now, primitive parser",
 	"keywords": [ "xls", "office", "excel", "spreadsheet" ],
@@ -21,6 +21,11 @@
 	"scripts": {
 		"pretest": "git submodule init && git submodule update",
 		"test": "make mocha"
+	},
+	"config": {
+		"blanket": {
+			"pattern": "xls.js"
+		}
 	},
 	"bugs": { "url": "https://github.com/SheetJS/js-xls/issues" },
 	"license": "Apache-2.0",

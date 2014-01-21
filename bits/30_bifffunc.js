@@ -261,7 +261,7 @@ function parse_XF(blob, length) {
 	o.ifnt = read(2); o.ifmt = read(2); o.flags = read(2);
 	o.fStyle = (o.flags >> 2) & 0x01;
 	length -= 6;
-	o.data = o.fStyle ? parse_StyleXF(blob, length) : parse_CellXF(blob, length); 
+	o.data = o.fStyle ? parse_StyleXF(blob, length) : parse_CellXF(blob, length);
 	return o;
 }
 

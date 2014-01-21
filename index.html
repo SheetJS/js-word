@@ -93,6 +93,7 @@ function b64it() {
 }
 
 function process_wb(wb) {
+	if(typeof Worker !== 'undefined') XLS.SSF.load_table(wb.SSF);
 	var output = "";
 	switch(get_radio_value("format")) {
 		case "json":

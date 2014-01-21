@@ -26,3 +26,13 @@ test mocha:
 .PHONY: lint
 lint: $(TARGET)
 	jshint --show-non-errors $(TARGET)
+
+.PHONY: cov
+cov: misc/coverage.html
+
+misc/coverage.html: xls.js 
+	mocha --require blanket -R html-cov > misc/coverage.html
+
+.PHONY: coveralls
+coveralls:
+	mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js

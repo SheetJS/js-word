@@ -270,7 +270,7 @@ function parse_workbook(blob) {
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'RK': {
-					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'}; 
+					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'};
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'MulRk': {
@@ -463,6 +463,7 @@ function parse_workbook(blob) {
 	wb.Sheets=Sheets;
 	wb.Preamble=Preamble;
 	wb.Strings = sst;
+	wb.SSF = SSF.get_table();
 	if(opts.enc) wb.Encryption = opts.enc;
 	return wb;
 }
@@ -473,77 +474,62 @@ if(CompObj) CompObjP = parse_compobj(CompObj);
 return WorkbookP;
 }
 
-function sheet_to_row_object_array(sheet){
-	var val, rowObject, range, columnHeaders, emptyRow, C;
-	var outSheet = [];
-	if (sheet["!ref"]) {
-		range = decode_range(sheet["!ref"]);
-
-		columnHeaders = {};
-		for (C = range.s.c; C <= range.e.c; ++C) {
-			val = sheet[encode_cell({
-				c: C,
-				r: range.s.r
-			})];
-			if(val){
-				switch(val.t) {
-					case 's': case 'str': columnHeaders[C] = JSON.parse(val.v); break;
-					case 'n': columnHeaders[C] = val.v; break;
-				}
-			}
-		}
-
-		for (var R = range.s.r + 1; R <= range.e.r; ++R) {
-			emptyRow = true;
-			//Row number is recorded in the prototype
-			//so that it doesn't appear when stringified.
-			rowObject = Object.create({ __rowNum__ : R });
-			for (C = range.s.c; C <= range.e.c; ++C) {
-				val = sheet[encode_cell({
-					c: C,
-					r: R
-				})];
-				var v = (val || {}).v;
-				if(val !== undefined) switch(val.t){
-					case 's': case 'str':
-						if(v !== undefined) v = JSON.parse(v);
-					/* falls through */
-					case 'b': case 'n':
-						if(v !== undefined) {
-							rowObject[columnHeaders[C]] = v;
-							emptyRow = false;
-						}
-						break;
-					case 'e': break; /* throw */
-					default: throw 'unrecognized type ' + val.t;
-				}
-			}
-			if(!emptyRow) {
-				outSheet.push(rowObject);
-			}
-		}
-	}
-	return outSheet;
+function format_cell(cell, v) {
+	if(!cell) return "";
+	if(typeof v === 'undefined') v = cell.v;
+	if(!cell.XF) return cell.v;
+	return SSF.format(cell.XF.ifmt||0, v);
 }
 
-function sheet_to_csv(sheet) {
-	var out = "";
-	if(sheet["!ref"]) {
-		var r = utils.decode_range(sheet["!ref"]);
-		for(var R = r.s.r; R <= r.e.r; ++R) {
-			var row = [];
-			for(var C = r.s.c; C <= r.e.c; ++C) {
-				var val = sheet[utils.encode_cell({c:C,r:R})];
-				if(!val) { row.push(""); continue; }
-				var fmt = 0;
-				if(val.XF) {
-					//console.log(val.XF, SSF._table[val.XF.ifmt], val.v)
-					val.v = SSF.format(val.XF.ifmt||0, val.v);
-				}
-				row.push(String(val.v).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\""));
+function sheet_to_row_object_array(sheet, opts){
+	var val, row, r, hdr = {}, isempty, R, C, v;
+	var out = [];
+	opts = opts || {};
+	if(!sheet["!ref"]) return out;
+	r = utils.decode_range(sheet["!ref"]);
+	for(R=r.s.r, C = r.s.c; C <= r.e.c; ++C) {
+		val = sheet[utils.encode_cell({c:C,r:R})];
+		hdr[C] = val && val.t[0] === 's' ? JSON.parse(val.v) : format_cell(val);
+	}
+
+	for (R = r.s.r + 1; R <= r.e.r; ++R) {
+		isempty = true;
+		/* row index available as __rowNum__ */
+		row = Object.create({ __rowNum__ : R });
+		for (C = r.s.c; C <= r.e.c; ++C) {
+			val = sheet[utils.encode_cell({c: C,r: R})];
+			if(!val) continue;
+			v = (val || {}).v;
+			switch(val.t){
+				case 'e': continue; /* TODO: emit error text? */
+				case 's': case 'str': if(v) v = JSON.parse(v); break;
+				case 'b': case 'n': break;
+				default: throw 'unrecognized type ' + val.t;
 			}
-			out += row.join(",") + "\n";
+			if(typeof v !== 'undefined') {
+				row[hdr[C]] = opts.raw ? v||val.v : format_cell(val, v);
+				isempty = false;
+			}
 		}
+		if(!isempty) out.push(row);
+	}
+	return out;
+}
+
+function sheet_to_csv(sheet, opts) {
+	var out = "", txt = "";
+	opts = opts || {};
+	if(!sheet["!ref"]) return out;
+	var r = utils.decode_range(sheet["!ref"]);
+	for(var R = r.s.r; R <= r.e.r; ++R) {
+		var row = [];
+		for(var C = r.s.c; C <= r.e.c; ++C) {
+			var val = sheet[utils.encode_cell({c:C,r:R})];
+			if(!val) { row.push(""); continue; }
+			txt = format_cell(val);
+			row.push(String(txt).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\""));
+		}
+		out += row.join(opts.FS||",") + (opts.RS||"\n");
 	}
 	return out;
 }
@@ -575,6 +561,7 @@ var utils = {
 	sheet_to_csv: sheet_to_csv,
 	make_csv: sheet_to_csv,
 	get_formulae: get_formulae,
+	format_cell: format_cell,
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 

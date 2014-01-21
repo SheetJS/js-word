@@ -1,15 +1,19 @@
 #!/usr/bin/env node
-/* xls.js (C) 2013 SheetJS -- http://sheetjs.com */
+/* xls.js (C) 2013-2014 SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
 var XLS = require('../');
 var fs = require('fs'), program = require('commander');
 program
-	.version('0.4.11')
+	.version('0.5.1')
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
 	.option('-l, --list-sheets', 'list sheet names and exit')
-	.option('-F, --formulae', 'print formulae')
+	.option('-S, --formulae', 'print formulae')
+	.option('-j, --json', 'emit formatted JSON rather than CSV (all fields text)')
+	.option('-J, --raw-js', 'emit raw JS object rather than CSV (raw numbers)')
+	.option('-F, --field-sep <sep>', 'CSV field separator', ",")
+	.option('-R, --row-sep <sep>', 'CSV row separator', "\n")
 	.option('--dev', 'development mode')
 	.option('--read', 'read but do not print out contents')
 	.option('-q, --quiet', 'quiet mode')
@@ -66,4 +70,6 @@ try {
 
 if(!program.quiet) console.error(target_sheet);
 if(program.formulae) console.log(XLS.utils.get_formulae(ws).join("\n"));
-else console.log(XLS.utils.make_csv(ws));
+else if(program.json) console.log(JSON.stringify(XLS.utils.sheet_to_row_object_array(ws)));
+else if(program.rawJs) console.log(JSON.stringify(XLS.utils.sheet_to_row_object_array(ws,{raw:true})));
+else console.log(XLS.utils.make_csv(ws, {FS:program.fieldSep, RS:program.rowSep}));

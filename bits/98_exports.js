@@ -3,6 +3,7 @@ XLS.read = xlsread;
 XLS.readFile = readFile;
 XLS.utils = utils;
 XLS.CFB = CFB;
+XLS.SSF = SSF;
 if(typeof module !== 'undefined' && require.main === module ) {
 	var wb = readFile(process.argv[2] || 'Book1.xls');
 	var target_sheet = process.argv[3] || '';

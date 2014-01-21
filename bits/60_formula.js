@@ -93,8 +93,8 @@ function parse_PtgArray(blob, length) {
 
 /* 2.5.198.33 */
 function parse_PtgAttrBaxcel(blob, length) {
-	bitSemi = blob[blob.l+1] & 0x01; /* 1 = volatile */
-	bitBaxcel = 1;
+	var bitSemi = blob[blob.l+1] & 0x01; /* 1 = volatile */
+	var bitBaxcel = 1;
 	blob.l += 4;
 	return [bitSemi, bitBaxcel];
 }
@@ -111,21 +111,21 @@ function parse_PtgAttrChoose(blob, length) {
 
 /* 2.5.198.35 */
 function parse_PtgAttrGoto(blob, length) {
-	bitGoto = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	var bitGoto = (blob[blob.l+1] & 0xFF) ? 1 : 0;
 	blob.l += 2;
 	return [bitGoto, blob.read_shift(2)];
 }
 
 /* 2.5.198.36 */
 function parse_PtgAttrIf(blob, length) {
-	bitIf = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	var bitIf = (blob[blob.l+1] & 0xFF) ? 1 : 0;
 	blob.l += 2;
 	return [bitIf, blob.read_shift(2)];
 }
 
 /* 2.5.198.37 */
 function parse_PtgAttrSemi(blob, length) {
-	bitSemi = (blob[blob.l+1] & 0xFF) ? 1 : 0;
+	var bitSemi = (blob[blob.l+1] & 0xFF) ? 1 : 0;
 	blob.l += 4;
 	return [bitSemi];
 }
