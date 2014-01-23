@@ -336,7 +336,6 @@ function parse_workbook(blob) {
 				case 'GUIDTypeLib': {
 
 				} break;
-				case 'Note': break;
 
 				case 'MergeCells': break;
 
@@ -368,6 +367,7 @@ function parse_workbook(blob) {
 				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
 
 				/* Comments */
+				case 'Note': break;
 				case 'NameCmt': break;
 
 				/* Chart */

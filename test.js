@@ -22,6 +22,13 @@ function parsetest(x, wb) {
 			assert.equal(names, file);
 		} : null);
 	});
+	describe(x + ' should generate CSV', function() {
+		wb.SheetNames.forEach(function(ws, i) {
+			it('#' + i + ' (' + ws + ')', function() {
+				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
+			});
+		});
+	});
 	describe(x + ' should generate correct output', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			var name = ('./test_files/' + x + '.' + i + '.csv');

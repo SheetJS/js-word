@@ -379,6 +379,21 @@ function parse_MTRSettings(blob, length) {
 	return [fMTREnabled, fUserSetThreadCount, cUserThreadCount];
 }
 
+/* 2.5.186 */
+function parse_NoteSh(blob, length) {
+	var row = blob.read_shift(2), col = blob.read_shift(2);
+	var flags = blob.read_shift(2), idObj = blob.read_shift(2);
+	var stAuthor = parse_XLUnicodeString(blob);
+	blob.read_shift(1);
+	return stAuthor;
+}
+
+/* 2.4.179 */
+function parse_Note(blob, length) {
+	/* TODO: Support revisions */
+	return parse_NoteSh(blob, length);
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -434,7 +449,6 @@ var parse_WriteProtect = parsenoop; /* 2.4.350 empty record */
 /* ---- */
 var parse_VerticalPageBreaks = parsenoop;
 var parse_HorizontalPageBreaks = parsenoop;
-var parse_Note = parsenoop;
 var parse_Selection = parsenoop;
 var parse_Continue = parsenoop;
 var parse_Pane = parsenoop;
