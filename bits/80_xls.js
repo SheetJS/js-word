@@ -301,7 +301,7 @@ function parse_workbook(blob) {
 					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
-					addline({c:val.c, r:val.r}, {v:JSON.stringify(sst[val.isst]), ixfe:val.ixfe, t:'s'});
+					addline({c:val.c, r:val.r}, {v:sst[val.isst], ixfe:val.ixfe, t:'s'});
 				} break;
 				case 'Dimensions': {
 					range = val;
@@ -477,7 +477,7 @@ return WorkbookP;
 function format_cell(cell, v) {
 	if(!cell) return "";
 	if(typeof v === 'undefined') v = cell.v;
-	if(!cell.XF) return cell.v;
+	if(!cell.XF) return v;
 	return SSF.format(cell.XF.ifmt||0, v);
 }
 
@@ -489,7 +489,8 @@ function sheet_to_row_object_array(sheet, opts){
 	r = utils.decode_range(sheet["!ref"]);
 	for(R=r.s.r, C = r.s.c; C <= r.e.c; ++C) {
 		val = sheet[utils.encode_cell({c:C,r:R})];
-		hdr[C] = val && val.t[0] === 's' ? JSON.parse(val.v) : format_cell(val);
+		if(!val) continue;
+		hdr[C] = format_cell(val);
 	}
 
 	for (R = r.s.r + 1; R <= r.e.r; ++R) {
@@ -502,7 +503,7 @@ function sheet_to_row_object_array(sheet, opts){
 			v = (val || {}).v;
 			switch(val.t){
 				case 'e': continue; /* TODO: emit error text? */
-				case 's': case 'str': if(v) v = JSON.parse(v); break;
+				case 's': case 'str': break;
 				case 'b': case 'n': break;
 				default: throw 'unrecognized type ' + val.t;
 			}
