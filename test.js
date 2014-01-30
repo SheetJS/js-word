@@ -3,7 +3,7 @@ var XLS;
 var fs = require('fs'), assert = require('assert');
 describe('source',function(){ it('should load', function(){ XLS = require('./'); });});
 
-var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(function(x){return x.substr(-4)==".xls";});
+var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(function(x){return x.substr(-4)==".xls" || x.substr(-8)==".xls.b64";});
 
 /* Excel enforces 31 character sheet limit, although technical file limit is 255 */
 function fixsheetname(x) { return x.substr(0,31); }
@@ -25,6 +25,7 @@ function parsetest(x, wb) {
 	describe(x + ' should generate CSV', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
+				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
 			});
 		});
@@ -32,6 +33,7 @@ function parsetest(x, wb) {
 	describe(x + ' should generate JSON', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
+				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var json = XLS.utils.sheet_to_row_object_array(wb.Sheets[ws]);
 			});
 		});
@@ -39,6 +41,7 @@ function parsetest(x, wb) {
 	describe(x + ' should generate formulae', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
+				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var json = XLS.utils.get_formulae(wb.Sheets[ws]);
 			});
 		});
@@ -48,6 +51,7 @@ function parsetest(x, wb) {
 			var name = ('./test_files/' + x + '.' + i + '.csv');
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
+				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
 				assert.equal(normalizecsv(csv), normalizecsv(file), "CSV badness");
 			} : null);
@@ -58,7 +62,7 @@ function parsetest(x, wb) {
 describe('should parse test files', function() {
 	files.forEach(function(x) {
 		it(x, x.substr(-8) == ".pending" ? null : function() {
-			var wb = XLS.readFile('./test_files/' + x);
+			var wb = x.substr(-4) == ".b64" ? XLS.read(fs.readFileSync('./test_files/' + x, 'utf8'), {type: 'base64'}) : XLS.readFile('./test_files/' + x);
 			parsetest(x, wb);
 		});
 	});

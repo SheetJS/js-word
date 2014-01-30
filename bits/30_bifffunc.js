@@ -215,6 +215,14 @@ function parse_LabelSst(blob, length) {
 	return cell;
 }
 
+/* 2.4.148 */
+function parse_Label(blob, length) {
+	var cell = parse_Cell(blob, 6);
+	var str = parse_XLUnicodeString(blob, length-6);
+	cell.val = str;
+	return cell;
+}
+
 /* 2.4.126 Number Formats */
 function parse_Format(blob, length) {
 	var ifmt = blob.read_shift(2);
@@ -568,7 +576,6 @@ var parse_CodeName = parse_XLUnicodeString;
 var parse_SXFDBType = parsenoop;
 var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
-var parse_Label = parsenoop;
 var parse_Index = parsenoop;
 var parse_Table = parsenoop;
 var parse_Window2 = parsenoop;

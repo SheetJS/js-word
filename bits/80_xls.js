@@ -303,6 +303,10 @@ function parse_workbook(blob) {
 				case 'LabelSst': {
 					addline({c:val.c, r:val.r}, {v:sst[val.isst], ixfe:val.ixfe, t:'s'});
 				} break;
+				case 'Label': {
+					/* Some writers erroneously write Label */
+					addline({c:val.c, r:val.r}, {v:val.val, ixfe:val.ixfe, t:'s'});
+				} break;
 				case 'Dimensions': {
 					range = val;
 				} break;
@@ -385,7 +389,7 @@ function parse_workbook(blob) {
 				case 'DataFormat': case 'SerToCrt': case 'FontX': break;
 				case 'CatSerRange': case 'AxcExt': case 'SerFmt': break;
 				case 'ShtProps': break;
-				case 'DefaultText': case 'Text': case 'Label': case 'CatLab': break;
+				case 'DefaultText': case 'Text': case 'CatLab': break;
 				case 'DataLabExtContents': break;
 				case 'Legend': case 'LegendException': break;
 				case 'Pie': case 'Scatter': break;

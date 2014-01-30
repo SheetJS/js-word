@@ -62,7 +62,7 @@ Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
  - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
  - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs 
 
-## XLSX/XLSM Support
+## XLSX/XLSM/XLSB Support
 
 XLSX/XLSM support is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
 
@@ -77,6 +77,7 @@ It is the opinion of the Original Author that this code conforms to the terms of
 OSP-covered specifications:
  - [MS-CFB]: Compound File Binary File Format
  - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification
+ - [MS-XLSB]: Excel (.xlsb) Binary File Format
  - [MS-XLSX]: Excel (.xlsx) Extensions to the Office Open XML SpreadsheetML File Format
  - [MS-ODATA]: Open Data Protocol (OData)
  - [MS-OFFCRYPTO]: Office Document Cryptography Structure
