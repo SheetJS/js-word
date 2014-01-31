@@ -3,7 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.3';
+XLS.version = '0.6.4';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -1397,13 +1397,16 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
 	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
 	var cRun, cbExtRst;
+	var z = {};
 	if(fRichSt) cRun = read_shift(2);
 	if(fExtSt) cbExtRst = read_shift(4);
 	var encoding = (flags & 0x1) ? 'dbcs' : 'sbcs';
 	var msg = cch === 0 ? "" : read_shift(encoding, cch);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
-	return msg;
+	z.t = msg;
+	if(!fRichSt) { z.raw = "<t>" + z.t + "</t>"; z.r = z.t; }
+	return z;
 }
 
 /* 2.5.296 XLUnicodeStringNoCch */
@@ -4825,7 +4828,7 @@ function parse_workbook(blob) {
 					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
-					addline({c:val.c, r:val.r}, {v:sst[val.isst], ixfe:val.ixfe, t:'s'});
+					addline({c:val.c, r:val.r}, {v:sst[val.isst].t, ixfe:val.ixfe, t:'s'});
 				} break;
 				case 'Label': {
 					/* Some writers erroneously write Label */
@@ -5004,9 +5007,11 @@ return WorkbookP;
 
 function format_cell(cell, v) {
 	if(!cell) return "";
+	if(typeof cell.w !== 'undefined') return cell.w;
 	if(typeof v === 'undefined') v = cell.v;
 	if(!cell.XF) return v;
-	return SSF.format(cell.XF.ifmt||0, v);
+	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v }
+	return cell.w;
 }
 
 function sheet_to_row_object_array(sheet, opts){

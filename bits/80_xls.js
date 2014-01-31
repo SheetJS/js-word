@@ -301,7 +301,7 @@ function parse_workbook(blob) {
 					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
-					addline({c:val.c, r:val.r}, {v:sst[val.isst], ixfe:val.ixfe, t:'s'});
+					addline({c:val.c, r:val.r}, {v:sst[val.isst].t, ixfe:val.ixfe, t:'s'});
 				} break;
 				case 'Label': {
 					/* Some writers erroneously write Label */
@@ -480,9 +480,11 @@ return WorkbookP;
 
 function format_cell(cell, v) {
 	if(!cell) return "";
+	if(typeof cell.w !== 'undefined') return cell.w;
 	if(typeof v === 'undefined') v = cell.v;
 	if(!cell.XF) return v;
-	return SSF.format(cell.XF.ifmt||0, v);
+	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v }
+	return cell.w;
 }
 
 function sheet_to_row_object_array(sheet, opts){
