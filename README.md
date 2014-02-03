@@ -64,7 +64,7 @@ Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
 
 ## XLSX/XLSM/XLSB Support
 
-XLSX/XLSM support is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
+XLSX/XLSM/XLSB support is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
 
 ## License
 

@@ -483,7 +483,7 @@ function format_cell(cell, v) {
 	if(typeof cell.w !== 'undefined') return cell.w;
 	if(typeof v === 'undefined') v = cell.v;
 	if(!cell.XF) return v;
-	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v }
+	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v; }
 	return cell.w;
 }
 

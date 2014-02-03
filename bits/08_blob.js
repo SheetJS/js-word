@@ -76,7 +76,6 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
 		var t = Array(this.slice(i+4,i+4+len-1));
-		//1console.log("start", this.l, len, t);
 		var c, j = i+4, o = "", cc;
 		for(;j!=i+4+len;++j) {
 			c = this.readUInt8(j);
@@ -88,7 +87,6 @@ if(typeof Buffer !== "undefined") {
 			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
 			if(c === 0) break;
 			o += cc;
-		//1console.log(cc, cc.charCodeAt(0), o, this.l);
 		}
 		return o;
 	};

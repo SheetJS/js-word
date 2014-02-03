@@ -3,7 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.4';
+XLS.version = '0.6.5';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -91,7 +91,6 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
 		var t = Array(this.slice(i+4,i+4+len-1));
-		//1console.log("start", this.l, len, t);
 		var c, j = i+4, o = "", cc;
 		for(;j!=i+4+len;++j) {
 			c = this.readUInt8(j);
@@ -103,7 +102,6 @@ if(typeof Buffer !== "undefined") {
 			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
 			if(c === 0) break;
 			o += cc;
-		//1console.log(cc, cc.charCodeAt(0), o, this.l);
 		}
 		return o;
 	};
@@ -772,7 +770,7 @@ function parse_VtStringBase(blob, stringType, pad) {
 	else return parse_VtStringBase(blob, blob.read_shift(2), pad);
 }
 
-function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, 4); }
+function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, pad === false ? null : 4); }
 function parse_VtUnalignedString(blob, t) { if(!t) throw new Error("dafuq?"); return parse_VtStringBase(blob, t, 0); }
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
@@ -854,14 +852,14 @@ function parse_VtVector(blob, cb) {
 }
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
-function parse_TypedPropertyValue(blob, type) {
+function parse_TypedPropertyValue(blob, type, _opts) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var t = read(2), ret;
+	var t = read(2), ret, opts = _opts||{};
 	read(2);
 	if(type !== VT_VARIANT)
 	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw new Error('Expected type ' + type + ' saw ' + t);
 	switch(type === VT_VARIANT ? t : type) {
-		case VT_I2: ret = read(2, 'i'); read(2); return ret;
+		case VT_I2: ret = read(2, 'i'); if(!opts.raw) read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_BOOL: return read(4) !== 0x0;
 		case VT_UI4: ret = read(4); return ret;
@@ -870,7 +868,7 @@ function parse_TypedPropertyValue(blob, type) {
 		case VT_FILETIME: return parse_FILETIME(blob);
 		case VT_BLOB: return parse_BLOB(blob);
 		case VT_CF: return parse_ClipboardData(blob);
-		case VT_STRING: return parse_VtString(blob, t, 4).replace(/\u0000/g,'');
+		case VT_STRING: return parse_VtString(blob, t, !opts.raw && 4).replace(/\u0000/g,'');
 		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
@@ -906,15 +904,23 @@ function parse_PropertySet(blob, PIDSI) {
 	var PropH = {};
 	for(i = 0; i != NumProps; ++i) {
 		if(blob.l !== Props[i][1]) {
-			throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
+			var fail = true;
+			if(i>0 && PIDSI) switch(PIDSI[Props[i-1][0]].t) {
+				case VT_I2: if(blob.l +2 === Props[i][1]) { blob.l+=2; fail = false; } break;
+				case VT_STRING: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+				case VT_VECTOR | VT_VARIANT: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+			}
+			if(fail) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
 		}
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
-			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
+			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t, {raw:true});
 			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
 				/* TODO: Generate files under every codepage */
 				case 10000: break; // OSX Roman
 				case 1252: break; // Windows Latin
+
+				case 0: PropH[piddsi.n] = 1252; break; // Unknown -> default
 
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
@@ -1274,16 +1280,16 @@ var rval = {
 	find: find_path
 };
 
-//for(var name in files) {
-//	switch(name) {
-//		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
-//		case '!DocumentSummaryInformation':
-//			rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); break;
-//		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
-//		case '!SummaryInformation':
-//			rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); break;
-//	}
-//}
+for(var name in files) {
+	switch(name) {
+		/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
+		case '!DocumentSummaryInformation':
+			try { rval.DocSummary = parse_PropertySetStream(files[name], DocSummaryPIDDSI); } catch(e) { } break;
+		/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
+		case '!SummaryInformation':
+			try { rval.Summary = parse_PropertySetStream(files[name], SummaryPIDSI); } catch(e) { } break;
+	}
+}
 
 return rval;
 } // parse
@@ -5010,7 +5016,7 @@ function format_cell(cell, v) {
 	if(typeof cell.w !== 'undefined') return cell.w;
 	if(typeof v === 'undefined') v = cell.v;
 	if(!cell.XF) return v;
-	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v }
+	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v; }
 	return cell.w;
 }
 

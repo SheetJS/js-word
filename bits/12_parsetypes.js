@@ -35,7 +35,7 @@ function parse_VtStringBase(blob, stringType, pad) {
 	else return parse_VtStringBase(blob, blob.read_shift(2), pad);
 }
 
-function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, 4); }
+function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, pad === false ? null : 4); }
 function parse_VtUnalignedString(blob, t) { if(!t) throw new Error("dafuq?"); return parse_VtStringBase(blob, t, 0); }
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
@@ -117,14 +117,14 @@ function parse_VtVector(blob, cb) {
 }
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
-function parse_TypedPropertyValue(blob, type) {
+function parse_TypedPropertyValue(blob, type, _opts) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var t = read(2), ret;
+	var t = read(2), ret, opts = _opts||{};
 	read(2);
 	if(type !== VT_VARIANT)
 	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw new Error('Expected type ' + type + ' saw ' + t);
 	switch(type === VT_VARIANT ? t : type) {
-		case VT_I2: ret = read(2, 'i'); read(2); return ret;
+		case VT_I2: ret = read(2, 'i'); if(!opts.raw) read(2); return ret;
 		case VT_I4: ret = read(4, 'i'); return ret;
 		case VT_BOOL: return read(4) !== 0x0;
 		case VT_UI4: ret = read(4); return ret;
@@ -133,7 +133,7 @@ function parse_TypedPropertyValue(blob, type) {
 		case VT_FILETIME: return parse_FILETIME(blob);
 		case VT_BLOB: return parse_BLOB(blob);
 		case VT_CF: return parse_ClipboardData(blob);
-		case VT_STRING: return parse_VtString(blob, t, 4).replace(/\u0000/g,'');
+		case VT_STRING: return parse_VtString(blob, t, !opts.raw && 4).replace(/\u0000/g,'');
 		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
 		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
 		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
@@ -169,15 +169,23 @@ function parse_PropertySet(blob, PIDSI) {
 	var PropH = {};
 	for(i = 0; i != NumProps; ++i) {
 		if(blob.l !== Props[i][1]) {
-			throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
+			var fail = true;
+			if(i>0 && PIDSI) switch(PIDSI[Props[i-1][0]].t) {
+				case VT_I2: if(blob.l +2 === Props[i][1]) { blob.l+=2; fail = false; } break;
+				case VT_STRING: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+				case VT_VECTOR | VT_VARIANT: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+			}
+			if(fail) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
 		}
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
-			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t);
+			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t, {raw:true});
 			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
 				/* TODO: Generate files under every codepage */
 				case 10000: break; // OSX Roman
 				case 1252: break; // Windows Latin
+
+				case 0: PropH[piddsi.n] = 1252; break; // Unknown -> default
 
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
