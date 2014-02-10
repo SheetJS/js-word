@@ -5060,16 +5060,23 @@ function sheet_to_csv(sheet, opts) {
 	var out = "", txt = "";
 	opts = opts || {};
 	if(!sheet["!ref"]) return out;
-	var r = utils.decode_range(sheet["!ref"]);
+	var r = utils.decode_range(sheet["!ref"]),
+		fs = opts.FS||",",
+		rs = opts.RS||"\n";
+
 	for(var R = r.s.r; R <= r.e.r; ++R) {
 		var row = [];
 		for(var C = r.s.c; C <= r.e.c; ++C) {
 			var val = sheet[utils.encode_cell({c:C,r:R})];
 			if(!val) { row.push(""); continue; }
 			txt = format_cell(val);
-			row.push(String(txt).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\""));
+			txt = String(txt).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\"");
+			if(txt.indexOf(fs) !== -1 || txt.indexOf(rs) !== -1 || txt.indexOf("\"") !== -1){
+				txt = "\""+txt+"\"";
+			}
+			row.push(txt);
 		}
-		out += row.join(opts.FS||",") + (opts.RS||"\n");
+		out += row.join(fs) + (rs);
 	}
 	return out;
 }
