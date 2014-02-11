@@ -14,17 +14,15 @@ In the browser:
 
 ## Usage
 
-The node version installs a binary `xls2csv` which can read XLS files and output the contents in various formats.  The source is available at `xls2csv.njs` in the bin directory.
-
-See <http://oss.sheetjs.com/js-xls/> for a browser example.
-
-See `bin/xls2csv` for a node example.
-
 Simple usage (gets the value of cell A1 of sheet Sheet1):
 
     var XLS = require('xlsjs');
     var xls = XLS.readFile('test.xls');
     var Sheet1A1 = xls.Sheets['Sheet1']['A1'].v;
+
+The node version installs a binary `xls2csv` which can read XLS files and output the contents in various formats.  The source is available at `xls2csv.njs` in the bin directory.
+
+See <http://oss.sheetjs.com/js-xls/> for a browser example.
 
 Some helper functions in `XLS.utils` generate different views of the sheets:
 
@@ -32,23 +30,32 @@ Some helper functions in `XLS.utils` generate different views of the sheets:
 - `XLS.utils.sheet_to_row_object_array` interprets sheets as tables with a header column and generates an array of objects
 - `XLS.utils.get_formulae` generates a list of formulae
 
-## Notes
-
-`CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
-
-The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).
-
-`.SheetNames` is an ordered list of the sheets in the workbook
- 
-`.Sheets[sheetname]` returns a data structure representing the sheet
-
-`.Sheets[sheetname][address].v` returns the value of the specified cell and `.Sheets[sheetname][address].t` returns the type of the cell (constrained to the enumeration `ST_CellType` as documented in page 4215 of ISO/IEC 29500-1:2012(E) ) 
-
 For more details:
 
 - `bin/xls2csv.njs` is a tool for node
 - `index.html` is the live demo
 - `bits/80_xls.js` contains the logic for generating CSV and JSON from sheets
+
+## Cell Object Description 
+
+`.SheetNames` is an ordered list of the sheets in the workbook
+ 
+`.Sheets[sheetname]` returns a data structure representing the sheet
+
+`.Sheets[sheetname][address]` returns the specified cell:
+
+- `.v` : the raw value of the cell
+- `.w` : the formatted text of the cell (if applicable)
+- `.t` : the type of the cell (constrained to the enumeration `ST_CellType` as documented in page 4215 of ISO/IEC 29500-1:2012(E) )
+- `.f` : the formula of the cell (if applicable)
+
+For dates, `.v` holds the raw date code from the sheet and `.w` holds the text
+
+## Other Notes
+
+`CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
+
+The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).
 
 ## Test Files
 
@@ -61,6 +68,10 @@ Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
  - <https://travis-ci.org/SheetJS/js-xls> for XLS module in node
  - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
  - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs 
+
+## Contributing
+
+Due to the precarious nature of the Open Specifications Promise, it is very important to ensure code is cleanroom.  Consult CONTRIBUTING.md 
 
 ## XLSX/XLSM/XLSB Support
 
@@ -98,3 +109,4 @@ ISO/IEC 29500:2012(E) "Information technology — Document description and proce
 [![Coverage Status](https://coveralls.io/repos/SheetJS/js-xls/badge.png?branch=master)](https://coveralls.io/r/SheetJS/js-xls?branch=master)
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/4ee4284bf2c638cff8ed705c4438a686 "githalytics.com")](http://githalytics.com/SheetJS/js-xls)
+

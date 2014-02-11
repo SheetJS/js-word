@@ -263,14 +263,23 @@ function parse_workbook(blob) {
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'BoolErr': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:val.t};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'RK': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'MulRk': {

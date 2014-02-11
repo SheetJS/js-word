@@ -3,7 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.5';
+XLS.version = '0.6.6';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -216,7 +216,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.5.5';
+SSF.version = '0.5.6';
 /* Options */
 var opts_fmt = {};
 function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
@@ -423,13 +423,19 @@ var write_num = function(type, fmt, val) {
 	if(fmt.indexOf("E") > -1) {
 		var idx = fmt.indexOf("E") - fmt.indexOf(".") - 1;
 		if(fmt == '##0.0E+0') {
-			var period = fmt.length - 5;
+			var period = fmt.indexOf("."); if(period === -1) period=fmt.indexOf('E');
 			var ee = (Number(val.toExponential(0).substr(2+(val<0))))%period;
+			if(ee < 0) ee += period;
 			o = (val/Math.pow(10,ee)).toPrecision(idx+1+(period+ee)%period);
 			if(!o.match(/[Ee]/)) {
 				var fakee = (Number(val.toExponential(0).substr(2+(val<0))));
 				if(o.indexOf(".") === -1) o = o[0] + "." + o.substr(1) + "E+" + (fakee - o.length+ee);
-				else throw "missing E |" + o;
+				else o += "E+" + (fakee - ee);
+				while(o.substr(0,2) === "0.") {
+					o = o[0] + o.substr(2,period) + "." + o.substr(2+period);
+					o = o.replace(/^0+([1-9])/,"$1").replace(/^0+\./,"0.");
+				}
+				o = o.replace(/\+-/,"-");
 			}
 			o = o.replace(/^([+-]?)([0-9]*)\.([0-9]*)[Ee]/,function($$,$1,$2,$3) { return $1 + $2 + $3.substr(0,(period+ee)%period) + "." + $3.substr(ee) + "E"; });
 		} else o = val.toExponential(idx);
@@ -444,6 +450,7 @@ var write_num = function(type, fmt, val) {
 		var myn = (rnd - base*den), myd = den;
 		return sign + (base?base:"") + " " + (myn === 0 ? fill(" ", r[1].length + 1 + r[4].length) : pad(myn,r[1].length," ") + r[2] + "/" + r[3] + pad(myd,r[4].length));
 	}
+	if(fmt.match(/^#+0+$/)) fmt = fmt.replace(/#/g,"");
 	if(fmt.match(/^00+$/)) return (val<0?"-":"")+pad(Math.round(aval),fmt.length);
 	if(fmt.match(/^[#?]+$/)) return String(Math.round(val)).replace(/^0$/,"");
 	if((r = fmt.match(/^#*0+\.(0+)/))) {
@@ -554,7 +561,7 @@ function eval_fmt(fmt, v, opts, flen) {
 				out.push({t:'D', v:o}); break;
 			case ' ': out.push({t:c,v:c}); ++i; break;
 			default:
-				if(",$-+/():!^&'~{}<>=".indexOf(c) === -1)
+				if(",$-+/():!^&'~{}<>=€".indexOf(c) === -1)
 					throw 'unrecognized character ' + fmt[i] + ' in ' + fmt;
 				out.push({t:'t', v:c}); ++i; break;
 		}
@@ -578,7 +585,7 @@ function eval_fmt(fmt, v, opts, flen) {
 				out[i].t = 't'; break;
 			case 'n': case '(': case '?':
 				var jj = i+1;
-				while(out[jj] && ("?D".indexOf(out[jj].t) > -1 || (" t".indexOf(out[jj].t) > -1 && "?t".indexOf((out[jj+1]||{}).t)>-1 && (out[jj+1].t == '?' || out[jj+1].v == '/')) || out[i].t == '(' && (out[jj].t == ')' || out[jj].t == 'n') || out[jj].t == 't' && (out[jj].v == '/' || out[jj].v == '$' || (out[jj].v == ' ' && (out[jj+1]||{}).t == '?')))) {
+				while(out[jj] && ("?D".indexOf(out[jj].t) > -1 || (" t".indexOf(out[jj].t) > -1 && "?t".indexOf((out[jj+1]||{}).t)>-1 && (out[jj+1].t == '?' || out[jj+1].v == '/')) || out[i].t == '(' && (out[jj].t == ')' || out[jj].t == 'n') || out[jj].t == 't' && (out[jj].v == '/' || '$€'.indexOf(out[jj].v) > -1 || (out[jj].v == ' ' && (out[jj+1]||{}).t == '?')))) {
 					out[i].v += out[jj].v;
 					delete out[jj]; ++jj;
 				}
@@ -4796,14 +4803,23 @@ function parse_workbook(blob) {
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'BoolErr': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:val.t};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'RK': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+					} catch(e) { }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'MulRk': {
