@@ -5085,10 +5085,9 @@ function sheet_to_csv(sheet, opts) {
 		for(var C = r.s.c; C <= r.e.c; ++C) {
 			var val = sheet[utils.encode_cell({c:C,r:R})];
 			if(!val) { row.push(""); continue; }
-			txt = format_cell(val);
-			txt = String(txt).replace(/\\n/g,"\n").replace(/\\t/g,"\t").replace(/\\\\/g,"\\").replace(/\\\"/g,"\"\"");
+			txt = String(format_cell(val));
 			if(txt.indexOf(fs) !== -1 || txt.indexOf(rs) !== -1 || txt.indexOf("\"") !== -1){
-				txt = "\""+txt+"\"";
+				txt = "\""+txt.replace(/"/g, '""') +"\"";
 			}
 			row.push(txt);
 		}
