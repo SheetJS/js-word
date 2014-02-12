@@ -10,9 +10,11 @@ function fixsheetname(x) { return x.substr(0,31); }
 
 function normalizecsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
 
+var dir = "./test_files/";
+
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
-		var sname = './test_files/2011/' + x + '.sheetnames';
+		var sname = dir + '2011/' + x + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
 		});
@@ -48,7 +50,7 @@ function parsetest(x, wb) {
 	});
 	describe(x + ' should generate correct output', function() {
 		wb.SheetNames.forEach(function(ws, i) {
-			var name = ('./test_files/' + x + '.' + i + '.csv');
+			var name = (dir + x + '.' + i + '.csv');
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
 				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
@@ -62,8 +64,17 @@ function parsetest(x, wb) {
 describe('should parse test files', function() {
 	files.forEach(function(x) {
 		it(x, x.substr(-8) == ".pending" ? null : function() {
-			var wb = x.substr(-4) == ".b64" ? XLS.read(fs.readFileSync('./test_files/' + x, 'utf8'), {type: 'base64'}) : XLS.readFile('./test_files/' + x);
-			parsetest(x, wb);
+			var wb = x.substr(-4) == ".b64" ? XLS.read(fs.readFileSync(dir + x, 'utf8'), {type: 'base64'}) : XLS.readFile(dir + x);
+			if(x.substr(-4) === ".xls") parsetest(x, wb);
 		});
+	});
+});
+
+describe('other features', function() {
+	it('should fail on passwords', function() {
+		assert.throws(function() { XLS.readFile(dir + 'apachepoi_password.xls'); });
+	});
+	it('should read binary strings', function() {
+		XLS.read(fs.readFileSync(dir + 'formula_stress_test.xls', 'binary'), {type:'binary'});
 	});
 });

@@ -15,15 +15,15 @@ clean:
 init:
 	git submodule init
 	git submodule update
-	git submodule foreach git pull origin master 
-	git submodule foreach make 
+	git submodule foreach git pull origin master
+	git submodule foreach make
 
 .PHONY: oldtest
 oldtest:
 	bin/test.sh
 
 .PHONY: test mocha
-test mocha:
+test mocha: test.js
 	mocha -R spec
 
 .PHONY: lint
@@ -33,7 +33,7 @@ lint: $(TARGET)
 .PHONY: cov
 cov: misc/coverage.html
 
-misc/coverage.html: xls.js 
+misc/coverage.html: xls.js test.js
 	mocha --require blanket -R html-cov > misc/coverage.html
 
 .PHONY: coveralls

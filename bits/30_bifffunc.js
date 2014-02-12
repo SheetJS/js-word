@@ -329,7 +329,7 @@ function parse_ExternName(blob, length, opts) {
 	};
 	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
 	//else throw new Error("unsupported SupBook cch: " + opts.sbcch);
-	o.body = blob.read_shift(length-2);
+	o.body = body || blob.read_shift(length-2);
 	return o;
 }
 

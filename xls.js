@@ -3,7 +3,7 @@
 /*jshint eqnull:true, funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.6';
+XLS.version = '0.6.7';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -216,7 +216,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.5.6';
+SSF.version = '0.5.7';
 /* Options */
 var opts_fmt = {};
 function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
@@ -357,23 +357,20 @@ var write_date = function(type, fmt, val) {
 	switch(type) {
 		case 'y': switch(fmt) { /* year */
 			case 'y': case 'yy': return pad(val.y % 100,2);
-			case 'yyy': case 'yyyy': return pad(val.y % 10000,4);
-			default: throw 'bad year format: ' + fmt;
+			default: return pad(val.y % 10000,4);
 		}
 		case 'm': switch(fmt) { /* month */
 			case 'm': return val.m;
 			case 'mm': return pad(val.m,2);
 			case 'mmm': return months[val.m-1][1];
-			case 'mmmm': return months[val.m-1][2];
 			case 'mmmmm': return months[val.m-1][0];
-			default: throw 'bad month format: ' + fmt;
+			default: return months[val.m-1][2];
 		}
 		case 'd': switch(fmt) { /* day */
 			case 'd': return val.d;
 			case 'dd': return pad(val.d,2);
 			case 'ddd': return days[val.q][0];
-			case 'dddd': return days[val.q][1];
-			default: throw 'bad day format: ' + fmt;
+			default: return days[val.q][1];
 		}
 		case 'h': switch(fmt) { /* 12-hour */
 			case 'h': return 1+(val.H+11)%12;
@@ -406,7 +403,6 @@ var write_date = function(type, fmt, val) {
 		} return fmt.length === 3 ? o : pad(o, 2);
 		/* TODO: handle the ECMA spec format ee -> yy */
 		case 'e': { return val.y; } break;
-		default: throw 'bad format type ' + type + ' in ' + fmt;
 	}
 };
 /*jshint +W086 */
@@ -422,7 +418,7 @@ var write_num = function(type, fmt, val) {
 	if(mul !== 0) return write_num(type, fmt, val * Math.pow(10,2*mul)) + fill("%",mul);
 	if(fmt.indexOf("E") > -1) {
 		var idx = fmt.indexOf("E") - fmt.indexOf(".") - 1;
-		if(fmt == '##0.0E+0') {
+		if(fmt.match(/^#+0.0E\+0$/)) {
 			var period = fmt.indexOf("."); if(period === -1) period=fmt.indexOf('E');
 			var ee = (Number(val.toExponential(0).substr(2+(val<0))))%period;
 			if(ee < 0) ee += period;
@@ -540,7 +536,8 @@ function eval_fmt(fmt, v, opts, flen) {
 				out.push(q); lst = c; break;
 			case '[': /* TODO: Fix this -- ignore all conditionals and formatting */
 				o = c;
-				while(fmt[i++] !== ']') o += fmt[i];
+				while(fmt[i++] !== ']' && i < fmt.length) o += fmt[i];
+				if(o.substr(-1) !== ']') throw 'unterminated "[" block: |' + o + '|';
 				if(o.match(/\[[HhMmSs]*\]/)) {
 					if(!dt) dt = parse_date_code(v, opts);
 					if(!dt) return "";
@@ -579,8 +576,8 @@ function eval_fmt(fmt, v, opts, flen) {
 	/* replace fields */
 	for(i=0; i < out.length; ++i) {
 		switch(out[i].t) {
-			case 't': case 'T': case ' ': break;
-			case 'd': case 'm': case 'y': case 'h': case 'H': case 'M': case 's': case 'A': case 'e': case 'Z':
+			case 't': case 'T': case ' ': case 'D': break;
+			case 'd': case 'm': case 'y': case 'h': case 'H': case 'M': case 's': case 'e': case 'Z':
 				out[i].v = write_date(out[i].t, out[i].v, dt);
 				out[i].t = 't'; break;
 			case 'n': case '(': case '?':
@@ -593,7 +590,6 @@ function eval_fmt(fmt, v, opts, flen) {
 				out[i].t = 't';
 				i = jj-1; break;
 			case 'G': out[i].t = 't'; out[i].v = general_fmt(v,opts); break;
-			default: console.error(out); throw "unrecognized type " + out[i].t;
 		}
 	}
 	return out.map(function(x){return x.v;}).join("");
@@ -1773,7 +1769,7 @@ function parse_ExternName(blob, length, opts) {
 	};
 	if(opts.sbcch === 0x3A01) body = parse_AddinUdf(blob, length-2);
 	//else throw new Error("unsupported SupBook cch: " + opts.sbcch);
-	o.body = blob.read_shift(length-2);
+	o.body = body || blob.read_shift(length-2);
 	return o;
 }
 
@@ -5183,13 +5179,4 @@ XLS.readFile = readFile;
 XLS.utils = utils;
 XLS.CFB = CFB;
 XLS.SSF = SSF;
-if(typeof module !== 'undefined' && require.main === module ) {
-	var wb = readFile(process.argv[2] || 'Book1.xls');
-	var target_sheet = process.argv[3] || '';
-	if(target_sheet === '') target_sheet = wb.Directory[0];
-	var ws = wb.Sheets[target_sheet];
-	console.log(target_sheet);
-	console.log(make_csv(ws));
-	//console.log(get_formulae(ws));
-}
 })(typeof exports !== 'undefined' ? exports : XLS);
