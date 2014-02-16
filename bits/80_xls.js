@@ -26,7 +26,7 @@ function parse_compobj(obj) {
 }
 
 
-function parse_xlscfb(cfb) {
+function parse_xlscfb(cfb, options) {
 reset_cp();
 var CompObj = cfb.find('!CompObj');
 var Summary = cfb.find('!SummaryInformation');
@@ -56,7 +56,7 @@ function slurp(R, blob, length, opts) {
 }
 
 // 2.3.2
-function parse_workbook(blob) {
+function parse_workbook(blob, options) {
 	var wb = {opts:{}};
 	var Sheets = {};
 	var out = [];
@@ -265,40 +265,63 @@ function parse_workbook(blob) {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
-					} catch(e) { }
+						if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+					} catch(e) { if(opts.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'BoolErr': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:val.t};
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
-					} catch(e) { }
+						if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+					} catch(e) { if(opts.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'RK': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'};
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
-					} catch(e) { }
+						if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+					} catch(e) { if(opts.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
 						var ixfe = val.rkrec[j-val.c][0];
-						addline({c:j, r:val.r}, {ixfe: ixfe, XF: XFs[ixfe], v:val.rkrec[j-val.c][1], t:'n'});
+						temp_val= {ixfe:ixfe, XF:XFs[ixfe], v:val.rkrec[j-val.c][1], t:'n'};
+						if(temp_val.XF) try {
+							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+							if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+						} catch(e) { if(opts.WTF) throw e; }
+						addline({c:j, r:val.r}, temp_val);
 					}
 				} break;
 				case 'Formula': {
 					switch(val.val) {
 						case 'String': last_formula = val; break;
 						case 'Array Formula': throw "Array Formula unsupported";
-						default: addline(val.cell, {v:val.val, f:stringify_formula(val.formula, range, val.cell, supbooks), ixfe: val.cell.ixfe, XF:XFs[val.cell.ixfe], t:'n'}); // TODO: infer type from formula
+						default: // TODO: infer type from formula
+							temp_val = {v:val.val, ixfe:val.cell.ixfe, t:'n'};
+							temp_val.XF = XFs[temp_val.ixfe];
+							temp_val.f = stringify_formula(val.formula,range,val.cell,supbooks);
+							if(temp_val.XF) try {
+								temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+								if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+							} catch(e) { if(opts.WTF) throw e; }
+							addline(val.cell, temp_val);
 					}
 				} break;
 				case 'String': {
 					if(last_formula) {
 						last_formula.val = val;
-						addline(last_formula.cell, {v:last_formula.val, f:stringify_formula(last_formula.formula, range, last_formula.cell, supbooks), ixfe: last_formula.cell.ixfe, t:'s'});
+						temp_val = {v:last_formula.val, ixfe:last_formula.cell.ixfe, t:'s'};
+						temp_val.XF = XFs[temp_val.ixfe];
+						temp_val.f = stringify_formula(last_formula.formula, range, last_formula.cell, supbooks);
+						if(temp_val.XF) try {
+							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+							if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+						} catch(e) { if(opts.WTF) throw e; }
+						addline(last_formula.cell, temp_val);
 						last_formula = null;
 					}
 				} break;
@@ -310,11 +333,22 @@ function parse_workbook(blob) {
 					shared_formulae[last_cell] = val[0];
 				} break;
 				case 'LabelSst': {
-					addline({c:val.c, r:val.r}, {v:sst[val.isst].t, ixfe:val.ixfe, t:'s'});
+					temp_val={v:sst[val.isst].t, ixfe:val.ixfe, t:'s'};
+					temp_val.XF = XFs[temp_val.ixfe];
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+						if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+					} catch(e) { if(opts.WTF) throw e; }
+					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'Label': {
 					/* Some writers erroneously write Label */
-					addline({c:val.c, r:val.r}, {v:val.val, ixfe:val.ixfe, t:'s'});
+					temp_val = {v:val.val, ixfe:val.ixfe, XF:XFs[val.ixfe], t:'s'};
+					if(temp_val.XF) try {
+						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
+						if(opts.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
+					} catch(e) { if(opts.WTF) throw e; }
+					addline({c:val.c, r:val.r}, temp_val);
 				} break;
 				case 'Dimensions': {
 					range = val;
@@ -480,7 +514,7 @@ function parse_workbook(blob) {
 	if(opts.enc) wb.Encryption = opts.enc;
 	return wb;
 }
-if(Workbook) WorkbookP = parse_workbook(Workbook.content);
+if(Workbook) WorkbookP = parse_workbook(Workbook.content, options);
 else throw new Error("Cannot find Workbook stream");
 if(CompObj) CompObjP = parse_compobj(CompObj);
 
@@ -563,6 +597,7 @@ function get_formulae(ws) {
 		var x = ws[y];
 		var val = "";
 		if(x.f) val = x.f;
+		else if(typeof x.w !== 'undefined') val = "'" + x.w;
 		else if(typeof x.v === 'number') val = x.v;
 		else val = x.v;
 		cmds.push(y + "=" + val);
@@ -588,6 +623,6 @@ var utils = {
 };
 
 function xlsread(f, options) {
-	return parse_xlscfb(CFB.read(f, options));
+	return parse_xlscfb(CFB.read(f, options), options);
 }
-var readFile = function(f) { return parse_xlscfb(CFB.read(f, {type:'file'})); };
+var readFile = function(f,o){return parse_xlscfb(CFB.read(f,{type:'file'}),o);};

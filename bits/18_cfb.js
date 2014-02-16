@@ -26,7 +26,6 @@ var fat_addrs = []; // locations of FAT sectors
 var blob = file.slice(0,512);
 prep_blob(blob);
 var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-//var wrn = WarnField.bind(blob);
 var j = 0, q;
 
 // header signature 8
@@ -36,7 +35,6 @@ chk(HEADER_SIGNATURE, 'Header Signature: ');
 chk(HEADER_CLSID, 'CLSID: ');
 
 // minor version 2
-//wrn(HEADER_MINOR_VERSION, 'Minor Version: ');
 read(2);
 
 // major version 3

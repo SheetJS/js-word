@@ -309,6 +309,7 @@ apachepoi_unicodeNameRecord.xls
 apachepoi_xor-encryption-abc.xls.pending
 apachepoi_yearfracExamples.xls
 comments_stress_test.xls
+custom_properties.xls
 formula_stress_test.xls
 jxls-core_array.xls
 jxls-core_beandata.xls
@@ -460,3 +461,4 @@ xlrd_picture_in_cell.xls
 xlrd_profiles.xls
 xlrd_ragged.xls
 xlrd_xf_class.xls
+xlsx-stream-d-date-cell.xls

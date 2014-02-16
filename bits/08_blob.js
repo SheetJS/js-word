@@ -1,5 +1,5 @@
 function readIEEE754(buf, idx, isLE, nl, ml) {
-	if(isLE === undefined) isLE = true;
+	if(typeof isLE === 'undefined') isLE = true;
 	if(!nl) nl = 8;
 	if(!ml && nl === 8) ml = 52;
 	var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1;
@@ -176,13 +176,6 @@ function CheckField(hexstr, fld) {
 	var b = this.slice(this.l, this.l+hexstr.length/2);
 	var m = b.hexlify ? b.hexlify() : __hexlify(b);
 	if(m !== hexstr) throw (fld||"") + 'Expected ' + hexstr + ' saw ' + m;
-	this.l += hexstr.length/2;
-}
-
-function WarnField(hexstr, fld) {
-	var b = this.slice(this.l, this.l+hexstr.length/2);
-	var m = b.hexlify ? b.hexlify() : __hexlify(b);
-	if(m !== hexstr) console.error((fld||"") + 'Expected ' + hexstr +' saw ' + m);
 	this.l += hexstr.length/2;
 }
 

@@ -26,7 +26,7 @@ See <http://oss.sheetjs.com/js-xls/> for a browser example.
 
 Some helper functions in `XLS.utils` generate different views of the sheets:
 
-- `XLS.utils.sheet_to_csv` generates CSV 
+- `XLS.utils.sheet_to_csv` generates CSV
 - `XLS.utils.sheet_to_row_object_array` interprets sheets as tables with a header column and generates an array of objects
 - `XLS.utils.get_formulae` generates a list of formulae
 
@@ -36,11 +36,12 @@ For more details:
 - `index.html` is the live demo
 - `bits/80_xls.js` contains the logic for generating CSV and JSON from sheets
 
-## Cell Object Description 
+## Cell Object Description
 
 `.SheetNames` is an ordered list of the sheets in the workbook
- 
-`.Sheets[sheetname]` returns a data structure representing the sheet
+
+`.Sheets[sheetname]` returns a data structure representing the sheet.  Each key
+that does not start with `!` corresponds to a cell (using `A-1` notation).
 
 `.Sheets[sheetname][address]` returns the specified cell:
 
@@ -48,8 +49,19 @@ For more details:
 - `.w` : the formatted text of the cell (if applicable)
 - `.t` : the type of the cell (constrained to the enumeration `ST_CellType` as documented in page 4215 of ISO/IEC 29500-1:2012(E) )
 - `.f` : the formula of the cell (if applicable)
+- `.z` : the number format string associated with the cell (if requested)
 
 For dates, `.v` holds the raw date code from the sheet and `.w` holds the text
+
+## Options
+
+The exported `read` and `readFile` functions accept an options argument:
+
+| Option Name | Default | Description |
+| :---------- | ------: | :---------- |
+| cellNF      | false   | Save number format string to the .z field |
+
+- Even if `cellNF` is false, formatted text (.w) will be generated
 
 ## Other Notes
 
@@ -67,15 +79,15 @@ Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
 
  - <https://travis-ci.org/SheetJS/js-xls> for XLS module in node
  - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
- - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs 
+ - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs
 
 ## Contributing
 
-Due to the precarious nature of the Open Specifications Promise, it is very important to ensure code is cleanroom.  Consult CONTRIBUTING.md 
+Due to the precarious nature of the Open Specifications Promise, it is very important to ensure code is cleanroom.  Consult CONTRIBUTING.md
 
 ## XLSX/XLSM/XLSB Support
 
-XLSX/XLSM/XLSB support is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
+XLSX/XLSM/XLSB is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
 
 ## License
 
@@ -95,7 +107,8 @@ OSP-covered specifications:
  - [MS-OLEDS]: Object Linking and Embedding (OLE) Data Structures
  - [MS-OLEPS]: Object Linking and Embedding (OLE) Property Set Data Structures
  - [MS-OSHARED]: Office Common Data Types and Objects Structures
- - [MS-OVBA]: Office VBA File Format Structure 
+ - [MS-OVBA]: Office VBA File Format Structure
+ - [MS-OE376]: Office Implementation Information for ECMA-376 Standards Support
  - [XLS]: Microsoft Office Excel 97-2007 Binary File Format Specification
 
 Certain features are shared with the Office Open XML File Formats, covered in:
