@@ -91,7 +91,7 @@ function parse_dictionary(blob,CodePage) {
 function parse_BLOB(blob) {
 	var size = blob.read_shift(4);
 	var bytes = blob.slice(blob.l,blob.l+size);
-	if(blob.l % 4) blob.l += (4 - (blob.l % 4)) % 4;
+	if(size % 4 > 0) blob.l += (4 - (size % 4)) % 4;
 	return bytes;
 }
 
@@ -175,6 +175,7 @@ function parse_PropertySet(blob, PIDSI) {
 				case VT_STRING: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
 				case VT_VECTOR | VT_VARIANT: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
 			}
+			if(!PIDSI && blob.l <= Props[i][1]) { fail=false; blob.l = Props[i][1]; }
 			if(fail) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
 		}
 		if(PIDSI) {
@@ -268,7 +269,9 @@ function parse_PropertySetStream(file, PIDSI) {
 	rval.FMTID = FMTID0;
 	//rval.PSet0 = PSet0;
 	if(NumSets === 1) return rval;
-	var PSet1 = parse_PropertySet(blob, null);
+	if(blob.l !== Offset1) throw "Length mismatch 2: " + blob.l + " !== " + Offset1;
+	var PSet1;
+	try { PSet1 = parse_PropertySet(blob, null); } catch(e) { }
 	for(y in PSet1) rval[y] = PSet1[y];
 	rval.FMTID = [FMTID0, FMTID1]; // TODO: verify FMTID0/1
 	return rval;

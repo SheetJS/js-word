@@ -59,9 +59,19 @@ The exported `read` and `readFile` functions accept an options argument:
 
 | Option Name | Default | Description |
 | :---------- | ------: | :---------- |
+| cellFormula | true    | Save formulae to the .f field ** |
 | cellNF      | false   | Save number format string to the .z field |
+| sheetRows   | 0       | If >0, read the first `sheetRows` rows ** |
+| bookFiles   | false   | If true, add raw files to book object ** |
+| bookProps   | false   | If true, only parse enough to get book metadata ** |
+| bookSheets  | false   | If true, only parse enough to get the sheet names |
 
 - Even if `cellNF` is false, formatted text (.w) will be generated
+- In some cases, sheets may be parsed even if `bookSheets` is false.
+- `bookSheets` and `bookProps` combine to give both sets of information
+- `bookFiles` adds a `cfb` object
+- `sheetRows-1` rows will be generated when looking at the JSON object output
+  (since the header row is counted as a row when parsing the data)
 
 ## Other Notes
 

@@ -1,12 +1,16 @@
 /* vim: set ts=2: */
 var XLS;
 var fs = require('fs'), assert = require('assert');
-describe('source',function(){ it('should load', function(){ XLS = require('./'); });});
+describe('source',function(){it('should load',function(){XLS=require('./');});});
 
 var opts = {};
 if(process.env.WTF) opts.WTF = true;
+var ex = [".xls"];
+if(process.env.FMTS) ex=process.env.FMTS.split(":").map(function(x){return x[0]==="."?x:"."+x;});
+var exp = ex.map(function(x){ return x + ".pending"; });
+function test_file(x){return ex.indexOf(x.substr(-4))>=0||exp.indexOf(x.substr(-12))>=0;}
 
-var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(function(x){return x.substr(-4)==".xls" || x.substr(-8)==".xls.b64";});
+var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(test_file);
 
 /* Excel enforces 31 character sheet limit, although technical file limit is 255 */
 function fixsheetname(x) { return x.substr(0,31); }
@@ -30,7 +34,6 @@ function parsetest(x, wb) {
 	describe(x + ' should generate CSV', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
 			});
 		});
@@ -38,7 +41,6 @@ function parsetest(x, wb) {
 	describe(x + ' should generate JSON', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var json = XLS.utils.sheet_to_row_object_array(wb.Sheets[ws]);
 			});
 		});
@@ -46,7 +48,6 @@ function parsetest(x, wb) {
 	describe(x + ' should generate formulae', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var json = XLS.utils.get_formulae(wb.Sheets[ws]);
 			});
 		});
@@ -56,7 +57,6 @@ function parsetest(x, wb) {
 			var name = (dir + x + '.' + i + '.csv');
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
-				if(wb.SSF) XLS.SSF.load_table(wb.SSF);
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
 				assert.equal(normalizecsv(csv), normalizecsv(file), "CSV badness");
 			} : null);
@@ -67,8 +67,8 @@ function parsetest(x, wb) {
 describe('should parse test files', function() {
 	files.forEach(function(x) {
 		it(x, x.substr(-8) == ".pending" ? null : function() {
-			var wb = x.substr(-4) == ".b64" ? XLS.read(fs.readFileSync(dir + x, 'utf8'), {type: 'base64'}) : XLS.readFile(dir + x, opts);
-			if(x.substr(-4) === ".xls") parsetest(x, wb);
+			var wb = XLS.readFile(dir + x, opts);
+			parsetest(x, wb);
 		});
 	});
 });
@@ -90,6 +90,16 @@ describe('options', function() {
 			});
 			assert(found);
 		});
+		it('should not generate formulae when requested', function() {
+			var wb =XLS.readFile(dir+'formula_stress_test.xls',{cellFormula:false});
+			wb.SheetNames.forEach(function(s) {
+				var ws = wb.Sheets[s];
+				Object.keys(ws).forEach(function(addr) {
+					if(addr[0] === "!" || !ws.hasOwnProperty(addr)) return;
+					assert(typeof ws[addr].f === 'undefined');
+				});
+			});
+		});
 		it('should not generate number formats by default', function() {
 			var wb = XLS.readFile(dir+'number_format.xls');
 			wb.SheetNames.forEach(function(s) {
@@ -106,9 +116,50 @@ describe('options', function() {
 				var ws = wb.Sheets[s];
 				Object.keys(ws).forEach(function(addr) {
 					if(addr[0] === "!" || !ws.hasOwnProperty(addr)) return;
-					assert(typeof ws[addr].t!== 'n' || typeof ws[addr].z !== 'undefined');
+					assert(ws[addr].t!== 'n' || typeof ws[addr].z !== 'undefined');
 				});
 			});
+		});
+	});
+	describe('sheet', function() {
+		it('should read all cells by default', function() {
+			var wb = XLS.readFile(dir+'formula_stress_test.xls');
+			assert(typeof wb.Sheets.Text.A46 !== 'undefined');
+			assert(typeof wb.Sheets.Text.B26 !== 'undefined');
+			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+		});
+		it('sheetRows n=20', function() {
+			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:20});
+			assert(typeof wb.Sheets.Text.A46 === 'undefined');
+			assert(typeof wb.Sheets.Text.B26 === 'undefined');
+			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+		});
+		it('sheetRows n=10', function() {
+			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:10});
+			assert(typeof wb.Sheets.Text.A46 === 'undefined');
+			assert(typeof wb.Sheets.Text.B26 === 'undefined');
+			assert(typeof wb.Sheets.Text.C16 === 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+		});
+	});
+	describe('book', function() {
+		it('bookSheets should not generate sheets', function() {
+			var wb = XLS.readFile(dir+'merge_cells.xls', {bookSheets:true});
+			assert(typeof wb.Sheets === 'undefined');
+		});
+		it('bookProps should not generate sheets', function() {
+			var wb = XLS.readFile(dir+'number_format.xls', {bookProps:true});
+			assert(typeof wb.Sheets === 'undefined');
+		});
+		it('bookProps && bookSheets should not generate sheets', function() {
+			var wb = XLS.readFile(dir+'LONumbers.xls', {bookProps:true, bookSheets:true});
+			assert(typeof wb.Sheets === 'undefined');
+		});
+		it('bookFiles should generate cfb', function() {
+			var wb = XLS.readFile(dir+'formula_stress_test.xls', {bookFiles:true});
+			assert(typeof wb.cfb !== 'undefined');
 		});
 	});
 });
@@ -119,6 +170,27 @@ describe('input formats', function() {
 	});
 	it('should read base64 strings', function() {
 		XLS.read(fs.readFileSync(dir+'comments_stress_test.xls', 'base64'), {type: 'base64'});
+	});
+});
+
+describe('features', function() {
+	describe('should parse core properties and custom properties', function() {
+		var wb;
+		before(function() {
+			XLS = require('./');
+			wb = XLS.readFile(dir+'custom_properties.xls');
+		});
+		it('Must have read the core properties', function() {
+			assert.equal(wb.Props.Company, 'Vector Inc');
+			assert.equal(wb.Props.Author, 'Pony Foo'); /* XLSX uses Creator */
+		});
+		it('Must have read the custom properties', function() {
+			assert.equal(wb.Custprops['I am a boolean'], true);
+			/* The date test requires parsing FILETIME (64 bit integer) */
+			//assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
+			assert.equal(wb.Custprops.Status, 2);
+			assert.equal(wb.Custprops.Counter, -3.14);
+		});
 	});
 });
 

@@ -1,5 +1,6 @@
+LIB=xls
 DEPS=$(wildcard bits/*.js)
-TARGET=xls.js
+TARGET=$(LIB).js
 
 $(TARGET): $(DEPS)
 	cat $^ > $@
@@ -18,13 +19,14 @@ init:
 	git submodule foreach git pull origin master
 	git submodule foreach make
 
-.PHONY: oldtest
-oldtest:
-	bin/test.sh
 
 .PHONY: test mocha
 test mocha: test.js
 	mocha -R spec
+
+.PHONY: oldtest
+oldtest:
+	bin/test.sh
 
 .PHONY: lint
 lint: $(TARGET)
@@ -33,9 +35,15 @@ lint: $(TARGET)
 .PHONY: cov
 cov: misc/coverage.html
 
-misc/coverage.html: xls.js test.js
+misc/coverage.html: $(TARGET) test.js
 	mocha --require blanket -R html-cov > misc/coverage.html
 
 .PHONY: coveralls
 coveralls:
 	mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+
+.PHONY: dist
+dist: $(TARGET)
+	cp $(TARGET) dist/
+	cp LICENSE dist/
+	uglifyjs $(TARGET) -o dist/$(LIB).min.js --source-map dist/$(LIB).min.map --preamble "$$(head -n 1 bits/00_header.js)"
