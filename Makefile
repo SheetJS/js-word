@@ -6,7 +6,7 @@ $(TARGET): $(DEPS)
 	cat $^ > $@
 
 bits/01_version.js: package.json
-	echo "XLS.version = '"`grep version package.json | awk '{gsub(/[^0-9\.]/,"",$$2); print $$2}'`"';" > bits/01_version.js
+	echo "XLS.version = '"`grep version package.json | awk '{gsub(/[^0-9a-z\.-]/,"",$$2); print $$2}'`"';" > $@
 
 .PHONY: clean
 clean:

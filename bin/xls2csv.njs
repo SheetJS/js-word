@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* xls.js (C) 2013-2014 SheetJS -- http://sheetjs.com */
 var n = "xls";
-/* vim: set ts=2: */
+/* vim: set ts=2 ft=javascript: */
 var X = require('../');
 var fs = require('fs'), program = require('commander');
 program
@@ -15,6 +15,7 @@ program
 	.option('-J, --raw-js', 'emit raw JS object rather than CSV (raw numbers)')
 	.option('-F, --field-sep <sep>', 'CSV field separator', ",")
 	.option('-R, --row-sep <sep>', 'CSV row separator', "\n")
+	.option('-n, --sheet-rows <num>', 'Number of rows to process (0=all rows)')
 	.option('--dev', 'development mode')
 	.option('--read', 'read but do not print out contents')
 	.option('-q, --quiet', 'quiet mode');
@@ -46,6 +47,8 @@ if(!fs.existsSync(filename)) {
 
 var opts = {}, wb;
 if(program.listSheets) opts.bookSheets = true;
+if(program.sheetRows) opts.sheetRows = program.sheetRows;
+if(!program.formulae) opts.cellFormula = false;
 
 if(program.dev) {
 	X.verbose = 2;

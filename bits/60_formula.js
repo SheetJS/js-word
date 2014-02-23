@@ -234,7 +234,7 @@ function parse_SerAr(blob) {
 			blob.l += 7; break;
 		/* 2.5.192.114 */
 		case 0x10: /* SerErr -- error */
-			val[1] = BERR[blob.l];
+			val[1] = BERR[blob[blob.l]];
 			blob.l += 8; break;
 		/* 2.5.192.115 */
 		case 0x00: /* SerNil -- honestly, I'm not sure how to reproduce this */
@@ -245,8 +245,7 @@ function parse_SerAr(blob) {
 		/* 2.5.192.117 */
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
 			val[1] = parse_XLUnicodeString(blob); break;
-		default:
-			throw "Bad SerAr: " + val[0];
+		// default: throw "Bad SerAr: " + val[0]; /* Unreachable */
 	}
 	return val;
 }

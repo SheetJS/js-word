@@ -1,9 +1,9 @@
 /* xls.js (C) 2013-2014 SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
-/*jshint eqnull:true, funcscope:true */
+/*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.9';
+XLS.version = '0.6.9-a';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -34,7 +34,7 @@ function readIEEE754(buf, idx, isLE, nl, ml) {
 var Base64 = (function(){
 	var map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	return {
-		encode: function(input, utf8) {
+		/* (will need this for writing) encode: function(input, utf8) {
 			var o = "";
 			var c1, c2, c3, e1, e2, e3, e4;
 			for(var i = 0; i < input.length; ) {
@@ -50,7 +50,7 @@ var Base64 = (function(){
 				o += map.charAt(e1) + map.charAt(e2) + map.charAt(e3) + map.charAt(e4);
 			}
 			return o;
-		},
+		},*/
 		decode: function(input, utf8) {
 			var o = "";
 			var c1, c2, c3;
@@ -91,7 +91,7 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
 		var t = Array(this.slice(i+4,i+4+len-1));
-		var c, j = i+4, o = "", cc;
+		var c, j = i+4, o = [], cc;
 		for(;j!=i+4+len;++j) {
 			c = this.readUInt8(j);
 			cc = current_cptable.dec[c];
@@ -101,9 +101,9 @@ if(typeof Buffer !== "undefined") {
 			}
 			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
 			if(c === 0) break;
-			o += cc;
+			o.push(cc);
 		}
-		return o;
+		return o.join("");
 	};
 	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
 } else {
@@ -123,9 +123,9 @@ var __readDoubleLE = function(b, idx) { return b.readDoubleLE ? b.readDoubleLE(i
 
 var __hexlify = function(b) { return b.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
 
-var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(__readUInt16LE(b,i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
+var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var ss=[]; for(var i=s; i<e; i+=2) ss.push(String.fromCharCode(__readUInt16LE(b,i))); return ss.join("").replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
-var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(__readUInt8(b,i)); return str; };
+var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var ss=[]; for(var i=s; i<e; i++) ss.push(String.fromCharCode(__readUInt8(b,i))); return ss.join(""); };
 
 var __lpstr = function(b,i) { if(b.lpstr) return b.lpstr(i); var len = __readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
 var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return __utf8(b, i+4,i+4+len-1);};
@@ -133,7 +133,7 @@ var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__re
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
 function ReadShift(size, t) {
-	var o, w, vv, i, loc; t = t || 'u';
+	var o, oo=[], w, vv, i, loc; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = __readUInt8(this, this.l); break;
@@ -159,11 +159,11 @@ function ReadShift(size, t) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
-					return o + vv;
+					return oo.join("") + vv;
 				}
-				o += _getchar(__readUInt16LE(this, loc));
+				oo.push(_getchar(__readUInt16LE(this, loc)));
 				loc+=2;
-			} break;
+			} o = oo.join(""); break;
 
 		case 'sbcs': size = t; o = ""; loc = this.l;
 			for(i = 0; i != t; ++i) {
@@ -171,18 +171,18 @@ function ReadShift(size, t) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
-					return o + vv;
+					return oo.join("") + vv;
 				}
-				o += _getchar(__readUInt8(this, loc));
+				oo.push(_getchar(__readUInt8(this, loc)));
 				loc+=1;
-			} break;
+			} o = oo.join(""); break;
 
 		case 'cstr': size = 0; o = "";
-			while((w=__readUInt8(this, this.l + size++))!==0) o+= _getchar(w);
-			break;
+			while((w=__readUInt8(this, this.l + size++))!==0) oo.push(_getchar(w));
+			o = oo.join(""); break;
 		case 'wstr': size = 0; o = "";
-			while((w=__readUInt16LE(this,this.l +size))!==0){o+= _getchar(w);size+=2;}
-			size+=2; break;
+			while((w=__readUInt16LE(this,this.l +size))!==0){oo.push(_getchar(w));size+=2;}
+			size+=2; o = oo.join(""); break;
 	}
 	this.l+=size; return o;
 }
@@ -2474,7 +2474,7 @@ function parse_SerAr(blob) {
 			blob.l += 7; break;
 		/* 2.5.192.114 */
 		case 0x10: /* SerErr -- error */
-			val[1] = BERR[blob.l];
+			val[1] = BERR[blob[blob.l]];
 			blob.l += 8; break;
 		/* 2.5.192.115 */
 		case 0x00: /* SerNil -- honestly, I'm not sure how to reproduce this */
@@ -2485,8 +2485,7 @@ function parse_SerAr(blob) {
 		/* 2.5.192.117 */
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
 			val[1] = parse_XLUnicodeString(blob); break;
-		default:
-			throw "Bad SerAr: " + val[0];
+		// default: throw "Bad SerAr: " + val[0]; /* Unreachable */
 	}
 	return val;
 }
@@ -4819,7 +4818,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'BoolErr': {
@@ -4827,7 +4826,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'RK': {
@@ -4835,7 +4834,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'MulRk': {
@@ -4845,7 +4844,7 @@ function parse_workbook(blob, options) {
 						if(temp_val.XF) try {
 							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 							if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-						} catch(e) { if(opts.WTF) throw e; }
+						} catch(e) { if(options.WTF) throw e; }
 						addline({c:j, r:val.r}, temp_val, options);
 					}
 				} break;
@@ -4860,7 +4859,7 @@ function parse_workbook(blob, options) {
 							if(temp_val.XF) try {
 								temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 								if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-							} catch(e) { if(opts.WTF) throw e; }
+							} catch(e) { if(options.WTF) throw e; }
 							addline(val.cell, temp_val, options);
 					}
 				} break;
@@ -4873,7 +4872,7 @@ function parse_workbook(blob, options) {
 						if(temp_val.XF) try {
 							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 							if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-						} catch(e) { if(opts.WTF) throw e; }
+						} catch(e) { if(options.WTF) throw e; }
 						addline(last_formula.cell, temp_val, options);
 						last_formula = null;
 					}
@@ -4892,7 +4891,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'Label': {
@@ -4901,11 +4900,11 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'Dimensions': {
-					range = val;
+					if(file_depth === 1) range = val; /* TODO: stack */
 				} break;
 				case 'SST': {
 					sst = val;
@@ -5046,8 +5045,8 @@ function parse_workbook(blob, options) {
 
 				/* Should not Happen */
 				case 'Continue': case 'ContinueFrt12': break;
-				/* Uncomment next line in development */
-				default: throw 'Unrecognized Record ' + R.n;
+
+				default: if(options.WTF) throw 'Unrecognized Record ' + R.n;
 			}
 			lst.push([R.n, s, val]);
 			continue;
@@ -5057,8 +5056,6 @@ function parse_workbook(blob, options) {
 	}
 	var sheetnamesraw = Object.keys(Directory).sort(function(a,b) { return Number(a) - Number(b); }).map(function(x){return Directory[x].name;});
 	var sheetnames = []; sheetnamesraw.forEach(function(x){sheetnames.push(x);});
-	//console.log(lst);
-	//lst.filter(function(x) { return x[0] === 'Formula';}).forEach(function(x){console.log(x[2].cell,x[2].formula);});
 	wb.Directory=sheetnamesraw;
 	wb.SheetNames=sheetnamesraw;
 	if(!options.bookSheets) wb.Sheets=Sheets;
@@ -5130,9 +5127,9 @@ function sheet_to_row_object_array(sheet, opts){
 }
 
 function sheet_to_csv(sheet, opts) {
-	var out = "", txt = "";
+	var out = [], txt = "";
 	opts = opts || {};
-	if(!sheet || !sheet["!ref"]) return out;
+	if(!sheet || !sheet["!ref"]) return "";
 	var r = utils.decode_range(sheet["!ref"]);
 	var fs = opts.FS||",", rs = opts.RS||"\n";
 
@@ -5142,14 +5139,13 @@ function sheet_to_csv(sheet, opts) {
 			var val = sheet[utils.encode_cell({c:C,r:R})];
 			if(!val) { row.push(""); continue; }
 			txt = String(format_cell(val));
-			if(txt.indexOf(fs) !== -1 || txt.indexOf(rs) !== -1 || txt.indexOf("\"") !== -1){
-				txt = "\""+txt.replace(/"/g, '""') +"\"";
-			}
+			if(txt.indexOf(fs)!==-1 || txt.indexOf(rs)!==-1 || txt.indexOf('"')!==-1)
+				txt = "\"" + txt.replace(/"/g, '""') + "\"";
 			row.push(txt);
 		}
-		out += row.join(fs) + (rs);
+		out.push(row.join(fs));
 	}
-	return out;
+	return out.join(rs) + (out.length ? rs : "");
 }
 var make_csv = sheet_to_csv;
 

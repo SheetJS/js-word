@@ -273,7 +273,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'BoolErr': {
@@ -281,7 +281,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'RK': {
@@ -289,7 +289,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'MulRk': {
@@ -299,7 +299,7 @@ function parse_workbook(blob, options) {
 						if(temp_val.XF) try {
 							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 							if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-						} catch(e) { if(opts.WTF) throw e; }
+						} catch(e) { if(options.WTF) throw e; }
 						addline({c:j, r:val.r}, temp_val, options);
 					}
 				} break;
@@ -314,7 +314,7 @@ function parse_workbook(blob, options) {
 							if(temp_val.XF) try {
 								temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 								if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-							} catch(e) { if(opts.WTF) throw e; }
+							} catch(e) { if(options.WTF) throw e; }
 							addline(val.cell, temp_val, options);
 					}
 				} break;
@@ -327,7 +327,7 @@ function parse_workbook(blob, options) {
 						if(temp_val.XF) try {
 							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 							if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-						} catch(e) { if(opts.WTF) throw e; }
+						} catch(e) { if(options.WTF) throw e; }
 						addline(last_formula.cell, temp_val, options);
 						last_formula = null;
 					}
@@ -346,7 +346,7 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'Label': {
@@ -355,11 +355,11 @@ function parse_workbook(blob, options) {
 					if(temp_val.XF) try {
 						temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 						if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
-					} catch(e) { if(opts.WTF) throw e; }
+					} catch(e) { if(options.WTF) throw e; }
 					addline({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'Dimensions': {
-					range = val;
+					if(file_depth === 1) range = val; /* TODO: stack */
 				} break;
 				case 'SST': {
 					sst = val;
@@ -500,8 +500,8 @@ function parse_workbook(blob, options) {
 
 				/* Should not Happen */
 				case 'Continue': case 'ContinueFrt12': break;
-				/* Uncomment next line in development */
-				default: throw 'Unrecognized Record ' + R.n;
+
+				default: if(options.WTF) throw 'Unrecognized Record ' + R.n;
 			}
 			lst.push([R.n, s, val]);
 			continue;
@@ -511,8 +511,6 @@ function parse_workbook(blob, options) {
 	}
 	var sheetnamesraw = Object.keys(Directory).sort(function(a,b) { return Number(a) - Number(b); }).map(function(x){return Directory[x].name;});
 	var sheetnames = []; sheetnamesraw.forEach(function(x){sheetnames.push(x);});
-	//console.log(lst);
-	//lst.filter(function(x) { return x[0] === 'Formula';}).forEach(function(x){console.log(x[2].cell,x[2].formula);});
 	wb.Directory=sheetnamesraw;
 	wb.SheetNames=sheetnamesraw;
 	if(!options.bookSheets) wb.Sheets=Sheets;
@@ -584,9 +582,9 @@ function sheet_to_row_object_array(sheet, opts){
 }
 
 function sheet_to_csv(sheet, opts) {
-	var out = "", txt = "";
+	var out = [], txt = "";
 	opts = opts || {};
-	if(!sheet || !sheet["!ref"]) return out;
+	if(!sheet || !sheet["!ref"]) return "";
 	var r = utils.decode_range(sheet["!ref"]);
 	var fs = opts.FS||",", rs = opts.RS||"\n";
 
@@ -596,14 +594,13 @@ function sheet_to_csv(sheet, opts) {
 			var val = sheet[utils.encode_cell({c:C,r:R})];
 			if(!val) { row.push(""); continue; }
 			txt = String(format_cell(val));
-			if(txt.indexOf(fs) !== -1 || txt.indexOf(rs) !== -1 || txt.indexOf("\"") !== -1){
-				txt = "\""+txt.replace(/"/g, '""') +"\"";
-			}
+			if(txt.indexOf(fs)!==-1 || txt.indexOf(rs)!==-1 || txt.indexOf('"')!==-1)
+				txt = "\"" + txt.replace(/"/g, '""') + "\"";
 			row.push(txt);
 		}
-		out += row.join(fs) + (rs);
+		out.push(row.join(fs));
 	}
-	return out;
+	return out.join(rs) + (out.length ? rs : "");
 }
 var make_csv = sheet_to_csv;
 

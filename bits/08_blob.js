@@ -19,7 +19,7 @@ function readIEEE754(buf, idx, isLE, nl, ml) {
 var Base64 = (function(){
 	var map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	return {
-		encode: function(input, utf8) {
+		/* (will need this for writing) encode: function(input, utf8) {
 			var o = "";
 			var c1, c2, c3, e1, e2, e3, e4;
 			for(var i = 0; i < input.length; ) {
@@ -35,7 +35,7 @@ var Base64 = (function(){
 				o += map.charAt(e1) + map.charAt(e2) + map.charAt(e3) + map.charAt(e4);
 			}
 			return o;
-		},
+		},*/
 		decode: function(input, utf8) {
 			var o = "";
 			var c1, c2, c3;
@@ -76,7 +76,7 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
 		var t = Array(this.slice(i+4,i+4+len-1));
-		var c, j = i+4, o = "", cc;
+		var c, j = i+4, o = [], cc;
 		for(;j!=i+4+len;++j) {
 			c = this.readUInt8(j);
 			cc = current_cptable.dec[c];
@@ -86,9 +86,9 @@ if(typeof Buffer !== "undefined") {
 			}
 			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
 			if(c === 0) break;
-			o += cc;
+			o.push(cc);
 		}
-		return o;
+		return o.join("");
 	};
 	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
 } else {
@@ -108,9 +108,9 @@ var __readDoubleLE = function(b, idx) { return b.readDoubleLE ? b.readDoubleLE(i
 
 var __hexlify = function(b) { return b.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
 
-var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var str = ""; for(var i=s; i<e; i+=2) str += String.fromCharCode(__readUInt16LE(b,i)); return str.replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
+var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var ss=[]; for(var i=s; i<e; i+=2) ss.push(String.fromCharCode(__readUInt16LE(b,i))); return ss.join("").replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
-var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var str = ""; for(var i=s; i<e; i++) str += String.fromCharCode(__readUInt8(b,i)); return str; };
+var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var ss=[]; for(var i=s; i<e; i++) ss.push(String.fromCharCode(__readUInt8(b,i))); return ss.join(""); };
 
 var __lpstr = function(b,i) { if(b.lpstr) return b.lpstr(i); var len = __readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
 var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return __utf8(b, i+4,i+4+len-1);};
@@ -118,7 +118,7 @@ var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__re
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
 function ReadShift(size, t) {
-	var o, w, vv, i, loc; t = t || 'u';
+	var o, oo=[], w, vv, i, loc; t = t || 'u';
 	if(size === 'ieee754') { size = 8; t = 'f'; }
 	switch(size) {
 		case 1: o = __readUInt8(this, this.l); break;
@@ -144,11 +144,11 @@ function ReadShift(size, t) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
-					return o + vv;
+					return oo.join("") + vv;
 				}
-				o += _getchar(__readUInt16LE(this, loc));
+				oo.push(_getchar(__readUInt16LE(this, loc)));
 				loc+=2;
-			} break;
+			} o = oo.join(""); break;
 
 		case 'sbcs': size = t; o = ""; loc = this.l;
 			for(i = 0; i != t; ++i) {
@@ -156,18 +156,18 @@ function ReadShift(size, t) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
 					vv = ReadShift.call(this, w ? 'dbcs' : 'sbcs', t-i);
-					return o + vv;
+					return oo.join("") + vv;
 				}
-				o += _getchar(__readUInt8(this, loc));
+				oo.push(_getchar(__readUInt8(this, loc)));
 				loc+=1;
-			} break;
+			} o = oo.join(""); break;
 
 		case 'cstr': size = 0; o = "";
-			while((w=__readUInt8(this, this.l + size++))!==0) o+= _getchar(w);
-			break;
+			while((w=__readUInt8(this, this.l + size++))!==0) oo.push(_getchar(w));
+			o = oo.join(""); break;
 		case 'wstr': size = 0; o = "";
-			while((w=__readUInt16LE(this,this.l +size))!==0){o+= _getchar(w);size+=2;}
-			size+=2; break;
+			while((w=__readUInt16LE(this,this.l +size))!==0){oo.push(_getchar(w));size+=2;}
+			size+=2; o = oo.join(""); break;
 	}
 	this.l+=size; return o;
 }
