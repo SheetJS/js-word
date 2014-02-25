@@ -1,6 +1,6 @@
 # xls
 
-Currently a parser for XLS files.  Cleanroom implementation from the Microsoft Open Specifications.
+Currently a parser for XLS (BIFF8) and XML (2003/2004) files.  Cleanroom implementation from the Microsoft Open Specifications.
 
 ## Installation
 
@@ -77,7 +77,7 @@ The exported `read` and `readFile` functions accept an options argument:
 
 `CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
 
-The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).
+The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).  XML files are not processed by the CFB parser.
 
 ## Test Files
 

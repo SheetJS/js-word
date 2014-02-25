@@ -1,6 +1,7 @@
 LIB=xls
 DEPS=$(wildcard bits/*.js)
 TARGET=$(LIB).js
+FMT=xls xml misc
 
 $(TARGET): $(DEPS)
 	cat $^ > $@
@@ -24,9 +25,11 @@ init:
 test mocha: test.js
 	mocha -R spec
 
-.PHONY: oldtest
-oldtest:
-	bin/test.sh
+TESTFMT=$(patsubst %,test_%,$(FMT))
+.PHONY: $(TESTFMT)
+$(TESTFMT): test_%:
+	FMTS=$* make test
+
 
 .PHONY: lint
 lint: $(TARGET)

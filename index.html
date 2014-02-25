@@ -18,7 +18,7 @@
 <input type="radio" name="format" value="json"> JSON<br>
 <input type="radio" name="format" value="form"> FORMULAE<br>
 
-<div id="drop">Drop an XLS file here to see sheet data.</div>
+<div id="drop">Drop an XLS or XML (2003) file here to see sheet data.</div>
 <!--
 <textarea id="b64data">... or paste a base64-encoding here</textarea>
 <input type="button" id="dotext" value="Click here to process the base64 text" onclick="b64it();"/>
@@ -27,12 +27,13 @@
 <br />
 <script src="xls.js"></script>
 <script>
+var use_worker = true;
 function xlsworker(data, cb) {
 	var worker = new Worker('./xlsworker.js');
 	worker.onmessage = function(e) {
 		switch(e.data.t) {
 			case 'ready': break;
-			case 'e': console.error(e.data.d);
+			case 'e': console.error(e.data); break;
 			case 'xls': cb(e.data.d); break;
 		}
 	};
@@ -87,8 +88,11 @@ function to_formulae(workbook) {
 
 var tarea = document.getElementById('b64data');
 function b64it() {
+/*
 	var cfb = XLS.CFB.read(tarea.value, {type: 'base64'});
 	var wb = XLS.parse_xlscfb(cfb);
+*/
+	var wb = XLS.read(tarea.value, {type:'base64'});
 	process_wb(wb);
 }
 
@@ -101,7 +105,7 @@ function process_wb(wb) {
 			break;
 		case "form":
 			output = to_formulae(wb);
-			break; 
+			break;
 		default:
 			output = to_csv(wb);
 	}
@@ -120,13 +124,14 @@ function handleDrop(e) {
 		var name = f.name;
 		reader.onload = function(e) {
 			var data = e.target.result;
-			if(typeof Worker !== 'undefined') {
+			if(use_worker && typeof Worker !== 'undefined') {
 				xlsworker(data, process_wb);
 			} else {
-				var cfb = XLS.CFB.read(data, {type: 'binary'});
+				/*var cfb = XLS.CFB.read(data, {type: 'binary'});
 				//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
 				//var cfb = XLS.CFB.read(btoa(arr), {type: 'base64'});
-				var wb = XLS.parse_xlscfb(cfb);
+				var wb = XLS.parse_xlscfb(cfb);*/
+				var wb = XLS.read(data, {type:'binary'});
 				process_wb(wb);
 			}
 		};

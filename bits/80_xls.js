@@ -72,6 +72,7 @@ function parse_workbook(blob, options) {
 	var Preamble = {};
 	var lastcell, last_cell;
 	var shared_formulae = {};
+	var array_formulae = []; /* TODO: something more clever */
 	var temp_val;
 	var cell_valid = true;
 	var XFs = []; /* XF records */
@@ -86,6 +87,7 @@ function parse_workbook(blob, options) {
 		sbcch: 0, // cch in the preceding SupBook
 		snames: [], // sheetnames
 		sharedf: shared_formulae, // shared formulae by address
+		arrayf: array_formulae, // array formulae array
 		rrtabid: [], // RRTabId
 		lastuser: "", // Last User from WriteAccess
 		codepage: 0, // CP from CodePage record
@@ -96,6 +98,7 @@ function parse_workbook(blob, options) {
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
 	supbooks.sharedf = opts.sharedf;
+	supbooks.arrayf = opts.arrayf;
 	var last_Rn = '';
 	var file_depth = 0; /* TODO: make a real stack */
 	while(blob.l < blob.length - 1) {
@@ -307,15 +310,16 @@ function parse_workbook(blob, options) {
 					switch(val.val) {
 						case 'String': last_formula = val; break;
 						case 'Array Formula': throw "Array Formula unsupported";
-						default: // TODO: infer type from formula
-							temp_val = {v:val.val, ixfe:val.cell.ixfe, t:'n'};
+						default:
+							temp_val = {v:val.val, ixfe:val.cell.ixfe, t:val.tt};
 							temp_val.XF = XFs[temp_val.ixfe];
-							if(options.cellFormula) temp_val.f = stringify_formula(val.formula,range,val.cell,supbooks);
+							if(options.cellFormula) temp_val.f = "="+stringify_formula(val.formula,range,val.cell,supbooks);
 							if(temp_val.XF) try {
 								temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 								if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
 							} catch(e) { if(options.WTF) throw e; }
 							addline(val.cell, temp_val, options);
+							last_formula = val;
 					}
 				} break;
 				case 'String': {
@@ -323,7 +327,7 @@ function parse_workbook(blob, options) {
 						last_formula.val = val;
 						temp_val = {v:last_formula.val, ixfe:last_formula.cell.ixfe, t:'s'};
 						temp_val.XF = XFs[temp_val.ixfe];
-						if(options.cellFormula) temp_val.f = stringify_formula(last_formula.formula, range, last_formula.cell, supbooks);
+						if(options.cellFormula) temp_val.f = "="+stringify_formula(last_formula.formula, range, last_formula.cell, supbooks);
 						if(temp_val.XF) try {
 							temp_val.w=SSF.format(temp_val.XF.ifmt||0, temp_val.v);
 							if(options.cellNF) temp_val.z = SSF._table[temp_val.XF.ifmt||0];
@@ -333,12 +337,13 @@ function parse_workbook(blob, options) {
 					}
 				} break;
 				case 'Array': {
-					/* console.error(val); */
+					array_formulae.push(val);
 				} break;
 				case 'ShrFmla': {
 					if(!cell_valid) break;
-					if(options.cellFormula) out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
-					shared_formulae[last_cell] = val[0];
+					//if(options.cellFormula) out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
+					/* TODO: capture range */
+					shared_formulae[encode_cell(last_formula.cell)]= val[0];
 				} break;
 				case 'LabelSst': {
 					temp_val={v:sst[val.isst].t, ixfe:val.ixfe, t:'s'};
@@ -365,7 +370,6 @@ function parse_workbook(blob, options) {
 					sst = val;
 				} break;
 				case 'Format': { /* val = [id, fmt] */
-					//console.log(val);
 					SSF.load(val[1], val[0]);
 				} break;
 				case 'Scl': {
@@ -635,7 +639,3 @@ var utils = {
 	sheet_to_row_object_array: sheet_to_row_object_array
 };
 
-function xlsread(f, options) {
-	return parse_xlscfb(CFB.read(f, options), options);
-}
-var readFile = function(f,o){return parse_xlscfb(CFB.read(f,{type:'file'}),o);};
