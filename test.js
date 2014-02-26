@@ -5,7 +5,7 @@ describe('source',function(){it('should load',function(){XLS=require('./');});})
 
 var opts = {};
 if(process.env.WTF) opts.WTF = true;
-var ex = [".xls",".xml"];
+var ex = [".xls", ".xml"];
 if(process.env.FMTS) ex=process.env.FMTS.split(":").map(function(x){return x[0]==="."?x:"."+x;});
 var exp = ex.map(function(x){ return x + ".pending"; });
 function test_file(x){return ex.indexOf(x.substr(-4))>=0||exp.indexOf(x.substr(-12))>=0;}
@@ -19,9 +19,8 @@ function normalizecsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").rep
 
 var dir = "./test_files/";
 
-function parsetest(x, wb, ext) {
-	var y = x + (ext||"");
-	describe(y + ' should have all bits', function() {
+function parsetest(x, wb) {
+	describe(x + ' should have all bits', function() {
 		var sname = dir + '2011/' + x + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
@@ -32,31 +31,30 @@ function parsetest(x, wb, ext) {
 			assert.equal(names, file);
 		} : null);
 	});
-	describe(y + ' should generate CSV', function() {
+	describe(x + ' should generate CSV', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
 				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(y + ' should generate JSON', function() {
+	describe(x + ' should generate JSON', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
 				var json = XLS.utils.sheet_to_row_object_array(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(y + ' should generate formulae', function() {
+	describe(x + ' should generate formulae', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
 				var json = XLS.utils.get_formulae(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(y + ' should generate correct output', function() {
+	describe(x + ' should generate correct output', function() {
 		wb.SheetNames.forEach(function(ws, i) {
-			var name = (dir + y + '.' + i + '.csv');
-			if(!fs.existsSync(name)) name = (dir + x + '.' + i + '.csv');
+			var name = (dir + x + '.' + i + '.csv');
 			if(x.substr(-4) === ".xls") {
 				root = x.slice(0,-4);
 				if(!fs.existsSync(name)) name=(dir + root + '.xlsx.'+i+'.csv');
@@ -70,17 +68,19 @@ function parsetest(x, wb, ext) {
 			} : null);
 		});
 	});
+	if(!fs.existsSync(dir + x + '.xml')) return;
+	describe(x + '.xml from 2011', function() {
+		it('should parse', function() {
+			var xlsb = XLS.readFile(dir + x + '.xml', opts);
+		});
+	});
 }
 
 describe('should parse test files', function() {
 	files.forEach(function(x) {
-		if(!process.env.XLML) it(x, x.substr(-8) == ".pending" ? null : function() {
+		it(x, x.substr(-8) == ".pending" ? null : function() {
 			var wb = XLS.readFile(dir + x, opts);
 			parsetest(x, wb);
-		});
-		if(fs.existsSync(dir + x + ".xml")) it(x+".xml", function() {
-			var wb = XLS.readFile(dir + x + ".xml", opts);
-			parsetest(x, wb, ".xml");
 		});
 	});
 });
@@ -140,6 +140,11 @@ describe('options', function() {
 			assert(typeof wb.Sheets.Text.B26 !== 'undefined');
 			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
 			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			wb = XLS.readFile(dir+'formula_stress_test.xls.xml');
+			assert(typeof wb.Sheets.Text.A46 !== 'undefined');
+			assert(typeof wb.Sheets.Text.B26 !== 'undefined');
+			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
 		});
 		it('sheetRows n=20', function() {
 			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:20});
@@ -147,9 +152,19 @@ describe('options', function() {
 			assert(typeof wb.Sheets.Text.B26 === 'undefined');
 			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
 			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			wb = XLS.readFile(dir+'formula_stress_test.xls.xml', {sheetRows:20});
+			assert(typeof wb.Sheets.Text.A46 === 'undefined');
+			assert(typeof wb.Sheets.Text.B26 === 'undefined');
+			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
 		});
 		it('sheetRows n=10', function() {
 			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:10});
+			assert(typeof wb.Sheets.Text.A46 === 'undefined');
+			assert(typeof wb.Sheets.Text.B26 === 'undefined');
+			assert(typeof wb.Sheets.Text.C16 === 'undefined');
+			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			wb = XLS.readFile(dir+'formula_stress_test.xls.xml', {sheetRows:10});
 			assert(typeof wb.Sheets.Text.A46 === 'undefined');
 			assert(typeof wb.Sheets.Text.B26 === 'undefined');
 			assert(typeof wb.Sheets.Text.C16 === 'undefined');

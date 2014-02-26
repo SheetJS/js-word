@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.9-b';
+XLS.version = '0.6.9-c';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -5361,7 +5361,7 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[0].match(/\/>$/)) ++c;
 			else if(Rn[1]==='/'){
 				delete cell[0];
-				cursheet[encode_cell({c:c,r:r})] = cell;
+				if(!opts.sheetRows || opts.sheetRows > r) cursheet[encode_cell({c:c,r:r})] = cell;
 				++c;
 			} else {
 				cell = parsexmltag(Rn[0]);
@@ -5420,11 +5420,84 @@ function parse_xlml_xml(d, opts) {
 		case 'Sub': break;
 		case 'Sup': break;
 		case 'Span': break;
+		case 'Border': break;
 		case 'Alignment': break;
 		case 'Borders': break;
 		case 'Font': break;
 		case 'Interior': break;
 		case 'Protection': break;
+
+		/* TODO: Normalize the properties */
+		case 'Author': break;
+		case 'Title': break;
+		case 'Description': break;
+		case 'Created': break;
+		case 'Keywords': break;
+		case 'Subject': break;
+		case 'Category': break;
+		case 'Company': break;
+		case 'LastAuthor': break;
+		case 'LastSaved': break;
+		case 'LastPrinted': break;
+		case 'Version': break;
+		case 'Revision': break;
+		case 'TotalTime': break;
+		case 'Manager': break;
+
+		/* CustomDocumentProperties */
+		case 'Text': break;
+		case 'Status': break;
+		case 'Counter': break;
+		case 'Date': break;
+
+		/* OfficeDocumentSettings */
+		case 'AllowPNG': break;
+		case 'RemovePersonalInformation': break;
+		case 'Colors': break;
+		case 'Color': break;
+		case 'Index': break;
+		case 'RGB': break;
+
+		/* ExcelWorkbook */
+		case 'WindowHeight': break;
+		case 'WindowWidth': break;
+		case 'WindowTopX': break;
+		case 'WindowTopY': break;
+		case 'TabRatio': break;
+		case 'ProtectStructure': break;
+		case 'ProtectWindows': break;
+		case 'ActiveSheet': break;
+		case 'DisplayInkNotes': break;
+		case 'FirstVisibleSheet': break;
+		case 'SupBook': break;
+		case 'Dll': break;
+
+		/* WorksheetOptions */
+		case 'Unsynced': break;
+		case 'Print': break;
+		case 'Panes': break;
+		case 'Scale': break;
+		case 'Pane': break;
+		case 'Number': break;
+		case 'Layout': break;
+		case 'Header': break;
+		case 'Footer': break;
+		case 'PageSetup': break;
+		case 'PageMargins': break;
+		case 'Selected': break;
+		case 'ProtectObjects': break;
+		case 'EnableSelection': break;
+		case 'ProtectScenarios': break;
+		case 'ValidPrinterInfo': break;
+		case 'HorizontalResolution': break;
+		case 'VerticalResolution': break;
+		case 'ActiveRow': break;
+		case 'ActiveCol': break;
+		case 'TopRowVisible': break;
+		case 'FitToPage': break;
+		case 'FitHeight': break;
+		case 'RangeSelection': break;
+		case 'PaperSizeIndex': break;
 
 		case 'Styles':
 		case 'Workbook': {
@@ -5442,7 +5515,7 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
 			else state.push([Rn[3], true]);
 		} break;
-		default: if(!state[state.length-1][1]) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
+		default: if(!state[state.length-1][1] || opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 	}
 	out.Sheets = sheets;
 	out.SheetNames = sheetnames;
@@ -5454,6 +5527,7 @@ function parse_xlml(data, opts) {
 	switch((opts||{}).type||"base64") {
 		case "base64": return parse_xlml_xml(Base64.decode(data), opts);
 		case "binary": case "file": return parse_xlml_xml(data, opts);
+		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts)
 		default: throw "dafuq";
 	}
 }
@@ -5462,12 +5536,12 @@ function firstbyte(f,o) {
 		case 'buffer': return f[0];
 		case 'base64': return Base64.decode(f.substr(0,12)).charCodeAt(0);
 		case 'binary': return f.charCodeAt(0);
+		case 'array': return f[0];
 		default: return 0xD0;
 	}
 }
 
 function xlsread(f, o) {
-	/* TODO: enable browser xlml support */
 	switch(firstbyte(f, o)) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
 		case 0x3C: return parse_xlml(f, o);
