@@ -1951,10 +1951,9 @@ var parse_OleObjectSize = parsenoop;
 var parse_SXVS = parsenoop;
 function parse_MergeCells(blob, length) {
     var merges = [];
-    var read = blob.read_shift.bind(blob);
-    var cmcs = read(2);
+    var cmcs = blob.read_shift(2);
     while (cmcs--) {
-        merges.push([read(2),read(2),read(2),read(2)]);
+        merges.push(parse_Ref8U(blob,length));
     }
     return merges;
 }
