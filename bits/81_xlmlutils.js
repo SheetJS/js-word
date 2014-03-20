@@ -72,6 +72,7 @@ function matchtag(f,g) {return new RegExp('<'+f+'(?: xml:space="preserve")?>([^\
 
 /* TODO: handle codepages */
 function fixstr(str) {
+	str = str.replace(/&#([0-9]+);/g,function($$,$1) { return String.fromCharCode($1); });
 	if(typeof current_cptable === "undefined") return str;
 	return str;
 }

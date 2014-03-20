@@ -24,7 +24,7 @@ function xlml_format(format, value) {
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
-function parse_xlml_data(xml, data, cell, base, styles, o) {
+function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 	var nf = "General", sid = cell.StyleID; o = o || {};
 	while(styles[sid]) {
 		if(styles[sid].nf) nf = styles[sid].nf;
@@ -34,10 +34,13 @@ function parse_xlml_data(xml, data, cell, base, styles, o) {
 
 	switch(data.Type) {
 		case 'Boolean':
-			cell.t = 'b'; cell.v = parsexmlbool(xml);
+			cell.t = 'b';
+			cell.v = parsexmlbool(xml);
 			break;
 		case 'String':
-			cell.t = 'str'; cell.v = fixstr(unescapexml(xml)); break;
+			cell.t = 'str'; cell.r = fixstr(unescapexml(xml));
+			cell.v = xml.indexOf("<") > -1 ? ss : cell.r;
+			break;
 		case 'DateTime':
 			cell.v = (Date.parse(xml) - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
 			if(cell.v !== cell.v) cell.v = unescapexml(xml);
@@ -71,11 +74,12 @@ function parse_xlml_xml(d, opts) {
 	var c = 0, r = 0;
 	var refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
 	var styles = {}, stag = {};
+	var ss = "", fidx = 0;
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), dtag, cell, {c:c,r:r}, styles, opts);
-			else { dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, cell, {c:c,r:r}, styles, opts);
+			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
 			if(Rn[0].match(/\/>$/)) ++c;
@@ -143,7 +147,11 @@ function parse_xlml_xml(d, opts) {
 		case 'Border': break;
 		case 'Alignment': break;
 		case 'Borders': break;
-		case 'Font': break;
+		case 'Font': {
+			if(Rn[0].match(/\/>$/)) break;
+			else if(Rn[1]==="/") ss += str.slice(fidx, Rn.index);
+			else fidx = Rn.index + Rn[0].length;
+		} break;
 		case 'Interior': break;
 		case 'Protection': break;
 
@@ -244,10 +252,11 @@ function parse_xlml_xml(d, opts) {
 }
 
 function parse_xlml(data, opts) {
-	switch((opts||{}).type||"base64") {
+	fixopts(opts=opts||{});
+	switch(opts.type||"base64") {
 		case "base64": return parse_xlml_xml(Base64.decode(data), opts);
 		case "binary": case "file": return parse_xlml_xml(data, opts);
-		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts)
+		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts);
 		default: throw "dafuq";
 	}
 }

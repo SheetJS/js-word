@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.9-c';
+XLS.version = '0.6.10';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -209,7 +209,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.5.8';
+SSF.version = '0.5.9';
 /* Options */
 var opts_fmt = {};
 function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
@@ -446,9 +446,10 @@ var write_num = function(type, fmt, val) {
 		o = Math.round(val * Math.pow(10,r[1].length));
 		return String(o/Math.pow(10,r[1].length)).replace(/^([^\.]+)$/,"$1."+r[1]).replace(/\.$/,"."+r[1]).replace(/\.([0-9]*)$/,function($$, $1) { return "." + $1 + fill("0", r[1].length-$1.length); });
 	}
+	fmt = fmt.replace(/^#+0/, "0");
 	if((r = fmt.match(/^(0*)\.(#*)$/))) {
-		o = Math.round(val*Math.pow(10,r[2].length));
-		return String(o * Math.pow(10,-r[2].length)).replace(/\.(\d*[1-9])0*$/,".$1").replace(/^([-]?\d*)$/,"$1.").replace(/^0\./,r[1].length?"0.":".");
+		o = Math.round(aval*Math.pow(10,r[2].length));
+		return sign + String(o / Math.pow(10,r[2].length)).replace(/\.(\d*[1-9])0*$/,".$1").replace(/^([-]?\d*)$/,"$1.").replace(/^0\./,r[1].length?"0.":".");
 	}
 	if((r = fmt.match(/^#,##0([.]?)$/))) return sign + commaify(String(Math.round(aval)));
 	if((r = fmt.match(/^#,##0\.([#0]*0)$/))) {
@@ -5275,6 +5276,7 @@ function matchtag(f,g) {return new RegExp('<'+f+'(?: xml:space="preserve")?>([^\
 
 /* TODO: handle codepages */
 function fixstr(str) {
+	str = str.replace(/&#([0-9]+);/g,function($$,$1) { return String.fromCharCode($1); });
 	if(typeof current_cptable === "undefined") return str;
 	return str;
 }
@@ -5304,7 +5306,7 @@ function xlml_format(format, value) {
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
-function parse_xlml_data(xml, data, cell, base, styles, o) {
+function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 	var nf = "General", sid = cell.StyleID; o = o || {};
 	while(styles[sid]) {
 		if(styles[sid].nf) nf = styles[sid].nf;
@@ -5314,10 +5316,13 @@ function parse_xlml_data(xml, data, cell, base, styles, o) {
 
 	switch(data.Type) {
 		case 'Boolean':
-			cell.t = 'b'; cell.v = parsexmlbool(xml);
+			cell.t = 'b';
+			cell.v = parsexmlbool(xml);
 			break;
 		case 'String':
-			cell.t = 'str'; cell.v = fixstr(unescapexml(xml)); break;
+			cell.t = 'str'; cell.r = fixstr(unescapexml(xml));
+			cell.v = xml.indexOf("<") > -1 ? ss : cell.r;
+			break;
 		case 'DateTime':
 			cell.v = (Date.parse(xml) - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
 			if(cell.v !== cell.v) cell.v = unescapexml(xml);
@@ -5351,11 +5356,12 @@ function parse_xlml_xml(d, opts) {
 	var c = 0, r = 0;
 	var refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
 	var styles = {}, stag = {};
+	var ss = "", fidx = 0;
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), dtag, cell, {c:c,r:r}, styles, opts);
-			else { dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, cell, {c:c,r:r}, styles, opts);
+			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
 			if(Rn[0].match(/\/>$/)) ++c;
@@ -5423,7 +5429,11 @@ function parse_xlml_xml(d, opts) {
 		case 'Border': break;
 		case 'Alignment': break;
 		case 'Borders': break;
-		case 'Font': break;
+		case 'Font': {
+			if(Rn[0].match(/\/>$/)) break;
+			else if(Rn[1]==="/") ss += str.slice(fidx, Rn.index);
+			else fidx = Rn.index + Rn[0].length;
+		} break;
 		case 'Interior': break;
 		case 'Protection': break;
 
@@ -5524,10 +5534,11 @@ function parse_xlml_xml(d, opts) {
 }
 
 function parse_xlml(data, opts) {
-	switch((opts||{}).type||"base64") {
+	fixopts(opts=opts||{});
+	switch(opts.type||"base64") {
 		case "base64": return parse_xlml_xml(Base64.decode(data), opts);
 		case "binary": case "file": return parse_xlml_xml(data, opts);
-		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts)
+		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts);
 		default: throw "dafuq";
 	}
 }
