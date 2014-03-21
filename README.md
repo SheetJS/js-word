@@ -119,6 +119,8 @@ OSP-covered specifications:
  - [MS-OSHARED]: Office Common Data Types and Objects Structures
  - [MS-OVBA]: Office VBA File Format Structure
  - [MS-OE376]: Office Implementation Information for ECMA-376 Standards Support
+ - [MS-CTXLS]: Excel Custom Toolbar Binary File Format
+ - [MS-XLDM]: Spreadsheet Data Model File Format
  - [XLS]: Microsoft Office Excel 97-2007 Binary File Format Specification
 
 Certain features are shared with the Office Open XML File Formats, covered in:

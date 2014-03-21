@@ -226,6 +226,7 @@ describe('features', function() {
 describe('invalid files', function() {
 	it('should fail on passwords', function() {
 		assert.throws(function() { XLS.readFile(dir + 'apachepoi_password.xls'); });
+		assert.throws(function() { XLS.readFile(dir + 'apachepoi_xor-encryption-abc.xls'); });
 	});
 	it('should fail on XLSX files', function() {
 		assert.throws(function() { XLS.readFile(dir + 'roo_type_excelx.xls'); });

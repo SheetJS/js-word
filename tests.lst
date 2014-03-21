@@ -1,5 +1,6 @@
 comments_stress_test.xls.b64
 formula_stress_test.xls.b64
+AutoFilter.xls
 LONumbers-2010.xls
 LONumbers-2011.xls
 LONumbers.xls
@@ -463,6 +464,7 @@ xlrd_profiles.xls
 xlrd_ragged.xls
 xlrd_xf_class.xls
 xlsx-stream-d-date-cell.xls
+AutoFilter.xml
 LONumbers-2010.xls.xml
 LONumbers-2010.xlsx.xml
 LONumbers-2011.xls.xml

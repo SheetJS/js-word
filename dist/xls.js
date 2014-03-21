@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.10';
+XLS.version = '0.6.11';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -5040,6 +5040,7 @@ function parse_workbook(blob, options) {
 				/* Filter */
 				case 'FilterMode': break;
 				case 'AutoFilter': case 'AutoFilterInfo': break;
+				case 'AutoFilter12': break;
 				case 'DropDownObjIds': break;
 				case 'Sort': break;
 				case 'SortData': break;
@@ -5508,6 +5509,15 @@ function parse_xlml_xml(d, opts) {
 		case 'FitHeight': break;
 		case 'RangeSelection': break;
 		case 'PaperSizeIndex': break;
+		case 'PageLayoutZoom': break;
+		case 'FilterOn': break;
+
+		/* AutoFilter */
+		case 'AutoFilter': break;
+		case 'AutoFilterColumn': break;
+		case 'AutoFilterCondition': break;
+		case 'AutoFilterAnd': break;
+		case 'AutoFilterOr': break;
 
 		case 'Styles':
 		case 'Workbook': {

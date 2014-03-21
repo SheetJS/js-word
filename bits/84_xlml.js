@@ -226,6 +226,15 @@ function parse_xlml_xml(d, opts) {
 		case 'FitHeight': break;
 		case 'RangeSelection': break;
 		case 'PaperSizeIndex': break;
+		case 'PageLayoutZoom': break;
+		case 'FilterOn': break;
+
+		/* AutoFilter */
+		case 'AutoFilter': break;
+		case 'AutoFilterColumn': break;
+		case 'AutoFilterCondition': break;
+		case 'AutoFilterAnd': break;
+		case 'AutoFilterOr': break;
 
 		case 'Styles':
 		case 'Workbook': {
