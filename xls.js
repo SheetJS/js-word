@@ -1950,7 +1950,14 @@ var parse_BookBool = parsenoop;
 var parse_DbOrParamQry = parsenoop;
 var parse_OleObjectSize = parsenoop;
 var parse_SXVS = parsenoop;
-var parse_MergeCells = parsenoop;
+function parse_MergeCells(blob, length) {
+    var merges = [];
+    var cmcs = blob.read_shift(2);
+    while (cmcs--) {
+        merges.push(parse_Ref8U(blob,length));
+    }
+    return merges;
+}
 var parse_BkHim = parsenoop;
 var parse_MsoDrawingGroup = parsenoop;
 var parse_MsoDrawing = parsenoop;
@@ -4823,6 +4830,7 @@ function parse_workbook(blob, options) {
 							out["!ref"] = encode_range(range);
 							range.e.r++; range.e.c++;
 						}
+                        out["!mergeCells"] = wb.opts.mergeCells;
 					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
@@ -4959,9 +4967,9 @@ function parse_workbook(blob, options) {
 
 				} break;
 
-				case 'MergeCells': break;
+				case 'MergeCells': wb.opts.mergeCells = val; break;
 
-				case 'WOpt': break; // TODO: WTF?
+                case 'WOpt': break; // TODO: WTF?
 				case 'HLink': case 'HLinkTooltip': break;
 
 				case 'PhoneticInfo': break;
