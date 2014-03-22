@@ -94,6 +94,7 @@ function parse_workbook(blob, options) {
 		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
+	var mergecells = [];
 	var supbooks = [[]]; // 1-indexed, will hold extern names
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
@@ -260,6 +261,7 @@ function parse_workbook(blob, options) {
 							out["!ref"] = encode_range(range);
 							range.e.r++; range.e.c++;
 						}
+						if(mergecells.length > 0) out["!merges"] = mergecells;
 					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
@@ -270,6 +272,7 @@ function parse_workbook(blob, options) {
 					out = {};
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
+					mergecells = [];
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
@@ -396,7 +399,7 @@ function parse_workbook(blob, options) {
 
 				} break;
 
-				case 'MergeCells': break;
+				case 'MergeCells': mergecells = mergecells.concat(val); break;
 
 				case 'WOpt': break; // TODO: WTF?
 				case 'HLink': case 'HLinkTooltip': break;

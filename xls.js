@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.11';
+XLS.version = '0.6.12';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -1836,6 +1836,14 @@ function parse_Note(blob, length) {
 	return parse_NoteSh(blob, length);
 }
 
+/* 2.4.168 */
+function parse_MergeCells(blob, length) {
+	var merges = [];
+	var cmcs = blob.read_shift(2);
+	while (cmcs--) merges.push(parse_Ref8U(blob,length));
+	return merges;
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -1950,14 +1958,6 @@ var parse_BookBool = parsenoop;
 var parse_DbOrParamQry = parsenoop;
 var parse_OleObjectSize = parsenoop;
 var parse_SXVS = parsenoop;
-function parse_MergeCells(blob, length) {
-    var merges = [];
-    var cmcs = blob.read_shift(2);
-    while (cmcs--) {
-            merges.push(parse_Ref8U(blob,length));
-        }
-    return merges;
-}
 var parse_BkHim = parsenoop;
 var parse_MsoDrawingGroup = parsenoop;
 var parse_MsoDrawing = parsenoop;
@@ -4664,6 +4664,7 @@ function parse_workbook(blob, options) {
 		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
+	var mergecells = [];
 	var supbooks = [[]]; // 1-indexed, will hold extern names
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
@@ -4830,7 +4831,7 @@ function parse_workbook(blob, options) {
 							out["!ref"] = encode_range(range);
 							range.e.r++; range.e.c++;
 						}
-                        out["!mergeCells"] = wb.opts.mergeCells;
+						if(mergecells.length > 0) out["!merges"] = mergecells;
 					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
@@ -4841,6 +4842,7 @@ function parse_workbook(blob, options) {
 					out = {};
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
+					mergecells = [];
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
@@ -4967,7 +4969,7 @@ function parse_workbook(blob, options) {
 
 				} break;
 
-				case 'MergeCells': wb.opts.mergeCells = val; break;
+				case 'MergeCells': mergecells = mergecells.concat(val); break;
 
 				case 'WOpt': break; // TODO: WTF?
 				case 'HLink': case 'HLinkTooltip': break;
@@ -5357,7 +5359,7 @@ function parse_xlml_xml(d, opts) {
 	if(typeof Buffer!=='undefined'&&d instanceof Buffer) str = d.toString('utf8');
 	else if(typeof d === 'string') str = d;
 	else throw "badf";
-	var re = /<(\/?)([a-z]*:|)([A-Za-z]+)[^>]*>/mg, Rn;
+	var re = /<(\/?)([a-z]*:|)([A-Za-z_0-9]+)[^>]*>/mg, Rn;
 	var state = [], tmp;
 	var out = {};
 	var sheets = {}, sheetnames = [], cursheet = {}, sheetname = "";
@@ -5366,6 +5368,8 @@ function parse_xlml_xml(d, opts) {
 	var refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
 	var styles = {}, stag = {};
 	var ss = "", fidx = 0;
+	var mergecells = [];
+	var Props = {}, Custprops = {}, pidx = 0;
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
@@ -5377,7 +5381,13 @@ function parse_xlml_xml(d, opts) {
 			else if(Rn[1]==='/'){
 				delete cell[0];
 				if(!opts.sheetRows || opts.sheetRows > r) cursheet[encode_cell({c:c,r:r})] = cell;
+				if(cell.MergeAcross || cell.MergeDown) {
+					var cc = c + Number(cell.MergeAcross||0);
+					var rr = r + Number(cell.MergeDown||0);
+					mergecells.push({s:{c:c,r:r},e:{c:cc,r:rr}});
+				}
 				++c;
+				if(cell.MergeAcross) c += +cell.MergeAcross;
 			} else {
 				cell = parsexmltag(Rn[0]);
 				if(cell.Index) c = +cell.Index - 1;
@@ -5397,6 +5407,7 @@ function parse_xlml_xml(d, opts) {
 				if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;
 				sheetnames.push(sheetname);
 				cursheet["!ref"] = encode_range(refguess);
+				if(mergecells.length) cursheet["!merges"] = mergecells;
 				sheets[sheetname] = cursheet;
 			} else {
 				refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
@@ -5405,6 +5416,7 @@ function parse_xlml_xml(d, opts) {
 				tmp = parsexmltag(Rn[0]);
 				sheetname = tmp.Name;
 				cursheet = {};
+				mergecells = [];
 			}
 		} break;
 		case 'Table': {
@@ -5447,27 +5459,25 @@ function parse_xlml_xml(d, opts) {
 		case 'Protection': break;
 
 		/* TODO: Normalize the properties */
-		case 'Author': break;
-		case 'Title': break;
-		case 'Description': break;
-		case 'Created': break;
-		case 'Keywords': break;
-		case 'Subject': break;
-		case 'Category': break;
-		case 'Company': break;
-		case 'LastAuthor': break;
-		case 'LastSaved': break;
-		case 'LastPrinted': break;
-		case 'Version': break;
-		case 'Revision': break;
-		case 'TotalTime': break;
-		case 'Manager': break;
-
-		/* CustomDocumentProperties */
-		case 'Text': break;
-		case 'Status': break;
-		case 'Counter': break;
-		case 'Date': break;
+		case 'Author':
+		case 'Title':
+		case 'Description':
+		case 'Created':
+		case 'Keywords':
+		case 'Subject':
+		case 'Category':
+		case 'Company':
+		case 'LastAuthor':
+		case 'LastSaved':
+		case 'LastPrinted':
+		case 'Version':
+		case 'Revision':
+		case 'TotalTime':
+		case 'Manager': {
+			if(Rn[0].match(/\/>$/)) break;
+			else if(Rn[1]==="/") Props[Rn[3]] = str.slice(pidx, Rn.index);
+			else pidx = Rn.index + Rn[0].length;
+		} break;
 
 		/* OfficeDocumentSettings */
 		case 'AllowPNG': break;
@@ -5543,11 +5553,23 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
 			else state.push([Rn[3], true]);
 		} break;
-		default: if(!state[state.length-1][1] || opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
+		
+		/* CustomDocumentProperties */
+		default:
+			if(!state[state.length-1][1]) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
+			if(state[state.length-1][0]==='CustomDocumentProperties') {
+				if(Rn[0].match(/\/>$/)) break;
+				else if(Rn[1]==="/") Custprops[Rn[3].replace(/_x0020_/g," ")] = str.slice(pidx, Rn.index);
+				else pidx = Rn.index + Rn[0].length;
+				break;
+			}
+			if(opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 	}
 	out.Sheets = sheets;
 	out.SheetNames = sheetnames;
 	out.SSF = SSF.get_table();
+	out.Props = Props;
+	out.Custprops = Custprops;
 	return out;
 }
 

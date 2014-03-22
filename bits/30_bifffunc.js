@@ -402,6 +402,14 @@ function parse_Note(blob, length) {
 	return parse_NoteSh(blob, length);
 }
 
+/* 2.4.168 */
+function parse_MergeCells(blob, length) {
+	var merges = [];
+	var cmcs = blob.read_shift(2);
+	while (cmcs--) merges.push(parse_Ref8U(blob,length));
+	return merges;
+}
+
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
 var parse_BottomMargin = parse_Xnum; /* 2.4.27 */
@@ -516,7 +524,6 @@ var parse_BookBool = parsenoop;
 var parse_DbOrParamQry = parsenoop;
 var parse_OleObjectSize = parsenoop;
 var parse_SXVS = parsenoop;
-var parse_MergeCells = parsenoop;
 var parse_BkHim = parsenoop;
 var parse_MsoDrawingGroup = parsenoop;
 var parse_MsoDrawing = parsenoop;

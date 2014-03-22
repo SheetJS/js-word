@@ -204,21 +204,46 @@ describe('input formats', function() {
 
 describe('features', function() {
 	describe('should parse core properties and custom properties', function() {
-		var wb;
+		var wbxls, wbxml;
 		before(function() {
 			XLS = require('./');
-			wb = XLS.readFile(dir+'custom_properties.xls');
+			wbxls = XLS.readFile(dir+'custom_properties.xls');
+			wbxml = XLS.readFile(dir+'custom_properties.xls.xml');
 		});
-		it('Must have read the core properties', function() {
-			assert.equal(wb.Props.Company, 'Vector Inc');
-			assert.equal(wb.Props.Author, 'Pony Foo'); /* XLSX uses Creator */
+		it('XLS should parse core properties', function() {
+			assert.equal(wbxls.Props.Company, 'Vector Inc');
+			assert.equal(wbxls.Props.Author, 'Pony Foo');
 		});
-		it('Must have read the custom properties', function() {
-			assert.equal(wb.Custprops['I am a boolean'], true);
+		it('XML should parse core properties', function() {
+			assert.equal(wbxml.Props.Company, 'Vector Inc');
+			assert.equal(wbxml.Props.Author, 'Pony Foo');
+		});
+		it('XLS should parse custom properties', function() {
+			assert.equal(wbxls.Custprops['I am a boolean'], true);
 			/* The date test requires parsing FILETIME (64 bit integer) */
-			//assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
-			assert.equal(wb.Custprops.Status, 2);
-			assert.equal(wb.Custprops.Counter, -3.14);
+			//assert.equal(wbxls.Custprops['Date completed'], '1967-03-09T16:30:00Z');
+			assert.equal(wbxls.Custprops.Status, 2);
+			assert.equal(wbxls.Custprops.Counter, -3.14);
+		});
+		it('XML should parse custom properties', function() {
+			assert.equal(wbxml.Custprops['I am a boolean'], true);
+			assert.equal(wbxml.Custprops['Date completed'], '1967-03-09T16:30:00Z');
+			assert.equal(wbxml.Custprops.Status, 2);
+			assert.equal(wbxml.Custprops.Counter, -3.14);
+		});
+	});
+	describe('merge cells',function() {
+		var wbxls, wbxml;
+		before(function() {
+			XLS = require('./');
+			wbxls = XLS.readFile(dir+'merge_cells.xls');
+			wbxml = XLS.readFile(dir+'merge_cells.xls.xml');
+		});
+		it('should have !merges', function() {
+			assert(wbxls.Sheets.Merge['!merges']);
+			assert(wbxml.Sheets.Merge['!merges']);
+			var m = [wbxls,wbxml].map(function(x) { return x.Sheets.Merge['!merges'].map(function(y) { return XLS.utils.encode_range(y); });});
+			assert.deepEqual(m[0].sort(),m[1].sort());
 		});
 	});
 });
