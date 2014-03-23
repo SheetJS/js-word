@@ -68,10 +68,14 @@ function parsetest(x, wb) {
 			} : null);
 		});
 	});
-	if(!fs.existsSync(dir + x + '.xml')) return;
-	describe(x + '.xml from 2011', function() {
+	if(fs.existsSync(dir + x + '.xml')) describe(x + '.xml from 2011', function() {
 		it('should parse', function() {
 			var xlsb = XLS.readFile(dir + x + '.xml', opts);
+		});
+	});
+	if(fs.existsSync(dir + '2011/' + x + '.xml')) describe(x + '.xml from 2011', function() {
+		it('should parse', function() {
+			var xlml = XLS.readFile(dir + '2011/' + x + '.xml', opts);
 		});
 	});
 }
