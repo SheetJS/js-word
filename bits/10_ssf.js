@@ -5,7 +5,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.5.9';
+SSF.version = '0.5.11';
 /* Options */
 var opts_fmt = {};
 function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
@@ -205,6 +205,8 @@ var write_num = function(type, fmt, val) {
 	var mul = 0, o;
 	fmt = fmt.replace(/%/g,function(x) { mul++; return ""; });
 	if(mul !== 0) return write_num(type, fmt, val * Math.pow(10,2*mul)) + fill("%",mul);
+	fmt = fmt.replace(/(\.0+)(,+)$/g,function($$,$1,$2) { mul=$2.length; return $1; });
+	if(mul !== 0) return write_num(type, fmt, val / Math.pow(10,3*mul));
 	if(fmt.indexOf("E") > -1) {
 		var idx = fmt.indexOf("E") - fmt.indexOf(".") - 1;
 		if(fmt.match(/^#+0.0E\+0$/)) {
@@ -238,11 +240,12 @@ var write_num = function(type, fmt, val) {
 	if(fmt.match(/^#+0+$/)) fmt = fmt.replace(/#/g,"");
 	if(fmt.match(/^00+$/)) return (val<0?"-":"")+pad(Math.round(aval),fmt.length);
 	if(fmt.match(/^[#?]+$/)) return String(Math.round(val)).replace(/^0$/,"");
-	if((r = fmt.match(/^#*0+\.(0+)/))) {
+	if((r = fmt.match(/^#*0*\.(0+)/))) {
 		o = Math.round(val * Math.pow(10,r[1].length));
-		return String(o/Math.pow(10,r[1].length)).replace(/^([^\.]+)$/,"$1."+r[1]).replace(/\.$/,"."+r[1]).replace(/\.([0-9]*)$/,function($$, $1) { return "." + $1 + fill("0", r[1].length-$1.length); });
+		rr = String(o/Math.pow(10,r[1].length)).replace(/^([^\.]+)$/,"$1."+r[1]).replace(/\.$/,"."+r[1]).replace(/\.([0-9]*)$/,function($$, $1) { return "." + $1 + fill("0", r[1].length-$1.length); });
+		return fmt.match(/0\./) ? rr : rr.replace(/^0\./,".");
 	}
-	fmt = fmt.replace(/^#+0/, "0");
+	fmt = fmt.replace(/^#+([0.])/, "$1");
 	if((r = fmt.match(/^(0*)\.(#*)$/))) {
 		o = Math.round(aval*Math.pow(10,r[2].length));
 		return sign + String(o / Math.pow(10,r[2].length)).replace(/\.(\d*[1-9])0*$/,".$1").replace(/^([-]?\d*)$/,"$1.").replace(/^0\./,r[1].length?"0.":".");
@@ -252,6 +255,11 @@ var write_num = function(type, fmt, val) {
 		rr = Math.round((val-Math.floor(val))*Math.pow(10,r[1].length));
 		return val < 0 ? "-" + write_num(type, fmt, -val) : commaify(String(Math.floor(val))) + "." + pad(rr,r[1].length,0);
 	}
+	if((r = fmt.match(/^([?]+)([ ]?)\/([ ]?)([?]+)/))) {
+		rr = Math.min(Math.max(r[1].length, r[4].length),7);
+		ff = frac(aval, Math.pow(10,rr)-1, false);
+		return sign + (ff[0]||(ff[1] ? "" : "0")) + (ff[1] ? pad(ff[1],rr," ") + r[2] + "/" + r[3] + rpad(ff[2],rr," "): fill(" ", 2*rr+1 + r[2].length + r[3].length));
+	}
 	if((r = fmt.match(/^# ([?]+)([ ]?)\/([ ]?)([?]+)/))) {
 		rr = Math.min(Math.max(r[1].length, r[4].length),7);
 		ff = frac(aval, Math.pow(10,rr)-1, true);
@@ -259,8 +267,6 @@ var write_num = function(type, fmt, val) {
 	}
 	switch(fmt) {
 		case "0": case "#0": return Math.round(val);
-		case "#.##": o = Math.round(val*100);
-			return String(o/100).replace(/^([^\.]+)$/,"$1.").replace(/^0\.$/,".");
 		case "#,###": var x = commaify(String(Math.round(aval))); return x !== "0" ? sign + x : "";
 		default:
 	}
@@ -305,7 +311,7 @@ function eval_fmt(fmt, v, opts, flen) {
 			case 'M': case 'D': case 'Y': case 'H': case 'S': case 'E':
 				c = c.toLowerCase();
 				/* falls through */
-			case 'm': case 'd': case 'y': case 'h': case 's': case 'e':
+			case 'm': case 'd': case 'y': case 'h': case 's': case 'e': case 'g':
 				if(v < 0) return "";
 				if(!dt) dt = parse_date_code(v, opts);
 				if(!dt) return "";

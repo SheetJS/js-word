@@ -532,8 +532,10 @@ roo_formula_parse_error.xml
 roo_numbers1.xml
 roo_only_one_sheet.xml
 roo_paragraph.xml
-roo_simple_spreadsheet.xml
+roo_simple_spreadsheet.xml.pending
 roo_simple_spreadsheet_from_italo.xml
 roo_style.xml
 roo_time-test.xml
 roo_whitespace.xml
+2011/apachepoi_53568.xlsx.xls
+2011/openpyxl_r_conditional-formatting.xlsx.xls

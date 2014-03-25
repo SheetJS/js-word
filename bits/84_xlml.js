@@ -44,10 +44,13 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 			cell.v = (Date.parse(xml) - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
 			if(cell.v !== cell.v) cell.v = unescapexml(xml);
 			else if(cell.v >= 1 && cell.v<60) cell.v = cell.v -1;
+			if(!nf || nf == "General") nf = "yyyy-mm-dd";
 			/* falls through */
 		case 'Number':
 			if(typeof cell.v === 'undefined') cell.v=Number(xml);
 			if(!cell.t) cell.t = 'n';
+			/* TODO: the next line is undocumented black magic */
+			//if((!nf || (nf == "General" && !cell.Formula)) && (cell.v != (cell.v|0))) { nf="#,##0.00"; console.log(cell.v, cell.v|0)}
 			break;
 		case 'Error': cell.t = 'e'; cell.v = xml; cell.w = xml; break;
 	}
@@ -101,14 +104,22 @@ function parse_xlml_xml(d, opts) {
 				if(cell.Index) c = +cell.Index - 1;
 				if(c < refguess.s.c) refguess.s.c = c;
 				if(c > refguess.e.c) refguess.e.c = c;
+				if(Rn[0].match(/\/>$/)) ++c;
 			}
 		} break;
 		case 'Row': {
-			if(Rn[1]==='/') {
+			if(Rn[1]==='/' || Rn[0].match(/\/>$/)) {
 				if(r < refguess.s.r) refguess.s.r = r;
 				if(r > refguess.e.r) refguess.e.r = r;
+				if(Rn[0].match(/\/>$/)) {
+					row = parsexmltag(Rn[0]);
+					if(row.Index) r = +row.Index - 1;
+				}
 				c = 0; ++r;
-			} else { row = parsexmltag(Rn[0]); if(row.Index) r = +row.Index - 1; }
+			} else {
+				row = parsexmltag(Rn[0]);
+				if(row.Index) r = +row.Index - 1;
+			}
 		} break;
 		case 'Worksheet': { /* TODO: read range from FullRows/FullColumns */
 			if(Rn[1]==='/'){

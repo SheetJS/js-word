@@ -213,6 +213,8 @@ function parse_workbook(blob, options) {
 				/* Table */
 				case 'Table': break; // TODO
 				case 'TableStyles': break; // TODO
+				case 'TableStyle': break; // TODO
+				case 'TableStyleElement': break; // TODO
 
 				/* PivotTable */
 				case 'SXStreamID': break; // TODO
