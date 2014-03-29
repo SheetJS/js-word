@@ -204,6 +204,9 @@ describe('input formats', function() {
 		XLS.read(fs.readFileSync(dir+'comments_stress_test.xls', 'base64'), {type: 'base64'});
 		XLS.read(fs.readFileSync(dir+'comments_stress_test.xls.xml', 'base64'), {type: 'base64'});
 	});
+	it('should read array', function() {
+		XLS.read(fs.readFileSync(dir+'merge_cells.xls.xml', 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
+	});
 });
 
 describe('features', function() {
@@ -236,6 +239,7 @@ describe('features', function() {
 			assert.equal(wbxml.Custprops.Counter, -3.14);
 		});
 	});
+
 	describe('merge cells',function() {
 		var wbxls, wbxml;
 		before(function() {

@@ -221,6 +221,13 @@ function parse_workbook(blob, options) {
 				case 'SXVS': break; // TODO
 				case 'DConRef': break; // TODO
 				case 'SXAddl': break; // TODO
+				case 'DConName': break; // TODO
+				case 'SXPI': break; // TODO
+				//case 'SxFormat': break; // TODO
+				//case 'SxRule': break; // TODO
+				//case 'SxFilt': break; // TODO
+				//case 'SxItm': break; // TODO
+				//case 'SxDXF': break; // TODO
 
 				/* Scenario Manager */
 				case 'ScenMan': break;

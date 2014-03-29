@@ -199,6 +199,7 @@ function parse_xlml_xml(d, opts) {
 			else if(Rn[1]==="/") Props[Rn[3]] = str.slice(pidx, Rn.index);
 			else pidx = Rn.index + Rn[0].length;
 		} break;
+		case 'Paragraphs': break;
 
 		/* OfficeDocumentSettings */
 		case 'AllowPNG': break;
@@ -284,7 +285,6 @@ function parse_xlml_xml(d, opts) {
 		case 'LeftColumnVisible': break;
 		case 'LeftColumnRightPane': break;
 		case 'FitToPage': break;
-		case 'FitHeight': break;
 		case 'RangeSelection': break;
 		case 'PaperSizeIndex': break;
 		case 'PageLayoutZoom': break;
@@ -352,9 +352,18 @@ function parse_xlml_xml(d, opts) {
 		case 'ConsolidationReference': break;
 		case 'FileName': break;
 		case 'Reference': break;
+		case 'NoColumnGrand': break;
 		case 'NoRowGrand': break;
 		case 'BlankLineAfterItems': break;
 		case 'DoNotCalculateBeforeSave': break;
+		case 'Hidden': break;
+		case 'Subtotal': break;
+		case 'BaseField': break;
+		case 'MapChildItems': break;
+		case 'Function': break;
+		case 'RefreshOnFileOpen': break;
+		case 'PrintSetTitles': break;
+		case 'MergeLabels': break;
 
 		/* PageBreaks */
 		case 'ColBreaks': break;
@@ -421,6 +430,7 @@ function parse_xlml_xml(d, opts) {
 		case 'Delimiters': break;
 		case 'Tab': break;
 		case 'Comma': break;
+		case 'AutoFormatName': break;
 
 		/* DataValidation */
 		case 'Type': break;
@@ -449,8 +459,18 @@ function parse_xlml_xml(d, opts) {
 		case 'Field': break;
 		case 'XSDType': break;
 		case 'Aggregate': break;
+		case 'ElementType': break;
+		case 'AttributeType': break;
 		/* These are from xsd (XML Schema Definition) */
-		case 'schema': case 'element': case 'complexType': case 'all': break;
+		case 'schema':
+		case 'element':
+		case 'complexType':
+		case 'datatype':
+		case 'all':
+		case 'attribute':
+		case 'extends': break;
+
+		case 'data': case 'row': break;
 
 		case 'Styles':
 		case 'Workbook': {
@@ -462,6 +482,7 @@ function parse_xlml_xml(d, opts) {
 		case 'CustomDocumentProperties':
 		case 'OfficeDocumentSettings':
 		case 'PivotTable':
+		case 'PivotCache':
 		case 'Names':
 		case 'MapInfo':
 		case 'PageBreaks':
@@ -474,7 +495,7 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
 			else state.push([Rn[3], true]);
 		} break;
-		
+
 		/* CustomDocumentProperties */
 		default:
 			if(!state[state.length-1][1]) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
