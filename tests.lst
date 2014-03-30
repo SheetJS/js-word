@@ -5,6 +5,7 @@ BlankSheetTypes.xls
 LONumbers-2010.xls
 LONumbers-2011.xls
 LONumbers.xls
+NumberFormatCondition.xls
 RkNumber.xls
 apachepoi_12561-1.xls
 apachepoi_12561-2.xls
@@ -473,6 +474,7 @@ LONumbers-2010.xlsx.xml
 LONumbers-2011.xls.xml
 LONumbers-2011.xlsx.xml
 LONumbers.xls.xml
+NumberFormatCondition.xml
 RkNumber.xls.xml
 RkNumber.xlsb.xml
 RkNumber.xlsx.xml
@@ -515,6 +517,7 @@ oo34xml_pagesheet.xml
 oo34xml_rowcolumn.xml
 oo34xml_solvsamp.xml
 pivot_table_named_range.xml
+protect_stress_test_xml.xml
 rich_text_stress.xls.xml
 rich_text_stress.xlsb.xml
 rich_text_stress.xlsx.xml

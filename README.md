@@ -66,10 +66,12 @@ The exported `read` and `readFile` functions accept an options argument:
 | bookProps   | false   | If true, only parse enough to get book metadata ** |
 | bookSheets  | false   | If true, only parse enough to get the sheet names |
 
+- `cellFormula` only applies to constructing XLS formulae.  XLML R1C1 formulae
+  are stored in plaintext, but XLS formulae are stored in a binary format.
 - Even if `cellNF` is false, formatted text (.w) will be generated
 - In some cases, sheets may be parsed even if `bookSheets` is false.
 - `bookSheets` and `bookProps` combine to give both sets of information
-- `bookFiles` adds a `cfb` object
+- `bookFiles` adds a `cfb` object (XLS only)
 - `sheetRows-1` rows will be generated when looking at the JSON object output
   (since the header row is counted as a row when parsing the data)
 

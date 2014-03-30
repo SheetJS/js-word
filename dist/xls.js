@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.15';
+XLS.version = '0.6.16';
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') var cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
@@ -209,7 +209,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.6.1';
+SSF.version = '0.6.2';
 /* Options */
 var opts_fmt = {};
 function fixopts(o){for(var y in opts_fmt) if(o[y]===undefined) o[y]=opts_fmt[y];}
@@ -324,7 +324,7 @@ var parse_date_code = function parse_date_code(v,opts) {
 	var dout=[], out={D:date, T:time, u:86400*(v-date)-time}; fixopts(opts = (opts||{}));
 	if(opts.date1904) date += 1462;
 	if(date > 2958465) return null;
-	if(out.u > .999) {
+	if(out.u > 0.999) {
 		out.u = 0;
 		if(++time == 86400) { time = 0; ++date; }
 	}
@@ -405,13 +405,13 @@ var write_date = function(type, fmt, val) {
 /*jshint +W086 */
 var commaify = function(s) { return _strrev(_strrev(s).replace(/.../g,"$&,")).replace(/^,/,""); };
 var write_num = function(type, fmt, val) {
-	if(type === '(') {
+	if(type === '(' && !fmt.match(/\).*[0#]/)) {
 		var ffmt = fmt.replace(/\( */,"").replace(/ \)/,"").replace(/\)/,"");
 		if(val >= 0) return write_num('n', ffmt, val);
 		return '(' + write_num('n', ffmt, -val) + ')';
 	}
 	var mul = 0, o;
-	fmt = fmt.replace(/%/g,function(x) { mul++; return ""; });
+	fmt = fmt.replace(/%/g,function() { mul++; return ""; });
 	if(mul !== 0) return write_num(type, fmt, val * Math.pow(10,2*mul)) + fill("%",mul);
 	fmt = fmt.replace(/(\.0+)(,+)$/g,function($$,$1,$2) { mul=$2.length; return $1; });
 	if(mul !== 0) return write_num(type, fmt, val / Math.pow(10,3*mul));
@@ -464,6 +464,18 @@ var write_num = function(type, fmt, val) {
 		return val < 0 ? "-" + write_num(type, fmt, -val) : commaify(String(Math.floor(val))) + "." + pad(rr,r[1].length,0);
 	}
 	if((r = fmt.match(/^#,#*,#0/))) return write_num(type,fmt.replace(/^#,#*,/,""),val);
+	if((r = fmt.match(/^([0#]+)-([0#]+)$/))) {
+		ff = write_num(type, fmt.replace(/-/,""), val);
+		return ff.substr(0,ff.length - r[2].length) + "-" + ff.substr(ff.length-r[2].length);
+	}
+	if((r = fmt.match(/^([0#]+)-([0#]+)-([0#]+)$/))) {
+		ff = write_num(type, fmt.replace(/-/g,""), val);
+		return ff.substr(0,ff.length - r[2].length - r[3].length) + "-" + ff.substr(ff.length-r[2].length - r[3].length, r[2].length) + "-" + ff.substr(ff.length-r[3].length);
+	}
+	if(fmt == "(###) ###-####") {
+		ff = write_num(type, "##########", val);
+		return "(" + ff.substr(0,3) + ") " + ff.substr(3, 3) + "-" + ff.substr(6);
+	}
 	if((r = fmt.match(/^([?]+)([ ]?)\/([ ]?)([?]+)/))) {
 		rr = Math.min(Math.max(r[1].length, r[4].length),7);
 		ff = frac(aval, Math.pow(10,rr)-1, false);
@@ -588,12 +600,12 @@ function eval_fmt(fmt, v, opts, flen) {
 	switch(bt) {
 		case 0: break;
 		case 1:
-			if(dt.u >= .5) { dt.u = 0; ++dt.S; }
+			if(dt.u >= 0.5) { dt.u = 0; ++dt.S; }
 			if(dt.S >= 60) { dt.S = 0; ++dt.M; }
 			if(dt.M >= 60) { dt.M = 0; ++dt.H; }
 			break;
 		case 2:
-			if(dt.u >= .5) { dt.u = 0; ++dt.S; }
+			if(dt.u >= 0.5) { dt.u = 0; ++dt.S; }
 			if(dt.S >= 60) { dt.S = 0; ++dt.M; }
 			break;
 	}
@@ -606,7 +618,7 @@ function eval_fmt(fmt, v, opts, flen) {
 				out[i].t = 't'; break;
 			case 'n': case '(': case '?':
 				var jj = i+1;
-				while(out[jj] && ("?D".indexOf(out[jj].t) > -1 || (" t".indexOf(out[jj].t) > -1 && "?t".indexOf((out[jj+1]||{}).t)>-1 && (out[jj+1].t == '?' || out[jj+1].v == '/')) || out[i].t == '(' && (out[jj].t == ')' || out[jj].t == 'n') || out[jj].t == 't' && (out[jj].v == '/' || '$€'.indexOf(out[jj].v) > -1 || (out[jj].v == ' ' && (out[jj+1]||{}).t == '?')))) {
+				while(out[jj] && ("?D".indexOf(out[jj].t) > -1 || (" t".indexOf(out[jj].t) > -1 && "?t".indexOf((out[jj+1]||{}).t)>-1 && (out[jj+1].t == '?' || out[jj+1].v == '/')) || out[i].t == '(' && (")n ".indexOf(out[jj].t) > -1) || out[jj].t == 't' && (out[jj].v == '/' || '$€'.indexOf(out[jj].v) > -1 || (out[jj].v == ' ' && (out[jj+1]||{}).t == '?')))) {
 					out[i].v += out[jj].v;
 					delete out[jj]; ++jj;
 				}
@@ -632,7 +644,27 @@ function choose_fmt(fmt, v, o) {
 		default: throw "cannot find right format for |" + fmt + "|";
 	}
 	if(typeof v !== "number") return [fmt.length, fmt[3]];
-	return [l, v > 0 ? fmt[0] : v < 0 ? fmt[1] : fmt[2]];
+	var ff = v > 0 ? fmt[0] : v < 0 ? fmt[1] : fmt[2];
+	if(fmt[0].match(/\[[=<>]/) || fmt[1].match(/\[[=<>]/)) {
+		var chk = function(v, rr, out) {
+			if(!rr) return null;
+			var found = false;
+			var thresh = Number(rr[2]);
+			switch(rr[1]) {
+				case "=":  if(v == thresh) found = true; break;
+				case ">":  if(v >  thresh) found = true; break;
+				case "<":  if(v <  thresh) found = true; break;
+				case "<>": if(v != thresh) found = true; break;
+				case ">=": if(v >= thresh) found = true; break;
+				case "<=": if(v <= thresh) found = true; break;
+			}
+			return found ? out : null;
+		};
+		var m1 = fmt[0].match(/\[([=<>]*)([-]?\d+)\]/);
+		var m2 = fmt[1].match(/\[([=<>]*)([-]?\d+)\]/);
+		return chk(v, m1, [l, fmt[0]]) || chk(v, m2, [l, fmt[1]]) || [l, fmt[m1&&m2?2:1]];
+	}
+	return [l, ff];
 }
 var format = function format(fmt,v,o) {
 	fixopts(o = (o||{}));
@@ -1548,6 +1580,70 @@ function parse_RefU(blob, length) {
 /* 2.5.207 */
 var parse_Ref = parse_RefU;
 
+/* 2.5.143 */
+function parse_FtCmo(blob, length) {
+	blob.l += 4;
+	var ot = blob.read_shift(2);
+	var id = blob.read_shift(2);
+	var flags = blob.read_shift(2);
+	blob.l+=12;
+	return [id, ot, flags];
+}
+
+/* 2.5.149 */
+function parse_FtNts(blob, length) {
+	var out = {};
+	blob.l += 4;
+	blob.l += 16; // GUID TODO
+	out.fSharedNote = blob.read_shift(2);
+	blob.l += 4;
+	return out;
+}
+
+/* 2.5.142 */
+function parse_FtCf(blob, length) {
+	var out = {};
+	blob.l += 4;
+	blob.cf = blob.read_shift(2);
+	return out;
+}
+
+/* 2.5.140 - 2.5.154 and friends */
+var FtTab = {
+	0x15: parse_FtCmo,
+	0x13: parsenoop,                                /* FtLbsData */
+	0x12: function(blob, length) { blob.l += 12; }, /* FtCblsData */
+	0x11: function(blob, length) { blob.l += 8; },  /* FtRboData */
+	0x10: parsenoop,                                /* FtEdoData */
+	0x0F: parsenoop,                                /* FtGboData */
+	0x0D: parse_FtNts,                              /* FtNts */
+	0x0C: function(blob, length) { blob.l += 24; }, /* FtSbs */
+	0x0B: function(blob, length) { blob.l += 10; }, /* FtRbo */
+	0x0A: function(blob, length) { blob.l += 16; }, /* FtCbls */
+	0x09: parsenoop,                                /* FtPictFmla */
+	0x08: function(blob, length) { blob.l += 6; },  /* FtPioGrbit */
+	0x07: parse_FtCf,                               /* FtCf */
+	0x06: function(blob, length) { blob.l += 6; },  /* FtGmo */
+	0x04: parsenoop,                                /* FtMacro */
+	0x00: function(blob, length) { blob.l += 4; }   /* FtEnding */
+};
+function parse_FtArray(blob, length, ot) {
+	var s = blob.l;
+	var fts = [];
+	while(blob.l < s + length) {
+		var ft = blob.read_shift(2);
+		blob.l-=2;
+		try {
+			fts.push(FtTab[ft](blob, s + length - blob.l));
+		} catch(e) { blob.l = s + length; return fts; }
+	}
+	if(blob.l != s + length) blob.l = s + length; //throw "bad Object Ft-sequence";
+	return fts;
+}
+
+/* 2.5.129 */
+var parse_FontIndex = parseuint16;
+
 /* --- 2.4 Records --- */
 
 /* 2.4.21 */
@@ -1858,7 +1954,7 @@ function parse_NoteSh(blob, length) {
 	var flags = blob.read_shift(2), idObj = blob.read_shift(2);
 	var stAuthor = parse_XLUnicodeString(blob);
 	blob.read_shift(1);
-	return stAuthor;
+	return [{r:row,c:col}, stAuthor, idObj, flags];
 }
 
 /* 2.4.179 */
@@ -1873,6 +1969,53 @@ function parse_MergeCells(blob, length) {
 	var cmcs = blob.read_shift(2);
 	while (cmcs--) merges.push(parse_Ref8U(blob,length));
 	return merges;
+}
+
+/* 2.4.181 TODO: parse all the things! */
+function parse_Obj(blob, length) {
+	var cmo = parse_FtCmo(blob, 22); // id, ot, flags
+	var fts = parse_FtArray(blob, length-22, cmo[1]);
+	return { cmo: cmo, ft:fts };
+}
+
+/* 2.4.329 TODO: parse properly */
+function parse_TxO(blob, length, opts) {
+	var s = blob.l;
+try {
+	blob.l += 4;
+	var ot = (opts.lastobj||{cmo:[0,0]}).cmo[1];
+	var controlInfo;
+	if([0,5,7,11,12,14].indexOf(ot) == -1) blob.l += 6;
+	else controlInfo = parse_ControlInfo(blob, 6, opts);
+	var cchText = blob.read_shift(2);
+	var cbRuns = blob.read_shift(2);
+	var ifntEmpty = parse_FontIndex(blob, 2);
+	var len = blob.read_shift(2);
+	blob.l += len;
+	//var fmla = parse_ObjFmla(blob, s + length - blob.l);
+
+	var texts = "";
+	for(var i = 1; i < blob.lens.length-1; ++i) {
+		if(blob.l-s != blob.lens[i]) throw "TxO: bad continue record";
+		var hdr = blob[blob.l]
+		var t = parse_XLUnicodeStringNoCch(blob, blob.lens[i+1]-blob.lens[i]-1);
+		texts += t;
+		if(texts.length >= (hdr ? cchText : 2*cchText)) break;
+	}
+	if(texts.length !== cchText && texts.length !== cchText*2) {
+		throw "cchText: " + cchText + " != " + texts.length;
+	}
+
+	blob.l = s + length;
+	/* 2.5.272 TxORuns */
+//	var rgTxoRuns = [];
+//	for(var j = 0; j != cbRuns/8-1; ++j) blob.l += 8;
+//	var cchText2 = blob.read_shift(2);
+//	if(cchText2 !== cchText) throw "TxOLastRun mismatch: " + cchText2 + " " + cchText;
+//	blob.l += 6;
+//	if(s + length != blob.l) throw "TxO " + (s + length) + ", at " + blob.l;
+	return { t: texts };
+} catch(e) { blob.l = s + length; return { t: texts||"" }; }
 }
 
 var parse_Backup = parsebool; /* 2.4.14 */
@@ -1940,7 +2083,6 @@ var parse_DConName = parsenoop;
 var parse_XCT = parsenoop;
 var parse_CRN = parsenoop;
 var parse_FileSharing = parsenoop;
-var parse_Obj = parsenoop;
 var parse_Uncalced = parsenoop;
 var parse_Template = parsenoop;
 var parse_Intl = parsenoop;
@@ -2041,7 +2183,6 @@ var parse_CondFmt = parsenoop;
 var parse_CF = parsenoop;
 var parse_DVal = parsenoop;
 var parse_DConBin = parsenoop;
-var parse_TxO = parsenoop;
 var parse_HLink = parsenoop;
 var parse_Lel = parsenoop;
 var parse_CodeName = parse_XLUnicodeString;
@@ -4873,6 +5014,7 @@ function parse_workbook(blob, options) {
 							range.e.r++; range.e.c++;
 						}
 						if(mergecells.length > 0) out["!merges"] = mergecells;
+						if(objects.length > 0) out["!objects"] = objects;
 					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
@@ -4884,6 +5026,7 @@ function parse_workbook(blob, options) {
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
 					mergecells = [];
+					objects = [];
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
@@ -5012,14 +5155,15 @@ function parse_workbook(blob, options) {
 
 				case 'MergeCells': mergecells = mergecells.concat(val); break;
 
+				case 'Obj': objects[val.cmo[0]] = opts.lastobj = val; break;
+				case 'TxO': opts.lastobj.TxO = val; break;
+
 				case 'WOpt': break; // TODO: WTF?
 				case 'HLink': case 'HLinkTooltip': break;
 
 				case 'PhoneticInfo': break;
 
 				case 'OleObjectSize': break;
-
-				case 'TxO': break;
 
 				/* Differential Formatting */
 				case 'DXF': case 'DXFN': case 'DXFN12': case 'DXFN12List': case 'DXFN12NoCB': break;
@@ -5040,7 +5184,14 @@ function parse_workbook(blob, options) {
 				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
 
 				/* Comments */
-				case 'Note': break;
+				case 'Note': {
+					var cc = out[encode_cell(val[0])];
+					var noteobj = objects[val[2]];
+					if(!cc) break;
+					if(!cc.c) cc.c = [];
+					var cmnt = {a:val[1],t:noteobj.TxO.t};
+					cc.c.push(cmnt);
+				} break;
 				case 'NameCmt': break;
 
 				/* Chart */
@@ -5098,7 +5249,6 @@ function parse_workbook(blob, options) {
 				/* Drawing */
 				case 'ShapePropsStream': break;
 				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
-				case 'Obj': break;
 				case 'ImData': break;
 				/* Explicitly Ignored */
 				case 'Excel9File': break;
@@ -5262,7 +5412,7 @@ function parsexmltag(tag) {
 	var z = {'0': words[0]};
 	if(words.length === 1) return z;
 	(tag.match(attregexg) || []).map(
-		function(x){var y=x.match(attregex); z[y[1]] = y[2].substr(1,y[2].length-2); });
+		function(x){var y=x.match(attregex); z[y[1]] = unescapexml(y[2].substr(1,y[2].length-2)); });
 	return z;
 }
 
@@ -5387,6 +5537,7 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 			//if((!nf || (nf == "General" && !cell.Formula)) && (cell.v != (cell.v|0))) { nf="#,##0.00"; console.log(cell.v, cell.v|0)}
 			break;
 		case 'Error': cell.t = 'e'; cell.v = xml; cell.w = xml; break;
+		default: cell.t = 's'; cell.v = fixstr(ss); break;
 	}
 	if(cell.t !== 'e') try {
 		cell.w = xlml_format(nf||"General", cell.v);
@@ -5416,15 +5567,17 @@ function parse_xlml_xml(d, opts) {
 	var ss = "", fidx = 0;
 	var mergecells = [];
 	var Props = {}, Custprops = {}, pidx = 0;
+	var comments = [], comment = {};
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, cell, {c:c,r:r}, styles, opts);
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, opts);
 			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
 			if(Rn[1]==='/'){
 				delete cell[0];
+				if(comments.length > 0) cell.c = comments;
 				if((!opts.sheetRows || opts.sheetRows > r) && typeof cell.v !== 'undefined') cursheet[encode_cell({c:c,r:r})] = cell;
 				if(cell.MergeAcross || cell.MergeDown) {
 					var cc = c + Number(cell.MergeAcross||0);
@@ -5439,6 +5592,7 @@ function parse_xlml_xml(d, opts) {
 				if(c < refguess.s.c) refguess.s.c = c;
 				if(c > refguess.e.c) refguess.e.c = c;
 				if(Rn[0].match(/\/>$/)) ++c;
+				comments = [];
 			}
 		} break;
 		case 'Row': {
@@ -5548,6 +5702,16 @@ function parse_xlml_xml(d, opts) {
 		case 'TargetScreenSize': break;
 		case 'ReadOnlyRecommended': break;
 
+		/* ComponentOptions */
+		case 'Toolbar': break;
+		case 'HideOfficeLogo': break;
+		case 'SpreadsheetAutoFit': break;
+		case 'Label': break;
+		case 'Caption': break;
+		case 'MaxHeight': break;
+		case 'MaxWidth': break;
+		case 'NextSheetNumber': break;
+
 		/* ExcelWorkbook */
 		case 'WindowHeight': break;
 		case 'WindowWidth': break;
@@ -5589,6 +5753,12 @@ function parse_xlml_xml(d, opts) {
 		case 'Text': break;
 		case 'OLE': break;
 		case 'NoAutoRecover': break;
+		case 'PublishObjects': break;
+
+		/* WorkbookOptions */
+		case 'OWCVersion': break;
+		case 'Height': break;
+		case 'Width': break;
 
 		/* WorksheetOptions */
 		case 'Unsynced': break;
@@ -5659,6 +5829,9 @@ function parse_xlml_xml(d, opts) {
 		case 'NoOrientation': break;
 		case 'AllowUsePivotTables': break;
 		case 'ZeroHeight': break;
+		case 'ViewableRange': break;
+		case 'Selection': break;
+		case 'ProtectContents': break;
 
 		/* PivotTable */
 		case 'ImmediateItemsOnDrop': break;
@@ -5811,7 +5984,20 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
 			else state.push([Rn[3], false]);
 		} break;
-		case 'Comment':
+
+		case 'Comment': {
+			if(Rn[1]==='/'){
+				if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;
+				comment.t = comment.v;
+				delete comment.v; delete comment.w; delete comment.ixfe;
+				comments.push(comment);
+			} else {
+				state.push([Rn[3], false]);
+				tmp = parsexmltag(Rn[0]);
+				comment = {a:tmp.Author};
+			}
+		} break;
+		case 'ComponentOptions':
 		case 'DocumentProperties':
 		case 'CustomDocumentProperties':
 		case 'OfficeDocumentSettings':
@@ -5841,7 +6027,7 @@ function parse_xlml_xml(d, opts) {
 			}
 			if(opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 	}
-	out.Sheets = sheets;
+	if(!opts.bookSheets && !opts.bookProps) out.Sheets = sheets;
 	out.SheetNames = sheetnames;
 	out.SSF = SSF.get_table();
 	out.Props = Props;

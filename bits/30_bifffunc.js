@@ -83,6 +83,70 @@ function parse_RefU(blob, length) {
 /* 2.5.207 */
 var parse_Ref = parse_RefU;
 
+/* 2.5.143 */
+function parse_FtCmo(blob, length) {
+	blob.l += 4;
+	var ot = blob.read_shift(2);
+	var id = blob.read_shift(2);
+	var flags = blob.read_shift(2);
+	blob.l+=12;
+	return [id, ot, flags];
+}
+
+/* 2.5.149 */
+function parse_FtNts(blob, length) {
+	var out = {};
+	blob.l += 4;
+	blob.l += 16; // GUID TODO
+	out.fSharedNote = blob.read_shift(2);
+	blob.l += 4;
+	return out;
+}
+
+/* 2.5.142 */
+function parse_FtCf(blob, length) {
+	var out = {};
+	blob.l += 4;
+	blob.cf = blob.read_shift(2);
+	return out;
+}
+
+/* 2.5.140 - 2.5.154 and friends */
+var FtTab = {
+	0x15: parse_FtCmo,
+	0x13: parsenoop,                                /* FtLbsData */
+	0x12: function(blob, length) { blob.l += 12; }, /* FtCblsData */
+	0x11: function(blob, length) { blob.l += 8; },  /* FtRboData */
+	0x10: parsenoop,                                /* FtEdoData */
+	0x0F: parsenoop,                                /* FtGboData */
+	0x0D: parse_FtNts,                              /* FtNts */
+	0x0C: function(blob, length) { blob.l += 24; }, /* FtSbs */
+	0x0B: function(blob, length) { blob.l += 10; }, /* FtRbo */
+	0x0A: function(blob, length) { blob.l += 16; }, /* FtCbls */
+	0x09: parsenoop,                                /* FtPictFmla */
+	0x08: function(blob, length) { blob.l += 6; },  /* FtPioGrbit */
+	0x07: parse_FtCf,                               /* FtCf */
+	0x06: function(blob, length) { blob.l += 6; },  /* FtGmo */
+	0x04: parsenoop,                                /* FtMacro */
+	0x00: function(blob, length) { blob.l += 4; }   /* FtEnding */
+};
+function parse_FtArray(blob, length, ot) {
+	var s = blob.l;
+	var fts = [];
+	while(blob.l < s + length) {
+		var ft = blob.read_shift(2);
+		blob.l-=2;
+		try {
+			fts.push(FtTab[ft](blob, s + length - blob.l));
+		} catch(e) { blob.l = s + length; return fts; }
+	}
+	if(blob.l != s + length) blob.l = s + length; //throw "bad Object Ft-sequence";
+	return fts;
+}
+
+/* 2.5.129 */
+var parse_FontIndex = parseuint16;
+
 /* --- 2.4 Records --- */
 
 /* 2.4.21 */
@@ -393,7 +457,7 @@ function parse_NoteSh(blob, length) {
 	var flags = blob.read_shift(2), idObj = blob.read_shift(2);
 	var stAuthor = parse_XLUnicodeString(blob);
 	blob.read_shift(1);
-	return stAuthor;
+	return [{r:row,c:col}, stAuthor, idObj, flags];
 }
 
 /* 2.4.179 */
@@ -408,6 +472,53 @@ function parse_MergeCells(blob, length) {
 	var cmcs = blob.read_shift(2);
 	while (cmcs--) merges.push(parse_Ref8U(blob,length));
 	return merges;
+}
+
+/* 2.4.181 TODO: parse all the things! */
+function parse_Obj(blob, length) {
+	var cmo = parse_FtCmo(blob, 22); // id, ot, flags
+	var fts = parse_FtArray(blob, length-22, cmo[1]);
+	return { cmo: cmo, ft:fts };
+}
+
+/* 2.4.329 TODO: parse properly */
+function parse_TxO(blob, length, opts) {
+	var s = blob.l;
+try {
+	blob.l += 4;
+	var ot = (opts.lastobj||{cmo:[0,0]}).cmo[1];
+	var controlInfo;
+	if([0,5,7,11,12,14].indexOf(ot) == -1) blob.l += 6;
+	else controlInfo = parse_ControlInfo(blob, 6, opts);
+	var cchText = blob.read_shift(2);
+	var cbRuns = blob.read_shift(2);
+	var ifntEmpty = parse_FontIndex(blob, 2);
+	var len = blob.read_shift(2);
+	blob.l += len;
+	//var fmla = parse_ObjFmla(blob, s + length - blob.l);
+
+	var texts = "";
+	for(var i = 1; i < blob.lens.length-1; ++i) {
+		if(blob.l-s != blob.lens[i]) throw "TxO: bad continue record";
+		var hdr = blob[blob.l]
+		var t = parse_XLUnicodeStringNoCch(blob, blob.lens[i+1]-blob.lens[i]-1);
+		texts += t;
+		if(texts.length >= (hdr ? cchText : 2*cchText)) break;
+	}
+	if(texts.length !== cchText && texts.length !== cchText*2) {
+		throw "cchText: " + cchText + " != " + texts.length;
+	}
+
+	blob.l = s + length;
+	/* 2.5.272 TxORuns */
+//	var rgTxoRuns = [];
+//	for(var j = 0; j != cbRuns/8-1; ++j) blob.l += 8;
+//	var cchText2 = blob.read_shift(2);
+//	if(cchText2 !== cchText) throw "TxOLastRun mismatch: " + cchText2 + " " + cchText;
+//	blob.l += 6;
+//	if(s + length != blob.l) throw "TxO " + (s + length) + ", at " + blob.l;
+	return { t: texts };
+} catch(e) { blob.l = s + length; return { t: texts||"" }; }
 }
 
 var parse_Backup = parsebool; /* 2.4.14 */
@@ -475,7 +586,6 @@ var parse_DConName = parsenoop;
 var parse_XCT = parsenoop;
 var parse_CRN = parsenoop;
 var parse_FileSharing = parsenoop;
-var parse_Obj = parsenoop;
 var parse_Uncalced = parsenoop;
 var parse_Template = parsenoop;
 var parse_Intl = parsenoop;
@@ -576,7 +686,6 @@ var parse_CondFmt = parsenoop;
 var parse_CF = parsenoop;
 var parse_DVal = parsenoop;
 var parse_DConBin = parsenoop;
-var parse_TxO = parsenoop;
 var parse_HLink = parsenoop;
 var parse_Lel = parsenoop;
 var parse_CodeName = parse_XLUnicodeString;

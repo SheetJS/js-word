@@ -271,6 +271,7 @@ function parse_workbook(blob, options) {
 							range.e.r++; range.e.c++;
 						}
 						if(mergecells.length > 0) out["!merges"] = mergecells;
+						if(objects.length > 0) out["!objects"] = objects;
 					}
 					for(y in out) if(out.hasOwnProperty(y)) nout[y] = out[y];
 					if(cur_sheet === "") Preamble = nout; else Sheets[cur_sheet] = nout;
@@ -282,6 +283,7 @@ function parse_workbook(blob, options) {
 					cur_sheet = (Directory[s] || {name:""}).name;
 					lst.push([R.n, s, val, Directory[s]]);
 					mergecells = [];
+					objects = [];
 				} break;
 				case 'Number': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
@@ -410,14 +412,15 @@ function parse_workbook(blob, options) {
 
 				case 'MergeCells': mergecells = mergecells.concat(val); break;
 
+				case 'Obj': objects[val.cmo[0]] = opts.lastobj = val; break;
+				case 'TxO': opts.lastobj.TxO = val; break;
+
 				case 'WOpt': break; // TODO: WTF?
 				case 'HLink': case 'HLinkTooltip': break;
 
 				case 'PhoneticInfo': break;
 
 				case 'OleObjectSize': break;
-
-				case 'TxO': break;
 
 				/* Differential Formatting */
 				case 'DXF': case 'DXFN': case 'DXFN12': case 'DXFN12List': case 'DXFN12NoCB': break;
@@ -438,7 +441,14 @@ function parse_workbook(blob, options) {
 				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
 
 				/* Comments */
-				case 'Note': break;
+				case 'Note': {
+					var cc = out[encode_cell(val[0])];
+					var noteobj = objects[val[2]];
+					if(!cc) break;
+					if(!cc.c) cc.c = [];
+					var cmnt = {a:val[1],t:noteobj.TxO.t};
+					cc.c.push(cmnt);
+				} break;
 				case 'NameCmt': break;
 
 				/* Chart */
@@ -496,7 +506,6 @@ function parse_workbook(blob, options) {
 				/* Drawing */
 				case 'ShapePropsStream': break;
 				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
-				case 'Obj': break;
 				case 'ImData': break;
 				/* Explicitly Ignored */
 				case 'Excel9File': break;

@@ -1,7 +1,7 @@
 /* vim: set ts=2: */
-var XLS;
+var X;
 var fs = require('fs'), assert = require('assert');
-describe('source',function(){it('should load',function(){XLS=require('./');});});
+describe('source',function(){it('should load',function(){X=require('./');});});
 
 var opts = {};
 if(process.env.WTF) opts.WTF = true;
@@ -19,6 +19,26 @@ function normalizecsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").rep
 
 var dir = "./test_files/";
 
+var paths = {
+	cp1:  dir + 'custom_properties.xls',
+	cp2:  dir + 'custom_properties.xls.xml',
+	cst1: dir + 'comments_stress_test.xls',
+	cst2: dir + 'comments_stress_test.xls.xml',
+	fst1: dir + 'formula_stress_test.xls',
+	fst2: dir + 'formula_stress_test.xls.xml',
+	fstb: dir + 'formula_stress_test.xls',
+	lon1: dir + 'LONumbers.xls',
+	mc1:  dir + 'merge_cells.xls',
+	mc2:  dir + 'merge_cells.xls.xml',
+	nf1:  dir + 'number_format.xls',
+	nf2:  dir + 'number_format.xls.xml',
+	swc1: dir + 'apachepoi_SimpleWithComments.xls',
+	swc2: dir + '2011/apachepoi_SimpleWithComments.xls.xml'
+};
+
+var N1 = 'XLS';
+var N2 = 'XML';
+
 function parsetest(x, wb) {
 	describe(x + ' should have all bits', function() {
 		var sname = dir + '2011/' + x + '.sheetnames';
@@ -34,21 +54,21 @@ function parsetest(x, wb) {
 	describe(x + ' should generate CSV', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
+				var csv = X.utils.make_csv(wb.Sheets[ws]);
 			});
 		});
 	});
 	describe(x + ' should generate JSON', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var json = XLS.utils.sheet_to_row_object_array(wb.Sheets[ws]);
+				var json = X.utils.sheet_to_row_object_array(wb.Sheets[ws]);
 			});
 		});
 	});
 	describe(x + ' should generate formulae', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var json = XLS.utils.get_formulae(wb.Sheets[ws]);
+				var json = X.utils.get_formulae(wb.Sheets[ws]);
 			});
 		});
 	});
@@ -63,19 +83,21 @@ function parsetest(x, wb) {
 			}
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
-				var csv = XLS.utils.make_csv(wb.Sheets[ws]);
+				var csv = X.utils.make_csv(wb.Sheets[ws]);
 				assert.equal(normalizecsv(csv), normalizecsv(file), "CSV badness");
 			} : null);
 		});
 	});
-	if(fs.existsSync(dir + x + '.xml')) describe(x + '.xml from 2011', function() {
+	if(fs.existsSync(dir + '2011/' + x + '.xml'))
+	describe(x + '.xml from 2011', function() {
 		it('should parse', function() {
-			var xlsb = XLS.readFile(dir + x + '.xml', opts);
+			var wb = X.readFile(dir + '2011/' + x + '.xml', opts);
 		});
 	});
-	if(fs.existsSync(dir + '2011/' + x + '.xml')) describe(x + '.xml from 2011', function() {
+	if(fs.existsSync(dir + x + '.xml'))
+	describe(x + '.xml', function() {
 		it('should parse', function() {
-			var xlml = XLS.readFile(dir + '2011/' + x + '.xml', opts);
+			var wb = X.readFile(dir + x + '.xml', opts);
 		});
 	});
 }
@@ -83,19 +105,36 @@ function parsetest(x, wb) {
 describe('should parse test files', function() {
 	files.forEach(function(x) {
 		it(x, x.substr(-8) == ".pending" ? null : function() {
-			var wb = XLS.readFile(dir + x, opts);
+			var wb = X.readFile(dir + x, opts);
 			parsetest(x, wb);
 		});
 	});
 });
 
 describe('options', function() {
+	var html_cell_types = ['s'];
 	before(function() {
-		XLS = require('./');
+		X = require('./');
 	});
 	describe('cell', function() {
+		it.skip('should generate HTML by default', function() {
+			var wb = X.readFile(paths.cst1);
+			var ws = wb.Sheets.Sheet1;
+			Object.keys(ws).forEach(function(addr) {
+				if(addr[0] === "!" || !ws.hasOwnProperty(addr)) return;
+				assert(html_cell_types.indexOf(ws[addr].t) === -1 || ws[addr].h);
+			});
+		});
+		it.skip('should not generate HTML when requested', function() {
+			var wb = X.readFile(paths.cst1, {cellHTML:false});
+			var ws = wb.Sheets.Sheet1;
+			Object.keys(ws).forEach(function(addr) {
+				if(addr[0] === "!" || !ws.hasOwnProperty(addr)) return;
+				assert(typeof ws[addr].h === 'undefined');
+			});
+		});
 		it('should generate formulae by default', function() {
-			var wb = XLS.readFile(dir + 'formula_stress_test.xls');
+			var wb = X.readFile(paths.fstb);
 			var found = false;
 			wb.SheetNames.forEach(function(s) {
 				var ws = wb.Sheets[s];
@@ -107,7 +146,7 @@ describe('options', function() {
 			assert(found);
 		});
 		it('should not generate formulae when requested', function() {
-			var wb =XLS.readFile(dir+'formula_stress_test.xls',{cellFormula:false});
+			var wb =X.readFile(paths.fstb,{cellFormula:false});
 			wb.SheetNames.forEach(function(s) {
 				var ws = wb.Sheets[s];
 				Object.keys(ws).forEach(function(addr) {
@@ -117,7 +156,7 @@ describe('options', function() {
 			});
 		});
 		it('should not generate number formats by default', function() {
-			var wb = XLS.readFile(dir+'number_format.xls');
+			var wb = X.readFile(paths.nf1);
 			wb.SheetNames.forEach(function(s) {
 				var ws = wb.Sheets[s];
 				Object.keys(ws).forEach(function(addr) {
@@ -127,7 +166,7 @@ describe('options', function() {
 			});
 		});
 		it('should generate number formats when requested', function() {
-			var wb = XLS.readFile(dir+'number_format.xls', {cellNF: true});
+			var wb = X.readFile(paths.nf1, {cellNF: true});
 			wb.SheetNames.forEach(function(s) {
 				var ws = wb.Sheets[s];
 				Object.keys(ws).forEach(function(addr) {
@@ -138,119 +177,183 @@ describe('options', function() {
 		});
 	});
 	describe('sheet', function() {
+		it('should not generate sheet stubs by default', function() {
+			var wb = X.readFile(paths.mc1);
+			assert.throws(function() { wb.Sheets.Merge.A2.v; });
+			wb = X.readFile(paths.mc2);
+			assert.throws(function() { wb.Sheets.Merge.A2.v; });
+		});
+		it.skip('should generate sheet stubs when requested', function() {
+			var wb = X.readFile(paths.mc1, {sheetStubs:true});
+			assert(typeof wb.Sheets.Merge.A2.t !== 'undefined');
+			wb = X.readFile(paths.mc2, {sheetStubs:true});
+			assert(typeof wb.Sheets.Merge.A2.t !== 'undefined');
+		});
+		function checkcells(wb, A46, B26, C16, D2) {
+			assert((typeof wb.Sheets.Text.A46 !== 'undefined') == A46);
+			assert((typeof wb.Sheets.Text.B26 !== 'undefined') == B26);
+			assert((typeof wb.Sheets.Text.C16 !== 'undefined') == C16);
+			assert((typeof wb.Sheets.Text.D2  !== 'undefined') == D2);
+		}
 		it('should read all cells by default', function() {
-			var wb = XLS.readFile(dir+'formula_stress_test.xls');
-			assert(typeof wb.Sheets.Text.A46 !== 'undefined');
-			assert(typeof wb.Sheets.Text.B26 !== 'undefined');
-			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
-			wb = XLS.readFile(dir+'formula_stress_test.xls.xml');
-			assert(typeof wb.Sheets.Text.A46 !== 'undefined');
-			assert(typeof wb.Sheets.Text.B26 !== 'undefined');
-			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			var wb = X.readFile(paths.fst1);
+			checkcells(wb, true, true, true, true);
+			wb = X.readFile(paths.fst2);
+			checkcells(wb, true, true, true, true);
 		});
 		it('sheetRows n=20', function() {
-			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:20});
-			assert(typeof wb.Sheets.Text.A46 === 'undefined');
-			assert(typeof wb.Sheets.Text.B26 === 'undefined');
-			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
-			wb = XLS.readFile(dir+'formula_stress_test.xls.xml', {sheetRows:20});
-			assert(typeof wb.Sheets.Text.A46 === 'undefined');
-			assert(typeof wb.Sheets.Text.B26 === 'undefined');
-			assert(typeof wb.Sheets.Text.C16 !== 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			var wb = X.readFile(paths.fst1, {sheetRows:20});
+			checkcells(wb, false, false, true, true);
+			wb = X.readFile(paths.fst2, {sheetRows:20});
+			checkcells(wb, false, false, true, true);
 		});
 		it('sheetRows n=10', function() {
-			var wb = XLS.readFile(dir+'formula_stress_test.xls', {sheetRows:10});
-			assert(typeof wb.Sheets.Text.A46 === 'undefined');
-			assert(typeof wb.Sheets.Text.B26 === 'undefined');
-			assert(typeof wb.Sheets.Text.C16 === 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
-			wb = XLS.readFile(dir+'formula_stress_test.xls.xml', {sheetRows:10});
-			assert(typeof wb.Sheets.Text.A46 === 'undefined');
-			assert(typeof wb.Sheets.Text.B26 === 'undefined');
-			assert(typeof wb.Sheets.Text.C16 === 'undefined');
-			assert(typeof wb.Sheets.Text.D2 !== 'undefined');
+			var wb = X.readFile(paths.fst1, {sheetRows:10});
+			checkcells(wb, false, false, false, true);
+			wb = X.readFile(paths.fst2, {sheetRows:10});
+			checkcells(wb, false, false, false, true);
 		});
 	});
 	describe('book', function() {
 		it('bookSheets should not generate sheets', function() {
-			var wb = XLS.readFile(dir+'merge_cells.xls', {bookSheets:true});
+			var wb = X.readFile(paths.mc1, {bookSheets:true});
+			assert(typeof wb.Sheets === 'undefined');
+			var wb = X.readFile(paths.mc2, {bookSheets:true});
 			assert(typeof wb.Sheets === 'undefined');
 		});
 		it('bookProps should not generate sheets', function() {
-			var wb = XLS.readFile(dir+'number_format.xls', {bookProps:true});
+			var wb = X.readFile(paths.nf1, {bookProps:true});
+			assert(typeof wb.Sheets === 'undefined');
+			wb = X.readFile(paths.nf2, {bookProps:true});
 			assert(typeof wb.Sheets === 'undefined');
 		});
 		it('bookProps && bookSheets should not generate sheets', function() {
-			var wb = XLS.readFile(dir+'LONumbers.xls', {bookProps:true, bookSheets:true});
+			var wb = X.readFile(paths.lon1, {bookProps:true, bookSheets:true});
 			assert(typeof wb.Sheets === 'undefined');
 		});
-		it('bookFiles should generate cfb', function() {
-			var wb = XLS.readFile(dir+'formula_stress_test.xls', {bookFiles:true});
-			assert(typeof wb.cfb !== 'undefined');
+		it('should not generate deps by default', function() {
+			var wb = X.readFile(paths.fst1);
+			assert(typeof wb.Deps === 'undefined' || !(wb.Deps.length>0));
+			wb = X.readFile(paths.fst2);
+			assert(typeof wb.Deps === 'undefined' || !(wb.Deps.length>0));
+		});
+		it.skip('bookDeps should generate deps', function() {
+			var wb = X.readFile(paths.fst1, {bookDeps:true});
+			assert(typeof wb.Deps !== 'undefined' && wb.Deps.length > 0);
+			wb = X.readFile(paths.fst2, {bookDeps:true});
+			assert(typeof wb.Deps !== 'undefined' && wb.Deps.length > 0);
+		});
+		var ckf = function(wb, fields, exists) { fields.forEach(function(f) {
+				assert((typeof wb[f] !== 'undefined') == exists);
+		}); };
+		it('should not generate book files by default', function() {
+			var wb = X.readFile(paths.fst1);
+			ckf(wb, ['cfb'], false);
+		});
+		it('bookFiles should generate book files', function() {
+			var wb = X.readFile(paths.fst1, {bookFiles:true});
+			ckf(wb, ['cfb'], true);
 		});
 	});
 });
 
 describe('input formats', function() {
 	it('should read binary strings', function() {
-		XLS.read(fs.readFileSync(dir+'formula_stress_test.xls', 'binary'), {type:'binary'});
-		XLS.read(fs.readFileSync(dir+'formula_stress_test.xls.xml', 'binary'), {type:'binary'});
+		X.read(fs.readFileSync(paths.cst1, 'binary'), {type: 'binary'});
+		X.read(fs.readFileSync(paths.cst2, 'binary'), {type: 'binary'});
 	});
 	it('should read base64 strings', function() {
-		XLS.read(fs.readFileSync(dir+'comments_stress_test.xls', 'base64'), {type: 'base64'});
-		XLS.read(fs.readFileSync(dir+'comments_stress_test.xls.xml', 'base64'), {type: 'base64'});
+		X.read(fs.readFileSync(paths.cst1, 'base64'), {type: 'base64'});
+		X.read(fs.readFileSync(paths.cst2, 'base64'), {type: 'base64'});
 	});
 	it('should read array', function() {
-		XLS.read(fs.readFileSync(dir+'merge_cells.xls.xml', 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
+		X.read(fs.readFileSync(dir+'merge_cells.xls.xml', 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
 	});
 });
 
 describe('features', function() {
+	it('should have comment as part of cell properties', function(){
+		var X = require('./');
+		var sheet = 'Sheet1';
+		var wb1=X.readFile(paths.swc1);
+		var wb2=X.readFile(paths.swc2);
+
+		[wb1,wb2].map(function(wb) { return wb.Sheets[sheet]; }).forEach(function(ws, i) {
+			assert.equal(ws.B1.c.length, 1,"must have 1 comment");
+			assert.equal(ws.B1.c[0].a, "Yegor Kozlov","must have the same author");
+			assert.equal(ws.B1.c[0].t.replace(/\r\n/g,"\n").replace(/\r/,"\n"), "Yegor Kozlov:\nfirst cell", "must have the concatenated texts");
+			return;
+			assert.equal(ws.B1.c[0].r, '<r><rPr><b/><sz val="8"/><color indexed="81"/><rFont val="Tahoma"/></rPr><t>Yegor Kozlov:</t></r><r><rPr><sz val="8"/><color indexed="81"/><rFont val="Tahoma"/></rPr><t xml:space="preserve">\r\nfirst cell</t></r>', "must have the rich text representation");
+			assert.equal(ws.B1.c[0].h, '<span style="font-weight: bold;">Yegor Kozlov:</span><span style=""><br/>first cell</span>', "must have the html representation");
+		});
+	});
+
 	describe('should parse core properties and custom properties', function() {
-		var wbxls, wbxml;
+		var wb1, wb2;
 		before(function() {
-			XLS = require('./');
-			wbxls = XLS.readFile(dir+'custom_properties.xls');
-			wbxml = XLS.readFile(dir+'custom_properties.xls.xml');
+			X = require('./');
+			wb1 = X.readFile(paths.cp1);
+			wb2 = X.readFile(paths.cp2);
 		});
-		it('XLS should parse core properties', function() {
-			assert.equal(wbxls.Props.Company, 'Vector Inc');
-			assert.equal(wbxls.Props.Author, 'Pony Foo');
+
+		function coreprop(wb) {
+			assert.equal(wb.Props.Company, 'Vector Inc');
+			assert.equal(wb.Props.Author, 'Pony Foo');
+		}
+		function custprop(wb) {
+			assert.equal(wb.Custprops['I am a boolean'], true);
+			// XLS requires parsing FILETIME
+			//assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
+			assert.equal(wb.Custprops.Status, 2);
+			assert.equal(wb.Custprops.Counter, -3.14);
+		}
+
+		it(N1 + ' should parse core properties', function() { coreprop(wb1); });
+		it(N2 + ' should parse core properties', function() { coreprop(wb2); });
+		it(N1 + ' should parse custom properties', function() { custprop(wb1); });
+		it(N2 + ' should parse custom properties', function() { custprop(wb2); });
+	});
+
+	describe('sheetRows', function() {
+		it('should use original range if not set', function() {
+			var opts = {};
+			var wb1 = X.readFile(paths.fst1, opts);
+			var wb2 = X.readFile(paths.fst2, opts);
+			[wb1, wb2].forEach(function(wb) {
+				assert.equal(wb.Sheets.Text["!ref"],"A1:F49");
+			});
 		});
-		it('XML should parse core properties', function() {
-			assert.equal(wbxml.Props.Company, 'Vector Inc');
-			assert.equal(wbxml.Props.Author, 'Pony Foo');
+		it.skip('should adjust range if set', function() {
+			var opts = {sheetRows:10};
+			var wb1 = X.readFile(paths.fst1, opts);
+			var wb2 = X.readFile(paths.fst2, opts);
+			[wb1, wb2].forEach(function(wb) {
+				assert.equal(wb.Sheets.Text["!fullref"],"A1:F49");
+				assert.equal(wb.Sheets.Text["!ref"],"A1:F10");
+			});
 		});
-		it('XLS should parse custom properties', function() {
-			assert.equal(wbxls.Custprops['I am a boolean'], true);
-			/* The date test requires parsing FILETIME (64 bit integer) */
-			//assert.equal(wbxls.Custprops['Date completed'], '1967-03-09T16:30:00Z');
-			assert.equal(wbxls.Custprops.Status, 2);
-			assert.equal(wbxls.Custprops.Counter, -3.14);
-		});
-		it('XML should parse custom properties', function() {
-			assert.equal(wbxml.Custprops['I am a boolean'], true);
-			assert.equal(wbxml.Custprops['Date completed'], '1967-03-09T16:30:00Z');
-			assert.equal(wbxml.Custprops.Status, 2);
-			assert.equal(wbxml.Custprops.Counter, -3.14);
+		it.skip('should not generate comment cells', function() {
+			var opts = {sheetRows:10};
+			var wb1 = X.readFile(paths.cst1, opts);
+			var wb2 = X.readFile(paths.cst2, opts);
+			[wb1, wb2].forEach(function(wb) {
+				assert.equal(wb.Sheets.Sheet7["!fullref"],"A1:N34");
+				assert.equal(wb.Sheets.Sheet7["!ref"],"A1:A1");
+			});
 		});
 	});
 
 	describe('merge cells',function() {
-		var wbxls, wbxml;
+		var wb1, wb2;
 		before(function() {
-			XLS = require('./');
-			wbxls = XLS.readFile(dir+'merge_cells.xls');
-			wbxml = XLS.readFile(dir+'merge_cells.xls.xml');
+			X = require('./');
+			wb1 = X.readFile(paths.mc1);
+			wb2 = X.readFile(paths.mc2);
 		});
 		it('should have !merges', function() {
-			assert(wbxls.Sheets.Merge['!merges']);
-			assert(wbxml.Sheets.Merge['!merges']);
-			var m = [wbxls,wbxml].map(function(x) { return x.Sheets.Merge['!merges'].map(function(y) { return XLS.utils.encode_range(y); });});
+			assert(wb1.Sheets.Merge['!merges']);
+			assert(wb2.Sheets.Merge['!merges']);
+			var m = [wb1, wb2].map(function(x) { return x.Sheets.Merge['!merges'].map(function(y) { return X.utils.encode_range(y); });});
 			assert.deepEqual(m[0].sort(),m[1].sort());
 		});
 	});
@@ -258,16 +361,16 @@ describe('features', function() {
 
 describe('invalid files', function() {
 	it('should fail on passwords', function() {
-		assert.throws(function() { XLS.readFile(dir + 'apachepoi_password.xls'); });
-		assert.throws(function() { XLS.readFile(dir + 'apachepoi_xor-encryption-abc.xls'); });
+		assert.throws(function() { X.readFile(dir + 'apachepoi_password.xls'); });
+		assert.throws(function() { X.readFile(dir + 'apachepoi_xor-encryption-abc.xls'); });
 	});
 	it('should fail on XLSX files', function() {
-		assert.throws(function() { XLS.readFile(dir + 'roo_type_excelx.xls'); });
+		assert.throws(function() { X.readFile(dir + 'roo_type_excelx.xls'); });
 	});
 	it('should fail on ODS files', function() {
-		assert.throws(function() { XLS.readFile(dir + 'roo_type_openoffice.xls');});
+		assert.throws(function() { X.readFile(dir + 'roo_type_openoffice.xls');});
 	});
 	it('should fail on DOC files', function() {
-		assert.throws(function() { XLS.readFile(dir + 'word_doc.doc');});
+		assert.throws(function() { X.readFile(dir + 'word_doc.doc');});
 	});
 });

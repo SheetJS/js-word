@@ -53,6 +53,7 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 			//if((!nf || (nf == "General" && !cell.Formula)) && (cell.v != (cell.v|0))) { nf="#,##0.00"; console.log(cell.v, cell.v|0)}
 			break;
 		case 'Error': cell.t = 'e'; cell.v = xml; cell.w = xml; break;
+		default: cell.t = 's'; cell.v = fixstr(ss); break;
 	}
 	if(cell.t !== 'e') try {
 		cell.w = xlml_format(nf||"General", cell.v);
@@ -82,15 +83,17 @@ function parse_xlml_xml(d, opts) {
 	var ss = "", fidx = 0;
 	var mergecells = [];
 	var Props = {}, Custprops = {}, pidx = 0;
+	var comments = [], comment = {};
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, cell, {c:c,r:r}, styles, opts);
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, opts);
 			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
 			if(Rn[1]==='/'){
 				delete cell[0];
+				if(comments.length > 0) cell.c = comments;
 				if((!opts.sheetRows || opts.sheetRows > r) && typeof cell.v !== 'undefined') cursheet[encode_cell({c:c,r:r})] = cell;
 				if(cell.MergeAcross || cell.MergeDown) {
 					var cc = c + Number(cell.MergeAcross||0);
@@ -105,6 +108,7 @@ function parse_xlml_xml(d, opts) {
 				if(c < refguess.s.c) refguess.s.c = c;
 				if(c > refguess.e.c) refguess.e.c = c;
 				if(Rn[0].match(/\/>$/)) ++c;
+				comments = [];
 			}
 		} break;
 		case 'Row': {
@@ -214,6 +218,16 @@ function parse_xlml_xml(d, opts) {
 		case 'TargetScreenSize': break;
 		case 'ReadOnlyRecommended': break;
 
+		/* ComponentOptions */
+		case 'Toolbar': break;
+		case 'HideOfficeLogo': break;
+		case 'SpreadsheetAutoFit': break;
+		case 'Label': break;
+		case 'Caption': break;
+		case 'MaxHeight': break;
+		case 'MaxWidth': break;
+		case 'NextSheetNumber': break;
+
 		/* ExcelWorkbook */
 		case 'WindowHeight': break;
 		case 'WindowWidth': break;
@@ -255,6 +269,12 @@ function parse_xlml_xml(d, opts) {
 		case 'Text': break;
 		case 'OLE': break;
 		case 'NoAutoRecover': break;
+		case 'PublishObjects': break;
+
+		/* WorkbookOptions */
+		case 'OWCVersion': break;
+		case 'Height': break;
+		case 'Width': break;
 
 		/* WorksheetOptions */
 		case 'Unsynced': break;
@@ -325,6 +345,9 @@ function parse_xlml_xml(d, opts) {
 		case 'NoOrientation': break;
 		case 'AllowUsePivotTables': break;
 		case 'ZeroHeight': break;
+		case 'ViewableRange': break;
+		case 'Selection': break;
+		case 'ProtectContents': break;
 
 		/* PivotTable */
 		case 'ImmediateItemsOnDrop': break;
@@ -477,7 +500,20 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
 			else state.push([Rn[3], false]);
 		} break;
-		case 'Comment':
+
+		case 'Comment': {
+			if(Rn[1]==='/'){
+				if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;
+				comment.t = comment.v;
+				delete comment.v; delete comment.w; delete comment.ixfe;
+				comments.push(comment);
+			} else {
+				state.push([Rn[3], false]);
+				tmp = parsexmltag(Rn[0]);
+				comment = {a:tmp.Author};
+			}
+		} break;
+		case 'ComponentOptions':
 		case 'DocumentProperties':
 		case 'CustomDocumentProperties':
 		case 'OfficeDocumentSettings':
@@ -507,7 +543,7 @@ function parse_xlml_xml(d, opts) {
 			}
 			if(opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 	}
-	out.Sheets = sheets;
+	if(!opts.bookSheets && !opts.bookProps) out.Sheets = sheets;
 	out.SheetNames = sheetnames;
 	out.SSF = SSF.get_table();
 	out.Props = Props;
