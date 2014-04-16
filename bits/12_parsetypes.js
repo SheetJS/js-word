@@ -1,10 +1,10 @@
-/* [MS-DTYP] 2.3.1 FILETIME */
+/* [MS-DTYP] 2.3.3 FILETIME */
 /* [MS-OLEDS] 2.1.3 FILETIME (Packet Version) */
 /* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
 function parse_FILETIME(blob) {
 	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
 	var dwLowDateTime = read(4), dwHighDateTime = read(4);
-	return [dwLowDateTime, dwHighDateTime];
+	return new Date(((dwHighDateTime/1e7*Math.pow(2,32) + dwLowDateTime/1e7) - 11644473600)*1000).toISOString().replace(/\.000/,"");
 }
 
 /* [MS-OSHARED] 2.3.3.1.4 Lpstr */

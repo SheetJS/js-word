@@ -106,7 +106,7 @@ var __readUInt32LE = function(b, idx) { return b.readUInt32LE ? b.readUInt32LE(i
 var __readInt32LE = function(b, idx) { if(b.readInt32LE) return b.readInt32LE(idx); var u = __readUInt32LE(b,idx); if(!(u & 0x80000000)) return u; return (0xffffffff - u + 1) * -1; };
 var __readDoubleLE = function(b, idx) { return b.readDoubleLE ? b.readDoubleLE(idx) : readIEEE754(b, idx||0);};
 
-var __hexlify = function(b) { return b.map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
+var __hexlify = function(b,l) { if(typeof Buffer !== 'undefined' && b instanceof Buffer) return b.toString('hex', b.l, b.l+l); return b.slice(b.l||0,(b.l||0)+16).map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
 
 var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var ss=[]; for(var i=s; i<e; i+=2) ss.push(String.fromCharCode(__readUInt16LE(b,i))); return ss.join("").replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
@@ -126,7 +126,7 @@ function ReadShift(size, t) {
 		case 4: o = __readUInt32LE(this, this.l); break;
 		case 8: if(t === 'f') { o = __readDoubleLE(this, this.l); break; }
 		/* falls through */
-		case 16: o = this.toString('hex', this.l,this.l+size); break;
+		case 16: o = __hexlify(this, 16); break;
 
 		case 'utf8': size = t; o = __utf8(this, this.l, this.l + size); break;
 		case 'utf16le': size=2*t; o = __utf16le(this, this.l, this.l + size); break;
@@ -174,7 +174,7 @@ function ReadShift(size, t) {
 
 function CheckField(hexstr, fld) {
 	var b = this.slice(this.l, this.l+hexstr.length/2);
-	var m = b.hexlify ? b.hexlify() : __hexlify(b);
+	var m = b.hexlify ? b.hexlify() : __hexlify(b,hexstr.length/2);
 	if(m !== hexstr) throw (fld||"") + 'Expected ' + hexstr + ' saw ' + m;
 	this.l += hexstr.length/2;
 }

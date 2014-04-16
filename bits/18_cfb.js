@@ -1,6 +1,7 @@
 /* [MS-CFB] v20130118 */
 /*if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
 else*/ var CFB = (function(){
+this.version = '0.9.0';
 var exports = {};
 function parse(file) {
 
@@ -131,8 +132,7 @@ sleuth_fat(difat_start, ndfs);
 /** DONT CAT THE FAT!  Just calculate where we need to go */
 function get_buffer(byte_addr, bytes) {
 	var addr = fat_addrs[Math.floor(byte_addr*4/ssz)];
-	if(ssz - (byte_addr*4 % ssz) < (bytes || 0))
-		throw "FAT boundary crossed: " + byte_addr + " "+bytes+" "+ssz;
+	if(ssz - (byte_addr*4 % ssz) < (bytes || 0)) throw "FAT boundary crossed: " + byte_addr + " "+bytes+" "+ssz;
 	return sectors[addr].slice((byte_addr*4 % ssz));
 }
 
@@ -329,10 +329,4 @@ if(typeof require !== 'undefined' && typeof exports !== 'undefined') {
 	//exports.parse = CFB.parse;
 	//exports.ReadShift = ReadShift;
 	//exports.prep_blob = prep_blob;
-	exports.main = function(args) {
-		var cfb = CFB.read(args[0], {type:'file'});
-		console.log(cfb);
-	};
-	if(typeof module !== 'undefined' && require.main === module)
-		exports.main(process.argv.slice(2));
 }

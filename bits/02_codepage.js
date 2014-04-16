@@ -1,5 +1,5 @@
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
-	if(typeof cptable === 'undefined') var cptable = require('codepage');
+	if(typeof cptable === 'undefined') cptable = require('codepage');
 	var current_codepage = 1252, current_cptable = cptable[1252];
 }
 function reset_cp() {

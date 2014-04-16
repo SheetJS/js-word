@@ -27,6 +27,8 @@ var paths = {
 	fst1: dir + 'formula_stress_test.xls',
 	fst2: dir + 'formula_stress_test.xls.xml',
 	fstb: dir + 'formula_stress_test.xls',
+	hl1:  dir + 'hyperlink_stress_test_2011.xls',
+	hl2:  dir + 'hyperlink_stress_test_2011.xml',
 	lon1: dir + 'LONumbers.xls',
 	mc1:  dir + 'merge_cells.xls',
 	mc2:  dir + 'merge_cells.xls.xml',
@@ -302,8 +304,7 @@ describe('features', function() {
 		}
 		function custprop(wb) {
 			assert.equal(wb.Custprops['I am a boolean'], true);
-			// XLS requires parsing FILETIME
-			//assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
+			assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
 			assert.equal(wb.Custprops.Status, 2);
 			assert.equal(wb.Custprops.Counter, -3.14);
 		}
@@ -357,6 +358,30 @@ describe('features', function() {
 			assert.deepEqual(m[0].sort(),m[1].sort());
 		});
 	});
+
+	describe('should find hyperlinks', function() {
+		var wb1, wb2;
+		before(function() {
+			X = require('./');
+			wb1 = X.readFile(paths.hl1);
+			wb2 = X.readFile(paths.hl2);
+		});
+
+		function hlink(wb) {
+			var ws = wb.Sheets.Sheet1;
+			assert.equal(ws.A1.l.Target, "http://www.sheetjs.com");
+			assert.equal(ws.A2.l.Target, "http://oss.sheetjs.com");
+			assert.equal(ws.A3.l.Target, "http://oss.sheetjs.com#foo");
+			assert.equal(ws.A4.l.Target, "mailto:dev@sheetjs.com");
+			assert.equal(ws.A5.l.Target, "mailto:dev@sheetjs.com?subject=hyperlink");
+			assert.equal(ws.A6.l.Target, "../../sheetjs/Documents/Test.xlsx");
+			assert.equal(ws.A7.l.Target, "http://sheetjs.com");
+		}
+
+		it(N1, function() { hlink(wb1); });
+		it(N2, function() { hlink(wb2); });
+	});
+
 });
 
 describe('invalid files', function() {

@@ -500,7 +500,7 @@ try {
 	var texts = "";
 	for(var i = 1; i < blob.lens.length-1; ++i) {
 		if(blob.l-s != blob.lens[i]) throw "TxO: bad continue record";
-		var hdr = blob[blob.l]
+		var hdr = blob[blob.l];
 		var t = parse_XLUnicodeStringNoCch(blob, blob.lens[i+1]-blob.lens[i]-1);
 		texts += t;
 		if(texts.length >= (hdr ? cchText : 2*cchText)) break;
@@ -520,6 +520,25 @@ try {
 	return { t: texts };
 } catch(e) { blob.l = s + length; return { t: texts||"" }; }
 }
+
+/* 2.4.140 */
+var parse_HLink = function(blob, length) {
+	var ref = parse_Ref8U(blob, 8);
+	blob.l += 16; /* CLSID */
+	var hlink = parse_Hyperlink(blob, length-24);
+	return [ref, hlink];
+};
+
+/* 2.4.141 */
+var parse_HLinkTooltip = function(blob, length) {
+	var end = blob.l + length;
+	blob.read_shift(2);
+	var ref = parse_Ref8U(blob, 8);
+	var wzTooltip = blob.read_shift('dbcs', (length-10)/2);
+	wzTooltip = wzTooltip.replace(/\u0000$/,"");
+	return [ref, wzTooltip];
+};
+
 
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
@@ -686,7 +705,6 @@ var parse_CondFmt = parsenoop;
 var parse_CF = parsenoop;
 var parse_DVal = parsenoop;
 var parse_DConBin = parsenoop;
-var parse_HLink = parsenoop;
 var parse_Lel = parsenoop;
 var parse_CodeName = parse_XLUnicodeString;
 var parse_SXFDBType = parsenoop;
@@ -698,7 +716,6 @@ var parse_Window2 = parsenoop;
 var parse_Style = parsenoop;
 var parse_BigName = parsenoop;
 var parse_ContinueBigName = parsenoop;
-var parse_HLinkTooltip = parsenoop;
 var parse_WebPub = parsenoop;
 var parse_QsiSXTag = parsenoop;
 var parse_DBQueryExt = parsenoop;

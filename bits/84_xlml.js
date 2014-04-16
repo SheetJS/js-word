@@ -95,6 +95,10 @@ function parse_xlml_xml(d, opts) {
 				delete cell[0];
 				if(comments.length > 0) cell.c = comments;
 				if((!opts.sheetRows || opts.sheetRows > r) && typeof cell.v !== 'undefined') cursheet[encode_cell({c:c,r:r})] = cell;
+				if(cell.HRef) {
+					cell.l = {Target:cell.HRef, tooltip:cell.HRefScreenTip};
+					delete cell.HRef; delete cell.HRefScreenTip;
+				}
 				if(cell.MergeAcross || cell.MergeDown) {
 					var cc = c + Number(cell.MergeAcross||0);
 					var rr = r + Number(cell.MergeDown||0);

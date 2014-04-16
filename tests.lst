@@ -114,6 +114,7 @@ apachepoi_46904.xls
 apachepoi_47034.xls
 apachepoi_47154.xls
 apachepoi_47251.xls
+apachepoi_47251_1.xls
 apachepoi_47701.xls
 apachepoi_47847.xls
 apachepoi_47920.xls
@@ -311,9 +312,11 @@ apachepoi_text.xls
 apachepoi_unicodeNameRecord.xls
 apachepoi_xor-encryption-abc.xls.pending
 apachepoi_yearfracExamples.xls
+calendar_stress_test.xls.pending
 comments_stress_test.xls
 custom_properties.xls
 formula_stress_test.xls
+hyperlink_stress_test_2011.xls
 jxls-core_array.xls
 jxls-core_beandata.xls
 jxls-core_beanwithlist.xls
@@ -458,6 +461,7 @@ roo_time-test.xls
 roo_type_excelx.xls.pending
 roo_type_openoffice.xls.pending
 roo_whitespace.xls
+text_and_numbers.xls
 xlrd_Formate.xls
 xlrd_formula_test_names.xls
 xlrd_formula_test_sjmachin.xls
@@ -478,6 +482,7 @@ NumberFormatCondition.xml
 RkNumber.xls.xml
 RkNumber.xlsb.xml
 RkNumber.xlsx.xml
+calendar_stress_test.xml.pending
 comments_stress_test.xls.xml
 comments_stress_test.xlsb.xml
 comments_stress_test.xlsx.xml
@@ -487,6 +492,7 @@ custom_properties.xlsx.xml
 formula_stress_test.xls.xml
 formula_stress_test.xlsb.xml
 formula_stress_test.xlsx.xml
+hyperlink_stress_test_2011.xml
 interview.xlsx.xml
 issue.xlsx.xml
 large_strings.xls.xml
@@ -541,6 +547,7 @@ roo_simple_spreadsheet_from_italo.xml
 roo_style.xml
 roo_time-test.xml
 roo_whitespace.xml
+text_and_numbers.xml
 xlsx-stream-d-date-cell.xls.xml
 xlsx-stream-d-date-cell.xlsb.xml
 xlsx-stream-d-date-cell.xlsx.xml

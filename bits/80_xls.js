@@ -70,7 +70,7 @@ function parse_workbook(blob, options) {
 	var sst = [];
 	var cur_sheet = "";
 	var Preamble = {};
-	var lastcell, last_cell;
+	var lastcell, last_cell, cc, cmnt, rng, rngC, rngR;
 	var shared_formulae = {};
 	var array_formulae = []; /* TODO: something more clever */
 	var temp_val;
@@ -79,6 +79,10 @@ function parse_workbook(blob, options) {
 	function addline(cell, line, options) {
 		lastcell = cell;
 		last_cell = encode_cell(cell);
+		if(range.s && cell.r < range.s.r) range.s.r = cell.r;
+		if(range.s && cell.c < range.s.c) range.s.c = cell.c;
+		if(range.e && cell.r > range.e.r) range.e.r = cell.r;
+		if(range.e && cell.c > range.e.c) range.e.c = cell.c;
 		if(options.sheetRows && lastcell.r >= options.sheetRows) cell_valid = false;
 		else out[last_cell] = line;
 	}
@@ -415,9 +419,18 @@ function parse_workbook(blob, options) {
 				case 'Obj': objects[val.cmo[0]] = opts.lastobj = val; break;
 				case 'TxO': opts.lastobj.TxO = val; break;
 
-				case 'WOpt': break; // TODO: WTF?
-				case 'HLink': case 'HLinkTooltip': break;
+				case 'HLink': {
+					for(rngR = val[0].s.r; rngR <= val[0].e.r; ++rngR)
+						for(rngC = val[0].s.c; rngC <= val[0].e.c; ++rngC)
+							out[encode_cell({c:rngC,r:rngR})].l = val[1];
+				} break;
+				case 'HLinkTooltip': {
+					for(rngR = val[0].s.r; rngR <= val[0].e.r; ++rngR)
+						for(rngC = val[0].s.c; rngC <= val[0].e.c; ++rngC)
+							out[encode_cell({c:rngC,r:rngR})].l.tooltip = val[1];
+				} break;
 
+				case 'WOpt': break; // TODO: WTF?
 				case 'PhoneticInfo': break;
 
 				case 'OleObjectSize': break;
@@ -442,11 +455,11 @@ function parse_workbook(blob, options) {
 
 				/* Comments */
 				case 'Note': {
-					var cc = out[encode_cell(val[0])];
+					cc = out[encode_cell(val[0])];
 					var noteobj = objects[val[2]];
 					if(!cc) break;
 					if(!cc.c) cc.c = [];
-					var cmnt = {a:val[1],t:noteobj.TxO.t};
+					cmnt = {a:val[1],t:noteobj.TxO.t};
 					cc.c.push(cmnt);
 				} break;
 				case 'NameCmt': break;
