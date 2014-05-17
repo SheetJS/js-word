@@ -11,11 +11,13 @@ var exp = ex.map(function(x){ return x + ".pending"; });
 function test_file(x){return ex.indexOf(x.substr(-4))>=0||exp.indexOf(x.substr(-12))>=0;}
 
 var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(test_file);
+var fileA = (fs.existsSync('testA.lst') ? fs.readFileSync('testA.lst', 'utf-8').split("\n") : []).filter(test_file);
 
 /* Excel enforces 31 character sheet limit, although technical file limit is 255 */
 function fixsheetname(x) { return x.substr(0,31); }
 
-function normalizecsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
+function fixcsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
+function fixjson(x) { return x.replace(/[\r\n]+$/,""); }
 
 var dir = "./test_files/";
 
@@ -41,8 +43,9 @@ var paths = {
 var N1 = 'XLS';
 var N2 = 'XML';
 
-function parsetest(x, wb) {
-	describe(x + ' should have all bits', function() {
+function parsetest(x, wb, full, ext) {
+	ext = (ext ? " [" + ext + "]": "");
+	describe(x + ext + ' should have all bits', function() {
 		var sname = dir + '2011/' + x + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
@@ -53,50 +56,72 @@ function parsetest(x, wb) {
 			assert.equal(names, file);
 		} : null);
 	});
-	describe(x + ' should generate CSV', function() {
+	describe(x + ext + ' should generate CSV', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var csv = X.utils.make_csv(wb.Sheets[ws]);
+				X.utils.make_csv(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(x + ' should generate JSON', function() {
+	describe(x + ext + ' should generate JSON', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var json = X.utils.sheet_to_row_object_array(wb.Sheets[ws]);
+				X.utils.sheet_to_row_object_array(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(x + ' should generate formulae', function() {
+	describe(x + ext + ' should generate formulae', function() {
 		wb.SheetNames.forEach(function(ws, i) {
 			it('#' + i + ' (' + ws + ')', function() {
-				var json = X.utils.get_formulae(wb.Sheets[ws]);
+				X.utils.get_formulae(wb.Sheets[ws]);
 			});
 		});
 	});
-	describe(x + ' should generate correct output', function() {
-		wb.SheetNames.forEach(function(ws, i) {
-			var name = (dir + x + '.' + i + '.csv');
+	if(!full) return;
+	var getfile = function(dir, x, i, type) {
+			var name = (dir + x + '.' + i + type);
 			if(x.substr(-4) === ".xls") {
 				root = x.slice(0,-4);
-				if(!fs.existsSync(name)) name=(dir + root + '.xlsx.'+i+'.csv');
-				if(!fs.existsSync(name)) name=(dir + root + '.xlsm.'+i+'.csv');
-				if(!fs.existsSync(name)) name=(dir + root + '.xlsb.'+i+'.csv');
+				if(!fs.existsSync(name)) name=(dir + root + '.xlsx.' + i + type);
+				if(!fs.existsSync(name)) name=(dir + root + '.xlsm.' + i + type);
+				if(!fs.existsSync(name)) name=(dir + root + '.xlsb.' + i + type);
 			}
+			return name;
+	};
+	describe(x + ext + ' should generate correct CSV output', function() {
+		wb.SheetNames.forEach(function(ws, i) {
+			var name = getfile(dir, x, i, ".csv");
 			it('#' + i + ' (' + ws + ')', fs.existsSync(name) ? function() {
 				var file = fs.readFileSync(name, 'utf-8');
 				var csv = X.utils.make_csv(wb.Sheets[ws]);
-				assert.equal(normalizecsv(csv), normalizecsv(file), "CSV badness");
+				assert.equal(fixcsv(csv), fixcsv(file), "CSV badness");
 			} : null);
 		});
 	});
+	describe(x + ext + ' should generate correct JSON output', function() {
+		wb.SheetNames.forEach(function(ws, i) {
+			var rawjson = getfile(dir, x, i, ".rawjson");
+			if(fs.existsSync(rawjson)) it('#' + i + ' (' + ws + ')', function() {
+				var file = fs.readFileSync(rawjson, 'utf-8');
+				var json = X.utils.make_json(wb.Sheets[ws],{raw:true});
+				assert.equal(JSON.stringify(json), fixjson(file), "JSON badness");
+			});
+
+			var jsonf = getfile(dir, x, i, ".json");
+			if(fs.existsSync(jsonf)) it('#' + i + ' (' + ws + ')', function() {
+				var file = fs.readFileSync(jsonf, 'utf-8');
+				var json = X.utils.make_json(wb.Sheets[ws]);
+				assert.equal(JSON.stringify(json), fixjson(file), "JSON badness");
+			});
+		});
+	});
 	if(fs.existsSync(dir + '2011/' + x + '.xml'))
-	describe(x + '.xml from 2011', function() {
+	describe(x + ext + '.xml from 2011', function() {
 		it('should parse', function() {
 			var wb = X.readFile(dir + '2011/' + x + '.xml', opts);
 		});
 	});
-	if(fs.existsSync(dir + x + '.xml'))
+	if(fs.existsSync(dir + x + '.xml' + ext))
 	describe(x + '.xml', function() {
 		it('should parse', function() {
 			var wb = X.readFile(dir + x + '.xml', opts);
@@ -106,14 +131,22 @@ function parsetest(x, wb) {
 
 describe('should parse test files', function() {
 	files.forEach(function(x) {
+		if(!fs.existsSync(dir + x)) return;
 		it(x, x.substr(-8) == ".pending" ? null : function() {
 			var wb = X.readFile(dir + x, opts);
-			parsetest(x, wb);
+			parsetest(x, wb, true);
+		});
+	});
+	fileA.forEach(function(x) {
+		if(!fs.existsSync(dir + x)) return;
+		it(x, x.substr(-8) == ".pending" ? null : function() {
+			var wb = X.readFile(dir + x, {WTF:opts.wtf, sheetRows:10});
+			parsetest(x, wb, false);
 		});
 	});
 });
 
-describe('options', function() {
+describe('parse options', function() {
 	var html_cell_types = ['s'];
 	before(function() {
 		X = require('./');
@@ -273,7 +306,25 @@ describe('input formats', function() {
 	});
 });
 
-describe('features', function() {
+function coreprop(wb) {
+	assert.equal(wb.Props.Title, 'Example with properties');
+	assert.equal(wb.Props.Subject, 'Test it before you code it');
+	assert.equal(wb.Props.Author, 'Pony Foo');
+	assert.equal(wb.Props.Manager, 'Despicable Drew');
+	assert.equal(wb.Props.Company, 'Vector Inc');
+	assert.equal(wb.Props.Category, 'Quirky');
+	assert.equal(wb.Props.Keywords, 'example humor');
+	assert.equal(wb.Props.Comments, 'some comments');
+	assert.equal(wb.Props.LastAuthor, 'Hugues');
+}
+function custprop(wb) {
+	assert.equal(wb.Custprops['I am a boolean'], true);
+	assert.equal(wb.Custprops['Date completed'].toISOString(), '1967-03-09T16:30:00.000Z');
+	assert.equal(wb.Custprops.Status, 2);
+	assert.equal(wb.Custprops.Counter, -3.14);
+}
+
+describe('parse features', function() {
 	it('should have comment as part of cell properties', function(){
 		var X = require('./');
 		var sheet = 'Sheet1';
@@ -283,7 +334,7 @@ describe('features', function() {
 		[wb1,wb2].map(function(wb) { return wb.Sheets[sheet]; }).forEach(function(ws, i) {
 			assert.equal(ws.B1.c.length, 1,"must have 1 comment");
 			assert.equal(ws.B1.c[0].a, "Yegor Kozlov","must have the same author");
-			assert.equal(ws.B1.c[0].t.replace(/\r\n/g,"\n").replace(/\r/,"\n"), "Yegor Kozlov:\nfirst cell", "must have the concatenated texts");
+			assert.equal(ws.B1.c[0].t.replace(/\r\n/g,"\n").replace(/\r/g,"\n"), "Yegor Kozlov:\nfirst cell", "must have the concatenated texts");
 			return;
 			assert.equal(ws.B1.c[0].r, '<r><rPr><b/><sz val="8"/><color indexed="81"/><rFont val="Tahoma"/></rPr><t>Yegor Kozlov:</t></r><r><rPr><sz val="8"/><color indexed="81"/><rFont val="Tahoma"/></rPr><t xml:space="preserve">\r\nfirst cell</t></r>', "must have the rich text representation");
 			assert.equal(ws.B1.c[0].h, '<span style="font-weight: bold;">Yegor Kozlov:</span><span style=""><br/>first cell</span>', "must have the html representation");
@@ -297,17 +348,6 @@ describe('features', function() {
 			wb1 = X.readFile(paths.cp1);
 			wb2 = X.readFile(paths.cp2);
 		});
-
-		function coreprop(wb) {
-			assert.equal(wb.Props.Company, 'Vector Inc');
-			assert.equal(wb.Props.Author, 'Pony Foo');
-		}
-		function custprop(wb) {
-			assert.equal(wb.Custprops['I am a boolean'], true);
-			assert.equal(wb.Custprops['Date completed'], '1967-03-09T16:30:00Z');
-			assert.equal(wb.Custprops.Status, 2);
-			assert.equal(wb.Custprops.Counter, -3.14);
-		}
 
 		it(N1 + ' should parse core properties', function() { coreprop(wb1); });
 		it(N2 + ' should parse core properties', function() { coreprop(wb2); });
@@ -384,18 +424,30 @@ describe('features', function() {
 
 });
 
+function password_file(x){return x.match(/^password.*\.xls$/); }
+var password_files = fs.readdirSync('test_files').filter(password_file);
 describe('invalid files', function() {
-	it('should fail on passwords', function() {
-		assert.throws(function() { X.readFile(dir + 'apachepoi_password.xls'); });
-		assert.throws(function() { X.readFile(dir + 'apachepoi_xor-encryption-abc.xls'); });
+	describe('parse', function() { [
+			['password', 'apachepoi_password.xls'],
+			['passwords', 'apachepoi_xor-encryption-abc.xls'],
+			['XLSX files', 'roo_type_excelx.xls'],
+			['ODS files', 'roo_type_openoffice.xls'],
+			['DOC files', 'word_doc.doc']
+		].forEach(function(w) { it('should fail on ' + w[0], function() { assert.throws(function() { X.readFile(dir + w[1]); }); }); });
 	});
-	it('should fail on XLSX files', function() {
-		assert.throws(function() { X.readFile(dir + 'roo_type_excelx.xls'); });
-	});
-	it('should fail on ODS files', function() {
-		assert.throws(function() { X.readFile(dir + 'roo_type_openoffice.xls');});
-	});
-	it('should fail on DOC files', function() {
-		assert.throws(function() { X.readFile(dir + 'word_doc.doc');});
+});
+describe('encryption', function() {
+	password_files.forEach(function(x) {
+		describe(x, function() {
+			it('should throw with no password', function() {assert.throws(function() { X.readFile(dir + x); }); });
+			it('should throw with wrong password', function() {assert.throws(function() { X.readFile(dir + x, {password:'passwor',WTF:opts.WTF}); }); });
+			it('should recognize correct password', function() {
+				try { X.readFile(dir + x, {password:'password',WTF:opts.WTF}); }
+				catch(e) { if(e.message == "Password is incorrect") throw e; }
+			});
+			it.skip('should decrypt file', function() {
+				var wb = X.readFile(dir + x, {password:'password',WTF:opts.WTF});
+			});
+		});
 	});
 });

@@ -16,11 +16,30 @@ var magic_formats = {
 	"Scientific": SSF._table[11],
 	"Yes/No": '"Yes";"Yes";"No";@',
 	"True/False": '"True";"True";"False";@',
-	"On/Off": '"Yes";"Yes";"No";@',
+	"On/Off": '"Yes";"Yes";"No";@'
 };
 
 function xlml_format(format, value) {
 	return SSF.format(magic_formats[format] || unescapexml(format), value);
+}
+
+/* TODO: Normalize the properties */
+function xlml_set_prop(Props, tag, val) {
+	switch(tag) {
+		case 'Description': tag = 'Comments'; break;
+	}
+	Props[tag] = val;
+}
+
+function xlml_set_custprop(Custprops, Rn, cp, val) {
+	switch((cp[0].match(/dt:dt="([\w.]+)"/)||["",""])[1]) {
+		case "boolean": val = parsexmlbool(val); break;
+		case "i2": case "int": case "r4": case "float": val = Number(val); break;
+		case "date": case "dateTime.tz": val = new Date(val); break;
+		case "i8": case "string": case "fixed": case "uuid": case "bin.base64": break;
+		default: throw "bad custprop:" + cp[0];
+	}
+	Custprops[unescapexml(Rn[3])] = val;
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
@@ -49,8 +68,6 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
 		case 'Number':
 			if(typeof cell.v === 'undefined') cell.v=Number(xml);
 			if(!cell.t) cell.t = 'n';
-			/* TODO: the next line is undocumented black magic */
-			//if((!nf || (nf == "General" && !cell.Formula)) && (cell.v != (cell.v|0))) { nf="#,##0.00"; console.log(cell.v, cell.v|0)}
 			break;
 		case 'Error': cell.t = 'e'; cell.v = xml; cell.w = xml; break;
 		default: cell.t = 's'; cell.v = fixstr(ss); break;
@@ -82,7 +99,7 @@ function parse_xlml_xml(d, opts) {
 	var styles = {}, stag = {};
 	var ss = "", fidx = 0;
 	var mergecells = [];
-	var Props = {}, Custprops = {}, pidx = 0;
+	var Props = {}, Custprops = {}, pidx = 0, cp = {};
 	var comments = [], comment = {};
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
@@ -133,7 +150,7 @@ function parse_xlml_xml(d, opts) {
 			if(Rn[1]==='/'){
 				if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;
 				sheetnames.push(sheetname);
-				cursheet["!ref"] = encode_range(refguess);
+				if(refguess.s.r <= refguess.e.r && refguess.s.c <= refguess.e.c) cursheet["!ref"] = encode_range(refguess);
 				if(mergecells.length) cursheet["!merges"] = mergecells;
 				sheets[sheetname] = cursheet;
 			} else {
@@ -186,7 +203,6 @@ function parse_xlml_xml(d, opts) {
 		case 'Interior': break;
 		case 'Protection': break;
 
-		/* TODO: Normalize the properties */
 		case 'Author':
 		case 'Title':
 		case 'Description':
@@ -204,7 +220,7 @@ function parse_xlml_xml(d, opts) {
 		case 'HyperlinkBase':
 		case 'Manager': {
 			if(Rn[0].match(/\/>$/)) break;
-			else if(Rn[1]==="/") Props[Rn[3]] = str.slice(pidx, Rn.index);
+			else if(Rn[1]==="/") xlml_set_prop(Props, Rn[3], str.slice(pidx, Rn.index));
 			else pidx = Rn.index + Rn[0].length;
 		} break;
 		case 'Paragraphs': break;
@@ -541,8 +557,8 @@ function parse_xlml_xml(d, opts) {
 			if(!state[state.length-1][1]) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 			if(state[state.length-1][0]==='CustomDocumentProperties') {
 				if(Rn[0].match(/\/>$/)) break;
-				else if(Rn[1]==="/") Custprops[Rn[3].replace(/_x0020_/g," ")] = str.slice(pidx, Rn.index);
-				else pidx = Rn.index + Rn[0].length;
+				else if(Rn[1]==="/") xlml_set_custprop(Custprops, Rn, cp, str.slice(pidx, Rn.index));
+				else { cp = Rn; pidx = Rn.index + Rn[0].length; }
 				break;
 			}
 			if(opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
@@ -559,8 +575,7 @@ function parse_xlml(data, opts) {
 	fixopts(opts=opts||{});
 	switch(opts.type||"base64") {
 		case "base64": return parse_xlml_xml(Base64.decode(data), opts);
-		case "binary": case "file": return parse_xlml_xml(data, opts);
+		case "binary": case "buffer": case "file": return parse_xlml_xml(data, opts);
 		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts);
-		default: throw "dafuq";
 	}
 }

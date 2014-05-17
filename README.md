@@ -4,7 +4,7 @@ Currently a parser for XLS (BIFF8) and XML (2003/2004) files.  Cleanroom impleme
 
 ## Installation
 
-In node:
+In [node](https://www.npmjs.org/package/xlsjs):
 
     npm install xlsjs
 
@@ -12,15 +12,34 @@ In the browser:
 
     <script src="xls.js"></script>
 
+In [bower](http://bower.io/search/?q=js-xls):
+
+    bower install js-xls
+
+CDNjs automatically pulls the latest version and makes all versions available at
+<http://cdnjs.com/libraries/xls>
+
+## Optional Modules
+
+The node version automatically requires modules for additional features.  Some of these modules are rather large in size and are only needed in special circumstances, so they do not ship with the core.  For browser use, they must be included directly:
+
+    <!-- international support from https://github.com/sheetjs/js-codepage -->
+    <script src="dist/cpexcel.js"></script>
+
+An appropriate version for each dependency is included in the dist/ directory.
+
+The complete single-file version is generated at `dist/xls.full.min.js`
+
 ## Usage
 
-Simple usage (gets the value of cell A1 of sheet Sheet1):
+Simple usage (gets the value of cell A1 of the first worksheet):
 
     var XLS = require('xlsjs');
-    var xls = XLS.readFile('test.xls');
-    var Sheet1A1 = xls.Sheets['Sheet1']['A1'].v;
+    var workbook = XLS.readFile('test.xls');
+    var sheet_name_list = workbook.SheetNames;
+    var Sheet1A1 = workbook.Sheets[sheet_name_list[0]]['A1'].v;
 
-The node version installs a binary `xls2csv` which can read XLS files and output the contents in various formats.  The source is available at `xls2csv.njs` in the bin directory.
+The node version installs a binary `xls` which can read XLS files and output the contents in various formats.  The source is available at `xls.njs` in the bin directory.
 
 See <http://oss.sheetjs.com/js-xls/> for a browser example.
 
@@ -32,7 +51,7 @@ Some helper functions in `XLS.utils` generate different views of the sheets:
 
 For more details:
 
-- `bin/xls2csv.njs` is a tool for node
+- `bin/xls.njs` is a tool for node
 - `index.html` is the live demo
 - `bits/80_xls.js` contains the logic for generating CSV and JSON from sheets
 
@@ -65,6 +84,7 @@ The exported `read` and `readFile` functions accept an options argument:
 | bookFiles   | false   | If true, add raw files to book object ** |
 | bookProps   | false   | If true, only parse enough to get book metadata ** |
 | bookSheets  | false   | If true, only parse enough to get the sheet names |
+| password    | ""      | If defined and file is encrypted, use password ** |
 
 - `cellFormula` only applies to constructing XLS formulae.  XLML R1C1 formulae
   are stored in plaintext, but XLS formulae are stored in a binary format.
@@ -74,12 +94,16 @@ The exported `read` and `readFile` functions accept an options argument:
 - `bookFiles` adds a `cfb` object (XLS only)
 - `sheetRows-1` rows will be generated when looking at the JSON object output
   (since the header row is counted as a row when parsing the data)
+- Currently only XOR encryption is supported.  Unsupported error will be thrown
+  for files employing other encryption methods.
 
-## Other Notes
+## Tested Environments
 
-`CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
+Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
 
-The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).  XML files are not processed by the CFB parser.
+ - <https://travis-ci.org/SheetJS/js-xls> for XLS module in node
+ - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
+ - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs
 
 ## Test Files
 
@@ -87,11 +111,24 @@ Test files are housed in [another repo](https://github.com/SheetJS/test_files).
 
 Running `make init` will refresh the `test_files` submodule and get the files.
 
-Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
+## Testing
 
- - <https://travis-ci.org/SheetJS/js-xls> for XLS module in node
- - <https://travis-ci.org/SheetJS/SheetJS.github.io> for XLS* modules
- - <https://saucelabs.com/u/sheetjs> for XLS* modules using Sauce Labs
+`make test` will run the node-based tests.  To run the in-browser tests, clone
+[the oss.sheetjs.com repo](https://github.com/SheetJS/SheetJS.github.io) and
+replace the xls.js file (then fire up the browser and go to `stress.html`):
+
+```
+$ cp xls.js ../SheetJS.github.io
+$ cd ../SheetJS.github.io
+$ simplehttpserver # or "python -mSimpleHTTPServer" or "serve"
+$ open -a Chromium.app http://localhost:8000/stress.html
+```
+
+## Other Notes
+
+`CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
+
+The mechanism is split into a CFB parser (which scans through the file and produces concrete data chunks) and a Workbook parser (which does excel-specific parsing).  XML files are not processed by the CFB parser.
 
 ## Contributing
 
@@ -110,6 +147,7 @@ It is the opinion of the Original Author that this code conforms to the terms of
 ## References
 
 OSP-covered specifications:
+
  - [MS-CFB]: Compound File Binary File Format
  - [MS-XLS]: Excel Binary File Format (.xls) Structure Specification
  - [MS-XLSB]: Excel (.xlsb) Binary File Format

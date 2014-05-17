@@ -65,7 +65,11 @@ var DocSummaryPIDDSI = {
 	0x11: { n: 'CharacterCount', t: VT_I4 },
 	0x13: { n: 'SharedDoc', t: VT_BOOL },
 	0x16: { n: 'HLinksChanged', t: VT_BOOL },
-	0x17: { n: 'Version', t: VT_I4 },
+	0x17: { n: 'AppVersion', t: VT_I4, p: 'version' },
+	0x1A: { n: 'ContentType', t: VT_STRING },
+	0x1B: { n: 'ContentStatus', t: VT_STRING },
+	0x1C: { n: 'Language', t: VT_STRING },
+	0x1D: { n: 'Version', t: VT_STRING },
 	0xFF: {}
 };
 
@@ -82,8 +86,8 @@ var SummaryPIDSI = {
 	0x09: { n: 'RevNumber', t: VT_STRING },
 	0x0A: { n: 'EditTime', t: VT_FILETIME },
 	0x0B: { n: 'LastPrinted', t: VT_FILETIME },
-	0x0C: { n: 'CreateTime', t: VT_FILETIME },
-	0x0D: { n: 'SaveTime', t: VT_FILETIME },
+	0x0C: { n: 'CreatedDate', t: VT_FILETIME },
+	0x0D: { n: 'ModifiedDate', t: VT_FILETIME },
 	0x0E: { n: 'PageCount', t: VT_I4 },
 	0x0F: { n: 'WordCount', t: VT_I4 },
 	0x10: { n: 'CharCount', t: VT_I4 },

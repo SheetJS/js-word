@@ -40,7 +40,17 @@ var CompObjP, SummaryP, WorkbookP;
 function slurp(R, blob, length, opts) {
 	var read = blob.read_shift.bind(blob);
 	var l = length;
-	var bufs = [blob.slice(blob.l,blob.l+l)];
+	var bufs = [];
+	var d = blob.slice(blob.l,blob.l+l);
+	if(opts.enc && opts.enc.insitu_decrypt) {
+		switch(R.n) {
+		case 'BOF': case 'FilePass': case 'FileLock': case 'InterfaceHdr': case 'RRDInfo': case 'RRDHead': case 'UsrExcl': break;
+		default:
+			if(d.length === 0) break;
+			opts.enc.insitu_decrypt(d);
+		}
+	}
+	bufs.push(d);
 	blob.l += length;
 	var next = (RecordEnum[__readUInt16LE(blob,blob.l)]);
 	while(next && next.n === 'Continue') {
@@ -98,7 +108,9 @@ function parse_workbook(blob, options) {
 		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
 	};
+	if(options.password) opts.password = options.password;
 	var mergecells = [];
+	var objects = [];
 	var supbooks = [[]]; // 1-indexed, will hold extern names
 	var sbc = 0, sbci = 0, sbcli = 0;
 	supbooks.SheetNames = opts.snames;
@@ -130,13 +142,19 @@ function parse_workbook(blob, options) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
-				case 'FilePass': opts.enc = val; if(XLS.verbose >= 2) console.error(val); throw new Error("Password protection unsupported"); /* break; */
+				case 'FilePass':
+					if(!opts.enc) blob.l = 0;
+					opts.enc = val;
+					if(opts.WTF) console.error(val);
+					if(!options.password) throw new Error("File is password-protected");
+					if(val.Type !== 0) throw new Error("Encryption scheme unsupported");
+					if(!val.valid) throw new Error("Password is incorrect");
+					break;
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
 					opts.codepage = val;
-					if(typeof current_codepage !== 'undefined') current_codepage = val;
-					if(typeof current_cptable !== 'undefined') current_cptable = cptable[val];
+					set_cp(val);
 					break;
 				case 'RRTabId': opts.rrtabid = val; break;
 				case 'WinProtect': opts.winlocked = val; break;
@@ -227,11 +245,12 @@ function parse_workbook(blob, options) {
 				case 'SXAddl': break; // TODO
 				case 'DConName': break; // TODO
 				case 'SXPI': break; // TODO
-				//case 'SxFormat': break; // TODO
-				//case 'SxRule': break; // TODO
-				//case 'SxFilt': break; // TODO
-				//case 'SxItm': break; // TODO
-				//case 'SxDXF': break; // TODO
+				case 'SxFormat': break; // TODO
+				case 'SxSelect': break; // TODO
+				case 'SxRule': break; // TODO
+				case 'SxFilt': break; // TODO
+				case 'SxItm': break; // TODO
+				case 'SxDXF': break; // TODO
 
 				/* Scenario Manager */
 				case 'ScenMan': break;
@@ -257,7 +276,7 @@ function parse_workbook(blob, options) {
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
 
 				case 'Protect': out["!protect"] = val; break; /* for sheet or book */
-				case 'Password': if(val !== 0 && XLS.verbose >= 2) console.error("Password verifier: " + val); break;
+				case 'Password': if(val !== 0 && opts.WTF) console.error("Password verifier: " + val); break;
 				case 'Prot4Rev': case 'Prot4RevPass': break; /*TODO: Revision Control*/
 
 				case 'BoundSheet8': {
@@ -422,12 +441,14 @@ function parse_workbook(blob, options) {
 				case 'HLink': {
 					for(rngR = val[0].s.r; rngR <= val[0].e.r; ++rngR)
 						for(rngC = val[0].s.c; rngC <= val[0].e.c; ++rngC)
-							out[encode_cell({c:rngC,r:rngR})].l = val[1];
+							if(out[encode_cell({c:rngC,r:rngR})])
+								out[encode_cell({c:rngC,r:rngR})].l = val[1];
 				} break;
 				case 'HLinkTooltip': {
 					for(rngR = val[0].s.r; rngR <= val[0].e.r; ++rngR)
 						for(rngC = val[0].s.c; rngC <= val[0].e.c; ++rngC)
-							out[encode_cell({c:rngC,r:rngR})].l.tooltip = val[1];
+							if(out[encode_cell({c:rngC,r:rngR})])
+								out[encode_cell({c:rngC,r:rngR})].l.tooltip = val[1];
 				} break;
 
 				case 'WOpt': break; // TODO: WTF?
@@ -575,102 +596,4 @@ WorkbookP.CompObjP = CompObjP;
 return WorkbookP;
 }
 
-function format_cell(cell, v) {
-	if(!cell) return "";
-	if(typeof cell.w !== 'undefined') return cell.w;
-	if(typeof v === 'undefined') v = cell.v;
-	if(!cell.XF) return v;
-	try { cell.w = SSF.format(cell.XF.ifmt||0, v); } catch(e) { return v; }
-	return cell.w;
-}
-
-function sheet_to_row_object_array(sheet, opts){
-	var val, row, r, hdr = {}, isempty, R, C, v;
-	var out = [];
-	opts = opts || {};
-	if(!sheet || !sheet["!ref"]) return out;
-	r = utils.decode_range(sheet["!ref"]);
-	for(R=r.s.r, C = r.s.c; C <= r.e.c; ++C) {
-		val = sheet[utils.encode_cell({c:C,r:R})];
-		if(!val) continue;
-		hdr[C] = format_cell(val);
-	}
-
-	for (R = r.s.r + 1; R <= r.e.r; ++R) {
-		isempty = true;
-		/* row index available as __rowNum__ */
-		row = Object.create({ __rowNum__ : R });
-		for (C = r.s.c; C <= r.e.c; ++C) {
-			val = sheet[utils.encode_cell({c: C,r: R})];
-			if(!val || !val.t) continue;
-			v = (val || {}).v;
-			switch(val.t){
-				case 'e': continue; /* TODO: emit error text? */
-				case 's': case 'str': break;
-				case 'b': case 'n': break;
-				default: throw 'unrecognized type ' + val.t;
-			}
-			if(typeof v !== 'undefined') {
-				row[hdr[C]] = opts.raw ? v||val.v : format_cell(val, v);
-				isempty = false;
-			}
-		}
-		if(!isempty) out.push(row);
-	}
-	return out;
-}
-
-function sheet_to_csv(sheet, opts) {
-	var out = [], txt = "";
-	opts = opts || {};
-	if(!sheet || !sheet["!ref"]) return "";
-	var r = utils.decode_range(sheet["!ref"]);
-	var fs = opts.FS||",", rs = opts.RS||"\n";
-
-	for(var R = r.s.r; R <= r.e.r; ++R) {
-		var row = [];
-		for(var C = r.s.c; C <= r.e.c; ++C) {
-			var val = sheet[utils.encode_cell({c:C,r:R})];
-			if(!val) { row.push(""); continue; }
-			txt = String(format_cell(val));
-			if(txt.indexOf(fs)!==-1 || txt.indexOf(rs)!==-1 || txt.indexOf('"')!==-1)
-				txt = "\"" + txt.replace(/"/g, '""') + "\"";
-			row.push(txt);
-		}
-		out.push(row.join(fs));
-	}
-	return out.join(rs) + (out.length ? rs : "");
-}
-var make_csv = sheet_to_csv;
-
-function get_formulae(ws) {
-	var cmds = [];
-	for(var y in ws) if(y[0] !=='!' && ws.hasOwnProperty(y)) {
-		var x = ws[y];
-		var val = "";
-		if(x.f) val = x.f;
-		else if(typeof x.w !== 'undefined') val = "'" + x.w;
-		else if(typeof x.v === 'undefined') continue;
-		else val = x.v;
-		cmds.push(y + "=" + val);
-	}
-	return cmds;
-}
-
-var utils = {
-	encode_col: encode_col,
-	encode_row: encode_row,
-	encode_cell: encode_cell,
-	encode_range: encode_range,
-	decode_col: decode_col,
-	decode_row: decode_row,
-	split_cell: split_cell,
-	decode_cell: decode_cell,
-	decode_range: decode_range,
-	sheet_to_csv: sheet_to_csv,
-	make_csv: sheet_to_csv,
-	get_formulae: get_formulae,
-	format_cell: format_cell,
-	sheet_to_row_object_array: sheet_to_row_object_array
-};
 

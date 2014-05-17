@@ -85,6 +85,9 @@ function parse_XLUnicodeString(blob) {
 /* 2.5.342 Xnum */
 function parse_Xnum(blob, length) { return blob.read_shift('ieee754'); }
 
+/* 2.5.61 ControlInfo */
+var parse_ControlInfo = parsenoop;
+
 /* [MS-OSHARED] 2.3.7.6 URLMoniker TODO: flags */
 var parse_URLMoniker = function(blob, length) {
 	var len = blob.read_shift(4), start = blob.l;

@@ -181,12 +181,12 @@ function parse_PropertySet(blob, PIDSI) {
 		if(PIDSI) {
 			var piddsi = PIDSI[Props[i][0]];
 			PropH[piddsi.n] = parse_TypedPropertyValue(blob, piddsi.t, {raw:true});
+			if(piddsi.p === 'version') PropH[piddsi.n] = String(PropH[piddsi.n] >> 16) + "." + String(PropH[piddsi.n] & 0xFFFF);
 			if(piddsi.n == "CodePage") switch(PropH[piddsi.n]) {
-				/* TODO: Generate files under every codepage */
-				case 10000: break; // OSX Roman
-				case 1252: break; // Windows Latin
-
-				case 0: PropH[piddsi.n] = 1252; break; // Unknown -> default
+				case 0: PropH[piddsi.n] = 1252;
+					/* falls through */
+				case 10000: // OSX Roman
+				case 1252: // Windows Latin
 
 				case 874: // SB Windows Thai
 				case 1250: // SB Windows Central Europe
@@ -205,12 +205,13 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1201: // UTF16BE
 				case 65000: case -536: // UTF-7
 				case 65001: case -535: // UTF-8
-					break;
+					set_cp(CodePage = PropH[piddsi.n]); break;
 				default: throw new Error("Unsupported CodePage: " + PropH[piddsi.n]);
 			}
 		} else {
 			if(Props[i][0] === 0x1) {
 				CodePage = PropH.CodePage = parse_TypedPropertyValue(blob, VT_I2);
+				set_cp(CodePage);
 				if(Dictionary !== -1) {
 					var oldpos = blob.l;
 					blob.l = Props[Dictionary][1];
@@ -232,7 +233,7 @@ function parse_PropertySet(blob, PIDSI) {
 					case VT_UI4: blob.l += 4; val = read(4); break;
 					case VT_R8: blob.l += 4; val = read(8, 'f'); break;
 					case VT_BOOL: blob.l += 4; val = parsebool(blob, 4); break;
-					case VT_FILETIME: blob.l += 4; val = parse_FILETIME(blob); break;
+					case VT_FILETIME: blob.l += 4; val = new Date(parse_FILETIME(blob)); break;
 					default: throw new Error("unparsed value: " + blob[blob.l]);
 				}
 				PropH[name] = val;

@@ -9,6 +9,7 @@ program
 	.usage('[options] <file> [sheetname]')
 	.option('-f, --file <file>', 'use specified workbook')
 	.option('-s, --sheet <sheet>', 'print specified sheet (default first sheet)')
+	.option('-p, --password <pw>', 'if file is encrypted, try with specified pw')
 	.option('-l, --list-sheets', 'list sheet names and exit')
 	.option('-S, --formulae', 'print formulae')
 	.option('-j, --json', 'emit formatted JSON rather than CSV (all fields text)')
@@ -49,6 +50,7 @@ var opts = {}, wb;
 if(program.listSheets) opts.bookSheets = true;
 if(program.sheetRows) opts.sheetRows = program.sheetRows;
 if(!program.formulae) opts.cellFormula = false;
+if(program.password) opts.password = program.password;
 
 if(program.dev) {
 	X.verbose = 2;

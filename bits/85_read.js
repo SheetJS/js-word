@@ -12,6 +12,7 @@ function xlsread(f, o) {
 	switch(firstbyte(f, o)) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
 		case 0x3C: return parse_xlml(f, o);
+		default: throw "Unsupported file";
 	}
 }
 var readFile = function(f,o) {
@@ -19,7 +20,7 @@ var readFile = function(f,o) {
 	if(!o) o = {};
 	switch(firstbyte(d, {type:'buffer'})) {
 		case 0xD0: return parse_xlscfb(CFB.read(d,{type:'buffer'}),o);
-		case 0x3C: o.type = "file"; return parse_xlml(d, o);
+		case 0x3C: return parse_xlml(d, (o.type="buffer",o));
 		default: throw "Unsupported file";
 	}
 };

@@ -1,9 +1,10 @@
+var current_codepage = 1252, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('codepage');
-	var current_codepage = 1252, current_cptable = cptable[1252];
+	current_cptable = cptable[current_codepage];
 }
-function reset_cp() {
-	current_codepage = 1252; if(typeof cptable !== 'undefined') current_cptable = cptable[1252];
-}
-function _getchar(x) { return String.fromCharCode(x); }
+function reset_cp() { set_cp(1252); }
+function set_cp(cp) { current_codepage = cp; if(typeof cptable !== 'undefined') current_cptable = cptable[cp]; }
 
+var _getchar = function(x) { return String.fromCharCode(x); };
+if(typeof cptable !== 'undefined') _getchar = function(x) { return current_codepage === 1200 ? String.fromCharCode(x) : cptable.utils.decode(current_codepage, [x%256,x>>8])[0]; };

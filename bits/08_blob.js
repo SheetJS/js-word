@@ -1,3 +1,8 @@
+function new_buf(len) {
+	/* jshint -W056 */
+	return new (typeof Buffer !== 'undefined' ? Buffer : Array)(len);
+	/* jshint +W056 */
+}
 function readIEEE754(buf, idx, isLE, nl, ml) {
 	if(typeof isLE === 'undefined') isLE = true;
 	if(!nl) nl = 8;
@@ -66,7 +71,7 @@ function s2a(s) {
 
 var __toBuffer;
 if(typeof Buffer !== "undefined") {
-	Buffer.prototype.hexlify= function() { return this.toString('hex'); };
+	Buffer.prototype.hexlify= function(s,e) {return this.toString('hex',s,e);};
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
 	Buffer.prototype.utf8 = function(s,e) { return this.toString('utf8',s,e); };
 	Buffer.prototype.lpstr = function(i) { var len = this.readUInt32LE(i); return len > 0 ? this.utf8(i+4,i+4+len-1) : "";};
@@ -74,21 +79,7 @@ if(typeof Buffer !== "undefined") {
 	if(typeof cptable !== "undefined") Buffer.prototype.lpstr = function(i) {
 		var len = this.readUInt32LE(i);
 		if(len === 0) return "";
-		if(typeof current_cptable === "undefined") return this.utf8(i+4,i+4+len-1);
-		var t = Array(this.slice(i+4,i+4+len-1));
-		var c, j = i+4, o = [], cc;
-		for(;j!=i+4+len;++j) {
-			c = this.readUInt8(j);
-			cc = current_cptable.dec[c];
-			if(typeof cc === 'undefined') {
-				c = c*256 + this.readUInt8(++j);
-				cc = current_cptable.dec[c];
-			}
-			if(typeof cc === 'undefined') throw "Unrecognized character " + c.toString(16);
-			if(c === 0) break;
-			o.push(cc);
-		}
-		return o.join("");
+		return cptable.utils.decode(current_codepage,this.slice(i+4,i+4+len-1));
 	};
 	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
 } else {
@@ -106,14 +97,22 @@ var __readUInt32LE = function(b, idx) { return b.readUInt32LE ? b.readUInt32LE(i
 var __readInt32LE = function(b, idx) { if(b.readInt32LE) return b.readInt32LE(idx); var u = __readUInt32LE(b,idx); if(!(u & 0x80000000)) return u; return (0xffffffff - u + 1) * -1; };
 var __readDoubleLE = function(b, idx) { return b.readDoubleLE ? b.readDoubleLE(idx) : readIEEE754(b, idx||0);};
 
-var __hexlify = function(b,l) { if(typeof Buffer !== 'undefined' && b instanceof Buffer) return b.toString('hex', b.l, b.l+l); return b.slice(b.l||0,(b.l||0)+16).map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
+var __hexlify = function(b,l) { if(b.hexlify) return b.hexlify((b.l||0), (b.l||0)+l); return b.slice(b.l||0,(b.l||0)+16).map(function(x){return (x<16?"0":"") + x.toString(16);}).join(""); };
+var __unhexlify = function(s) { if(typeof Buffer !== 'undefined') return new Buffer(s, 'hex'); return s.match(/../g).map(function(x) { return parseInt(x,16);}); };
 
 var __utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); var ss=[]; for(var i=s; i<e; i+=2) ss.push(String.fromCharCode(__readUInt16LE(b,i))); return ss.join("").replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
 
 var __utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); var ss=[]; for(var i=s; i<e; i++) ss.push(String.fromCharCode(__readUInt8(b,i))); return ss.join(""); };
 
 var __lpstr = function(b,i) { if(b.lpstr) return b.lpstr(i); var len = __readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
-var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return __utf8(b, i+4,i+4+len-1);};
+var __lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
+
+if(typeof cptable !== 'undefined') {
+	__utf16le = function(b,s,e) { if(b.utf16le) return b.utf16le(s,e); return cptable.utils.decode(1200, b.slice(s,e)).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
+	__utf8 = function(b,s,e) { if(b.utf8) return b.utf8(s,e); return cptable.utils.decode(65001, b.slice(s,e)).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!'); };
+	__lpstr = function(b,i) { if(b.lpstr) return b.lpstr(i); var len = __readUInt32LE(b,i); return len > 0 ? cptable.utils.decode(current_codepage, b.slice(i+4, i+4+len-1)) : "";};
+	__lpwstr = function(b,i) { if(b.lpwstr) return b.lpwstr(i); var len = 2*__readUInt32LE(b,i); return len > 0 ? cptable.utils.decode(current_codepage, b.slice(i+4,i+4+len-1)) : "";};
+}
 
 function bconcat(bufs) { return (typeof Buffer !== 'undefined') ? Buffer.concat(bufs) : [].concat.apply([], bufs); }
 
@@ -174,7 +173,7 @@ function ReadShift(size, t) {
 
 function CheckField(hexstr, fld) {
 	var b = this.slice(this.l, this.l+hexstr.length/2);
-	var m = b.hexlify ? b.hexlify() : __hexlify(b,hexstr.length/2);
+	var m = __hexlify(b,hexstr.length/2);
 	if(m !== hexstr) throw (fld||"") + 'Expected ' + hexstr + ' saw ' + m;
 	this.l += hexstr.length/2;
 }
