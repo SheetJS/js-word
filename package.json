@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.6.18",
+	"version": "0.6.19",
 	"author": "sheetjs",
 	"description": "XLS (Excel 97-2004 Spreadsheet) and XML (2003/2004) parser",
 	"keywords": [ "xls", "office", "excel", "spreadsheet" ],
@@ -9,9 +9,9 @@
 	},
 	"main": "./xls",
 	"dependencies": {
-		"ssf":"~0.6.5",
+		"ssf":"~0.7.0",
 		"codepage":"1.x",
-		"cfb":">=0.8.0",
+		"cfb":">=0.9.1",
 		"commander":""
 	},
 	"devDependencies": {

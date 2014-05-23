@@ -3,9 +3,11 @@ var X;
 var fs = require('fs'), assert = require('assert');
 describe('source',function(){it('should load',function(){X=require('./');});});
 
-var opts = {};
+var opts = {cellNF: true};
 if(process.env.WTF) opts.WTF = true;
-var ex = [".xls", ".xml"];
+var fullex = [".xls", ".xml"];
+var ex = fullex;
+if(process.env.FMTS === "full") process.env.FMTS = ex.join(":");
 if(process.env.FMTS) ex=process.env.FMTS.split(":").map(function(x){return x[0]==="."?x:"."+x;});
 var exp = ex.map(function(x){ return x + ".pending"; });
 function test_file(x){return ex.indexOf(x.substr(-4))>=0||exp.indexOf(x.substr(-12))>=0;}
@@ -301,8 +303,17 @@ describe('input formats', function() {
 		X.read(fs.readFileSync(paths.cst1, 'base64'), {type: 'base64'});
 		X.read(fs.readFileSync(paths.cst2, 'base64'), {type: 'base64'});
 	});
+	it('should read buffers', function() {
+		X.read(fs.readFileSync(paths.cst1), {type: 'buffer'});
+		X.read(fs.readFileSync(paths.cst2), {type: 'buffer'});
+	});
 	it('should read array', function() {
-		X.read(fs.readFileSync(dir+'merge_cells.xls.xml', 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
+		X.read(fs.readFileSync(paths.mc1, 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
+		X.read(fs.readFileSync(paths.mc2, 'binary').split("").map(function(x) { return x.charCodeAt(0); }), {type:'array'});
+	});
+	it('should throw if format is unknown', function() {
+		assert.throws(function() { X.read(fs.readFileSync(paths.cst1), {type: 'dafuq'}); });
+		assert.throws(function() { X.read(fs.readFileSync(paths.cst2), {type: 'dafuq'}); });
 	});
 });
 
@@ -424,6 +435,15 @@ describe('parse features', function() {
 
 });
 
+describe('roundtrip features', function() {
+	before(function() {
+		X = require('./');
+	});
+	describe('should parse core properties and custom properties', function() {
+		var wb1, wb2, base = './tmp/cp';
+	});
+});
+
 function password_file(x){return x.match(/^password.*\.xls$/); }
 var password_files = fs.readdirSync('test_files').filter(password_file);
 describe('invalid files', function() {
@@ -433,7 +453,35 @@ describe('invalid files', function() {
 			['XLSX files', 'roo_type_excelx.xls'],
 			['ODS files', 'roo_type_openoffice.xls'],
 			['DOC files', 'word_doc.doc']
-		].forEach(function(w) { it('should fail on ' + w[0], function() { assert.throws(function() { X.readFile(dir + w[1]); }); }); });
+		].forEach(function(w) { it('should fail on ' + w[0], function() {
+			assert.throws(function() { X.readFile(dir + w[1]); });
+			assert.throws(function() { X.read(fs.readFileSync(dir+w[1], 'base64'), {type:'base64'}); });
+		}); });
+	});
+	describe.skip('write', function() {
+		it('should pass', function() { X.write(X.readFile(paths.fst1), {type:'binary'}); });
+		it('should pass if a sheet is missing', function() {
+			var wb = X.readFile(paths.fst1); delete wb.Sheets[wb.SheetNames[0]];
+			X.read(X.write(wb, {type:'binary'}), {type:'binary'});
+		});
+		['Props', 'Custprops', 'SSF'].forEach(function(t) {
+			it('should pass if ' + t + ' is missing', function() {
+				var wb = X.readFile(paths.fst1);
+				assert.doesNotThrow(function() {
+					delete wb[t];
+					X.write(wb, {type:'binary'});
+				});
+			});
+		});
+		['SheetNames', 'Sheets'].forEach(function(t) {
+			it('should fail if ' + t + ' is missing', function() {
+				var wb = X.readFile(paths.fst1);
+				assert.throws(function() {
+					delete wb[t];
+					X.write(wb, {type:'binary'});
+				});
+			});
+		});
 	});
 });
 describe('encryption', function() {

@@ -158,6 +158,7 @@ apachepoi_52575_source.xls
 apachepoi_53404.xls
 apachepoi_53446.xls
 apachepoi_53588.xls
+apachepoi_53691.xls
 apachepoi_53798_shiftNegative_TMPL.xls
 apachepoi_53972.xls
 apachepoi_54016.xls
@@ -622,7 +623,7 @@ roo_formula_parse_error.xml
 roo_numbers1.xml
 roo_only_one_sheet.xml
 roo_paragraph.xml
-roo_simple_spreadsheet.xml.pending
+roo_simple_spreadsheet.xml
 roo_simple_spreadsheet_from_italo.xml
 roo_style.xml
 roo_time-test.xml

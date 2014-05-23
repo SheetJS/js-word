@@ -1,31 +1,3 @@
-var _chr = function(c) { return String.fromCharCode(c); };
-var attregexg=/(\w+)=((?:")([^"]*)(?:")|(?:')([^']*)(?:'))/g;
-var attregex=/(\w+)=((?:")(?:[^"]*)(?:")|(?:')(?:[^']*)(?:'))/;
-function parsexmltag(tag) {
-	var words = tag.split(/\s+/);
-	var z = {'0': words[0]};
-	if(words.length === 1) return z;
-	(tag.match(attregexg) || []).map(
-		function(x){var y=x.match(attregex); z[y[1]] = unescapexml(y[2].substr(1,y[2].length-2)); });
-	return z;
-}
-
-function evert(obj) {
-	var o = {};
-	Object.keys(obj).forEach(function(k) { if(obj.hasOwnProperty(k)) o[obj[k]] = k; });
-	return o;
-}
-
-var encodings = {
-	'&quot;': '"',
-	'&apos;': "'",
-	'&gt;': '>',
-	'&lt;': '<',
-	'&amp;': '&'
-};
-var rencoding = evert(encodings);
-var rencstr = "&<>'\"".split("");
-
 // TODO: CP remap (need to read file version to determine OS)
 function unescapexml(text){
 	var s = text + '';

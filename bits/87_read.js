@@ -4,7 +4,7 @@ function firstbyte(f,o) {
 		case 'base64': return Base64.decode(f.substr(0,12)).charCodeAt(0);
 		case 'binary': return f.charCodeAt(0);
 		case 'array': return f[0];
-		default: return 0xD0;
+		default: throw new Error("Unrecognized type " + o.type);
 	}
 }
 
@@ -24,3 +24,4 @@ var readFile = function(f,o) {
 		default: throw "Unsupported file";
 	}
 };
+

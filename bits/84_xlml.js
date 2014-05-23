@@ -43,8 +43,9 @@ function xlml_set_custprop(Custprops, Rn, cp, val) {
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
-function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
+function parse_xlml_data(xml, ss, data, cell, base, styles, csty, o) {
 	var nf = "General", sid = cell.StyleID; o = o || {};
+	if(typeof sid === 'undefined' && csty) sid = csty.StyleID;
 	while(styles[sid]) {
 		if(styles[sid].nf) nf = styles[sid].nf;
 		if(!styles[sid].Parent) break;
@@ -101,10 +102,11 @@ function parse_xlml_xml(d, opts) {
 	var mergecells = [];
 	var Props = {}, Custprops = {}, pidx = 0, cp = {};
 	var comments = [], comment = {};
+	var cstys = [], csty;
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, opts);
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, cstys[c], opts);
 			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
@@ -169,6 +171,7 @@ function parse_xlml_xml(d, opts) {
 			else {
 				table = parsexmltag(Rn[0]);
 				state.push([Rn[3], false]);
+				cstys = [];
 			}
 		} break;
 
@@ -182,9 +185,15 @@ function parse_xlml_xml(d, opts) {
 			stag.nf = parsexmltag(Rn[0]).Format || "General";
 		} break;
 
+		case 'Column': {
+			if(state[state.length-1][0] !== 'Table') break;
+			csty = parsexmltag(Rn[0]);
+			cstys[(csty.Index-1||cstys.length)] = csty;
+			for(var i = 0; i < +csty.Span; ++i) cstys[cstys.length] = csty;
+		} break;
+
 		case 'NamedRange': break;
 		case 'NamedCell': break;
-		case 'Column': break;
 		case 'B': break;
 		case 'I': break;
 		case 'U': break;
@@ -579,3 +588,5 @@ function parse_xlml(data, opts) {
 		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts);
 	}
 }
+
+function write_xlml(wb, opts) { }

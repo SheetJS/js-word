@@ -69,7 +69,12 @@ function s2a(s) {
 	return w;
 }
 
-var __toBuffer;
+var __toBuffer, ___toBuffer;
+__toBuffer = ___toBuffer = function(bufs) {
+	var x = [];
+	for(var i = 0; i != bufs[0].length; ++i) { x = x.concat(bufs[0][i]); }
+	return x;
+};
 if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function(s,e) {return this.toString('hex',s,e);};
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
@@ -81,13 +86,7 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		return cptable.utils.decode(current_codepage,this.slice(i+4,i+4+len-1));
 	};
-	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
-} else {
-	__toBuffer = function(bufs) {
-		var x = [];
-		for(var i = 0; i != bufs[0].length; ++i) { x = x.concat(bufs[0][i]); }
-		return x;
-	};
+	__toBuffer = function(bufs) { try { return Buffer.concat(bufs[0]); } catch(e) { return ___toBuffer(bufs);} };
 }
 
 var __readUInt8 = function(b, idx) { return b.readUInt8 ? b.readUInt8(idx) : b[idx]; };

@@ -3,7 +3,7 @@
 /*jshint funcscope:true */
 var XLS = {};
 (function(XLS){
-XLS.version = '0.6.18';
+XLS.version = '0.6.19';
 var current_codepage = 1252, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('codepage');
@@ -85,7 +85,12 @@ function s2a(s) {
 	return w;
 }
 
-var __toBuffer;
+var __toBuffer, ___toBuffer;
+__toBuffer = ___toBuffer = function(bufs) {
+	var x = [];
+	for(var i = 0; i != bufs[0].length; ++i) { x = x.concat(bufs[0][i]); }
+	return x;
+};
 if(typeof Buffer !== "undefined") {
 	Buffer.prototype.hexlify= function(s,e) {return this.toString('hex',s,e);};
 	Buffer.prototype.utf16le= function(s,e){return this.toString('utf16le',s,e).replace(/\u0000/,'').replace(/[\u0001-\u0006]/,'!');};
@@ -97,13 +102,7 @@ if(typeof Buffer !== "undefined") {
 		if(len === 0) return "";
 		return cptable.utils.decode(current_codepage,this.slice(i+4,i+4+len-1));
 	};
-	__toBuffer = function(bufs) { return Buffer.concat(bufs[0]); };
-} else {
-	__toBuffer = function(bufs) {
-		var x = [];
-		for(var i = 0; i != bufs[0].length; ++i) { x = x.concat(bufs[0][i]); }
-		return x;
-	};
+	__toBuffer = function(bufs) { try { return Buffer.concat(bufs[0]); } catch(e) { return ___toBuffer(bufs);} };
 }
 
 var __readUInt8 = function(b, idx) { return b.readUInt8 ? b.readUInt8(idx) : b[idx]; };
@@ -209,7 +208,7 @@ var _strrev = function(x) { return String(x).split("").reverse().join("");};
 function fill(c,l) { return new Array(l+1).join(c); }
 function pad(v,d,c){var t=String(v);return t.length>=d?t:(fill(c||0,d-t.length)+t);}
 function rpad(v,d,c){var t=String(v);return t.length>=d?t:(t+fill(c||0,d-t.length));}
-SSF.version = '0.6.5';
+SSF.version = '0.7.0';
 /* Options */
 var opts_fmt = {
 	date1904:0,
@@ -353,8 +352,8 @@ var parse_date_code = function parse_date_code(v,opts,b2) {
 };
 SSF.parse_date_code = parse_date_code;
 /*jshint -W086 */
-var write_date = function(type, fmt, val) {
-	var o, ss, y = val.y;
+var write_date = function(type, fmt, val, ss0) {
+	var o, ss, tt, y = val.y, sss0;
 	switch(type) {
 		case 'b': y = val.y + 543;
 			/* falls through */
@@ -391,11 +390,15 @@ var write_date = function(type, fmt, val) {
 			default: throw 'bad minute format: ' + fmt;
 		}
 		case 's': switch(fmt) { /* seconds */
-			case 's': ss=Math.round(val.S+val.u); return ss >= 60 ? 0 : ss;
-			case 'ss': ss=Math.round(val.S+val.u); if(ss>=60) ss=0; return pad(ss,2);
-			case 'ss.0': ss=Math.round(10*(val.S+val.u)); if(ss>=600) ss = 0; o = pad(ss,3); return o.substr(0,2)+"." + o.substr(2);
-			case 'ss.00': ss=Math.round(100*(val.S+val.u)); if(ss>=6000) ss = 0; o = pad(ss,4); return o.substr(0,2)+"." + o.substr(2);
-			case 'ss.000': ss=Math.round(1000*(val.S+val.u)); if(ss>=60000) ss = 0; o = pad(ss,5); return o.substr(0,2)+"." + o.substr(2);
+			case 's': case 'ss': case '.0': case '.00': case '.000':
+				sss0 = ss0 || 0;
+				tt = Math.pow(10,sss0);
+				ss = Math.round((tt)*(val.S + val.u));
+				if(fmt === 's') return ss >= 60*tt ? 0 : ss/tt;
+				else if(fmt === 'ss') { if(ss>=60*tt) ss=0; return pad(ss,(2+sss0)).substr(0,2); }
+				if(ss >= 60*tt) ss = 0;
+				o = pad(ss,2 + sss0);
+				return "." + o.substr(2,fmt.length-1);
 			default: throw 'bad second format: ' + fmt;
 		}
 		case 'Z': switch(fmt) {
@@ -404,7 +407,6 @@ var write_date = function(type, fmt, val) {
 			case '[s]': case '[ss]': o = ((val.D*24+val.H)*60+val.M)*60+Math.round(val.S+val.u); break;
 			default: throw 'bad abstime format: ' + fmt;
 		} return fmt.length === 3 ? o : pad(o, 2);
-		/* TODO: handle the ECMA spec format ee -> yy */
 		case 'e': { return val.y; } break;
 	}
 };
@@ -489,12 +491,22 @@ var write_num = function(type, fmt, val) {
 		ff = frac(aval, Math.pow(10,rr)-1, true);
 		return sign + (ff[0]||(ff[1] ? "" : "0")) + " " + (ff[1] ? pad(ff[1],rr," ") + r[2] + "/" + r[3] + rpad(ff[2],rr," "): fill(" ", 2*rr+1 + r[2].length + r[3].length));
 	}
+	if((r = fmt.match(/^[#0]+$/))) {
+		o = "" + Math.round(val);
+		if(fmt.length <= o.length) return o;
+		return fmt.substr(0,fmt.length - o.length).replace(/#/g,"") + o;
+	}
+	if((r = fmt.match(/^([#0]+)\.([#0]+)$/))) {
+		o = "" + val.toFixed(Math.min(r[2].length,10)).replace(/([^0])0+$/,"$1");
+		rr = o.indexOf(".");
+		var lres = fmt.indexOf(".") - rr, rres = fmt.length - o.length - lres;
+		return fmt.substr(0,lres).replace(/#/g,"") + o + fmt.substr(fmt.length-rres).replace(/#/g,"");
+	}
 	if((r = fmt.match(/^00,000\.([#0]*0)$/))) {
 		rr = val == Math.floor(val) ? 0 : Math.round((val-Math.floor(val))*Math.pow(10,r[1].length));
 		return val < 0 ? "-" + write_num(type, fmt, -val) : commaify(String(Math.floor(val))).replace(/^\d,\d{3}$/,"0$&").replace(/^\d*$/,function($$) { return "00," + ($$.length < 3 ? pad(0,3-$$.length) : "") + $$; }) + "." + pad(rr,r[1].length,0);
 	}
 	switch(fmt) {
-		case "0": case "#0": return ""+Math.round(val);
 		case "#,###": var x = commaify(String(Math.round(aval))); return x !== "0" ? sign + x : "";
 		default:
 	}
@@ -517,7 +529,7 @@ function split_fmt(fmt) {
 }
 SSF._split = split_fmt;
 function eval_fmt(fmt, v, opts, flen) {
-	var out = [], o = "", i = 0, c = "", lst='t', q, dt;
+	var out = [], o = "", i = 0, c = "", lst='t', q, dt, j;
 	fixopts(opts = (opts || {}));
 	var hr='H';
 	/* Tokenize */
@@ -549,7 +561,6 @@ function eval_fmt(fmt, v, opts, flen) {
 				if(!dt) dt = parse_date_code(v, opts);
 				if(!dt) return "";
 				o = fmt[i]; while((fmt[++i]||"").toLowerCase() === c) o+=c;
-				if(c === 's' && fmt[i] === '.' && fmt[i+1] === '0') { o+='.'; while(fmt[++i] === '0') o+= '0'; }
 				if(c === 'm' && lst.toLowerCase() === 'h') c = 'M'; /* m = minute */
 				if(c === 'h') c = hr;
 				o = o.toLowerCase();
@@ -573,7 +584,13 @@ function eval_fmt(fmt, v, opts, flen) {
 				} else { o=""; }
 				break;
 			/* Numbers */
-			case '0': case '#': case '.':
+			case '.':
+				if(dt) {
+					o = c; while((c=fmt[++i]) === "0") o += c;
+					out.push({t:'s', v:o}); break;
+				}
+				/* falls through */
+			case '0': case '#':
 				o = c; while("0#?.,E+-%".indexOf(c=fmt[++i]) > -1 || c=='\\' && fmt[i+1] == "-" && "0#".indexOf(fmt[i+2])>-1) o += c;
 				out.push({t:'n', v:o}); break;
 			case '?':
@@ -591,11 +608,13 @@ function eval_fmt(fmt, v, opts, flen) {
 				out.push({t:'t', v:c}); ++i; break;
 		}
 	}
-	var bt = 0;
+	var bt = 0, ss0 = 0, ssm;
 	for(i=out.length-1, lst='t'; i >= 0; --i) {
 		switch(out[i].t) {
 			case 'h': case 'H': out[i].t = hr; lst='h'; if(bt < 1) bt = 1; break;
-			case 's': if(bt < 3) bt = 3;
+			case 's':
+				if((ssm=out[i].v.match(/\.0+$/))) ss0=Math.max(ss0,ssm[0].length-1);
+				if(bt < 3) bt = 3;
 			/* falls through */
 			case 'd': case 'y': case 'M': case 'e': lst=out[i].t; break;
 			case 'm': if(lst === 's') { out[i].t = 'M'; if(bt < 2) bt = 2; } break;
@@ -620,24 +639,76 @@ function eval_fmt(fmt, v, opts, flen) {
 			break;
 	}
 	/* replace fields */
+	var nstr = "", jj;
 	for(i=0; i < out.length; ++i) {
 		switch(out[i].t) {
 			case 't': case 'T': case ' ': case 'D': break;
 			case 'X': delete out[i]; break;
 			case 'd': case 'm': case 'y': case 'h': case 'H': case 'M': case 's': case 'e': case 'b': case 'Z':
-				out[i].v = write_date(out[i].t, out[i].v, dt);
+				out[i].v = write_date(out[i].t, out[i].v, dt, ss0);
 				out[i].t = 't'; break;
 			case 'n': case '(': case '?':
-				var jj = i+1;
+				jj = i+1;
 				while(out[jj] && ("?D".indexOf(out[jj].t) > -1 || (" t".indexOf(out[jj].t) > -1 && "?t".indexOf((out[jj+1]||{}).t)>-1 && (out[jj+1].t == '?' || out[jj+1].v == '/')) || out[i].t == '(' && (")n ".indexOf(out[jj].t) > -1) || out[jj].t == 't' && (out[jj].v == '/' || '$€'.indexOf(out[jj].v) > -1 || (out[jj].v == ' ' && (out[jj+1]||{}).t == '?')))) {
 					out[i].v += out[jj].v;
 					delete out[jj]; ++jj;
 				}
-				out[i].v = write_num(out[i].t, out[i].v, (flen >1 && v < 0 && i>0 && out[i-1].v == "-" ? -v:v));
-				out[i].t = 't';
+				nstr += out[i].v;
 				i = jj-1; break;
 			case 'G': out[i].t = 't'; out[i].v = general_fmt(v,opts); break;
 		}
+	}
+	if(nstr) {
+		var ostr = write_num(nstr[0]=='(' ? '(' : 'n', nstr, (v<0&&nstr[0] == "-" ? -v : v));
+		jj=ostr.length-1;
+		var decpt = out.length;
+		for(i=0; i < out.length; ++i) if(out[i] && out[i].v.indexOf(".") > -1) { decpt = i; break; }
+		var lasti=out.length, vv;
+		if(decpt === out.length && !ostr.match(/E/)) {
+			for(i=out.length-1; i>= 0;--i) {
+				if(!out[i] || 'n?('.indexOf(out[i].t) === -1) continue;
+				vv = out[i].v.split("");
+				for(j=vv.length-1; j>=0; --j) {
+					if(jj>=0) vv[j] = ostr[jj--];
+					else vv[j] = "";
+				}
+				out[i].v = vv.join("");
+				out[i].t = 't';
+				lasti = i;
+			}
+			if(jj>=0 && lasti<out.length) out[lasti].v = ostr.substr(0,jj+1) + out[lasti].v;
+		}
+		else if(decpt !== out.length && !ostr.match(/E/)) {
+			jj = ostr.indexOf(".")-1;
+			for(i=decpt; i>= 0; --i) {
+				if(!out[i] || 'n?('.indexOf(out[i].t) === -1) continue;
+				vv = out[i].v.split("");
+				for(j=out[i].v.indexOf(".")>-1&&i==decpt?out[i].v.indexOf(".")-1:vv.length-1; j>=0; --j) {
+					if(jj>=0 && "0#".indexOf(vv[j])>-1) vv[j] = ostr[jj--];
+					else vv[j] = "";
+				}
+				out[i].v = vv.join("");
+				out[i].t = 't';
+				lasti = i;
+			}
+			if(jj>=0 && lasti<out.length) out[lasti].v = ostr.substr(0,jj+1) + out[lasti].v;
+			jj = ostr.indexOf(".")+1;
+			for(i=decpt; i<out.length; ++i) {
+				if(!out[i] || 'n?('.indexOf(out[i].t) === -1 && i != decpt ) continue;
+				vv = out[i].v.split("");
+				for(j=out[i].v.indexOf(".")>-1&&i==decpt?out[i].v.indexOf(".")+1:0; j<vv.length; ++j) {
+					if(jj<ostr.length) vv[j] = ostr[jj++];
+					else vv[j] = "";
+				}
+				out[i].v = vv.join("");
+				out[i].t = 't';
+				lasti = i;
+			}
+		}
+	}
+	for(i=0; i<out.length; ++i) if(out[i] && 'n(?'.indexOf(out[i].t)>-1) {
+		out[i].v = write_num(out[i].t, out[i].v, (flen >1 && v < 0 && i>0 && out[i-1].v == "-" ? -v:v));
+		out[i].t = 't';
 	}
 	return out.map(function(x){return x.v;}).join("");
 }
@@ -1089,7 +1160,7 @@ function parse_PropertySetStream(file, PIDSI) {
 /* [MS-CFB] v20130118 */
 /*if(typeof module !== "undefined" && typeof require !== 'undefined') CFB = require('cfb');
 else*/ var CFB = (function(){
-this.version = '0.9.0';
+this.version = '0.9.1';
 var exports = {};
 function parse(file) {
 
@@ -1312,10 +1383,20 @@ function build_full_paths(Dir, pathobj, paths, patharr) {
 
 	for(i=0; i != dad.length; ++i) { dad[i]=q[i]=i; paths[i]=patharr[i]; }
 
-	for(i = q[0]; typeof i !== "undefined"; i = q.shift()) {
-		if(Dir[i].child) dad[Dir[i].child] = i;
-		if(Dir[i].left) { dad[Dir[i].left] = dad[i]; q.push(Dir[i].left); }
-		if(Dir[i].right) { dad[Dir[i].right] = dad[i]; q.push(Dir[i].right); }
+	while(q.length > 0) {
+		for(i = q[0]; typeof i !== "undefined"; i = q.shift()) {
+			if(dad[i] === i) {
+				if(Dir[i].left && dad[Dir[i].left] != Dir[i].left) dad[i] = dad[Dir[i].left];
+				if(Dir[i].right && dad[Dir[i].right] != Dir[i].right) dad[i] = dad[Dir[i].right];
+			}
+			if(Dir[i].child) dad[Dir[i].child] = i;
+			if(Dir[i].left) { dad[Dir[i].left] = dad[i]; q.push(Dir[i].left); }
+			if(Dir[i].right) { dad[Dir[i].right] = dad[i]; q.push(Dir[i].right); }
+		}
+		for(i=1; i != dad.length; ++i) if(dad[i] === i) {
+			if(Dir[i].right && dad[Dir[i].right] != Dir[i].right) dad[i] = dad[Dir[i].right];
+			else if(Dir[i].left && dad[Dir[i].left] != Dir[i].left) dad[i] = dad[Dir[i].left];
+		}
 	}
 
 	for(i=1; i !== paths.length; ++i) {
@@ -1576,6 +1657,19 @@ var parse_Hyperlink = function(blob, length) {
 	if(location) target+="#"+location;
 	return {Target: target};
 };
+function isval(x) { return typeof x !== "undefined" && x !== null; }
+
+function keys(o) { return Object.keys(o).filter(function(x) { return o.hasOwnProperty(x); }); }
+
+function evert(obj, arr) {
+	var o = {};
+	keys(obj).forEach(function(k) {
+		if(!obj.hasOwnProperty(k)) return;
+		if(!arr) o[obj[k]] = k;
+		else (o[obj[k]]=o[obj[k]]||[]).push(k);
+	});
+	return o;
+}
 
 
 /* 2.5.19 */
@@ -2438,6 +2532,29 @@ var parse_BopPopCustom = parsenoop;
 var parse_Fbi2 = parsenoop;
 
 
+var _chr = function(c) { return String.fromCharCode(c); };
+var attregexg=/(\w+)=((?:")([^"]*)(?:")|(?:')([^']*)(?:'))/g;
+var attregex=/(\w+)=((?:")(?:[^"]*)(?:")|(?:')(?:[^']*)(?:'))/;
+function parsexmltag(tag) {
+	var words = tag.split(/\s+/);
+	var z = {'0': words[0]};
+	if(words.length === 1) return z;
+	(tag.match(attregexg) || []).map(
+		function(x){var y=x.match(attregex); z[y[1]] = unescapexml(y[2].substr(1,y[2].length-2)); });
+	return z;
+}
+
+var encodings = {
+	'&quot;': '"',
+	'&apos;': "'",
+	'&gt;': '>',
+	'&lt;': '<',
+	'&amp;': '&'
+};
+var rencoding = evert(encodings);
+var rencstr = "&<>'\"".split("");
+
+var XML_HEADER = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n';
 var OFFCRYPTO = {};
 var make_offcrypto = function(O, _crypto) {
 	var crypto;
@@ -5576,34 +5693,6 @@ return WorkbookP;
 }
 
 
-var _chr = function(c) { return String.fromCharCode(c); };
-var attregexg=/(\w+)=((?:")([^"]*)(?:")|(?:')([^']*)(?:'))/g;
-var attregex=/(\w+)=((?:")(?:[^"]*)(?:")|(?:')(?:[^']*)(?:'))/;
-function parsexmltag(tag) {
-	var words = tag.split(/\s+/);
-	var z = {'0': words[0]};
-	if(words.length === 1) return z;
-	(tag.match(attregexg) || []).map(
-		function(x){var y=x.match(attregex); z[y[1]] = unescapexml(y[2].substr(1,y[2].length-2)); });
-	return z;
-}
-
-function evert(obj) {
-	var o = {};
-	Object.keys(obj).forEach(function(k) { if(obj.hasOwnProperty(k)) o[obj[k]] = k; });
-	return o;
-}
-
-var encodings = {
-	'&quot;': '"',
-	'&apos;': "'",
-	'&gt;': '>',
-	'&lt;': '<',
-	'&amp;': '&'
-};
-var rencoding = evert(encodings);
-var rencstr = "&<>'\"".split("");
-
 // TODO: CP remap (need to read file version to determine OS)
 function unescapexml(text){
 	var s = text + '';
@@ -5698,8 +5787,9 @@ function xlml_set_custprop(Custprops, Rn, cp, val) {
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
-function parse_xlml_data(xml, ss, data, cell, base, styles, o) {
+function parse_xlml_data(xml, ss, data, cell, base, styles, csty, o) {
 	var nf = "General", sid = cell.StyleID; o = o || {};
+	if(typeof sid === 'undefined' && csty) sid = csty.StyleID;
 	while(styles[sid]) {
 		if(styles[sid].nf) nf = styles[sid].nf;
 		if(!styles[sid].Parent) break;
@@ -5756,10 +5846,11 @@ function parse_xlml_xml(d, opts) {
 	var mergecells = [];
 	var Props = {}, Custprops = {}, pidx = 0, cp = {};
 	var comments = [], comment = {};
+	var cstys = [], csty;
 	while((Rn = re.exec(str))) switch(Rn[3]) {
 		case 'Data': {
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, opts);
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, cstys[c], opts);
 			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 		} break;
 		case 'Cell': {
@@ -5824,6 +5915,7 @@ function parse_xlml_xml(d, opts) {
 			else {
 				table = parsexmltag(Rn[0]);
 				state.push([Rn[3], false]);
+				cstys = [];
 			}
 		} break;
 
@@ -5837,9 +5929,15 @@ function parse_xlml_xml(d, opts) {
 			stag.nf = parsexmltag(Rn[0]).Format || "General";
 		} break;
 
+		case 'Column': {
+			if(state[state.length-1][0] !== 'Table') break;
+			csty = parsexmltag(Rn[0]);
+			cstys[(csty.Index-1||cstys.length)] = csty;
+			for(var i = 0; i < +csty.Span; ++i) cstys[cstys.length] = csty;
+		} break;
+
 		case 'NamedRange': break;
 		case 'NamedCell': break;
-		case 'Column': break;
 		case 'B': break;
 		case 'I': break;
 		case 'U': break;
@@ -6234,13 +6332,15 @@ function parse_xlml(data, opts) {
 		case "array": return parse_xlml_xml(data.map(function(x) { return String.fromCharCode(x);}).join(""), opts);
 	}
 }
+
+function write_xlml(wb, opts) { }
 function firstbyte(f,o) {
 	switch((o||{}).type || "base64") {
 		case 'buffer': return f[0];
 		case 'base64': return Base64.decode(f.substr(0,12)).charCodeAt(0);
 		case 'binary': return f.charCodeAt(0);
 		case 'array': return f[0];
-		default: return 0xD0;
+		default: throw new Error("Unrecognized type " + o.type);
 	}
 }
 
@@ -6260,6 +6360,25 @@ var readFile = function(f,o) {
 		default: throw "Unsupported file";
 	}
 };
+
+function writeSync(wb, opts) {
+	var o = opts||{};
+	switch(o.bookType) {
+		case 'xml': return write_xlml(wb, o);
+		default: throw 'unsupported output format ' + o.bookType;
+	}
+}
+
+function writeFileSync(wb, filename, opts) {
+	var o = opts|{}; o.type = 'file';
+	o.file = filename;
+	switch(o.file.substr(-4).toLowerCase()) {
+		case '.xls': o.bookType = 'xls'; break;
+		case '.xml': o.bookType = 'xml'; break;
+	}
+	return writeSync(wb, o);
+}
+
 function shift_cell(cell, tgt) {
 	if(tgt.s) {
 		if(cell.cRel) cell.c += tgt.s.c;
