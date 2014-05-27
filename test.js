@@ -484,6 +484,106 @@ describe('invalid files', function() {
 		});
 	});
 });
+describe('json output', function() {
+	function datenum(v, date1904) {
+		if(date1904) v+=1462;
+		var epoch = Date.parse(v);
+		return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+	}
+	function sheet_from_array_of_arrays(data, opts) {
+		var ws = {};
+		var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+		for(var R = 0; R != data.length; ++R) {
+			for(var C = 0; C != data[R].length; ++C) {
+				if(range.s.r > R) range.s.r = R;
+				if(range.s.c > C) range.s.c = C;
+				if(range.e.r < R) range.e.r = R;
+				if(range.e.c < C) range.e.c = C;
+				var cell = {v: data[R][C] };
+				if(cell.v == null) continue;
+				var cell_ref = X.utils.encode_cell({c:C,r:R});
+				if(typeof cell.v === 'number') cell.t = 'n';
+				else if(typeof cell.v === 'boolean') cell.t = 'b';
+				else if(cell.v instanceof Date) {
+					cell.t = 'n'; cell.z = X.SSF._table[14];
+					cell.v = datenum(cell.v);
+				}
+				else cell.t = 's';
+				ws[cell_ref] = cell;
+			}
+		}
+		if(range.s.c < 10000000) ws['!ref'] = X.utils.encode_range(range);
+		return ws;
+	}
+	function seeker(json, keys, val) {
+		for(var i = 0; i != json.length; ++i) {
+			for(var j = 0; j != keys.length; ++j) {
+				if(json[i][keys[j]] === val) throw new Error("found " + val + " in row " + i + " key " + keys[j]);
+			}
+		}
+	}
+	var data, ws;
+	before(function() {
+		data = [
+			[1,2,3],
+			[true, false, null, "sheetjs"],
+			["foo","bar",new Date("2014-02-19T14:30Z"), "0.3"],
+			["baz", null, "qux"]
+		];
+		ws = sheet_from_array_of_arrays(data);
+	});
+	it('should use first-row headers and full sheet by default', function() {
+		var json = X.utils.sheet_to_json(ws);
+		assert.equal(json.length, data.length - 1);
+		assert.equal(json[0][1], true);
+		assert.equal(json[1][2], "bar");
+		assert.equal(json[2][3], "qux");
+		assert.doesNotThrow(function() { seeker(json, [1,2,3], "sheetjs"); });
+		assert.throws(function() { seeker(json, [1,2,3], "baz"); });
+	});
+	it('should create array of arrays if header == 1', function() {
+		var json = X.utils.sheet_to_json(ws, {header:1});
+		assert.equal(json.length, data.length);
+		assert.equal(json[1][0], true);
+		assert.equal(json[2][1], "bar");
+		assert.equal(json[3][2], "qux");
+		assert.doesNotThrow(function() { seeker(json, [0,1,2], "sheetjs"); });
+		assert.throws(function() { seeker(json, [0,1,2,3], "sheetjs"); });
+		assert.throws(function() { seeker(json, [0,1,2], "baz"); });
+	});
+	it('should use column names if header == "A"', function() {
+		var json = X.utils.sheet_to_json(ws, {header:'A'});
+		assert.equal(json.length, data.length);
+		assert.equal(json[1]['A'], true);
+		assert.equal(json[2]['B'], "bar");
+		assert.equal(json[3]['C'], "qux");
+		assert.doesNotThrow(function() { seeker(json, "ABC", "sheetjs"); });
+		assert.throws(function() { seeker(json, "ABCD", "sheetjs"); });
+		assert.throws(function() { seeker(json, "ABC", "baz"); });
+	});
+	it('should use column labels if specified', function() {
+		var json = X.utils.sheet_to_json(ws, {header:["O","D","I","N"]});
+		assert.equal(json.length, data.length);
+		assert.equal(json[1]['O'], true);
+		assert.equal(json[2]['D'], "bar");
+		assert.equal(json[3]['I'], "qux");
+		assert.doesNotThrow(function() { seeker(json, "ODI", "sheetjs"); });
+		assert.throws(function() { seeker(json, "ODIN", "sheetjs"); });
+		assert.throws(function() { seeker(json, "ODIN", "baz"); });
+	});
+	[["string", "A2:D4"], ["numeric", 1], ["object", {s:{r:1,c:0},e:{r:3,c:3}}]].forEach(function(w) {
+		it('should accept custom ' + w[0] + ' range', function() {
+			var json = X.utils.sheet_to_json(ws, {header:1, range:w[1]});
+			assert.equal(json.length, 3);
+			assert.equal(json[0][0], true);
+			assert.equal(json[1][1], "bar");
+			assert.equal(json[2][2], "qux");
+			assert.doesNotThrow(function() { seeker(json, [0,1,2], "sheetjs"); });
+			assert.throws(function() { seeker(json, [0,1,2,3], "sheetjs"); });
+			assert.throws(function() { seeker(json, [0,1,2], "baz"); });
+		});
+	});
+});
 describe('encryption', function() {
 	password_files.forEach(function(x) {
 		describe(x, function() {
