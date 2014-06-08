@@ -2,23 +2,20 @@
 /* [MS-OLEDS] 2.1.3 FILETIME (Packet Version) */
 /* [MS-OLEPS] 2.8 FILETIME (Packet Version) */
 function parse_FILETIME(blob) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var dwLowDateTime = read(4), dwHighDateTime = read(4);
+	var dwLowDateTime = blob.read_shift(4), dwHighDateTime = blob.read_shift(4);
 	return new Date(((dwHighDateTime/1e7*Math.pow(2,32) + dwLowDateTime/1e7) - 11644473600)*1000).toISOString().replace(/\.000/,"");
 }
 
 /* [MS-OSHARED] 2.3.3.1.4 Lpstr */
 function parse_lpstr(blob, type, pad) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var str = read('lpstr');
+	var str = blob.read_shift('lpstr');
 	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
 	return str;
 }
 
 /* [MS-OSHARED] 2.3.3.1.6 Lpwstr */
 function parse_lpwstr(blob, type, pad) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var str = read('lpwstr');
+	var str = blob.read_shift('lpwstr');
 	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
 	return str;
 }
@@ -40,10 +37,9 @@ function parse_VtUnalignedString(blob, t) { if(!t) throw new Error("dafuq?"); re
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
 function parse_VtVecUnalignedLpstrValue(blob) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	var length = read(4);
+	var length = blob.read_shift(4);
 	var ret = [];
-	for(var i = 0; i != length; ++i) ret[i] = read('lpstr');
+	for(var i = 0; i != length; ++i) ret[i] = blob.read_shift('lpstr');
 	return ret;
 }
 
@@ -75,7 +71,7 @@ function parse_VtVecHeadingPair(blob) {
 
 /* [MS-OLEPS] 2.18.1 Dictionary (uses 2.17, 2.16) */
 function parse_dictionary(blob,CodePage) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var read = ReadShift.bind(blob);
 	var cnt = read(4);
 	var dict = {};
 	for(var j = 0; j != cnt; ++j) {
@@ -118,7 +114,7 @@ function parse_VtVector(blob, cb) {
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
 function parse_TypedPropertyValue(blob, type, _opts) {
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var read = ReadShift.bind(blob);
 	var t = read(2), ret, opts = _opts||{};
 	read(2);
 	if(type !== VT_VARIANT)
@@ -155,7 +151,7 @@ function parse_VTVectorVariant(blob) {
 /* [MS-OLEPS] 2.20 PropertySet */
 function parse_PropertySet(blob, PIDSI) {
 	var start_addr = blob.l;
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	var read = ReadShift.bind(blob);
 	var size = read(4);
 	var NumProps = read(4);
 	var Props = [], i = 0;

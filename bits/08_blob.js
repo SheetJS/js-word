@@ -4,7 +4,7 @@ function new_buf(len) {
 	/* jshint +W056 */
 }
 function readIEEE754(buf, idx, isLE, nl, ml) {
-	if(typeof isLE === 'undefined') isLE = true;
+	if(isLE === undefined) isLE = true;
 	if(!nl) nl = 8;
 	if(!ml && nl === 8) ml = 52;
 	var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1;
@@ -178,10 +178,12 @@ function CheckField(hexstr, fld) {
 }
 
 function prep_blob(blob, pos) {
-	blob.read_shift = ReadShift.bind(blob);
-	blob.chk = CheckField;
 	blob.l = pos || 0;
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
-	return [read, chk];
+	//var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	//blob.read_shift = read;
+	//blob.chk = chk;
+	blob.read_shift = ReadShift;
+	blob.chk = CheckField;
+	//return [read, chk];
 }
 

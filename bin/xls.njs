@@ -18,6 +18,8 @@ program
 	.option('-F, --field-sep <sep>', 'CSV field separator', ",")
 	.option('-R, --row-sep <sep>', 'CSV row separator', "\n")
 	.option('-n, --sheet-rows <num>', 'Number of rows to process (0=all rows)')
+	.option('--perf', 'do not generate output')
+	.option('--all', 'parse everything')
 	.option('--dev', 'development mode')
 	.option('--read', 'read but do not print out contents')
 	.option('-q, --quiet', 'quiet mode');
@@ -51,8 +53,14 @@ if(!fs.existsSync(filename)) {
 var opts = {}, wb;
 if(program.listSheets) opts.bookSheets = true;
 if(program.sheetRows) opts.sheetRows = program.sheetRows;
-if(!program.formulae) opts.cellFormula = false;
 if(program.password) opts.password = program.password;
+if(program.formulae) opts.cellFormula = true;
+else opts.cellFormula = false;
+
+if(program.all) {
+	opts.cellFormula = true;
+	opts.cellNF = true;
+}
 
 if(program.dev) {
 	X.verbose = 2;
@@ -85,6 +93,8 @@ try {
 	console.error(n + ": error parsing "+filename+" "+target_sheet+": " + e);
 	process.exit(4);
 }
+
+if(program.perf) return;
 
 var oo = ""; 
 if(!program.quiet) console.error(target_sheet);

@@ -10,10 +10,9 @@ function parse_Cell(blob, length) {
 
 /* 2.5.134 */
 function parse_frtHeader(blob) {
-	var read = blob.read_shift.bind(blob);
-	var rt = read(2);
-	var flags = read(2); // TODO: parse these flags
-	read(8);
+	var rt = blob.read_shift(2);
+	var flags = blob.read_shift(2); // TODO: parse these flags
+	blob.l += 8;
 	return {type: rt, flags: flags};
 }
 
@@ -27,8 +26,7 @@ var parse_HideObjEnum = parseuint16;
 
 /* 2.5.344 */
 function parse_XTI(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var iSupBook = read(2), itabFirst = read(2,'i'), itabLast = read(2,'i');
+	var iSupBook = blob.read_shift(2), itabFirst = blob.read_shift(2,'i'), itabLast = blob.read_shift(2,'i');
 	return [iSupBook, itabFirst, itabLast];
 }
 
@@ -179,10 +177,9 @@ function parse_WriteAccess(blob, length, opts) {
 
 /* 2.4.28 */
 function parse_BoundSheet8(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var pos = read(4);
-	var hidden = read(1) >> 6;
-	var dt = read(1);
+	var pos = blob.read_shift(4);
+	var hidden = blob.read_shift(1) >> 6;
+	var dt = blob.read_shift(1);
 	switch(dt) {
 		case 0: dt = 'Worksheet'; break;
 		case 1: dt = 'Macrosheet'; break;
@@ -195,9 +192,8 @@ function parse_BoundSheet8(blob, length) {
 
 /* 2.4.265 TODO */
 function parse_SST(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var cnt = read(4);
-	var ucnt = read(4);
+	var cnt = blob.read_shift(4);
+	var ucnt = blob.read_shift(4);
 	var strs = [];
 	for(var i = 0; i != ucnt; ++i) {
 		strs.push(parse_XLUnicodeRichExtendedString(blob));
@@ -208,22 +204,20 @@ function parse_SST(blob, length) {
 
 /* 2.4.107 */
 function parse_ExtSST(blob, length) {
-	var read = blob.read_shift.bind(blob);
 	var extsst = {};
-	extsst.dsst = read(2);
-	blob.read_shift(length-2);
+	extsst.dsst = blob.read_shift(2);
+	blob.l += length-2;
 	return extsst;
 }
 
 
 /* 2.4.221 TODO*/
 function parse_Row(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var rw = read(2), col = read(2), Col = read(2), rht = read(2);
-	read(4); // reserved(2), unused(2)
-	var flags = read(1); // various flags
-	read(1); // reserved
-	read(2); //ixfe, other flags
+	var rw = blob.read_shift(2), col = blob.read_shift(2), Col = blob.read_shift(2), rht = blob.read_shift(2);
+	blob.read_shift(4); // reserved(2), unused(2)
+	var flags = blob.read_shift(1); // various flags
+	blob.read_shift(1); // reserved
+	blob.read_shift(2); //ixfe, other flags
 	return {r:rw, c:col, cnt:Col-col};
 }
 
@@ -328,9 +322,8 @@ var parse_StyleXF = parsenoop;
 
 /* 2.4.353 TODO: actually do this right */
 function parse_XF(blob, length) {
-	var read = blob.read_shift.bind(blob);
 	var o = {};
-	o.ifnt = read(2); o.ifmt = read(2); o.flags = read(2);
+	o.ifnt = blob.read_shift(2); o.ifmt = blob.read_shift(2); o.flags = blob.read_shift(2);
 	o.fStyle = (o.flags >> 2) & 0x01;
 	length -= 6;
 	o.data = o.fStyle ? parse_StyleXF(blob, length) : parse_CellXF(blob, length);

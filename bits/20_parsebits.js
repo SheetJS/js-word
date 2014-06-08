@@ -21,7 +21,7 @@ function parslurp2(blob, length, cb) {
 
 function parsebool(blob, length) { return blob.read_shift(length) === 0x1; }
 
-function parseuint16(blob, length) { return blob.read_shift(2, 'u'); }
+function parseuint16(blob) { return blob.read_shift(2, 'u'); }
 function parseuint16a(blob, length) { return parslurp(blob,length,parseuint16);}
 
 /* --- 2.5 Structures --- */
@@ -37,27 +37,25 @@ function parse_Bes(blob) {
 
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
 function parse_ShortXLUnicodeString(blob) {
-	var read = blob.read_shift.bind(blob);
-	var cch = read(1);
-	var fHighByte = read(1);
+	var cch = blob.read_shift(1);
+	var fHighByte = blob.read_shift(1);
 	var retval;
 	var width = 1 + (fHighByte === 0 ? 0 : 1), encoding = fHighByte ? 'dbcs' : 'sbcs';
-	retval = cch ? read(encoding, cch) : "";
+	retval = cch ? blob.read_shift(encoding, cch) : "";
 	return retval;
 }
 
 /* 2.5.293 XLUnicodeRichExtendedString */
 function parse_XLUnicodeRichExtendedString(blob) {
-	var read_shift = blob.read_shift.bind(blob);
-	var cch = read_shift(2), flags = read_shift(1);
+	var cch = blob.read_shift(2), flags = blob.read_shift(1);
 	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
 	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
 	var cRun, cbExtRst;
 	var z = {};
-	if(fRichSt) cRun = read_shift(2);
-	if(fExtSt) cbExtRst = read_shift(4);
+	if(fRichSt) cRun = blob.read_shift(2);
+	if(fExtSt) cbExtRst = blob.read_shift(4);
 	var encoding = (flags & 0x1) ? 'dbcs' : 'sbcs';
-	var msg = cch === 0 ? "" : read_shift(encoding, cch);
+	var msg = cch === 0 ? "" : blob.read_shift(encoding, cch);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	z.t = msg;
@@ -67,8 +65,7 @@ function parse_XLUnicodeRichExtendedString(blob) {
 
 /* 2.5.296 XLUnicodeStringNoCch */
 function parse_XLUnicodeStringNoCch(blob, cch) {
-	var read = blob.read_shift.bind(blob);
-	var fHighByte = read(1);
+	var fHighByte = blob.read_shift(1);
 	var retval;
 	if(fHighByte===0) { retval = __utf8(blob,blob.l, blob.l+cch); blob.l += cch; }
 	else { retval = blob.read_shift('dbcs', cch); }
@@ -83,7 +80,7 @@ function parse_XLUnicodeString(blob) {
 }
 
 /* 2.5.342 Xnum */
-function parse_Xnum(blob, length) { return blob.read_shift('ieee754'); }
+function parse_Xnum(blob) { return blob.read_shift('ieee754'); }
 
 /* 2.5.61 ControlInfo */
 var parse_ControlInfo = parsenoop;

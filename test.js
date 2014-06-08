@@ -4,7 +4,10 @@ var fs = require('fs'), assert = require('assert');
 describe('source',function(){it('should load',function(){X=require('./');});});
 
 var opts = {cellNF: true};
-if(process.env.WTF) opts.WTF = true;
+if(process.env.WTF) {
+	opts.WTF = true;
+	opts.cellStyles = true;
+}
 var fullex = [".xls", ".xml"];
 var ex = fullex;
 if(process.env.FMTS === "full") process.env.FMTS = ex.join(":");
@@ -49,13 +52,14 @@ var N2 = 'XML';
 
 function parsetest(x, wb, full, ext) {
 	ext = (ext ? " [" + ext + "]": "");
+	if(!full && ext) return;
 	describe(x + ext + ' should have all bits', function() {
 		var sname = dir + '2011/' + x + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
 		});
 		it('should have the right sheet names', fs.existsSync(sname) ? function() {
-			var file = fs.readFileSync(sname, 'utf-8');
+			var file = fs.readFileSync(sname, 'utf-8').replace(/\r/g,"");
 			var names = wb.SheetNames.map(fixsheetname).join("\n") + "\n";
 			assert.equal(names, file);
 		} : null);
@@ -342,6 +346,16 @@ describe('input formats', function() {
 		assert.throws(function() { X.read(fs.readFileSync(paths.cst1), {type: 'dafuq'}); });
 		assert.throws(function() { X.read(fs.readFileSync(paths.cst2), {type: 'dafuq'}); });
 	});
+	it('should infer buffer type', function() {
+		X.read(fs.readFileSync(paths.cst1));
+		X.read(fs.readFileSync(paths.cst2));
+	});
+	it('should default to base64 type', function() {
+		assert.throws(function() { X.read(fs.readFileSync(paths.cst1, 'binary')); });
+		assert.throws(function() { X.read(fs.readFileSync(paths.cst2, 'binary')); });
+		X.read(fs.readFileSync(paths.cst1, 'base64'));
+		X.read(fs.readFileSync(paths.cst2, 'base64'));
+	});
 });
 
 function coreprop(wb) {
@@ -505,7 +519,7 @@ describe('parse features', function() {
 			'A1:D1,F1:G1', 'A2:D2,F2:G2', /* rows */
 			'A3:A10', 'B3:B10', 'E1:E10', 'F6:F8', /* cols */
 			'H1:J4', 'H10' /* blocks */
-		]
+		];
 		ranges.forEach(function(rng) {
 			it(rng,function(){cmparr(rn2(rng).map(function(x){ return ws[x].s; }));});
 		});
@@ -686,6 +700,12 @@ describe('corner cases', function() {
 		X.utils.get_formulae(ws);
 		X.utils.make_csv(ws);
 		X.utils.make_json(ws);
+		ws['!cols'] = [ {wch:6}, {wch:7}, {wch:10}, {wch:20} ];
+
+		var wb = {SheetNames:['sheetjs'], Sheets:{sheetjs:ws}};
+		//X.write(wb, {type: "binary", bookType: 'xlsx'});
+		//X.write(wb, {type: "buffer", bookType: 'xlsm'});
+		//X.write(wb, {type: "base64", bookType: 'xlsb'});
 		ws.A2.t = "f";
 		assert.throws(function() { X.utils.make_json(ws); });
 	});
@@ -699,6 +719,17 @@ describe('corner cases', function() {
 		});
 		["[m]","[s]"].forEach(function(f) {
 			assert.doesNotThrow(function(x) { return X.SSF.format(f, 12345.6789);});
+		});
+	});
+	it('SSF oddities', function() {
+		var ssfdata = require('./misc/ssf.json');
+		ssfdata.forEach(function(d) {
+			for(j=1;j<d.length;++j) {
+				if(d[j].length == 2) {
+					var expected = d[j][1], actual = X.SSF.format(d[0], d[j][0], {});
+					assert.equal(actual, expected);
+				} else if(d[j][2] !== "#") assert.throws(function() { SSF.format(d[0], d[j][0]); });
+			}
 		});
 	});
 });

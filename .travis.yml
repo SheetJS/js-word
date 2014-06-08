@@ -1,13 +1,15 @@
 language: node_js
 node_js:
+  - "0.11"
   - "0.10"
   - "0.8"
 before_install:
   - "npm install -g mocha"
   - "npm install blanket"
+  - "npm install xlsx"
   - "npm install coveralls mocha-lcov-reporter"
 before_script:
   - "make init"
-  - "cd test_files; make; cd .."
+  - "cd test_files; make all; cd -"
 after_success:
   - "make coveralls-spin"

@@ -1,21 +1,22 @@
 {
 	"name": "xlsjs",
-	"version": "0.6.20",
+	"version": "0.6.21",
 	"author": "sheetjs",
-	"description": "XLS (Excel 97-2004 Spreadsheet) and XML (2003/2004) parser",
-	"keywords": [ "xls", "office", "excel", "spreadsheet" ],
+	"description": "Excel 97-2004 spreadsheet (XLS/XML) parser",
+	"keywords": [ "excel", "xls", "office", "spreadsheet" ],
 	"bin": {
 		"xls": "./bin/xls.njs"
 	},
 	"main": "./xls",
 	"dependencies": {
-		"ssf":"~0.7.0",
-		"codepage":"1.x",
+		"ssf":"~0.7.1",
+		"codepage":"~1.2.0",
 		"cfb":">=0.9.1",
 		"commander":""
 	},
 	"devDependencies": {
 		"mocha":"",
+		"xlsx":"",
 		"uglify-js":""
 	},
 	"repository": { "type":"git", "url":"git://github.com/SheetJS/js-xls.git" },

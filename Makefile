@@ -13,7 +13,11 @@ bits/01_version.js: package.json
 
 .PHONY: clean
 clean:
-	rm $(TARGET)
+	rm -f $(TARGET)
+
+.PHONY: clean-data
+clean-data:
+	rm -f *.xlsx *.xlsm *.xlsb *.xls *.xml
 
 .PHONY: init
 init:
@@ -37,6 +41,8 @@ $(TESTFMT): test_%:
 .PHONY: lint
 lint: $(TARGET)
 	jshint --show-non-errors $(TARGET)
+	jscs $(TARGET)
+
 
 .PHONY: cov cov-spin
 cov: misc/coverage.html

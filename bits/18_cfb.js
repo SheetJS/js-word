@@ -144,13 +144,14 @@ function get_next_sector(idx) { return get_buffer_u32(idx); }
 
 /** Chains */
 var chkd = new Array(sectors.length), sector_list = [];
-var get_sector = function get_sector(k) { return sectors[k]; };
+var buf_chain = [];
 for(i=0; i != sectors.length; ++i) {
 	var buf = [], k = (i + dir_start) % sectors.length;
+	buf_chain = [];
 	if(chkd[k]) continue;
-	for(j=k; j<=MAXREGSECT; buf.push(j),j=get_next_sector(j)) chkd[j] = true;
+	for(j=k; j<=MAXREGSECT; buf.push(j),buf_chain.push(sectors[j]),j=get_next_sector(j)) chkd[j] = true;
 	sector_list[k] = {nodes: buf};
-	sector_list[k].data = __toBuffer(Array(buf.map(get_sector)));
+	sector_list[k].data = __toBuffer(Array(buf_chain));
 }
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";

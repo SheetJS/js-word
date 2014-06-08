@@ -1,1 +1,10 @@
 test_files/
+index.html
+misc/
+node_modules
+tmp
+*.xls
+*.xlsb
+*.xlsm
+*.xlsx
+*.xml
