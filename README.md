@@ -169,9 +169,8 @@ ISO/IEC 29500:2012(E) "Information technology — Document description and proce
 
 ## Badges
 
-[![Build Status](https://travis-ci.org/SheetJS/js-xls.png?branch=master)](https://travis-ci.org/SheetJS/js-xls)
+[![Build Status](https://travis-ci.org/SheetJS/js-xls.svg?branch=master)](https://travis-ci.org/SheetJS/js-xls)
 
-[![Coverage Status](https://coveralls.io/repos/SheetJS/js-xls/badge.png?branch=master)](https://coveralls.io/r/SheetJS/js-xls?branch=master)
+[![Coverage Status](http://img.shields.io/coveralls/SheetJS/js-xls/master.svg)](https://coveralls.io/r/SheetJS/js-xls?branch=master)
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/4ee4284bf2c638cff8ed705c4438a686 "githalytics.com")](http://githalytics.com/SheetJS/js-xls)
-
