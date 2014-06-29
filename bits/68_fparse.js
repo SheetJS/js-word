@@ -1,11 +1,13 @@
 /* 2.4.127 TODO */
-function parse_Formula(blob, length) {
+function parse_Formula(blob, length, opts) {
 	var cell = parse_Cell(blob, 6);
 	var val = parse_FormulaValue(blob,8);
 	var flags = blob.read_shift(1);
 	blob.read_shift(1);
 	var chn = blob.read_shift(4);
-	var cbf = parse_CellParsedFormula(blob, length-20);
+	var cbf = "";
+	if(opts.biff === 5) blob.l += length-20;
+	else cbf = parse_CellParsedFormula(blob, length-20, opts);
 	return {cell:cell, val:val[0], formula:cbf, shared: (flags >> 3) & 1, tt:val[1]};
 }
 
@@ -22,7 +24,8 @@ function parse_FormulaValue(blob) {
 }
 
 /* 2.5.198.103 */
-function parse_RgbExtra(blob, length, rgce) {
+function parse_RgbExtra(blob, length, rgce, opts) {
+	if(opts.biff < 8) return parsenoop(length);
 	var target = blob.l + length;
 	var o = [];
 	for(var i = 0; i !== rgce.length; ++i) {
@@ -44,31 +47,31 @@ function parse_RgbExtra(blob, length, rgce) {
 }
 
 /* 2.5.198.21 */
-function parse_NameParsedFormula(blob, length, cce) {
+function parse_NameParsedFormula(blob, length, opts, cce) {
 	var target = blob.l + length;
 	var rgce = parse_Rgce(blob, cce);
 	var rgcb;
-	if(target !== blob.l) rgcb = parse_RgbExtra(blob, target - blob.l, rgce);
+	if(target !== blob.l) rgcb = parse_RgbExtra(blob, target - blob.l, rgce, opts);
 	return [rgce, rgcb];
 }
 
 /* 2.5.198.3 TODO */
-function parse_CellParsedFormula(blob, length) {
+function parse_CellParsedFormula(blob, length, opts) {
 	var target = blob.l + length;
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
 	var rgce = parse_Rgce(blob, cce);
-	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, length - cce - 2, rgce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, length - cce - 2, rgce, opts);
 	return [rgce, rgcb];
 }
 
 /* 2.5.198.118 TODO */
-function parse_SharedParsedFormula(blob, length) {
+function parse_SharedParsedFormula(blob, length, opts) {
 	var target = blob.l + length;
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	var rgce = parse_Rgce(blob, cce);
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
-	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce, opts);
 	return [rgce, rgcb];
 }
 
@@ -78,7 +81,7 @@ function parse_ArrayParsedFormula(blob, length, opts, ref) {
 	var rgcb, cce = blob.read_shift(2); // length of rgce
 	if(cce == 0xFFFF) return [[],parsenoop(blob, length-2)];
 	var rgce = parse_Rgce(blob, cce);
-	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce);
+	if(length !== cce + 2) rgcb = parse_RgbExtra(blob, target - cce - 2, rgce, opts);
 	return [rgce, rgcb];
 }
 
@@ -101,13 +104,17 @@ function parse_Rgce(blob, length) {
 	return ptgs;
 }
 
+function mapper(x) { return x.map(function f2(y) { return y[1];}).join(",");}
+
 /* 2.2.2 + Magic TODO */
-function stringify_formula(formula, range, cell, supbooks) {
-	range = range || {s:{c:0, r:0}};
+function stringify_formula(formula, range, cell, supbooks, opts) {
+	if(opts !== undefined && opts.biff === 5) return "BIFF5??";
+	var _range = range !== undefined ? range : {s:{c:0, r:0}};
 	var stack = [], e1, e2, type, c, ixti, nameidx, r;
 	if(!formula[0] || !formula[0][0]) return "";
 	//console.log("--",cell,formula[0])
-	formula[0].forEach(function(f) {
+	for(var ff = 0, fflen = formula[0].length; ff < fflen; ++ff) {
+		var f = formula[0][ff];
 		//console.log("++",f, stack)
 		switch(f[0]) {
 		/* 2.2.2.1 Unary Operator Tokens */
@@ -203,7 +210,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			/* 2.5.198.84 */
 			case 'PtgRef':
-				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), range);
+				type = f[1][0]; c = shift_cell(decode_cell(encode_cell(f[1][1])), _range);
 				stack.push(encode_cell(c));
 				break;
 			/* 2.5.198.88 */
@@ -212,7 +219,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 				stack.push(encode_cell(c));
 				break;
 			case 'PtgRef3d': // TODO: lots of stuff
-				type = f[1][0]; ixti = f[1][1]; c = shift_cell(f[1][2], range);
+				type = f[1][0]; ixti = f[1][1]; c = shift_cell(f[1][2], _range);
 				stack.push(supbooks[1][ixti+1]+"!"+encode_cell(c));
 				break;
 
@@ -242,7 +249,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			case 'PtgErr': stack.push(f[1]); break;
 			/* 2.5.198.27 TODO: fixed points */
 			case 'PtgArea':
-				type = f[1][0]; r = shift_range(f[1][1], range);
+				type = f[1][0]; r = shift_range(f[1][1], _range);
 				stack.push(encode_range(r));
 				break;
 			/* 2.5.198.28 */
@@ -294,7 +301,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 				var q = {c: cell.c, r:cell.r};
 				if(supbooks.sharedf[encode_cell(c)]) {
 					var parsedf = (supbooks.sharedf[encode_cell(c)]);
-					stack.push(stringify_formula(parsedf, range, q, supbooks));
+					stack.push(stringify_formula(parsedf, _range, q, supbooks, opts));
 				}
 				else {
 					var fnd = false;
@@ -303,7 +310,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 						e2 = supbooks.arrayf[e1];
 						if(c.c < e2[0].s.c || c.c > e2[0].e.c) continue;
 						if(c.r < e2[0].s.r || c.r > e2[0].e.r) continue;
-						stack.push(stringify_formula(e2[1], range, q, supbooks));
+						stack.push(stringify_formula(e2[1], _range, q, supbooks, opts));
 					}
 					if(!fnd) stack.push(f[1]);
 				}
@@ -311,7 +318,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 
 			/* 2.5.198.32 TODO */
 			case 'PtgArray':
-				stack.push("{" + f[1].map(function(x) { return x.map(function(y) { return y[1];}).join(",");}).join(";") + "}");
+				stack.push("{" + f[1].map(mapper).join(";") + "}");
 				break;
 
 		/* 2.2.2.5 Mem Tokens */
@@ -349,7 +356,7 @@ function stringify_formula(formula, range, cell, supbooks) {
 			default: throw 'Unrecognized Formula Token: ' + f;
 		}
 		//console.log("::",f, stack)
-	});
+	}
 	//console.log("--",stack);
 	return stack[0];
 }

@@ -1,17 +1,17 @@
 {
 	"name": "xlsjs",
-	"version": "0.6.21",
+	"version": "0.7.0",
 	"author": "sheetjs",
-	"description": "Excel 97-2004 spreadsheet (XLS/XML) parser",
+	"description": "Excel 5.0/95 and 97-2004 spreadsheet (BIFF5 XLS / BIFF8 XLS / XML 2003) parser",
 	"keywords": [ "excel", "xls", "office", "spreadsheet" ],
 	"bin": {
 		"xls": "./bin/xls.njs"
 	},
 	"main": "./xls",
 	"dependencies": {
-		"ssf":"~0.7.1",
-		"codepage":"~1.2.0",
-		"cfb":">=0.9.1",
+		"ssf":"~0.8.1",
+		"codepage":"~1.3.1",
+		"cfb":">=0.10.0",
 		"commander":""
 	},
 	"devDependencies": {

@@ -1,3 +1,9 @@
+var fs;
+if(typeof exports !== 'undefined') {
+	if(typeof module !== 'undefined' && module.exports) {
+		fs = require('fs');
+	}
+}
 function firstbyte(f,o) {
 	switch((o||{}).type || "base64") {
 		case 'buffer': return f[0];

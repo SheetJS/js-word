@@ -1,10 +1,11 @@
 # xls
 
-Currently a parser for XLS (BIFF8) and XML (2003/2004) files.  Cleanroom implementation from the Microsoft Open Specifications.
+Parser for Excel XLS (BIFF5/BIFF8) and 2003-2004 (XML) files.  Pure-JS cleanroom
+implementation from the Microsoft Open Specifications and related documents.
 
 ## Installation
 
-In [node](https://www.npmjs.org/package/xlsjs):
+In [nodejs](https://www.npmjs.org/package/xlsjs):
 
     npm install xlsjs
 
@@ -21,7 +22,10 @@ CDNjs automatically pulls the latest version and makes all versions available at
 
 ## Optional Modules
 
-The node version automatically requires modules for additional features.  Some of these modules are rather large in size and are only needed in special circumstances, so they do not ship with the core.  For browser use, they must be included directly:
+The nodejs version automatically requires modules for additional features.  Some
+of these modules are rather large in size and are only needed in special
+circumstances, so they do not ship with the core.  For browser use, they must
+be included directly:
 
     <!-- international support from https://github.com/sheetjs/js-codepage -->
     <script src="dist/cpexcel.js"></script>
@@ -30,32 +34,124 @@ An appropriate version for each dependency is included in the dist/ directory.
 
 The complete single-file version is generated at `dist/xls.full.min.js`
 
-## Usage
+## ECMAScript 5 compatibility
 
-Simple usage (gets the value of cell A1 of the first worksheet):
+Since xlsx.js uses ES5 functions like `Array#forEach`, older browsers require
+[Polyfills](http://git.io/QVh77g).  This repo and the gh-pages branch include
+[a shim](https://github.com/SheetJS/js-xls/blob/master/shim.js)
 
-    var XLS = require('xlsjs');
-    var workbook = XLS.readFile('test.xls');
-    var sheet_name_list = workbook.SheetNames;
-    var Sheet1A1 = workbook.Sheets[sheet_name_list[0]]['A1'].v;
+To use the shim, add the shim before the script tag that loads xlsx.js:
 
-The node version installs a binary `xls` which can read XLS files and output the contents in various formats.  The source is available at `xls.njs` in the bin directory.
+    <script type="text/javascript" src="/path/to/shim.js"></script>
 
-See <http://oss.sheetjs.com/js-xls/> for a browser example.
+## Parsing Workbooks
+
+For parsing, the first step is to read the file.
+
+- nodejs:
+
+```
+if(typeof require !== 'undefined') XLS = require('xlsjs');
+var workbook = XLS.readFile('test.xls');
+/* DO SOMETHING WITH workbook HERE */
+```
+
+- ajax:
+
+```
+/* set up XMLHttpRequest */
+var url = "test_files/formula_stress_test_ajax.xls";
+var oReq = new XMLHttpRequest();
+oReq.open("GET", url, true);
+oReq.responseType = "arraybuffer";
+
+oReq.onload = function(e) {
+  var arraybuffer = oReq.response;
+
+  /* convert data to binary string */
+  var data = new Uint8Array(arraybuffer);
+  var arr = new Array();
+  for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+  var bstr = arr.join("");
+
+  /* Call XLS */
+  var workbook = XLS.read(bstr, {type:"binary"});
+
+  /* DO SOMETHING WITH workbook HERE */
+}
+
+oReq.send();
+```
+
+- html5 drag-and-drop using readAsBinaryString:
+
+```
+/* set up drag-and-drop event */
+function handleDrop(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  var files = e.dataTransfer.files;
+  var i,f;
+  for (i = 0, f = files[i]; i != files.length; ++i) {
+    var reader = new FileReader();
+    var name = f.name;
+    reader.onload = function(e) {
+      var data = e.target.result;
+
+      /* if binary string, read with type 'binary' */
+      var wb = XLS.read(data, {type: 'binary'});
+
+      /* DO SOMETHING WITH workbook HERE */
+    };
+    reader.readAsBinaryString(f);
+  }
+}
+drop_dom_element.addEventListener('drop', handleDrop, false);
+```
+
+This example gets the value of cell A1 of the first worksheet:
+
+```
+var sheet_name_list = workbook.SheetNames;
+var Sheet1A1 = workbook.Sheets[sheet_name_list[0]]['A1'].v;
+```
+
+Complete examples:
+
+- <http://oss.sheetjs.com/js-xls/> HTML5 File API / Base64 Text / Web Workers
+
+Note that older versions of IE does not support HTML5 File API, so the base64
+mode is provided for testing.  On OSX you can get the base64 encoding with:
+
+    $ <target_file.xls base64 | pbcopy
+
+- <http://oss.sheetjs.com/js-xls/ajax.html> XMLHttpRequest
+
+- <https://github.com/SheetJS/js-xls/blob/master/bin/xls.njs> nodejs
+
+The nodejs version installs a binary `xls` which can read XLS and XML2003
+files and output the contents in various formats.  The source is available at
+`xls.njs` in the bin directory.
 
 Some helper functions in `XLS.utils` generate different views of the sheets:
 
 - `XLS.utils.sheet_to_csv` generates CSV
-- `XLS.utils.sheet_to_row_object_array` interprets sheets as tables with a header column and generates an array of objects
+- `XLS.utils.sheet_to_json` generates an array of objects
 - `XLS.utils.get_formulae` generates a list of formulae
 
-For more details:
 
-- `bin/xls.njs` is a tool for node
-- `index.html` is the live demo
-- `bits/80_xls.js` contains the logic for generating CSV and JSON from sheets
+## Interface
+
+`XLS` is the exposed variable in the browser and the exported nodejs variable
+
+
+`XLS.read(data, read_opts)` attempts to parse `data`.
+
+`XLS.readFile(filename, read_opts)` attempts to read `filename` and parse.
 
 ## Cell Object Description
+
+js-xls conforms to the Common Spreadsheet Format (CSF):
 
 `.SheetNames` is an ordered list of the sheets in the workbook
 
@@ -66,13 +162,14 @@ that does not start with `!` corresponds to a cell (using `A-1` notation).
 
 - `.v` : the raw value of the cell
 - `.w` : the formatted text of the cell (if applicable)
-- `.t` : the type of the cell (constrained to the enumeration `ST_CellType` as documented in page 4215 of ISO/IEC 29500-1:2012(E) )
+- `.t` : the type of the cell (constrained to the enumeration `ST_CellType` as
+  documented in page 4215 of ISO/IEC 29500-1:2012(E) )
 - `.f` : the formula of the cell (if applicable)
 - `.z` : the number format string associated with the cell (if requested)
 
 For dates, `.v` holds the raw date code from the sheet and `.w` holds the text
 
-## Options
+## Parsing Options
 
 The exported `read` and `readFile` functions accept an options argument:
 
@@ -113,7 +210,7 @@ Running `make init` will refresh the `test_files` submodule and get the files.
 
 ## Testing
 
-`make test` will run the node-based tests.  To run the in-browser tests, clone
+`make test` will run the nodejs-based tests.  To run the in-browser tests, clone
 [the oss.sheetjs.com repo](https://github.com/SheetJS/SheetJS.github.io) and
 replace the xls.js file (then fire up the browser and go to `stress.html`):
 
@@ -124,6 +221,8 @@ $ simplehttpserver # or "python -mSimpleHTTPServer" or "serve"
 $ open -a Chromium.app http://localhost:8000/stress.html
 ```
 
+For a much smaller test, run `make test_misc`.
+
 ## Other Notes
 
 `CFB` refers to the Microsoft Compound File Binary Format, a container format for XLS as well as DOC and other pre-OOXML data formats.
@@ -132,19 +231,30 @@ The mechanism is split into a CFB parser (which scans through the file and produ
 
 ## Contributing
 
-Due to the precarious nature of the Open Specifications Promise, it is very important to ensure code is cleanroom.  Consult CONTRIBUTING.md
+Due to the precarious nature of the Open Specifications Promise, it is very
+important to ensure code is cleanroom.  Consult CONTRIBUTING.md
 
 ## XLSX/XLSM/XLSB Support
 
-XLSX/XLSM/XLSB is available in [js-xlsx](https://github.com/SheetJS/js-xlsx).
+XLSX/XLSM/XLSB is available in [js-xlsx](http://git.io/xlsx).
 
 ## License
 
-Please consult the attached LICENSE file for details.  All rights not explicitly granted by the Apache 2.0 license are reserved by the Original Author.
+Please consult the attached LICENSE file for details.  All rights not explicitly
+granted by the Apache 2.0 license are reserved by the Original Author.
 
-It is the opinion of the Original Author that this code conforms to the terms of the Microsoft Open Specifications Promise, falling under the same terms as OpenOffice (which is governed by the Apache License v2).  Given the vagaries of the promise, the Original Author makes no legal claim that in fact end users are protected from future actions.  It is highly recommended that, for commercial uses, you consult a lawyer before proceeding.
+It is the opinion of the Original Author that this code conforms to the terms of
+the Microsoft Open Specifications Promise, falling under the same terms as
+OpenOffice (which is governed by the Apache License v2).  Given the vagaries of
+the promise, the Original Author makes no legal claim that in fact end users are
+protected from future actions.  It is highly recommended that, for commercial
+uses, you consult a lawyer before proceeding.
 
 ## References
+
+Certain features are shared with the Office Open XML File Formats, covered in:
+
+ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
 
 OSP-covered specifications:
 
@@ -162,10 +272,6 @@ OSP-covered specifications:
  - [MS-CTXLS]: Excel Custom Toolbar Binary File Format
  - [MS-XLDM]: Spreadsheet Data Model File Format
  - [XLS]: Microsoft Office Excel 97-2007 Binary File Format Specification
-
-Certain features are shared with the Office Open XML File Formats, covered in:
-
-ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
 
 ## Badges
 

@@ -50,24 +50,33 @@ function slurp(R, blob, length, opts) {
 	bufs.push(d);
 	blob.l += l;
 	var next = (RecordEnum[__readUInt16LE(blob,blob.l)]);
-	while(next && next.n === 'Continue') {
+	while(next != null && next.n === 'Continue') {
 		l = __readUInt16LE(blob,blob.l+2);
 		bufs.push(blob.slice(blob.l+4,blob.l+4+l));
 		blob.l += 4+l;
 		next = (RecordEnum[__readUInt16LE(blob, blob.l)]);
 	}
 	var b = bconcat(bufs);
-	prep_blob(b);
+	prep_blob(b, 0);
 	var ll = 0; b.lens = [];
-	bufs.forEach(function(x) { b.lens.push(ll); ll += x.length; });
+	for(var j = 0; j < bufs.length; ++j) { b.lens.push(ll); ll += bufs[j].length; }
 	return R.f(b, b.length, opts);
 }
 
-function safe_format_xf(cell, options) {
-	if(cell.XF) try {
-		cell.w=SSF.format(cell.XF.ifmt||0, cell.v);
-		if(options.cellNF) cell.z = SSF._table[cell.XF.ifmt||0];
-	} catch(e) { if(options.WTF) throw e; }
+function safe_format_xf(p, opts) {
+	if(!p.XF) return;
+	try {
+		var fmtid = p.XF.ifmt||0;
+		if(fmtid === 0) {
+			if(p.t === 'n') {
+				if((p.v|0) === p.v) p.w = SSF._general_int(p.v);
+				else p.w = SSF._general_num(p.v);
+			}
+			else p.w = SSF._general(p.v);
+		}
+		else p.w = SSF.format(fmtid,p.v);
+		if(opts.cellNF) p.z = SSF._table[fmtid];
+	} catch(e) { if(opts.WTF) throw e; }
 }
 
 function make_cell(val, ixfe, t) {
@@ -79,7 +88,6 @@ function parse_workbook(blob, options) {
 	var wb = {opts:{}};
 	var Sheets = {};
 	var out = {};
-	var read = blob.read_shift.bind(blob);
 	var Directory = {};
 	var found_sheet = false;
 	var range = {};
@@ -93,7 +101,7 @@ function parse_workbook(blob, options) {
 	var temp_val;
 	var cell_valid = true;
 	var XFs = []; /* XF records */
-	var addline = function(cell, line, options) {
+	var addline = function addline(cell, line, options) {
 		if(!cell_valid) return;
 		lastcell = cell;
 		last_cell = encode_cell(cell);
@@ -116,6 +124,7 @@ function parse_workbook(blob, options) {
 		arrayf: array_formulae, // array formulae array
 		rrtabid: [], // RRTabId
 		lastuser: "", // Last User from WriteAccess
+		biff: 8, // BIFF version
 		codepage: 0, // CP from CodePage record
 		winlocked: 0, // fLockWn from WinProtect
 		wtf: false
@@ -132,9 +141,9 @@ function parse_workbook(blob, options) {
 	var file_depth = 0; /* TODO: make a real stack */
 	while(blob.l < blob.length - 1) {
 		var s = blob.l;
-		var RecordType = read(2);
+		var RecordType = blob.read_shift(2);
 		if(RecordType === 0 && last_Rn === 'EOF') break;
-		var length = (blob.l === blob.length ? 0 : read(2)), y;
+		var length = (blob.l === blob.length ? 0 : blob.read_shift(2)), y;
 		var R = RecordEnum[RecordType];
 		if(R && R.f) {
 			if(options.bookSheets) {
@@ -142,7 +151,7 @@ function parse_workbook(blob, options) {
 			}
 			last_Rn = R.n;
 			if(R.r === 2 || R.r == 12) {
-				var rt = read(2); length -= 2;
+				var rt = blob.read_shift(2); length -= 2;
 				if(!opts.enc && rt !== RecordType) throw "rt mismatch";
 				if(R.r == 12){ blob.l += 10; length -= 10; } // skip FRT
 			}
@@ -150,7 +159,12 @@ function parse_workbook(blob, options) {
 			var val;
 			if(R.n === 'EOF') val = R.f(blob, length, opts);
 			else val = slurp(R, blob, length, opts);
-			switch(R.n) {
+			var Rn = R.n;
+			/* BIFF5 overrides */
+			if(opts.biff === 5) switch(Rn) {
+				case 'Lbl': Rn = 'Label'; break;
+			}
+			switch(Rn) {
 				/* Workbook Options */
 				case 'Date1904': wb.opts.Date1904 = val; break;
 				case 'WriteProtect': wb.opts.WriteProtect = true; break;
@@ -187,102 +201,14 @@ function parse_workbook(blob, options) {
 				case 'Uncalced': break;
 				case 'ForceFullCalculation': wb.opts.FullCalc = val; break;
 				case 'WsBool': break; // TODO
-/*
-				case 'Header': break; // TODO
-				case 'Footer': break; // TODO
-				case 'HCenter': break; // TODO
-				case 'VCenter': break; // TODO
-				case 'Pls': break; // TODO
-				case 'Setup': break; // TODO
-				case 'DefColWidth': break; // TODO
-				case 'GCW': break;
-				case 'LHRecord': break;
-				case 'ColInfo': break; // TODO
-				case 'Row': break; // TODO
-				case 'DBCell': break; // TODO
-				case 'MulBlank': break; // TODO
-				case 'EntExU2': break; // TODO
-				case 'SxView': break; // TODO
-				case 'Sxvd': break; // TODO
-				case 'SXVI': break; // TODO
-				case 'SXVDEx': break; // TODO
-				case 'SxIvd': break; // TODO
-				case 'SXDI': break; // TODO
-				case 'SXLI': break; // TODO
-				case 'SXEx': break; // TODO
-				case 'QsiSXTag': break; // TODO
-				case 'Selection': break;
-				case 'Feat': break;
-				case 'FeatHdr': case 'FeatHdr11': break;
-				case 'Feature11': case 'Feature12': case 'List12': break;
-				case 'Blank': break;
-
-				case 'Country': break; // TODO: international support
-				case 'RecalcId': break;
-
-				case 'DefaultRowHeight': case 'DxGCol': break; // TODO: htmlify
-				case 'Fbi': case 'Fbi2': case 'GelFrame': break;
-				case 'Font': break; // TODO */
 				case 'XF': XFs.push(val); break;
-/*				case 'XFCRC': break; // TODO
-				case 'XFExt': break; // TODO
-				case 'Style': break; // TODO
-				case 'StyleExt': break; // TODO
-				case 'Palette': break; // TODO
-				case 'ClrtClient': break; // TODO
-				case 'Theme': break; // TODO
-
 				case 'ExtSST': break; // TODO
 				case 'BookExt': break; // TODO
 				case 'RichTextStream': break;
 				case 'BkHim': break;
-*/
-				/* Protection */
-/*				case 'ScenarioProtect': break;
-				case 'ObjProtect': break; */
 
-				/* Conditional Formatting */
-/*				case 'CondFmt12': break; */
-
-				/* Table */
-/*				case 'Table': break; // TODO
-				case 'TableStyles': break; // TODO
-				case 'TableStyle': break; // TODO
-				case 'TableStyleElement': break; // TODO
-*/
-				/* PivotTable */
-/*				case 'SXStreamID': break; // TODO
-				case 'SXVS': break; // TODO
-				case 'DConRef': break; // TODO
-				case 'SXAddl': break; // TODO
-				case 'DConName': break; // TODO
-				case 'SXPI': break; // TODO
-				case 'SxFormat': break; // TODO
-				case 'SxSelect': break; // TODO
-				case 'SxRule': break; // TODO
-				case 'SxFilt': break; // TODO
-				case 'SxItm': break; // TODO
-				case 'SxDXF': break; // TODO
-*/
-				/* Scenario Manager */
-//				case 'ScenMan': break;
-
-				/* Data Consolidation */
-//				case 'DCon': break;
-
-				/* Watched Cell */
-//				case 'CellWatch': break;
-
-				/* Print Settings */
-/*				case 'PrintRowCol': break;
-				case 'PrintGrid': break;
-				case 'PrintSize': break;
-*/
 				case 'SupBook': supbooks[++sbc] = [val]; sbci = 0; break;
 				case 'ExternName': supbooks[sbc][++sbci] = val; break;
-/*				case 'XCT': break;
-				case 'CRN': break;
-*/
 				case 'Index': break; // TODO
 				case 'Lbl': supbooks[0][++sbcli] = val; break;
 				case 'ExternSheet': supbooks[sbc] = supbooks[sbc].concat(val); sbci += val.length; break;
@@ -311,6 +237,7 @@ function parse_workbook(blob, options) {
 					out = {};
 				} break;
 				case 'BOF': {
+					if(val.BIFFVer === 0x0500) opts.biff = 5;
 					if(file_depth++) break;
 					cell_valid = true;
 					out = {};
@@ -348,7 +275,7 @@ function parse_workbook(blob, options) {
 						default:
 							temp_val = {v:val.val, ixfe:val.cell.ixfe, t:val.tt};
 							temp_val.XF = XFs[temp_val.ixfe];
-							if(options.cellFormula) temp_val.f = "="+stringify_formula(val.formula,range,val.cell,supbooks);
+							if(options.cellFormula) temp_val.f = "="+stringify_formula(val.formula,range,val.cell,supbooks, opts);
 							if(temp_val.XF) safe_format_xf(temp_val, options);
 							addline(val.cell, temp_val, options);
 							last_formula = val;
@@ -359,7 +286,7 @@ function parse_workbook(blob, options) {
 						last_formula.val = val;
 						temp_val = {v:last_formula.val, ixfe:last_formula.cell.ixfe, t:'s'};
 						temp_val.XF = XFs[temp_val.ixfe];
-						if(options.cellFormula) temp_val.f = "="+stringify_formula(last_formula.formula, range, last_formula.cell, supbooks);
+						if(options.cellFormula) temp_val.f = "="+stringify_formula(last_formula.formula, range, last_formula.cell, supbooks, opts);
 						if(temp_val.XF) safe_format_xf(temp_val, options);
 						addline(last_formula.cell, temp_val, options);
 						last_formula = null;
@@ -370,7 +297,7 @@ function parse_workbook(blob, options) {
 				} break;
 				case 'ShrFmla': {
 					if(!cell_valid) break;
-					//if(options.cellFormula) out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks);
+					//if(options.cellFormula) out[last_cell].f = stringify_formula(val[0], range, lastcell, supbooks, opts);
 					/* TODO: capture range */
 					shared_formulae[encode_cell(last_formula.cell)]= val[0];
 				} break;
@@ -398,30 +325,7 @@ function parse_workbook(blob, options) {
 				case 'Format': { /* val = [id, fmt] */
 					SSF.load(val[1], val[0]);
 				} break;
-				//case 'Scl': {
-					//console.log("Zoom Level:", val[0]/val[1],val);
-				//} break;
-				//case 'SheetExt': {
 
-				//} break;
-				//case 'SheetExtOptional': {
-
-				//} break;
-
-				/* VBA */
-/*				case 'ObNoMacros': {
-
-				} break;
-				case 'ObProj': {
-
-				} break;
-				case 'CodeName': {
-
-				} break;
-				case 'GUIDTypeLib': {
-
-				} break;
-*/
 				case 'MergeCells': mergecells = mergecells.concat(val); break;
 
 				case 'Obj': objects[val.cmo[0]] = opts.lastobj = val; break;
@@ -440,31 +344,9 @@ function parse_workbook(blob, options) {
 								out[encode_cell({c:rngC,r:rngR})].l.tooltip = val[1];
 				} break;
 
-/*				case 'WOpt': break; // TODO: WTF?
-				case 'PhoneticInfo': break;
-
-				case 'OleObjectSize': break;
-*/
-				/* Differential Formatting */
-/*				case 'DXF': case 'DXFN': case 'DXFN12': case 'DXFN12List': case 'DXFN12NoCB': break;
-*/
-				/* Data Validation */
-/*				case 'Dv': case 'DVal': break;
-*/
-				/* Data Series */
-/*				case 'BRAI': case 'Series': case 'SeriesText': break;
-*/
-				/* Data Connection */
-/*				case 'DConn': break;
-				case 'DbOrParamQry': break;
-				case 'DBQueryExt': break;
-*/
-				/* Formatting */
-/*				case 'IFmtRecord': break;
-				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
-*/
 				/* Comments */
 				case 'Note': {
+					if(opts.biff === 5) break; /* TODO: BIFF5 */
 					cc = out[encode_cell(val[0])];
 					var noteobj = objects[val[2]];
 					if(!cc) break;
@@ -474,8 +356,149 @@ function parse_workbook(blob, options) {
 				} break;
 				case 'NameCmt': break;
 
+				default: switch(R.n) { /* nested */
+				case 'Header': break; // TODO
+				case 'Footer': break; // TODO
+				case 'HCenter': break; // TODO
+				case 'VCenter': break; // TODO
+				case 'Pls': break; // TODO
+				case 'Setup': break; // TODO
+				case 'DefColWidth': break; // TODO
+				case 'GCW': break;
+				case 'LHRecord': break;
+				case 'ColInfo': break; // TODO
+				case 'Row': break; // TODO
+				case 'DBCell': break; // TODO
+				case 'MulBlank': break; // TODO
+				case 'EntExU2': break; // TODO
+				case 'SxView': break; // TODO
+				case 'Sxvd': break; // TODO
+				case 'SXVI': break; // TODO
+				case 'SXVDEx': break; // TODO
+				case 'SxIvd': break; // TODO
+				case 'SXDI': break; // TODO
+				case 'SXLI': break; // TODO
+				case 'SXEx': break; // TODO
+				case 'QsiSXTag': break; // TODO
+				case 'Selection': break;
+				case 'Feat': break;
+				case 'FeatHdr': case 'FeatHdr11': break;
+				case 'Feature11': case 'Feature12': case 'List12': break;
+				case 'Blank': break;
+				case 'Country': break; // TODO: international support
+				case 'RecalcId': break;
+				case 'DefaultRowHeight': case 'DxGCol': break; // TODO: htmlify
+				case 'Fbi': case 'Fbi2': case 'GelFrame': break;
+				case 'Font': break; // TODO
+				case 'XFCRC': break; // TODO
+				case 'XFExt': break; // TODO
+				case 'Style': break; // TODO
+				case 'StyleExt': break; // TODO
+				case 'Palette': break; // TODO
+				case 'ClrtClient': break; // TODO
+				case 'Theme': break; // TODO
+				/* Protection */
+				case 'ScenarioProtect': break;
+				case 'ObjProtect': break;
+
+				/* Conditional Formatting */
+				case 'CondFmt12': break;
+
+				/* Table */
+				case 'Table': break; // TODO
+				case 'TableStyles': break; // TODO
+				case 'TableStyle': break; // TODO
+				case 'TableStyleElement': break; // TODO
+
+				/* PivotTable */
+				case 'SXStreamID': break; // TODO
+				case 'SXVS': break; // TODO
+				case 'DConRef': break; // TODO
+				case 'SXAddl': break; // TODO
+				case 'DConName': break; // TODO
+				case 'SXPI': break; // TODO
+				case 'SxFormat': break; // TODO
+				case 'SxSelect': break; // TODO
+				case 'SxRule': break; // TODO
+				case 'SxFilt': break; // TODO
+				case 'SxItm': break; // TODO
+				case 'SxDXF': break; // TODO
+
+				/* Scenario Manager */
+				case 'ScenMan': break;
+
+				/* Data Consolidation */
+				case 'DCon': break;
+
+				/* Watched Cell */
+				case 'CellWatch': break;
+
+				/* Print Settings */
+				case 'PrintRowCol': break;
+				case 'PrintGrid': break;
+				case 'PrintSize': break;
+
+				case 'XCT': break;
+				case 'CRN': break;
+
+				case 'Scl': {
+					//console.log("Zoom Level:", val[0]/val[1],val);
+				} break;
+				case 'SheetExt': {
+
+				} break;
+				case 'SheetExtOptional': {
+
+				} break;
+
+				/* VBA */
+				case 'ObNoMacros': {
+
+				} break;
+				case 'ObProj': {
+
+				} break;
+				case 'CodeName': {
+
+				} break;
+				case 'GUIDTypeLib': {
+
+				} break;
+
+				case 'WOpt': break; // TODO: WTF?
+				case 'PhoneticInfo': break;
+
+				case 'OleObjectSize': break;
+
+				/* Differential Formatting */
+				case 'DXF': case 'DXFN': case 'DXFN12': case 'DXFN12List': case 'DXFN12NoCB': break;
+
+				/* Data Validation */
+				case 'Dv': case 'DVal': break;
+
+				/* Data Series */
+				case 'BRAI': case 'Series': case 'SeriesText': break;
+
+				/* Data Connection */
+				case 'DConn': break;
+				case 'DbOrParamQry': break;
+				case 'DBQueryExt': break;
+
+				/* Formatting */
+				case 'IFmtRecord': break;
+				case 'CondFmt': case 'CF': case 'CF12': case 'CFEx': break;
+
+				/* Explicitly Ignored */
+				case 'Excel9File': break;
+				case 'Units': break;
+				case 'InterfaceHdr': case 'Mms': case 'InterfaceEnd': case 'DSF': case 'BuiltInFnGroupCount':
+				/* View Stuff */
+				case 'Window1': case 'Window2': case 'HideObj': case 'GridSet': case 'Guts':
+				case 'UserBView': case 'UserSViewBegin': case 'UserSViewEnd':
+				case 'Pane': break;
+				default: switch(R.n) { /* nested */
 				/* Chart */
-/*				case 'Dat':
+				case 'Dat':
 				case 'Begin': case 'End':
 				case 'StartBlock': case 'EndBlock':
 				case 'Frame': case 'Area':
@@ -498,71 +521,66 @@ function parse_workbook(blob, options) {
 				case 'AlRuns': case 'ObjectLink': break;
 				case 'SIIndex': break;
 				case 'AttachedLabel': break;
-*/
+
 				/* Chart Group */
-/*				case 'Line': case 'Bar': break;
+				case 'Line': case 'Bar': break;
 				case 'Surf': break;
-*/
+
 				/* Axis Group */
-/*				case 'AxisParent': break;
+				case 'AxisParent': break;
 				case 'Pos': break;
 				case 'ValueRange': break;
-*/
+
 				/* Pivot Chart */
-/*				case 'SXViewEx9': break; // TODO
+				case 'SXViewEx9': break; // TODO
 				case 'SXViewLink': break;
 				case 'PivotChartBits': break;
 				case 'SBaseRef': break;
 				case 'TextPropsStream': break;
-*/
+
 				/* Chart Misc */
-/*				case 'LnExt': break;
+				case 'LnExt': break;
 				case 'MkrExt': break;
 				case 'CrtCoopt': break;
-*/
+
 				/* Query Table */
-/*				case 'Qsi': case 'Qsif': case 'Qsir': case 'QsiSXTag': break;
+				case 'Qsi': case 'Qsif': case 'Qsir': case 'QsiSXTag': break;
 				case 'TxtQry': break;
-*/
+
 				/* Filter */
-/*				case 'FilterMode': break;
+				case 'FilterMode': break;
 				case 'AutoFilter': case 'AutoFilterInfo': break;
 				case 'AutoFilter12': break;
 				case 'DropDownObjIds': break;
 				case 'Sort': break;
 				case 'SortData': break;
-*/
+
 				/* Drawing */
-/*				case 'ShapePropsStream': break;
+				case 'ShapePropsStream': break;
 				case 'MsoDrawing': case 'MsoDrawingGroup': case 'MsoDrawingSelection': break;
-				case 'ImData': break;*/
-				/* Explicitly Ignored */
-/*				case 'Excel9File': break;
-				case 'Units': break;
-				case 'InterfaceHdr': case 'Mms': case 'InterfaceEnd': case 'DSF': case 'BuiltInFnGroupCount':*/
-				/* View Stuff */
-/*				case 'Window1': case 'Window2': case 'HideObj': case 'GridSet': case 'Guts':
-				case 'UserBView': case 'UserSViewBegin': case 'UserSViewEnd':
-				case 'Pane':*/
+				case 'ImData': break;
 				/* Pub Stuff */
-/*				case 'WebPub': case 'AutoWebPub':
-*/
+				case 'WebPub': case 'AutoWebPub':
+
 				/* Print Stuff */
-/*				case 'RightMargin': case 'LeftMargin': case 'TopMargin': case 'BottomMargin':
+				case 'RightMargin': case 'LeftMargin': case 'TopMargin': case 'BottomMargin':
 				case 'HeaderFooter': case 'HFPicture': case 'PLV':
-				case 'HorizontalPageBreaks': case 'VerticalPageBreaks':*/
+				case 'HorizontalPageBreaks': case 'VerticalPageBreaks':
 				/* Behavioral */
-/*				case 'Backup': case 'CompressPictures': case 'Compat12': break;*/
+				case 'Backup': case 'CompressPictures': case 'Compat12': break;
 
 				/* Should not Happen */
-/*				case 'Continue': case 'ContinueFrt12': break;*/
+				case 'Continue': case 'ContinueFrt12': break;
 
+				/* BIFF5 records */
+				case 'ExternCount': break;
+				case 'RString': break;
 				default: if(options.WTF) throw 'Unrecognized Record ' + R.n;
-			}
-		} else read(length);
+			}}}
+		} else blob.l += length;
 	}
 	var sheetnamesraw = Object.keys(Directory).sort(function(a,b) { return Number(a) - Number(b); }).map(function(x){return Directory[x].name;});
-	var sheetnames = []; sheetnamesraw.forEach(function(x){sheetnames.push(x);});
+	var sheetnames = sheetnamesraw.slice();
 	wb.Directory=sheetnamesraw;
 	wb.SheetNames=sheetnamesraw;
 	if(!options.bookSheets) wb.Sheets=Sheets;
@@ -579,6 +597,8 @@ else {
 	else throw new Error("Cannot find Workbook stream");
 }
 
+parse_props(cfb);
+
 var props = {};
 for(var y in cfb.Summary) props[y] = cfb.Summary[y];
 for(y in cfb.DocSummary) props[y] = cfb.DocSummary[y];
@@ -588,4 +608,13 @@ WorkbookP.CompObjP = CompObjP;
 return WorkbookP;
 }
 
+/* TODO: WTF */
+function parse_props(cfb) {
+	/* [MS-OSHARED] 2.3.3.2.2 Document Summary Information Property Set */
+	var DSI = cfb.find('!DocumentSummaryInformation');
+	if(DSI) try { cfb.DocSummary = parse_PropertySetStream(DSI, DocSummaryPIDDSI); } catch(e) {}
 
+	/* [MS-OSHARED] 2.3.3.2.1 Summary Information Property Set*/
+	var SI = cfb.find('!SummaryInformation');
+	if(SI) try { cfb.Summary = parse_PropertySetStream(SI, SummaryPIDSI); } catch(e) {}
+}

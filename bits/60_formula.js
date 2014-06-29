@@ -13,8 +13,7 @@ function parse_ColRelU(blob, length) {
 
 /* 2.5.198.105 */
 function parse_RgceArea(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var r=read(2), R=read(2);
+	var r=blob.read_shift(2), R=blob.read_shift(2);
 	var c=parse_ColRelU(blob, 2);
 	var C=parse_ColRelU(blob, 2);
 	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };
@@ -22,8 +21,7 @@ function parse_RgceArea(blob, length) {
 
 /* 2.5.198.105 TODO */
 function parse_RgceAreaRel(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var r=read(2), R=read(2);
+	var r=blob.read_shift(2), R=blob.read_shift(2);
 	var c=parse_ColRelU(blob, 2);
 	var C=parse_ColRelU(blob, 2);
 	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };

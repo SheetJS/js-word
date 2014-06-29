@@ -1,7 +1,9 @@
 /* vim: set ts=2: */
 var X;
+var modp = './';
+//var modp = 'xlsjs';
 var fs = require('fs'), assert = require('assert');
-describe('source',function(){it('should load',function(){X=require('./');});});
+describe('source',function(){it('should load',function(){X=require(modp);});});
 
 var opts = {cellNF: true};
 if(process.env.WTF) {
@@ -13,7 +15,8 @@ var ex = fullex;
 if(process.env.FMTS === "full") process.env.FMTS = ex.join(":");
 if(process.env.FMTS) ex=process.env.FMTS.split(":").map(function(x){return x[0]==="."?x:"."+x;});
 var exp = ex.map(function(x){ return x + ".pending"; });
-function test_file(x){return ex.indexOf(x.substr(-4))>=0||exp.indexOf(x.substr(-12))>=0;}
+var ow = 4;
+function test_file(x){return ex.indexOf(x.substr(-ow))>=0||exp.indexOf(x.substr(-8-ow))>=0;}
 
 var files = (fs.existsSync('tests.lst') ? fs.readFileSync('tests.lst', 'utf-8').split("\n") : fs.readdirSync('test_files')).filter(test_file);
 var fileA = (fs.existsSync('testA.lst') ? fs.readFileSync('testA.lst', 'utf-8').split("\n") : []).filter(test_file);
@@ -21,7 +24,8 @@ var fileA = (fs.existsSync('testA.lst') ? fs.readFileSync('testA.lst', 'utf-8').
 /* Excel enforces 31 character sheet limit, although technical file limit is 255 */
 function fixsheetname(x) { return x.substr(0,31); }
 
-function fixcsv(x) { return x.replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
+function stripbom(x) { return x.replace(/^\ufeff/,""); }
+function fixcsv(x) { return stripbom(x).replace(/\t/g,",").replace(/#{255}/g,"").replace(/"/g,"").replace(/[\n\r]+/g,"\n").replace(/\n*$/,""); }
 function fixjson(x) { return x.replace(/[\r\n]+$/,""); }
 
 var dir = "./test_files/";
@@ -88,8 +92,8 @@ function parsetest(x, wb, full, ext) {
 	if(!full) return;
 	var getfile = function(dir, x, i, type) {
 		var name = (dir + x + '.' + i + type);
-		if(x.substr(-4) === ".xls") {
-			root = x.slice(0,-4);
+		if(x.substr(-ow) === ".xls") {
+			root = x.slice(0,-ow);
 			if(!fs.existsSync(name)) name=(dir + root + '.xlsx.' + i + type);
 			if(!fs.existsSync(name)) name=(dir + root + '.xlsm.' + i + type);
 			if(!fs.existsSync(name)) name=(dir + root + '.xlsb.' + i + type);
@@ -160,7 +164,7 @@ describe('should parse test files', function() {
 describe('parse options', function() {
 	var html_cell_types = ['s'];
 	before(function() {
-		X = require('./');
+		X = require(modp);
 	});
 	describe('cell', function() {
 		it.skip('should generate HTML by default', function() {
@@ -406,7 +410,7 @@ function diffsty(ws, r1,r2) {
 
 describe('parse features', function() {
 	it('should have comment as part of cell properties', function(){
-		var X = require('./');
+		var X = require(modp);
 		var sheet = 'Sheet1';
 		var wb1=X.readFile(paths.swc1);
 		var wb2=X.readFile(paths.swc2);
@@ -424,7 +428,7 @@ describe('parse features', function() {
 	describe('should parse core properties and custom properties', function() {
 		var wb1, wb2;
 		before(function() {
-			X = require('./');
+			X = require(modp);
 			wb1 = X.readFile(paths.cp1);
 			wb2 = X.readFile(paths.cp2);
 		});
@@ -459,7 +463,7 @@ describe('parse features', function() {
 			var wb2 = X.readFile(paths.cst2, opts);
 			[wb1, wb2].forEach(function(wb) {
 				assert.equal(wb.Sheets.Sheet7["!fullref"],"A1:N34");
-				assert.equal(wb.Sheets.Sheet7["!ref"],"A1:A1");
+				assert.equal(wb.Sheets.Sheet7["!ref"],"A1");
 			});
 		});
 	});
@@ -467,7 +471,7 @@ describe('parse features', function() {
 	describe('merge cells',function() {
 		var wb1, wb2;
 		before(function() {
-			X = require('./');
+			X = require(modp);
 			wb1 = X.readFile(paths.mc1);
 			wb2 = X.readFile(paths.mc2);
 		});
@@ -482,7 +486,7 @@ describe('parse features', function() {
 	describe('should find hyperlinks', function() {
 		var wb1, wb2;
 		before(function() {
-			X = require('./');
+			X = require(modp);
 			wb1 = X.readFile(paths.hl1);
 			wb2 = X.readFile(paths.hl2);
 		});
@@ -505,7 +509,7 @@ describe('parse features', function() {
 	describe.skip('should correctly handle styles', function() {
 		var ws, rn, rn2;
 		before(function() {
-			ws=X.readFile(paths.css1, {cellStyles:true}).Sheets.Sheet1;
+			ws=X.readFile(paths.css1, {cellStyles:true,WTF:1}).Sheets.Sheet1;
 			rn = function(range) {
 				var r = X.utils.decode_range(range);
 				var out = [];
@@ -520,6 +524,32 @@ describe('parse features', function() {
 			'A3:A10', 'B3:B10', 'E1:E10', 'F6:F8', /* cols */
 			'H1:J4', 'H10' /* blocks */
 		];
+		var exp = [
+			{ patternType: 'darkHorizontal',
+				fgColor: { theme: 9, raw_rgb: 'F79646' },
+				bgColor: { theme: 5, raw_rgb: 'C0504D' } },
+			{ patternType: 'darkUp',
+				fgColor: { theme: 3, raw_rgb: 'EEECE1' },
+				bgColor: { theme: 7, raw_rgb: '8064A2' } },
+			{ patternType: 'darkGray',
+				fgColor: { theme: 3, raw_rgb: 'EEECE1' },
+				bgColor: { theme: 1, raw_rgb: 'FFFFFF' } },
+			{ patternType: 'lightGray',
+				fgColor: { theme: 6, raw_rgb: '9BBB59' },
+				bgColor: { theme: 2, raw_rgb: '1F497D' } },
+			{ patternType: 'lightDown',
+				fgColor: { theme: 4, raw_rgb: '4F81BD' },
+				bgColor: { theme: 7, raw_rgb: '8064A2' } },
+			{ patternType: 'lightGrid',
+				fgColor: { theme: 6, raw_rgb: '9BBB59' },
+				bgColor: { theme: 9, raw_rgb: 'F79646' } },
+			{ patternType: 'lightGrid',
+				fgColor: { theme: 4, raw_rgb: '4F81BD' },
+				bgColor: { theme: 2, raw_rgb: '1F497D' } },
+			{ patternType: 'lightVertical',
+				fgColor: { theme: 3, raw_rgb: 'EEECE1' },
+				bgColor: { theme: 7, raw_rgb: '8064A2' } }
+		];
 		ranges.forEach(function(rng) {
 			it(rng,function(){cmparr(rn2(rng).map(function(x){ return ws[x].s; }));});
 		});
@@ -530,12 +560,22 @@ describe('parse features', function() {
 				}
 			}
 		});
+		it('correct styles', function() {
+			var styles = ranges.map(function(r) { return rn2(r)[0]}).map(function(r) { return ws[r].s});
+			for(var i = 0; i != exp.length; ++i) {
+				[
+					"fgColor.theme","fgColor.raw_rgb",
+					"bgColor.theme","bgColor.raw_rgb",
+					"patternType"
+				].forEach(function(k) { deepcmp(exp[i], styles[i], k, i + ":"+k); });
+			}
+		});
 	});
 });
 
 describe('roundtrip features', function() {
 	before(function() {
-		X = require('./');
+		X = require(modp);
 	});
 	describe('should parse core properties and custom properties', function() {
 		var wb1, wb2, base = './tmp/cp';
@@ -724,7 +764,7 @@ describe('corner cases', function() {
 	it('SSF oddities', function() {
 		var ssfdata = require('./misc/ssf.json');
 		ssfdata.forEach(function(d) {
-			for(j=1;j<d.length;++j) {
+			for(var j=1;j<d.length;++j) {
 				if(d[j].length == 2) {
 					var expected = d[j][1], actual = X.SSF.format(d[0], d[j][0], {});
 					assert.equal(actual, expected);

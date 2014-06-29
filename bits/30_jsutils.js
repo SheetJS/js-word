@@ -1,14 +1,15 @@
-function isval(x) { return typeof x !== "undefined" && x !== null; }
+function isval(x) { return x !== undefined && x !== null; }
 
-function keys(o) { return Object.keys(o).filter(function(x) { return o.hasOwnProperty(x); }); }
+function keys(o) { return Object.keys(o); }
 
 function evert(obj, arr) {
 	var o = {};
-	keys(obj).forEach(function(k) {
-		if(!obj.hasOwnProperty(k)) return;
+	var K = keys(obj);
+	for(var i = 0; i < K.length; ++i) {
+		var k = K[i];
 		if(!arr) o[obj[k]] = k;
 		else (o[obj[k]]=o[obj[k]]||[]).push(k);
-	});
+	}
 	return o;
 }
 

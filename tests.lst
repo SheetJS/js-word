@@ -1,3 +1,17 @@
+biff5/NumberFormatCondition.xls
+biff5/RkNumber.xls
+biff5/cell_style_simple.xls
+biff5/comments_stress_test.xls
+biff5/custom_properties.xls
+biff5/hyperlink_stress_test_2011.xls
+biff5/large_strings.xls
+biff5/merge_cells.xls
+biff5/named_ranges_2011.xls
+biff5/number_format.xls
+biff5/pivot_table_test.xls
+biff5/rich_text_stress.xls
+biff5/sushi.xls
+biff5/text_and_numbers.xls
 comments_stress_test.xls.b64
 formula_stress_test.xls.b64
 AutoFilter.xls
@@ -546,6 +560,7 @@ roo_time-test.xls
 roo_type_excelx.xls.pending
 roo_type_openoffice.xls.pending
 roo_whitespace.xls
+sushi.xls
 text_and_numbers.xls
 xlrd_Formate.xls
 xlrd_formula_test_names.xls
@@ -634,6 +649,7 @@ roo_simple_spreadsheet_from_italo.xml
 roo_style.xml
 roo_time-test.xml
 roo_whitespace.xml
+sushi.xml
 text_and_numbers.xml
 xlsx-stream-d-date-cell.xls.xml
 xlsx-stream-d-date-cell.xlsb.xml

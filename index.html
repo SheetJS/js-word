@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!-- xls.js (C) 2013-2014 SheetJS http://sheetjs.com -->
+<!-- vim: set ts=2: -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>JS-XLS Live Demo</title>
 <style>
 #drop{
 	border:2px dashed #bbb;
@@ -13,37 +19,67 @@
 	width:100%;
 }
 </style>
-<b>JS-XLS Live Demo</b><br />
-<input type="radio" name="format" value="csv" checked> CSV<br>
+</head>
+<body>
+<b>JS-XLS (BIFF5/BIFF8/XML) Live Demo</b><br />
+Output Format:
+<select name="format">
+<option value="csv" selected> CSV</option>
+<option value="json"> JSON</option>
+<option value="form"> FORMULAE</option>
+</select><br />
+<!--<input type="radio" name="format" value="csv" checked> CSV<br>
 <input type="radio" name="format" value="json"> JSON<br>
-<input type="radio" name="format" value="form"> FORMULAE<br>
+<input type="radio" name="format" value="form"> FORMULAE<br> -->
 
 <div id="drop">Drop an XLS or XML (2003) file here to see sheet data.</div>
-<!--
 <textarea id="b64data">... or paste a base64-encoding here</textarea>
-<input type="button" id="dotext" value="Click here to process the base64 text" onclick="b64it();"/>
--->
+<input type="button" id="dotext" value="Click here to process the base64 text" onclick="b64it();"/><br />
+Advanced Demo Options: <br />
+Use Web Workers: (when available) <input type="checkbox" name="useworker" checked><br />
+Use readAsBinaryString: (when available) <input type="checkbox" name="userabs" checked><br />
 <pre id="out"></pre>
 <br />
+<!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!--<script src="dist/cpexcel.js"></script>-->
 <script src="xls.js"></script>
 <script>
-var use_worker = true;
+var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+if(!rABS) {
+	document.getElementsByName("userabs")[0].disabled = true;
+	document.getElementsByName("userabs")[0].checked = false;
+}
+
+var use_worker = typeof Worker !== 'undefined';
+if(!use_worker) {
+	document.getElementsByName("useworker")[0].disabled = true;
+	document.getElementsByName("useworker")[0].checked = false;
+}
+
+function fixdata(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(o.length)));
+	return o;
+}
+
 function xlsworker(data, cb) {
 	var worker = new Worker('./xlsworker.js');
 	worker.onmessage = function(e) {
 		switch(e.data.t) {
 			case 'ready': break;
-			case 'e': console.error(e.data); break;
-			case 'xls': cb(e.data.d); break;
+			case 'e': console.error(e.data.d); break;
+			case 'xls': cb(JSON.parse(e.data.d)); break;
 		}
 	};
-	worker.postMessage(data);
+	var arr = rABS ? data : btoa(fixdata(data));
+	worker.postMessage({d:arr,b:rABS});
 }
 
 function get_radio_value( radioName ) {
 	var radios = document.getElementsByName( radioName );
 	for( var i = 0; i < radios.length; i++ ) {
-		if( radios[i].checked ) {
+		if( radios[i].checked || radios.length === 1 ) {
 			return radios[i].value;
 		}
 	}
@@ -63,7 +99,7 @@ function to_json(workbook) {
 function to_csv(workbook) {
 	var result = [];
 	workbook.SheetNames.forEach(function(sheetName) {
-		var csv = XLS.utils.make_csv(workbook.Sheets[sheetName]);
+		var csv = XLS.utils.sheet_to_csv(workbook.Sheets[sheetName]);
 		if(csv.length > 0){
 			result.push("SHEET: " + sheetName);
 			result.push("");
@@ -88,16 +124,13 @@ function to_formulae(workbook) {
 
 var tarea = document.getElementById('b64data');
 function b64it() {
-/*
-	var cfb = XLS.CFB.read(tarea.value, {type: 'base64'});
-	var wb = XLS.parse_xlscfb(cfb);
-*/
-	var wb = XLS.read(tarea.value, {type:'base64'});
+	if(typeof console !== 'undefined') console.log("onload", new Date());
+	var wb = XLS.read(tarea.value, {type: 'base64'});
 	process_wb(wb);
 }
 
 function process_wb(wb) {
-	if(typeof Worker !== 'undefined') XLS.SSF.load_table(wb.SSF);
+	if(use_worker) XLS.SSF.load_table(wb.SSF);
 	var output = "";
 	switch(get_radio_value("format")) {
 		case "json":
@@ -111,32 +144,38 @@ function process_wb(wb) {
 	}
 	if(out.innerText === undefined) out.textContent = output;
 	else out.innerText = output;
+	if(typeof console !== 'undefined') console.log("output", new Date());
 }
 
 var drop = document.getElementById('drop');
 function handleDrop(e) {
 	e.stopPropagation();
 	e.preventDefault();
+	rABS = document.getElementsByName("userabs")[0].checked;
+	use_worker = document.getElementsByName("useworker")[0].checked;
 	var files = e.dataTransfer.files;
 	var i,f;
 	for (i = 0, f = files[i]; i != files.length; ++i) {
 		var reader = new FileReader();
 		var name = f.name;
 		reader.onload = function(e) {
+			if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
 			var data = e.target.result;
-			if(use_worker && typeof Worker !== 'undefined') {
+			if(use_worker) {
 				xlsworker(data, process_wb);
 			} else {
-				/*var cfb = XLS.CFB.read(data, {type: 'binary'});
-				//var arr = String.fromCharCode.apply(null, new Uint8Array(data));
-				//var cfb = XLS.CFB.read(btoa(arr), {type: 'base64'});
-				var wb = XLS.parse_xlscfb(cfb);*/
-				var wb = XLS.read(data, {type:'binary'});
+				var wb;
+				if(rABS) {
+					wb = XLS.read(data, {type: 'binary'});
+				} else {
+					var arr = fixdata(data);
+					wb = XLS.read(btoa(arr), {type: 'base64'});
+				}
 				process_wb(wb);
 			}
 		};
-		reader.readAsBinaryString(f);
-		//reader.readAsArrayBuffer(f);
+		if(rABS) reader.readAsBinaryString(f);
+		else reader.readAsArrayBuffer(f);
 	}
 }
 
@@ -152,3 +191,5 @@ if(drop.addEventListener) {
 	drop.addEventListener('drop', handleDrop, false);
 }
 </script>
+</body>
+</html>

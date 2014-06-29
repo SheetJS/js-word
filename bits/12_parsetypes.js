@@ -8,15 +8,15 @@ function parse_FILETIME(blob) {
 
 /* [MS-OSHARED] 2.3.3.1.4 Lpstr */
 function parse_lpstr(blob, type, pad) {
-	var str = blob.read_shift('lpstr');
-	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
+	var str = blob.read_shift(0, 'lpstr');
+	if(pad) blob.l += (4 - ((str.length+1) & 3)) & 3;
 	return str;
 }
 
 /* [MS-OSHARED] 2.3.3.1.6 Lpwstr */
 function parse_lpwstr(blob, type, pad) {
-	var str = blob.read_shift('lpwstr');
-	if(pad) blob.l += (4 - ((str.length+1) % 4)) % 4;
+	var str = blob.read_shift(0, 'lpwstr');
+	if(pad) blob.l += (4 - ((str.length+1) & 3)) & 3;
 	return str;
 }
 
@@ -24,22 +24,18 @@ function parse_lpwstr(blob, type, pad) {
 /* [MS-OSHARED] 2.3.3.1.11 VtString */
 /* [MS-OSHARED] 2.3.3.1.12 VtUnalignedString */
 function parse_VtStringBase(blob, stringType, pad) {
-	if(stringType) switch(stringType) {
-		case VT_LPSTR: return parse_lpstr(blob, stringType, pad);
-		case VT_LPWSTR: return parse_lpwstr(blob);
-		default: throw "Unrecognized string type " + stringType;
-	}
-	else return parse_VtStringBase(blob, blob.read_shift(2), pad);
+	if(stringType === 0x1F /*VT_LPWSTR*/) return parse_lpwstr(blob);
+	return parse_lpstr(blob, stringType, pad);
 }
 
-function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, pad === false ? null : 4); }
+function parse_VtString(blob, t, pad) { return parse_VtStringBase(blob, t, pad === false ? 0: 4); }
 function parse_VtUnalignedString(blob, t) { if(!t) throw new Error("dafuq?"); return parse_VtStringBase(blob, t, 0); }
 
 /* [MS-OSHARED] 2.3.3.1.9 VtVecUnalignedLpstrValue */
 function parse_VtVecUnalignedLpstrValue(blob) {
 	var length = blob.read_shift(4);
 	var ret = [];
-	for(var i = 0; i != length; ++i) ret[i] = blob.read_shift('lpstr');
+	for(var i = 0; i != length; ++i) ret[i] = blob.read_shift(0, 'lpstr');
 	return ret;
 }
 
@@ -71,15 +67,14 @@ function parse_VtVecHeadingPair(blob) {
 
 /* [MS-OLEPS] 2.18.1 Dictionary (uses 2.17, 2.16) */
 function parse_dictionary(blob,CodePage) {
-	var read = ReadShift.bind(blob);
-	var cnt = read(4);
+	var cnt = blob.read_shift(4);
 	var dict = {};
 	for(var j = 0; j != cnt; ++j) {
-		var pid = read(4);
-		var len = read(4);
-		dict[pid] = read((CodePage === 0x4B0 ?'utf16le':'utf8'), len).replace(/\u0000/g,'').replace(/[\u0001-\u0006]/g,'!');
+		var pid = blob.read_shift(4);
+		var len = blob.read_shift(4);
+		dict[pid] = blob.read_shift(len, (CodePage === 0x4B0 ?'utf16le':'utf8')).replace(chr0,'').replace(chr1,'!');
 	}
-	if(blob.l % 4) blob.l = (blob.l>>2+1)<<2;
+	if(blob.l & 3) blob.l = (blob.l>>2+1)<<2;
 	return dict;
 }
 
@@ -87,7 +82,7 @@ function parse_dictionary(blob,CodePage) {
 function parse_BLOB(blob) {
 	var size = blob.read_shift(4);
 	var bytes = blob.slice(blob.l,blob.l+size);
-	if(size % 4 > 0) blob.l += (4 - (size % 4)) % 4;
+	if(size & 3 > 0) blob.l += (4 - (size & 3)) & 3;
 	return bytes;
 }
 
@@ -104,62 +99,60 @@ function parse_ClipboardData(blob) {
 /* [MS-OLEPS] 2.14 Vector and Array Property Types */
 function parse_VtVector(blob, cb) {
 	/* [MS-OLEPS] 2.14.2 VectorHeader */
-	var Length = blob.read_shift(4);
+/*	var Length = blob.read_shift(4);
 	var o = [];
 	for(var i = 0; i != Length; ++i) {
 		o.push(cb(blob));
 	}
-	return o;
+	return o;*/
 }
 
 /* [MS-OLEPS] 2.15 TypedPropertyValue */
 function parse_TypedPropertyValue(blob, type, _opts) {
-	var read = ReadShift.bind(blob);
-	var t = read(2), ret, opts = _opts||{};
-	read(2);
+	var t = blob.read_shift(2), ret, opts = _opts||{};
+	blob.l += 2;
 	if(type !== VT_VARIANT)
 	if(t !== type && VT_CUSTOM.indexOf(type)===-1) throw new Error('Expected type ' + type + ' saw ' + t);
 	switch(type === VT_VARIANT ? t : type) {
-		case VT_I2: ret = read(2, 'i'); if(!opts.raw) read(2); return ret;
-		case VT_I4: ret = read(4, 'i'); return ret;
-		case VT_BOOL: return read(4) !== 0x0;
-		case VT_UI4: ret = read(4); return ret;
-		case VT_LPSTR: return parse_lpstr(blob, t, 4).replace(/\u0000/g,'');
-		case VT_LPWSTR: return parse_lpwstr(blob);
-		case VT_FILETIME: return parse_FILETIME(blob);
-		case VT_BLOB: return parse_BLOB(blob);
-		case VT_CF: return parse_ClipboardData(blob);
-		case VT_STRING: return parse_VtString(blob, t, !opts.raw && 4).replace(/\u0000/g,'');
-		case VT_USTR: return parse_VtUnalignedString(blob, t, 4).replace(/\u0000/g,'');
-		case VT_VECTOR | VT_VARIANT: return parse_VtVecHeadingPair(blob);
-		case VT_VECTOR | VT_LPSTR: return parse_VtVecUnalignedLpstr(blob);
+		case 0x02 /*VT_I2*/: ret = blob.read_shift(2, 'i'); if(!opts.raw) blob.l += 2; return ret;
+		case 0x03 /*VT_I4*/: ret = blob.read_shift(4, 'i'); return ret;
+		case 0x0B /*VT_BOOL*/: return blob.read_shift(4) !== 0x0;
+		case 0x13 /*VT_UI4*/: ret = blob.read_shift(4); return ret;
+		case 0x1E /*VT_LPSTR*/: return parse_lpstr(blob, t, 4).replace(chr0,'');
+		case 0x1F /*VT_LPWSTR*/: return parse_lpwstr(blob);
+		case 0x40 /*VT_FILETIME*/: return parse_FILETIME(blob);
+		case 0x41 /*VT_BLOB*/: return parse_BLOB(blob);
+		case 0x47 /*VT_CF*/: return parse_ClipboardData(blob);
+		case 0x50 /*VT_STRING*/: return parse_VtString(blob, t, !opts.raw && 4).replace(chr0,'');
+		case 0x51 /*VT_USTR*/: return parse_VtUnalignedString(blob, t, 4).replace(chr0,'');
+		case 0x100C /*VT_VECTOR|VT_VARIANT*/: return parse_VtVecHeadingPair(blob);
+		case 0x101E /*VT_LPSTR*/: return parse_VtVecUnalignedLpstr(blob);
 		default: throw new Error("TypedPropertyValue unrecognized type " + type + " " + t);
 	}
 }
-function parse_VTVectorVariant(blob) {
-	/* [MS-OLEPS] 2.14.2 VectorHeader */
+/* [MS-OLEPS] 2.14.2 VectorHeader */
+/*function parse_VTVectorVariant(blob) {
 	var Length = blob.read_shift(4);
 
-	if(Length % 2 !== 0) throw new Error("VectorHeader Length=" + Length + " must be even");
+	if(Length & 1 !== 0) throw new Error("VectorHeader Length=" + Length + " must be even");
 	var o = [];
 	for(var i = 0; i != Length; ++i) {
 		o.push(parse_TypedPropertyValue(blob, VT_VARIANT));
 	}
 	return o;
-}
+}*/
 
 /* [MS-OLEPS] 2.20 PropertySet */
 function parse_PropertySet(blob, PIDSI) {
 	var start_addr = blob.l;
-	var read = ReadShift.bind(blob);
-	var size = read(4);
-	var NumProps = read(4);
+	var size = blob.read_shift(4);
+	var NumProps = blob.read_shift(4);
 	var Props = [], i = 0;
 	var CodePage = 0;
 	var Dictionary = -1, DictObj;
 	for(i = 0; i != NumProps; ++i) {
-		var PropID = read(4);
-		var Offset = read(4);
+		var PropID = blob.read_shift(4);
+		var Offset = blob.read_shift(4);
 		Props[i] = [PropID, Offset + start_addr];
 	}
 	var PropH = {};
@@ -167,9 +160,9 @@ function parse_PropertySet(blob, PIDSI) {
 		if(blob.l !== Props[i][1]) {
 			var fail = true;
 			if(i>0 && PIDSI) switch(PIDSI[Props[i-1][0]].t) {
-				case VT_I2: if(blob.l +2 === Props[i][1]) { blob.l+=2; fail = false; } break;
-				case VT_STRING: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
-				case VT_VECTOR | VT_VARIANT: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+				case 0x02 /*VT_I2*/: if(blob.l +2 === Props[i][1]) { blob.l+=2; fail = false; } break;
+				case 0x50 /*VT_STRING*/: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
+				case 0x100C /*VT_VECTOR|VT_VARIANT*/: if(blob.l <= Props[i][1]) { blob.l=Props[i][1]; fail = false; } break;
 			}
 			if(!PIDSI && blob.l <= Props[i][1]) { fail=false; blob.l = Props[i][1]; }
 			if(fail) throw new Error("Read Error: Expected address " + Props[i][1] + ' at ' + blob.l + ' :' + i);
@@ -222,14 +215,14 @@ function parse_PropertySet(blob, PIDSI) {
 				var val;
 				/* [MS-OSHARED] 2.3.3.2.3.1.2 + PROPVARIANT */
 				switch(blob[blob.l]) {
-					case VT_BLOB: blob.l += 4; val = parse_BLOB(blob); break;
-					case VT_LPSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
-					case VT_LPWSTR: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
-					case VT_I4: blob.l += 4; val = read(4, 'i'); break;
-					case VT_UI4: blob.l += 4; val = read(4); break;
-					case VT_R8: blob.l += 4; val = read(8, 'f'); break;
-					case VT_BOOL: blob.l += 4; val = parsebool(blob, 4); break;
-					case VT_FILETIME: blob.l += 4; val = new Date(parse_FILETIME(blob)); break;
+					case 0x41 /*VT_BLOB*/: blob.l += 4; val = parse_BLOB(blob); break;
+					case 0x1E /*VT_LPSTR*/: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case 0x1F /*VT_LPWSTR*/: blob.l += 4; val = parse_VtString(blob, blob[blob.l-4]); break;
+					case 0x03 /*VT_I4*/: blob.l += 4; val = blob.read_shift(4, 'i'); break;
+					case 0x13 /*VT_UI4*/: blob.l += 4; val = blob.read_shift(4); break;
+					case 0x05 /*VT_R8*/: blob.l += 4; val = blob.read_shift(8, 'f'); break;
+					case 0x0B /*VT_BOOL*/: blob.l += 4; val = parsebool(blob, 4); break;
+					case 0x40 /*VT_FILETIME*/: blob.l += 4; val = new Date(parse_FILETIME(blob)); break;
 					default: throw new Error("unparsed value: " + blob[blob.l]);
 				}
 				PropH[name] = val;
@@ -243,21 +236,20 @@ function parse_PropertySet(blob, PIDSI) {
 /* [MS-OLEPS] 2.21 PropertySetStream */
 function parse_PropertySetStream(file, PIDSI) {
 	var blob = file.content;
-	prep_blob(blob);
-	var read = ReadShift.bind(blob), chk = CheckField.bind(blob);
+	prep_blob(blob, 0);
 
 	var NumSets, FMTID0, FMTID1, Offset0, Offset1;
-	chk('feff', 'Byte Order: ');
+	blob.chk('feff', 'Byte Order: ');
 
-	var vers = read(2); // TODO: check version
-	var SystemIdentifier = read(4);
-	chk(HEADER_CLSID, 'CLSID: ');
-	NumSets = read(4);
+	var vers = blob.read_shift(2); // TODO: check version
+	var SystemIdentifier = blob.read_shift(4);
+	blob.chk(CFB.utils.consts.HEADER_CLSID, 'CLSID: ');
+	NumSets = blob.read_shift(4);
 	if(NumSets !== 1 && NumSets !== 2) throw "Unrecognized #Sets: " + NumSets;
-	FMTID0 = read(16); Offset0 = read(4);
+	FMTID0 = blob.read_shift(16); Offset0 = blob.read_shift(4);
 
 	if(NumSets === 1 && Offset0 !== blob.l) throw "Length mismatch";
-	else if(NumSets === 2) { FMTID1 = read(16); Offset1 = read(4); }
+	else if(NumSets === 2) { FMTID1 = blob.read_shift(16); Offset1 = blob.read_shift(4); }
 	var PSet0 = parse_PropertySet(blob, PIDSI);
 
 	var rval = { SystemIdentifier: SystemIdentifier };

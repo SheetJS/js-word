@@ -18,7 +18,7 @@ function parse_frtHeader(blob) {
 
 
 
-function parse_OptXLUnicodeString(blob, length) { return length === 0 ? "" : parse_XLUnicodeString(blob); }
+function parse_OptXLUnicodeString(blob, length, opts) { return length === 0 ? "" : parse_XLUnicodeString(blob, length, opts); }
 
 /* 2.5.158 */
 var HIDEOBJENUM = ['SHOWALL', 'SHOWPLACEHOLDER', 'HIDEALL'];
@@ -36,7 +36,7 @@ function parse_RkNumber(blob) {
 	var fX100 = b[0] & 1, fInt = b[0] & 2;
 	blob.l+=4;
 	b[0] &= ~3;
-	var RK = fInt === 0 ? __readDoubleLE([0,0,0,0,b[0],b[1],b[2],b[3]],0) : __readInt32LE(b,0)>>2;
+	var RK = fInt === 0 ? __double([0,0,0,0,b[0],b[1],b[2],b[3]],0) : __readInt32LE(b,0)>>2;
 	return fX100 ? RK/100 : RK;
 }
 
@@ -151,7 +151,7 @@ var parse_FontIndex = parseuint16;
 function parse_BOF(blob, length) {
 	var o = {};
 	o.BIFFVer = blob.read_shift(2); length -= 2;
-	if(o.BIFFVer != 0x0600) throw "Unexpected BIFF Ver " + o.BIFFVer;
+	if(o.BIFFVer !== 0x0600 && o.BIFFVer !== 0x0500) throw "Unexpected BIFF Ver " + o.BIFFVer;
 	blob.read_shift(length);
 	return o;
 }
@@ -159,6 +159,7 @@ function parse_BOF(blob, length) {
 
 /* 2.4.146 */
 function parse_InterfaceHdr(blob, length) {
+	if(length === 0) return 0x04b0;
 	var q;
 	if((q=blob.read_shift(2))!==0x04b0) throw 'InterfaceHdr codePage ' + q;
 	return 0x04b0;
@@ -170,13 +171,13 @@ function parse_WriteAccess(blob, length, opts) {
 	if(opts.enc) { blob.l += length; return ""; }
 	var l = blob.l;
 	// TODO: make sure XLUnicodeString doesnt overrun
-	var UserName = parse_XLUnicodeString(blob);
+	var UserName = parse_XLUnicodeString(blob, 0, opts);
 	blob.read_shift(length + l - blob.l);
 	return UserName;
 }
 
 /* 2.4.28 */
-function parse_BoundSheet8(blob, length) {
+function parse_BoundSheet8(blob, length, opts) {
 	var pos = blob.read_shift(4);
 	var hidden = blob.read_shift(1) >> 6;
 	var dt = blob.read_shift(1);
@@ -186,7 +187,7 @@ function parse_BoundSheet8(blob, length) {
 		case 2: dt = 'Chartsheet'; break;
 		case 6: dt = 'VBAModule'; break;
 	}
-	var name = parse_ShortXLUnicodeString(blob);
+	var name = parse_ShortXLUnicodeString(blob, 0, opts);
 	return { pos:pos, hs:hidden, dt:dt, name:name };
 }
 
@@ -251,18 +252,17 @@ function parse_DefaultRowHeight (blob, length) {
 
 /* 2.4.345 TODO */
 function parse_Window1(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var xWn = read(2), yWn = read(2), dxWn = read(2), dyWn = read(2);
-	var flags = read(2), iTabCur = read(2), iTabFirst = read(2);
-	var ctabSel = read(2), wTabRatio = read(2);
+	var xWn = blob.read_shift(2), yWn = blob.read_shift(2), dxWn = blob.read_shift(2), dyWn = blob.read_shift(2);
+	var flags = blob.read_shift(2), iTabCur = blob.read_shift(2), iTabFirst = blob.read_shift(2);
+	var ctabSel = blob.read_shift(2), wTabRatio = blob.read_shift(2);
 	return { Pos: [xWn, yWn], Dim: [dxWn, dyWn], Flags: flags, CurTab: iTabCur,
 		FirstTab: iTabFirst, Selected: ctabSel, TabRatio: wTabRatio };
 }
 
 /* 2.4.122 TODO */
-function parse_Font(blob, length) {
+function parse_Font(blob, length, opts) {
 	blob.l += 14;
-	var name = parse_ShortXLUnicodeString(blob);
+	var name = parse_ShortXLUnicodeString(blob, 0, opts);
 	return name;
 }
 
@@ -274,25 +274,26 @@ function parse_LabelSst(blob, length) {
 }
 
 /* 2.4.148 */
-function parse_Label(blob, length) {
+function parse_Label(blob, length, opts) {
 	var cell = parse_Cell(blob, 6);
-	var str = parse_XLUnicodeString(blob, length-6);
+	var str = parse_XLUnicodeString(blob, length-6, opts);
 	cell.val = str;
 	return cell;
 }
 
 /* 2.4.126 Number Formats */
-function parse_Format(blob, length) {
+function parse_Format(blob, length, opts) {
 	var ifmt = blob.read_shift(2);
-	var fmtstr = parse_XLUnicodeString(blob);
+	var fmtstr = parse_XLUnicodeString2(blob, 0, opts);
 	return [ifmt, fmtstr];
 }
 
 /* 2.4.90 */
 function parse_Dimensions(blob, length) {
-	var read = blob.read_shift.bind(blob);
-	var r = read(4), R = read(4), c = read(2), C = read(2);
-	read(2);
+	var w = length === 10 ? 2 : 4;
+	var r = blob.read_shift(w), R = blob.read_shift(w),
+	    c = blob.read_shift(2), C = blob.read_shift(2);
+	blob.l += 2;
 	return {s: {r:r, c:c}, e: {r:R, c:C}};
 }
 
@@ -392,6 +393,7 @@ function parse_ExternName(blob, length, opts) {
 
 /* 2.4.150 TODO */
 function parse_Lbl(blob, length, opts) {
+	if(opts.biff < 8) return parse_Label(blob, length, opts);
 	var target = blob.l + length;
 	var flags = blob.read_shift(2);
 	var chKey = blob.read_shift(1);
@@ -400,8 +402,8 @@ function parse_Lbl(blob, length, opts) {
 	blob.l += 2;
 	var itab = blob.read_shift(2);
 	blob.l += 4;
-	var name = parse_XLUnicodeStringNoCch(blob, cch);
-	var rgce = parse_NameParsedFormula(blob, target - blob.l, cce);
+	var name = parse_XLUnicodeStringNoCch(blob, cch, opts);
+	var rgce = parse_NameParsedFormula(blob, target - blob.l, opts, cce);
 	return {
 		chKey: chKey,
 		Name: name,
@@ -411,6 +413,7 @@ function parse_Lbl(blob, length, opts) {
 
 /* 2.4.106 TODO: verify supbook manipulation */
 function parse_ExternSheet(blob, length, opts) {
+	if(opts.biff < 8) return parse_ShortXLUnicodeString(blob, length, opts);
 	var o = parslurp2(blob,length,parse_XTI);
 	var oo = [];
 	if(opts.sbcch === 0x0401) {
@@ -444,19 +447,20 @@ function parse_MTRSettings(blob, length) {
 	return [fMTREnabled, fUserSetThreadCount, cUserThreadCount];
 }
 
-/* 2.5.186 */
-function parse_NoteSh(blob, length) {
+/* 2.5.186 TODO: BIFF5 */
+function parse_NoteSh(blob, length, opts) {
+	if(opts.biff < 8) return;
 	var row = blob.read_shift(2), col = blob.read_shift(2);
 	var flags = blob.read_shift(2), idObj = blob.read_shift(2);
-	var stAuthor = parse_XLUnicodeString(blob);
-	blob.read_shift(1);
+	var stAuthor = parse_XLUnicodeString2(blob, 0, opts);
+	if(opts.biff < 8) blob.read_shift(1);
 	return [{r:row,c:col}, stAuthor, idObj, flags];
 }
 
 /* 2.4.179 */
-function parse_Note(blob, length) {
+function parse_Note(blob, length, opts) {
 	/* TODO: Support revisions */
-	return parse_NoteSh(blob, length);
+	return parse_NoteSh(blob, length, opts);
 }
 
 /* 2.4.168 */
@@ -527,8 +531,8 @@ var parse_HLinkTooltip = function(blob, length) {
 	var end = blob.l + length;
 	blob.read_shift(2);
 	var ref = parse_Ref8U(blob, 8);
-	var wzTooltip = blob.read_shift('dbcs', (length-10)/2);
-	wzTooltip = wzTooltip.replace(/\u0000$/,"");
+	var wzTooltip = blob.read_shift((length-10)/2, 'dbcs');
+	wzTooltip = wzTooltip.replace(chr0,"");
 	return [ref, wzTooltip];
 };
 
@@ -852,4 +856,8 @@ var parse_GelFrame = parsenoop;
 var parse_BopPopCustom = parsenoop;
 var parse_Fbi2 = parsenoop;
 
-
+/* --- */
+function parse_BIFF5String(blob) {
+	var len = blob.read_shift(1);
+	return blob.read_shift(len, 'sbcs');
+}

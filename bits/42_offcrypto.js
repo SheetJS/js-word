@@ -1,4 +1,4 @@
-function _JS2ANSI(str) { return typeof cptable !== 'undefined' ? cptable.utils.encode(1252, str) : str.split("").map(_getchar); }
+function _JS2ANSI(str) { if(typeof cptable !== 'undefined') return cptable.utils.encode(1252, str); return str.split("").map(function(x) { return x.charCodeAt(0); }); }
 
 /* [MS-OFFCRYPTO] 2.1.4 Version */
 function parse_Version(blob, length) {
@@ -9,15 +9,14 @@ function parse_Version(blob, length) {
 }
 /* [MS-OFFCRYPTO] 2.3.2 Encryption Header */
 function parse_EncryptionHeader(blob, length) {
-	var read = blob.read_shift.bind(blob);
 	var o = {};
-	o.Flags = read(4);
+	o.Flags = blob.read_shift(4);
 
 	// Check if SizeExtra is 0x00000000
-	var tmp = read(4);
+	var tmp = blob.read_shift(4);
 	if(tmp !== 0) throw 'Unrecognized SizeExtra: ' + tmp;
 
-	o.AlgID = read(4);
+	o.AlgID = blob.read_shift(4);
 	switch(o.AlgID) {
 		case 0: case 0x6801: case 0x660E: case 0x660F: case 0x6610: break;
 		default: throw 'Unrecognized encryption algorithm: ' + o.AlgID;
@@ -77,7 +76,7 @@ var crypto_CreateXorArray_Method1 = (function() {
 	var PadArray = [0xBB, 0xFF, 0xFF, 0xBA, 0xFF, 0xFF, 0xB9, 0x80, 0x00, 0xBE, 0x0F, 0x00, 0xBF, 0x0F, 0x00];
 	var InitialCode = [0xE1F0, 0x1D0F, 0xCC9C, 0x84C0, 0x110C, 0x0E10, 0xF1CE, 0x313E, 0x1872, 0xE139, 0xD40F, 0x84F9, 0x280C, 0xA96A, 0x4EC3];
 	var XorMatrix = [0xAEFC, 0x4DD9, 0x9BB2, 0x2745, 0x4E8A, 0x9D14, 0x2A09, 0x7B61, 0xF6C2, 0xFDA5, 0xEB6B, 0xC6F7, 0x9DCF, 0x2BBF, 0x4563, 0x8AC6, 0x05AD, 0x0B5A, 0x16B4, 0x2D68, 0x5AD0, 0x0375, 0x06EA, 0x0DD4, 0x1BA8, 0x3750, 0x6EA0, 0xDD40, 0xD849, 0xA0B3, 0x5147, 0xA28E, 0x553D, 0xAA7A, 0x44D5, 0x6F45, 0xDE8A, 0xAD35, 0x4A4B, 0x9496, 0x390D, 0x721A, 0xEB23, 0xC667, 0x9CEF, 0x29FF, 0x53FE, 0xA7FC, 0x5FD9, 0x47D3, 0x8FA6, 0x0F6D, 0x1EDA, 0x3DB4, 0x7B68, 0xF6D0, 0xB861, 0x60E3, 0xC1C6, 0x93AD, 0x377B, 0x6EF6, 0xDDEC, 0x45A0, 0x8B40, 0x06A1, 0x0D42, 0x1A84, 0x3508, 0x6A10, 0xAA51, 0x4483, 0x8906, 0x022D, 0x045A, 0x08B4, 0x1168, 0x76B4, 0xED68, 0xCAF1, 0x85C3, 0x1BA7, 0x374E, 0x6E9C, 0x3730, 0x6E60, 0xDCC0, 0xA9A1, 0x4363, 0x86C6, 0x1DAD, 0x3331, 0x6662, 0xCCC4, 0x89A9, 0x0373, 0x06E6, 0x0DCC, 0x1021, 0x2042, 0x4084, 0x8108, 0x1231, 0x2462, 0x48C4];
-	var Ror = function(Byte) { return ((Byte/2) | (Byte*128)) % 0x100; };
+	var Ror = function(Byte) { return ((Byte/2) | (Byte*128)) & 0xFF; };
 	var XorRor = function(byte1, byte2) { return Ror(byte1 ^ byte2); };
 	var CreateXorKey_Method1 = function(Password) {
 		var XorKey = InitialCode[Password.length - 1];
@@ -98,7 +97,7 @@ var crypto_CreateXorArray_Method1 = (function() {
 		var ObfuscationArray = new_buf(16);
 		for(var i = 0; i != 16; ++i) ObfuscationArray[i] = 0x00;
 		var Temp, PasswordLastChar, PadIndex;
-		if((Index % 2) === 1) {
+		if((Index & 1) === 1) {
 			Temp = XorKey >> 8;
 			ObfuscationArray[Index] = XorRor(PadArray[0], Temp);
 			--Index;
