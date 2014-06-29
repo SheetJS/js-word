@@ -36,11 +36,11 @@ The complete single-file version is generated at `dist/xls.full.min.js`
 
 ## ECMAScript 5 compatibility
 
-Since xlsx.js uses ES5 functions like `Array#forEach`, older browsers require
+Since xls.js uses ES5 functions like `Array#forEach`, older browsers require
 [Polyfills](http://git.io/QVh77g).  This repo and the gh-pages branch include
 [a shim](https://github.com/SheetJS/js-xls/blob/master/shim.js)
 
-To use the shim, add the shim before the script tag that loads xlsx.js:
+To use the shim, add the shim before the script tag that loads xls.js:
 
     <script type="text/javascript" src="/path/to/shim.js"></script>
 
@@ -195,6 +195,11 @@ The exported `read` and `readFile` functions accept an options argument:
   for files employing other encryption methods.
 
 ## Tested Environments
+
+ - NodeJS 0.8, 0.10 (latest release), 0.11 (unstable)
+ - IE 6/7/8/9/10/11 using Base64 mode (IE10/11 using HTML5 mode)
+ - FF 18 using Base64 or HTML5 mode
+ - Chrome 24 using Base64 or HTML5 mode
 
 Tests utilize the mocha testing framework.  Travis-CI and Sauce Labs links:
 
