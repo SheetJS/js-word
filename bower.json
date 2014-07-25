@@ -1,0 +1,16 @@
+{
+  "name": "js-xls",
+  "homepage": "https://github.com/SheetJS/js-xls",
+  "main": "dist/xls.js",
+  "version": "0.7.0",
+  "ignore": [
+        "bin",
+        "bits",
+        "misc",
+        "**/.*"
+    ],
+    "keywords": [
+        "xls",
+        "js-xls"
+    ]
+}
