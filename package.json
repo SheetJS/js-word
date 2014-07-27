@@ -1,6 +1,6 @@
 {
 	"name": "xlsjs",
-	"version": "0.7.0",
+	"version": "0.7.1",
 	"author": "sheetjs",
 	"description": "Excel 5.0/95 and 97-2004 spreadsheet (BIFF5 XLS / BIFF8 XLS / XML 2003) parser",
 	"keywords": [ "excel", "xls", "office", "spreadsheet" ],
@@ -10,7 +10,7 @@
 	"main": "./xls",
 	"dependencies": {
 		"ssf":"~0.8.1",
-		"codepage":"~1.3.1",
+		"codepage":"~1.3.4",
 		"cfb":">=0.10.0",
 		"commander":""
 	},

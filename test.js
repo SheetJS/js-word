@@ -58,7 +58,7 @@ function parsetest(x, wb, full, ext) {
 	ext = (ext ? " [" + ext + "]": "");
 	if(!full && ext) return;
 	describe(x + ext + ' should have all bits', function() {
-		var sname = dir + '2011/' + x + '.sheetnames';
+		var sname = dir + '2011/' + x.substr(x.lastIndexOf('/')+1) + '.sheetnames';
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
 		});
@@ -771,6 +771,13 @@ describe('corner cases', function() {
 				} else if(d[j][2] !== "#") assert.throws(function() { SSF.format(d[0], d[j][0]); });
 			}
 		});
+	});
+	it('CFB', function() {
+		var cfb = X.CFB.read(paths.swc1, {type:"file"});
+		var xls = X.parse_xlscfb(cfb);
+	});
+	it('codepage', function() {
+		X.readFile(dir + "biff5/number_format_greek.xls");
 	});
 });
 

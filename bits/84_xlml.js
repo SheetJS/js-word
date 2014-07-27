@@ -104,7 +104,7 @@ function xlml_clean_comment(comment) {
 }
 
 function xlml_normalize(d) {
-	if(typeof Buffer!=='undefined'&&d instanceof Buffer) return d.toString('utf8');
+	if(has_buf && Buffer.isBuffer(d)) return d.toString('utf8');
 	if(typeof d === 'string') return d;
 	throw "badf";
 }
@@ -290,11 +290,13 @@ function parse_xlml_xml(d, opts) {
 		case 'Schema':
 		case 'data':
 		case 'ConditionalFormatting':
+		case 'SmartTagType':
+		case 'SmartTags':
 		case 'ExcelWorkbook':
 		case 'WorkbookOptions':
 		case 'WorksheetOptions':
 			if(Rn[1]==='/'){if((tmp=state.pop())[0]!==Rn[3]) throw "Bad state: "+tmp;}
-			else state.push([Rn[3], true]);
+			else if(Rn[0].charAt(Rn[0].length-2) !== '/') state.push([Rn[3], true]);
 			break;
 
 		default:
@@ -375,6 +377,7 @@ function parse_xlml_xml(d, opts) {
 					case 'DoNotCalculateBeforeSave': break;
 					case 'Number': break;
 					case 'RefModeR1C1': break;
+					case 'EmbedSaveSmartTags': break;
 					default: seen = false;
 				} break;
 
@@ -624,6 +627,9 @@ function parse_xlml_xml(d, opts) {
 					case 'row': break;
 					default: seen = false;
 				} break;
+
+				/* SmartTags (can be anything) */
+				case 'SmartTags': break;
 
 				default: seen = false; break;
 			}

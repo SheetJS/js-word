@@ -1,6 +1,8 @@
+var has_buf = (typeof Buffer !== 'undefined');
+
 function new_buf(len) {
 	/* jshint -W056 */
-	return new (typeof Buffer !== 'undefined' ? Buffer : Array)(len);
+	return new (has_buf ? Buffer : Array)(len);
 	/* jshint +W056 */
 }
 
@@ -47,7 +49,7 @@ var Base64 = (function make_b64(){
 })();
 
 function s2a(s) {
-	if(typeof Buffer !== 'undefined') return new Buffer(s, "binary");
+	if(has_buf) return new Buffer(s, "binary");
 	var w = s.split("").map(function(x){ return x.charCodeAt(0) & 0xff; });
 	return w;
 }

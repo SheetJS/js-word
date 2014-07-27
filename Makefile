@@ -69,8 +69,11 @@ coveralls:
 coveralls-spin:
 	make coveralls & bash misc/spin.sh $$!
 
+bower.json: package.json misc/_bower.json
+	cat $^ | sed 's/_VERSION_/'`grep version package.json | awk '{gsub(/[^0-9a-z\.-]/,"",$$2); print $$2}'`'/' > $@
+
 .PHONY: dist
-dist: dist-deps $(TARGET)
+dist: dist-deps $(TARGET) bower.json
 	cp $(TARGET) dist/
 	cp LICENSE dist/
 	uglifyjs $(TARGET) -o dist/$(LIB).min.js --source-map dist/$(LIB).min.map --preamble "$$(head -n 1 bits/00_header.js)"

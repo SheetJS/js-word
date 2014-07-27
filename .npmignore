@@ -8,3 +8,15 @@ tmp
 *.xlsm
 *.xlsx
 *.xml
+.gitignore
+.jshintrc
+CONTRIBUTING.md
+Makefile
+tests.lst
+.npmignore
+xlsworker.js
+shim.js
+test.js
+.jscs.json
+.gitmodules
+.travis.yml

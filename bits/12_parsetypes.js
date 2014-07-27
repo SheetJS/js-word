@@ -184,6 +184,8 @@ function parse_PropertySet(blob, PIDSI) {
 				case 1254: // SB Windows Turkish
 				case 1255: // SB Windows Hebrew
 				case 1256: // SB Windows Arabic
+				case 1257: // SB Windows Baltic
+				case 1258: // SB Windows Vietnam
 
 				case 932: // DB Windows Japanese Shift-JIS
 				case 936: // DB Windows Simplified Chinese GBK

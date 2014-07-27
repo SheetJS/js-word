@@ -18,7 +18,7 @@ function parse_frtHeader(blob) {
 
 
 
-function parse_OptXLUnicodeString(blob, length, opts) { return length === 0 ? "" : parse_XLUnicodeString(blob, length, opts); }
+function parse_OptXLUnicodeString(blob, length, opts) { return length === 0 ? "" : parse_XLUnicodeString2(blob, length, opts); }
 
 /* 2.5.158 */
 var HIDEOBJENUM = ['SHOWALL', 'SHOWPLACEHOLDER', 'HIDEALL'];
@@ -536,6 +536,14 @@ var parse_HLinkTooltip = function(blob, length) {
 	return [ref, wzTooltip];
 };
 
+/* 2.4.63 */
+function parse_Country(blob, length) {
+	var o = [], d;
+	d = blob.read_shift(2); o[0] = CountryEnum[d] || d;
+	d = blob.read_shift(2); o[1] = CountryEnum[d] || d;
+	return o;
+}
+
 
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
@@ -550,7 +558,6 @@ var parse_CalcRefMode = parsenoop2; /* 2.4.36 */
 var parse_CalcSaveRecalc = parsebool; /* 2.4.37 */
 var parse_CodePage = parseuint16; /* 2.4.52 */
 var parse_Compat12 = parsebool; /* 2.4.54 true = no compatibility check */
-var parse_Country = parseuint16a; /* 2.4.63 -- two ints, 1 to 981 */
 var parse_Date1904 = parsebool; /* 2.4.77 - 1=1904,0=1900 */
 var parse_DefColWidth = parseuint16; /* 2.4.89 */
 var parse_DSF = parsenoop2; /* 2.4.94 -- MUST be ignored */

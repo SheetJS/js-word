@@ -99,6 +99,7 @@ function parse_workbook(blob, options) {
 	var shared_formulae = {};
 	var array_formulae = []; /* TODO: something more clever */
 	var temp_val;
+	var country;
 	var cell_valid = true;
 	var XFs = []; /* XF records */
 	var addline = function addline(cell, line, options) {
@@ -110,8 +111,8 @@ function parse_workbook(blob, options) {
 			if(cell.c < range.s.c) range.s.c = cell.c;
 		}
 		if(range.e) {
-			if(cell.r > range.e.r) range.e.r = cell.r;
-			if(cell.c > range.e.c) range.e.c = cell.c;
+			if(cell.r + 1 > range.e.r) range.e.r = cell.r + 1;
+			if(cell.c + 1 > range.e.c) range.e.c = cell.c + 1;
 		}
 		if(options.sheetRows && lastcell.r >= options.sheetRows) cell_valid = false;
 		else out[last_cell] = line;
@@ -179,6 +180,7 @@ function parse_workbook(blob, options) {
 				case 'WriteAccess': opts.lastuser = val; break;
 				case 'FileSharing': break; //TODO
 				case 'CodePage':
+					if(val === 0x5212) val = 1200;
 					opts.codepage = val;
 					set_cp(val);
 					break;
@@ -385,7 +387,7 @@ function parse_workbook(blob, options) {
 				case 'FeatHdr': case 'FeatHdr11': break;
 				case 'Feature11': case 'Feature12': case 'List12': break;
 				case 'Blank': break;
-				case 'Country': break; // TODO: international support
+				case 'Country': country = val; break;
 				case 'RecalcId': break;
 				case 'DefaultRowHeight': case 'DxGCol': break; // TODO: htmlify
 				case 'Fbi': case 'Fbi2': case 'GelFrame': break;
@@ -575,6 +577,7 @@ function parse_workbook(blob, options) {
 				/* BIFF5 records */
 				case 'ExternCount': break;
 				case 'RString': break;
+				case 'TabIdConf': case 'Radar': case 'RadarArea': case 'DropBar': case 'Intl': case 'CoordList': case 'SerAuxErrBar': break;
 				default: if(options.WTF) throw 'Unrecognized Record ' + R.n;
 			}}}
 		} else blob.l += length;
@@ -588,6 +591,8 @@ function parse_workbook(blob, options) {
 	wb.Strings = sst;
 	wb.SSF = SSF.get_table();
 	if(opts.enc) wb.Encryption = opts.enc;
+	wb.Metadata = {};
+	if(country !== undefined) wb.Metadata.Country = country;
 	return wb;
 }
 if(CompObj) CompObjP = parse_compobj(CompObj);

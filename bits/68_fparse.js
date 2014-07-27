@@ -25,7 +25,7 @@ function parse_FormulaValue(blob) {
 
 /* 2.5.198.103 */
 function parse_RgbExtra(blob, length, rgce, opts) {
-	if(opts.biff < 8) return parsenoop(length);
+	if(opts.biff < 8) return parsenoop(blob, length);
 	var target = blob.l + length;
 	var o = [];
 	for(var i = 0; i !== rgce.length; ++i) {
