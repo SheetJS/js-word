@@ -5,7 +5,7 @@ biff5/comments_stress_test.xls
 biff5/custom_properties.xls
 biff5/defined_names_simple.xls
 biff5/hyperlink_stress_test_2011.xls
-biff5/large_strings.xls
+biff5/large_strings.xls.pending
 biff5/merge_cells.xls
 biff5/named_ranges_2011.xls
 biff5/number_format.xls
@@ -309,7 +309,7 @@ apachepoi_ex44921-21902.xls
 apachepoi_ex45046-21984.xls
 apachepoi_ex45582-22397.xls
 apachepoi_ex45672.xls
-apachepoi_ex45698-22488.xls
+apachepoi_ex45698-22488.xls.pending
 apachepoi_ex45978-extraLinkTableSheets.xls
 apachepoi_ex46548-23133.xls
 apachepoi_ex47747-sharedFormula.xls
@@ -450,7 +450,7 @@ jxls-src_report.xls
 jxls-src_report_output.xls
 jxls-src_rowstyle.xls
 jxls-src_rowstyle_output.xls
-large_strings.xls
+large_strings.xls.pending
 libreoffice_calc_cell-value-validation.xls
 libreoffice_calc_chart-percent-stacked-with-line-chart.xls
 libreoffice_calc_chart-update-invisible-cells.xls
