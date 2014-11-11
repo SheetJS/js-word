@@ -32,7 +32,7 @@ var parse_Boolean = parsebool;
 /* [MS-XLS] 2.5.10 Bes (boolean or error) */
 function parse_Bes(blob) {
 	var v = blob.read_shift(1), t = blob.read_shift(1);
-	return t === 0x01 ? BERR[v] : v === 0x01;
+	return t === 0x01 ? v : v === 0x01;
 }
 
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
@@ -75,13 +75,13 @@ function parse_XLUnicodeStringNoCch(blob, cch, opts) {
 
 /* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob, length, opts) {
-	var cch = blob.read_shift(opts !== undefined && opts.biff === 5 ? 1 : 2);
+	var cch = blob.read_shift(opts !== undefined && opts.biff > 0 && opts.biff < 8 ? 1 : 2);
 	if(cch === 0) { blob.l++; return ""; }
 	return parse_XLUnicodeStringNoCch(blob, cch, opts);
 }
 /* BIFF5 override */
 function parse_XLUnicodeString2(blob, length, opts) {
-	if(opts.biff !== 5) return parse_XLUnicodeString(blob, length, opts);
+	if(opts.biff !== 5 && opts.biff !== 2) return parse_XLUnicodeString(blob, length, opts);
 	var cch = blob.read_shift(1);
 	if(cch === 0) { blob.l++; return ""; }
 	return blob.read_shift(cch, 'sbcs');
@@ -160,3 +160,9 @@ var parse_Hyperlink = function(blob, length) {
 	if(location) target+="#"+location;
 	return {Target: target};
 };
+
+/* 2.5.178 LongRGBA */
+function parse_LongRGBA(blob, length) { var r = blob.read_shift(1), g = blob.read_shift(1), b = blob.read_shift(1), a = blob.read_shift(1); return [r,g,b,a]; }
+
+/* 2.5.177 LongRGB */
+function parse_LongRGB(blob, length) { var x = parse_LongRGBA(blob, length); x[3] = 0; return x; }

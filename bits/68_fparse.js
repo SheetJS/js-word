@@ -18,7 +18,7 @@ function parse_FormulaValue(blob) {
 	switch(blob[blob.l]) {
 		case 0x00: blob.l += 8; return ["String", 's'];
 		case 0x01: b = blob[blob.l+2] === 0x1; blob.l += 8; return [b,'b'];
-		case 0x02: b = BERR[blob[blob.l+2]]; blob.l += 8; return [b,'e'];
+		case 0x02: b = blob[blob.l+2]; blob.l += 8; return [b,'e'];
 		case 0x03: blob.l += 8; return ["",'s'];
 	}
 }

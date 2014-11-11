@@ -208,7 +208,7 @@ function parse_PtgExp(blob, length) {
 }
 
 /* 2.5.198.57 */
-function parse_PtgErr(blob, length) { blob.l++; return BERR[blob.read_shift(1)]; }
+function parse_PtgErr(blob, length) { blob.l++; return BErr[blob.read_shift(1)]; }
 
 /* 2.5.198.66 TODO */
 function parse_PtgInt(blob, length) { blob.l++; return blob.read_shift(2); }
@@ -232,7 +232,7 @@ function parse_SerAr(blob) {
 			blob.l += 7; break;
 		/* 2.5.192.114 */
 		case 0x10: /* SerErr -- error */
-			val[1] = BERR[blob[blob.l]];
+			val[1] = BErr[blob[blob.l]];
 			blob.l += 8; break;
 		/* 2.5.192.115 */
 		case 0x00: /* SerNil -- honestly, I'm not sure how to reproduce this */

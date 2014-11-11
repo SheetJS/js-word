@@ -1,8 +1,12 @@
 var DO_NOT_EXPORT_CFB = true;
+/* cfb.js (C) 2013-2014 SheetJS -- http://sheetjs.com */
+/* vim: set ts=2: */
+/*jshint eqnull:true */
+
 /* [MS-CFB] v20130118 */
 var CFB = (function _CFB(){
 var exports = {};
-exports.version = '0.10.0';
+exports.version = '0.10.2';
 function parse(file) {
 var mver = 3; // major version
 var ssz = 512; // sector size
@@ -19,7 +23,8 @@ var blob = file.slice(0,512);
 prep_blob(blob, 0);
 
 /* major version */
-mver = check_get_mver(blob);
+var mv = check_get_mver(blob);
+mver = mv[0];
 switch(mver) {
 	case 3: ssz = 512; break; case 4: ssz = 4096; break;
 	default: throw "Major Version: Expected 3 or 4 saw " + mver;
@@ -79,6 +84,8 @@ var sector_list = make_sector_list(sectors, dir_start, fat_addrs, ssz);
 sector_list[dir_start].name = "!Directory";
 if(nmfs > 0 && minifat_start !== ENDOFCHAIN) sector_list[minifat_start].name = "!MiniFAT";
 sector_list[fat_addrs[0]].name = "!FAT";
+sector_list.fat_addrs = fat_addrs;
+sector_list.ssz = ssz;
 
 /* [MS-CFB] 2.6.1 Compound File Directory Entry */
 var files = {}, Paths = [], FileIndex = [], FullPaths = [], FullPathDir = {};
@@ -110,9 +117,9 @@ function check_get_mver(blob) {
 	blob.chk(HEADER_CLSID, 'CLSID: ');
 
 	// minor version 2
-	blob.l += 2;
+	var mver = blob.read_shift(2, 'u');
 
-	return blob.read_shift(2,'u');
+	return [blob.read_shift(2,'u'), mver];
 }
 function check_shifts(blob, mver) {
 	var shift = 0x09;
@@ -188,13 +195,13 @@ function build_full_paths(FI, FPD, FP, Paths) {
 function make_find_path(FullPaths, Paths, FileIndex, files, root_name) {
 	var UCFullPaths = new Array(FullPaths.length);
 	var UCPaths = new Array(Paths.length), i;
-	for(i = 0; i < FullPaths.length; ++i) UCFullPaths[i] = FullPaths[i].toUpperCase();
-	for(i = 0; i < Paths.length; ++i) UCPaths[i] = Paths[i].toUpperCase();
+	for(i = 0; i < FullPaths.length; ++i) UCFullPaths[i] = FullPaths[i].toUpperCase().replace(chr0,'').replace(chr1,'!');
+	for(i = 0; i < Paths.length; ++i) UCPaths[i] = Paths[i].toUpperCase().replace(chr0,'').replace(chr1,'!');
 	return function find_path(path) {
 		var k;
 		if(path.charCodeAt(0) === 47 /* "/" */) { k=true; path = root_name + path; }
 		else k = path.indexOf("/") !== -1;
-		var UCPath = path.toUpperCase();
+		var UCPath = path.toUpperCase().replace(chr0,'').replace(chr1,'!');
 		var w = k === true ? UCFullPaths.indexOf(UCPath) : UCPaths.indexOf(UCPath);
 		if(w === -1) return null;
 		return k === true ? FileIndex[w] : files[Paths[w]];
@@ -215,6 +222,26 @@ function sleuth_fat(idx, cnt, sectors, ssz, fat_addrs) {
 		}
 		sleuth_fat(__readInt32LE(sector,ssz-4),cnt - 1, sectors, ssz, fat_addrs);
 	}
+}
+
+/** Follow the linked list of sectors for a given starting point */
+function get_sector_list(sectors, start, fat_addrs, ssz, chkd) {
+	var sl = sectors.length;
+	var buf, buf_chain;
+	if(!chkd) chkd = new Array(sl);
+	var modulus = ssz - 1, j, jj;
+	buf = [];
+	buf_chain = [];
+	for(j=start; j>=0;) {
+		chkd[j] = true;
+		buf[buf.length] = j;
+		buf_chain.push(sectors[j]);
+		var addr = fat_addrs[Math.floor(j*4/ssz)];
+		jj = ((j*4) & modulus);
+		if(ssz < 4 + jj) throw "FAT boundary crossed: " + j + " 4 "+ssz;
+		j = __readInt32LE(sectors[addr], jj);
+	}
+	return {nodes: buf, data:__toBuffer([buf_chain])};
 }
 
 /** Chase down the sector linked lists */
@@ -252,7 +279,7 @@ function read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, Fil
 		prep_blob(blob, 64);
 		namelen = blob.read_shift(2);
 		if(namelen === 0) continue;
-		name = __utf16le(blob,0,namelen-pl).replace(chr0,'').replace(chr1,'!');
+		name = __utf16le(blob,0,namelen-pl);
 		Paths.push(name);
 		o = {
 			name:  name,
@@ -280,7 +307,7 @@ function read_directory(dir_start, sector_list, sectors, Paths, nmfs, files, Fil
 			/*minifat_size = o.size;*/
 		} else if(o.size >= 4096 /* MSCSZ */) {
 			o.storage = 'fat';
-			if(sector_list[o.start] === undefined) if((o.start+=dir_start)>=sectors.length) o.start-=sectors.length;
+			if(sector_list[o.start] === undefined) sector_list[o.start] = get_sector_list(sectors, o.start, sector_list.fat_addrs, sector_list.ssz);
 			sector_list[o.start].name = o.name;
 			o.content = sector_list[o.start].data.slice(0,o.size);
 			prep_blob(o.content, 0);
@@ -301,16 +328,16 @@ function read_date(blob, offset) {
 }
 
 var fs;
-function readFileSync(filename) {
+function readFileSync(filename, options) {
 	if(fs === undefined) fs = require('fs');
-	return parse(fs.readFileSync(filename));
+	return parse(fs.readFileSync(filename), options);
 }
 
 function readSync(blob, options) {
 	switch(options !== undefined && options.type !== undefined ? options.type : "base64") {
-		case "file": return readFileSync(blob);
-		case "base64": return parse(s2a(Base64.decode(blob)));
-		case "binary": return parse(s2a(blob));
+		case "file": return readFileSync(blob, options);
+		case "base64": return parse(s2a(Base64.decode(blob)), options);
+		case "binary": return parse(s2a(blob), options);
 	}
 	return parse(blob);
 }

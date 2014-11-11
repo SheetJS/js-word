@@ -151,7 +151,13 @@ var parse_FontIndex = parseuint16;
 function parse_BOF(blob, length) {
 	var o = {};
 	o.BIFFVer = blob.read_shift(2); length -= 2;
-	if(o.BIFFVer !== 0x0600 && o.BIFFVer !== 0x0500) throw "Unexpected BIFF Ver " + o.BIFFVer;
+	switch(o.BIFFVer) {
+		case 0x0600: /* BIFF8 */
+		case 0x0500: /* BIFF5 */
+		case 0x0002: case 0x0007: /* BIFF2 */
+			break;
+		default: throw "Unexpected BIFF Ver " + o.BIFFVer;
+	}
 	blob.read_shift(length);
 	return o;
 }
@@ -188,6 +194,7 @@ function parse_BoundSheet8(blob, length, opts) {
 		case 6: dt = 'VBAModule'; break;
 	}
 	var name = parse_ShortXLUnicodeString(blob, 0, opts);
+	if(name.length === 0) name = "Sheet1";
 	return { pos:pos, hs:hidden, dt:dt, name:name };
 }
 
@@ -316,10 +323,18 @@ function parse_MulRk(blob, length) {
 	return {r:rw, c:col, C:lastcol, rkrec:rkrecs};
 }
 
-/* 2.5.20 TODO */
-var parse_CellXF = parsenoop;
-/* 2.5.249 TODO */
-var parse_StyleXF = parsenoop;
+/* 2.5.20 2.5.249 TODO */
+function parse_CellStyleXF(blob, length, style) {
+	var o = {};
+	var a = blob.read_shift(4), b = blob.read_shift(4);
+	var c = blob.read_shift(4), d = blob.read_shift(2);
+	o.patternType = FillPattern[c >> 26];
+	o.icvFore = d & 0x7F;
+	o.icvBack = (d >> 7) & 0x7F;
+	return o;
+}
+function parse_CellXF(blob, length) {return parse_CellStyleXF(blob,length,0);}
+function parse_StyleXF(blob, length) {return parse_CellStyleXF(blob,length,1);}
 
 /* 2.4.353 TODO: actually do this right */
 function parse_XF(blob, length) {
@@ -327,7 +342,7 @@ function parse_XF(blob, length) {
 	o.ifnt = blob.read_shift(2); o.ifmt = blob.read_shift(2); o.flags = blob.read_shift(2);
 	o.fStyle = (o.flags >> 2) & 0x01;
 	length -= 6;
-	o.data = o.fStyle ? parse_StyleXF(blob, length) : parse_CellXF(blob, length);
+	o.data = parse_CellStyleXF(blob, length, o.fStyle);
 	return o;
 }
 
@@ -544,6 +559,39 @@ function parse_Country(blob, length) {
 	return o;
 }
 
+/* 2.4.50 ClrtClient */
+function parse_ClrtClient(blob, length) {
+	var ccv = blob.read_shift(2);
+	var o = [];
+	while(ccv-->0) o.push(parse_LongRGB(blob, 8));
+	return o;
+}
+
+/* 2.4.188 */
+function parse_Palette(blob, length) {
+	var ccv = blob.read_shift(2);
+	var o = [];
+	while(ccv-->0) o.push(parse_LongRGB(blob, 8));
+	return o;
+}
+
+/* 2.4.354 */
+function parse_XFCRC(blob, length) {
+	blob.l += 2;
+	var o = {cxfs:0, crc:0};
+	o.cxfs = blob.read_shift(2);
+	o.crc = blob.read_shift(4);
+	return o;
+}
+
+
+var parse_Style = parsenoop;
+var parse_StyleExt = parsenoop;
+
+var parse_ColInfo = parsenoop;
+
+var parse_Window2 = parsenoop;
+
 
 var parse_Backup = parsebool; /* 2.4.14 */
 var parse_Blank = parse_Cell; /* 2.4.20 Just the cell */
@@ -612,10 +660,8 @@ var parse_FileSharing = parsenoop;
 var parse_Uncalced = parsenoop;
 var parse_Template = parsenoop;
 var parse_Intl = parsenoop;
-var parse_ColInfo = parsenoop;
 var parse_WsBool = parsenoop;
 var parse_Sort = parsenoop;
-var parse_Palette = parsenoop;
 var parse_Sync = parsenoop;
 var parse_LPr = parsenoop;
 var parse_DxGCol = parsenoop;
@@ -716,8 +762,6 @@ var parse_ObNoMacros = parsenoop;
 var parse_Dv = parsenoop;
 var parse_Index = parsenoop;
 var parse_Table = parsenoop;
-var parse_Window2 = parsenoop;
-var parse_Style = parsenoop;
 var parse_BigName = parsenoop;
 var parse_ContinueBigName = parsenoop;
 var parse_WebPub = parsenoop;
@@ -767,8 +811,6 @@ var parse_Feature12 = parsenoop;
 var parse_CondFmt12 = parsenoop;
 var parse_CF12 = parsenoop;
 var parse_CFEx = parsenoop;
-var parse_XFCRC = parsenoop;
-var parse_XFExt = parsenoop;
 var parse_AutoFilter12 = parsenoop;
 var parse_ContinueFrt12 = parsenoop;
 var parse_MDTInfo = parsenoop;
@@ -783,11 +825,9 @@ var parse_DXF = parsenoop;
 var parse_TableStyles = parsenoop;
 var parse_TableStyle = parsenoop;
 var parse_TableStyleElement = parsenoop;
-var parse_StyleExt = parsenoop;
 var parse_NamePublish = parsenoop;
 var parse_NameCmt = parsenoop;
 var parse_SortData = parsenoop;
-var parse_Theme = parsenoop;
 var parse_GUIDTypeLib = parsenoop;
 var parse_FnGrp12 = parsenoop;
 var parse_NameFnGrp12 = parsenoop;
@@ -850,7 +890,6 @@ var parse_Pos = parsenoop;
 var parse_AlRuns = parsenoop;
 var parse_BRAI = parsenoop;
 var parse_SerAuxErrBar = parsenoop;
-var parse_ClrtClient = parsenoop;
 var parse_SerFmt = parsenoop;
 var parse_Chart3DBarShape = parsenoop;
 var parse_Fbi = parsenoop;

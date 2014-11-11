@@ -100,14 +100,19 @@ function sheet_to_json(sheet, opts){
 	for (R = r.s.r + offset; R <= r.e.r; ++R) {
 		rr = encode_row(R);
 		isempty = true;
-		row = header === 1 ? [] : Object.create({ __rowNum__ : R });
+		if(header === 1) row = [];
+		else {
+			row = {};
+			if(Object.defineProperty) Object.defineProperty(row, '__rowNum__', {value:R, enumerable:false});
+			else row.__rowNum__ = R;
+		}
 		for (C = r.s.c; C <= r.e.c; ++C) {
 			val = sheet[cols[C] + rr];
 			if(val === undefined || val.t === undefined) continue;
 			v = val.v;
 			switch(val.t){
 				case 'e': continue;
-				case 's': case 'str': break;
+				case 's': break;
 				case 'b': case 'n': break;
 				default: throw 'unrecognized type ' + val.t;
 			}
@@ -116,7 +121,7 @@ function sheet_to_json(sheet, opts){
 				isempty = false;
 			}
 		}
-		if(isempty === false) out[outi++] = row;
+		if(isempty === false || header === 1) out[outi++] = row;
 	}
 	out.length = outi;
 	return out;

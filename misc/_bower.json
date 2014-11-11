@@ -10,7 +10,9 @@
         "**/.*"
     ],
     "keywords": [
+        "excel",
         "xls",
+        "xml",
         "js-xls"
     ]
 }

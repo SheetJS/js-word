@@ -22,6 +22,7 @@ A4X_2013.xls
 A4X_gnumeric.xls
 AutoFilter.xls
 BlankSheetTypes.xls
+ErrorTypes.xls
 LONumbers-2010.xls
 LONumbers-2011.xls
 LONumbers.xls
@@ -87,6 +88,7 @@ apachepoi_3dFormulas.xls
 apachepoi_40285.xls
 apachepoi_41139.xls
 apachepoi_41546.xls
+apachepoi_42016.xls
 apachepoi_42464-ExpPtg-bad.xls
 apachepoi_42464-ExpPtg-ok.xls
 apachepoi_42726.xls
@@ -130,6 +132,9 @@ apachepoi_46137.xls
 apachepoi_46250.xls
 apachepoi_46368.xls
 apachepoi_46445.xls
+apachepoi_46670_http.xls
+apachepoi_46670_local.xls
+apachepoi_46670_ref_airline.xls
 apachepoi_46904.xls
 apachepoi_47034.xls
 apachepoi_47154.xls
@@ -176,11 +181,13 @@ apachepoi_52527.xls
 apachepoi_52575_main.xls
 apachepoi_52575_source.xls
 apachepoi_53404.xls
+apachepoi_53433.xls
 apachepoi_53446.xls
 apachepoi_53588.xls
 apachepoi_53691.xls
 apachepoi_53798_shiftNegative_TMPL.xls
 apachepoi_53972.xls
+apachepoi_53984.xls
 apachepoi_54016.xls
 apachepoi_54206.xls
 apachepoi_54500.xls
@@ -531,7 +538,11 @@ libreoffice_calc_xls-import_shared-formulas-simple.xls
 merge_cells.xls
 named_ranges_2011.xls
 number_format.xls
+number_format_entities.xls
 number_format_russian.xls
+numfmt_1_russian.xls
+phonetic_text.xls
+phpexcel_bad_cfb_dir.xls
 pivot_table_named_range.xls
 pivot_table_test.xls
 pyExcelerator_P-0508-0000507647-3280-5298.xls
@@ -575,6 +586,7 @@ roo_whitespace.xls
 smart_tags_2007.xls
 sushi.xls
 text_and_numbers.xls
+write.xls
 xlrd_Formate.xls
 xlrd_formula_test_names.xls
 xlrd_formula_test_sjmachin.xls
@@ -586,6 +598,7 @@ xlrd_xf_class.xls
 xlsx-stream-d-date-cell.xls
 AutoFilter.xml
 BlankSheetTypes.xml
+ErrorTypes.xml
 LONumbers-2010.xls.xml
 LONumbers-2010.xlsx.xml
 LONumbers-2011.xls.xml
@@ -624,7 +637,9 @@ named_ranges_2011.xlsx.xml
 number_format.xls.xml
 number_format.xlsb.xml
 number_format.xlsm.xml
+number_format_entities.xml
 number_format_russian.xml
+numfmt_1_russian.xml
 oo34xml_cell_pattern.xml
 oo34xml_cellstyle.xml
 oo34xml_conditionalformat.xml
@@ -639,6 +654,7 @@ oo34xml_pagebreak.xml
 oo34xml_pagesheet.xml
 oo34xml_rowcolumn.xml
 oo34xml_solvsamp.xml
+phonetic_text.xml
 pivot_table_named_range.xml
 protect_stress_test_xml.xml
 rich_text_stress.xls.xml

@@ -6,7 +6,7 @@ var PtgDataType = {
 };
 
 /* 2.5.198.2 */
-var BERR = {
+var BErr = {
 	0x00: "#NULL!",
 	0x07: "#DIV/0!",
 	0x0F: "#VALUE!",
@@ -17,6 +17,7 @@ var BERR = {
 	0x2B: "#GETTING_DATA", /* Noted in 2.5.10 but not in 2.5.198.2 */
 	0xFF: "#WTF?"
 };
+var RBErr = evert(BErr);
 
 /* 2.5.198.4 */
 var Cetab = {

@@ -60,6 +60,7 @@ else opts.cellFormula = false;
 if(program.all) {
 	opts.cellFormula = true;
 	opts.cellNF = true;
+	opts.cellStyles = true;
 }
 
 if(program.dev) {
@@ -94,6 +95,8 @@ try {
 	process.exit(4);
 }
 
+if(program.perf) return;
+
 var oo = ""; 
 if(!program.quiet) console.error(target_sheet);
 if(program.formulae) oo = X.utils.get_formulae(ws).join("\n");
@@ -102,5 +105,4 @@ else if(program.rawJs) oo = JSON.stringify(X.utils.sheet_to_row_object_array(ws,
 else oo = X.utils.make_csv(ws, {FS:program.fieldSep, RS:program.rowSep});
 
 if(program.output) fs.writeFileSync(program.output, oo);
-else if(program.perf) return;
 else console.log(oo);
