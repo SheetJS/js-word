@@ -2,7 +2,7 @@
   "name": "js-xls",
   "homepage": "https://github.com/SheetJS/js-xls",
   "main": "dist/xls.js",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "ignore": [
         "bin",
         "bits",

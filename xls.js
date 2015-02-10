@@ -1,9 +1,9 @@
-/* xls.js (C) 2013-2014 SheetJS -- http://sheetjs.com */
+/* xls.js (C) 2013-2015 SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
 /*jshint funcscope:true, eqnull:true */
 var XLS = {};
 (function make_xls(XLS){
-XLS.version = '0.7.3';
+XLS.version = '0.7.4';
 var current_codepage = 1200, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('./dist/cpexcel');
