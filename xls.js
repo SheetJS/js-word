@@ -3,13 +3,13 @@
 /*jshint funcscope:true, eqnull:true */
 var XLS = {};
 (function make_xls(XLS){
-XLS.version = '0.7.2';
-var current_codepage = 1252, current_cptable;
+XLS.version = '0.7.3';
+var current_codepage = 1200, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('./dist/cpexcel');
 	current_cptable = cptable[current_codepage];
 }
-function reset_cp() { set_cp(1252); }
+function reset_cp() { set_cp(1200); }
 function set_cp(cp) { current_codepage = cp; if(typeof cptable !== 'undefined') current_cptable = cptable[cp]; }
 
 var _getchar = function _gc1(x) { return String.fromCharCode(x); };
@@ -5155,6 +5155,16 @@ function parse_FullColorExt(blob, length) {
 	return o;
 }
 
+/* 2.5.164 TODO: read 7 bits*/
+function parse_IcvXF(blob, length) {
+	return parsenoop(blob, length);
+}
+
+/* 2.5.280 */
+function parse_XFExtGradient(blob, length) {
+	return parsenoop(blob, length);
+}
+
 /* 2.5.108 */
 function parse_ExtProp(blob, length) {
 	var extType = blob.read_shift(2);
@@ -5729,7 +5739,7 @@ function slurp(R, blob, length, opts) {
 	return R.f(b, b.length, opts);
 }
 
-function safe_format_xf(p, opts) {
+function safe_format_xf(p, opts, date1904) {
 	if(!p.XF) return;
 	try {
 		var fmtid = p.XF.ifmt||0;
@@ -5741,7 +5751,7 @@ function safe_format_xf(p, opts) {
 			}
 			else p.w = SSF._general(p.v);
 		}
-		else p.w = SSF.format(fmtid,p.v);
+		else p.w = SSF.format(fmtid,p.v, {date1904:date1904||false});
 		if(opts.cellNF) p.z = SSF._table[fmtid];
 	} catch(e) { if(opts.WTF) throw e; }
 }
@@ -5823,6 +5833,11 @@ function parse_workbook(blob, options) {
 	supbooks.arrayf = opts.arrayf;
 	var last_Rn = '';
 	var file_depth = 0; /* TODO: make a real stack */
+
+	/* explicit override for some broken writers */
+	opts.codepage = 1200;
+	set_cp(1200);
+
 	while(blob.l < blob.length - 1) {
 		var s = blob.l;
 		var RecordType = blob.read_shift(2);
@@ -5942,24 +5957,24 @@ function parse_workbook(blob, options) {
 				} break;
 				case 'Number': case 'BIFF2NUM': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:'n'};
-					if(temp_val.XF) safe_format_xf(temp_val, options);
+					if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 					addcell({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'BoolErr': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.val, t:val.t};
-					if(temp_val.XF) safe_format_xf(temp_val, options);
+					if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 					addcell({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'RK': {
 					temp_val = {ixfe: val.ixfe, XF: XFs[val.ixfe], v:val.rknum, t:'n'};
-					if(temp_val.XF) safe_format_xf(temp_val, options);
+					if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 					addcell({c:val.c, r:val.r}, temp_val, options);
 				} break;
 				case 'MulRk': {
 					for(var j = val.c; j <= val.C; ++j) {
 						var ixfe = val.rkrec[j-val.c][0];
 						temp_val= {ixfe:ixfe, XF:XFs[ixfe], v:val.rkrec[j-val.c][1], t:'n'};
-						if(temp_val.XF) safe_format_xf(temp_val, options);
+						if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 						addcell({c:j, r:val.r}, temp_val, options);
 					}
 				} break;
@@ -5971,7 +5986,7 @@ function parse_workbook(blob, options) {
 							temp_val = {v:val.val, ixfe:val.cell.ixfe, t:val.tt};
 							temp_val.XF = XFs[temp_val.ixfe];
 							if(options.cellFormula) temp_val.f = "="+stringify_formula(val.formula,range,val.cell,supbooks, opts);
-							if(temp_val.XF) safe_format_xf(temp_val, options);
+							if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 							addcell(val.cell, temp_val, options);
 							last_formula = val;
 					}
@@ -5982,7 +5997,7 @@ function parse_workbook(blob, options) {
 						temp_val = {v:last_formula.val, ixfe:last_formula.cell.ixfe, t:'s'};
 						temp_val.XF = XFs[temp_val.ixfe];
 						if(options.cellFormula) temp_val.f = "="+stringify_formula(last_formula.formula, range, last_formula.cell, supbooks, opts);
-						if(temp_val.XF) safe_format_xf(temp_val, options);
+						if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 						addcell(last_formula.cell, temp_val, options);
 						last_formula = null;
 					}
@@ -6000,14 +6015,14 @@ function parse_workbook(blob, options) {
 					//temp_val={v:sst[val.isst].t, ixfe:val.ixfe, t:'s'};
 					temp_val=make_cell(sst[val.isst].t, val.ixfe, 's');
 					temp_val.XF = XFs[temp_val.ixfe];
-					if(temp_val.XF) safe_format_xf(temp_val, options);
+					if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 					addcell({c:val.c, r:val.r}, temp_val, options);
 					break;
 				case 'Label': case 'BIFF2STR':
 					/* Some writers erroneously write Label */
 					temp_val=make_cell(val.val, val.ixfe, 's');
 					temp_val.XF = XFs[temp_val.ixfe];
-					if(temp_val.XF) safe_format_xf(temp_val, options);
+					if(temp_val.XF) safe_format_xf(temp_val, options, wb.opts.Date1904);
 					addcell({c:val.c, r:val.r}, temp_val, options);
 					break;
 				case 'Dimensions': {

@@ -1,9 +1,9 @@
-var current_codepage = 1252, current_cptable;
+var current_codepage = 1200, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('./dist/cpexcel');
 	current_cptable = cptable[current_codepage];
 }
-function reset_cp() { set_cp(1252); }
+function reset_cp() { set_cp(1200); }
 function set_cp(cp) { current_codepage = cp; if(typeof cptable !== 'undefined') current_cptable = cptable[cp]; }
 
 var _getchar = function _gc1(x) { return String.fromCharCode(x); };

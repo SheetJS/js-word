@@ -61,6 +61,11 @@ function parsetest(x, wb, full, ext) {
 		it('should have all sheets', function() {
 			wb.SheetNames.forEach(function(y) { assert(wb.Sheets[y], 'bad sheet ' + y); });
 		});
+		/*
+		if(x.substr(-4) === ".xls") it('should have codepage property', function() {
+			if(!wb.Props || !wb.Props.CodePage) throw "Missing CodePage entry";
+		});
+		*/
 		it('should have the right sheet names', fs.existsSync(sname) ? function() {
 			var file = fs.readFileSync(sname, 'utf-8').replace(/\r/g,"");
 			var names = wb.SheetNames.map(fixsheetname).join("\n") + "\n";

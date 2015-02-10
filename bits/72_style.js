@@ -24,6 +24,16 @@ function parse_FullColorExt(blob, length) {
 	return o;
 }
 
+/* 2.5.164 TODO: read 7 bits*/
+function parse_IcvXF(blob, length) {
+	return parsenoop(blob, length);
+}
+
+/* 2.5.280 */
+function parse_XFExtGradient(blob, length) {
+	return parsenoop(blob, length);
+}
+
 /* 2.5.108 */
 function parse_ExtProp(blob, length) {
 	var extType = blob.read_shift(2);
