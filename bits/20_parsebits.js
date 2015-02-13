@@ -48,6 +48,8 @@ function parse_ShortXLUnicodeString(blob, length, opts) {
 
 /* 2.5.293 XLUnicodeRichExtendedString */
 function parse_XLUnicodeRichExtendedString(blob) {
+	var cp = current_codepage;
+	current_codepage = 1200;
 	var cch = blob.read_shift(2), flags = blob.read_shift(1);
 	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
 	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
@@ -61,6 +63,7 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
 	z.t = msg;
 	if(!fRichSt) { z.raw = "<t>" + z.t + "</t>"; z.r = z.t; }
+	current_codepage = cp;
 	return z;
 }
 
