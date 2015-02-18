@@ -3,7 +3,7 @@
 /*jshint funcscope:true, eqnull:true */
 var XLS = {};
 (function make_xls(XLS){
-XLS.version = '0.7.4-a';
+XLS.version = '0.7.5';
 var current_codepage = 1200, current_cptable;
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
 	if(typeof cptable === 'undefined') cptable = require('./dist/cpexcel');
@@ -1777,11 +1777,15 @@ function parse_Bes(blob) {
 function parse_ShortXLUnicodeString(blob, length, opts) {
 	var cch = blob.read_shift(1);
 	var width = 1, encoding = 'sbcs';
+	var cp = current_codepage;
+	if(opts && opts.biff >= 8) current_codepage = 1200;
 	if(opts === undefined || opts.biff !== 5) {
 		var fHighByte = blob.read_shift(1);
 		if(fHighByte) { width = 2; encoding = 'dbcs'; }
 	}
-	return cch ? blob.read_shift(cch, encoding) : "";
+	var o = cch ? blob.read_shift(cch, encoding) : "";
+	current_codepage = cp;
+	return o;
 }
 
 /* 2.5.293 XLUnicodeRichExtendedString */
@@ -7375,6 +7379,8 @@ var utils = {
 XLS.parse_xlscfb = parse_xlscfb;
 XLS.read = xlsread;
 XLS.readFile = readFile;
+XLS.readSync = xlsread;
+XLS.readFileSync = readFile;
 XLS.utils = utils;
 XLS.CFB = CFB;
 XLS.SSF = SSF;
