@@ -1,3 +1,7 @@
+NOTE: this project has been merged into [js-xlsx](http://sheetjs.com/js-xlsx).
+The API is identical to js-xls. Some future changes may be backported, but all 
+new projects should use js-xlsx.
+
 # xls
 
 Parser for Excel XLS (BIFF5/BIFF8) and 2003-2004 (XML) files.  Pure-JS cleanroom
@@ -5,7 +9,7 @@ implementation from the Microsoft Open Specifications and related documents.
 
 Demo: <http://oss.sheetjs.com/js-xls>
 
-Source: <http://git.io/xls>
+Source: <http://sheetjs.com/js-xls>
 
 ## Installation
 
