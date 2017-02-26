@@ -1,5 +1,5 @@
-/* map from xlml named formats to SSF */
-var magic_formats = {
+/* map from xlml named formats to SSF TODO: localize */
+var XLMLFormatMap/*{[string]:string}*/ = ({
 	"General Number": "General",
 	"General Date": SSF._table[22],
 	"Long Date": "dddd, mmmm dd, yyyy",
@@ -16,7 +16,7 @@ var magic_formats = {
 	"Yes/No": '"Yes";"Yes";"No";@',
 	"True/False": '"True";"True";"False";@',
 	"On/Off": '"Yes";"Yes";"No";@'
-};
+}/*:any*/);
 
 /* [MS-EXSPXML3] 2.4.54 ST_enmPattern */
 var PatternTypeMap = {

@@ -15,13 +15,15 @@ function firstbyte(f,o) {
 }
 
 function xlsread(f, o) {
+	var n=0;
 	if(!o) o = {};
 	if(!o.type) o.type = (has_buf && Buffer.isBuffer(f)) ? "buffer" : "base64";
-	switch(firstbyte(f, o)) {
+	switch((n = firstbyte(f, o))) {
 		case 0xD0: return parse_xlscfb(CFB.read(f, o), o);
 		case 0x09: return parse_xlscfb(s2a(o.type === 'base64' ? Base64.decode(f) : f), o);
 		case 0x3C: return parse_xlml(f, o);
-		default: throw "Unsupported file";
+		case 0xEF: return parse_xlml(f, o);
+		default: throw new Error("Unsupported file " + n);
 	}
 }
 var readFile = function(f,o) {
@@ -31,6 +33,7 @@ var readFile = function(f,o) {
 		case 0xD0: return parse_xlscfb(CFB.read(d,{type:'buffer'}),o);
 		case 0x09: return parse_xlscfb(d, o);
 		case 0x3C: return parse_xlml(d, (o.type="buffer",o));
+		case 0xEF: return parse_xlml(d, (o.type="buffer",o));
 		default: throw "Unsupported file";
 	}
 };

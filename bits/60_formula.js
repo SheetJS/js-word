@@ -7,16 +7,27 @@ function parseread1(blob, length) { blob.l+=1; return; }
 
 /* 2.5.51 */
 function parse_ColRelU(blob, length) {
-	var c = blob.read_shift(2);
+	var c = blob.read_shift(length == 1 ? 1 : 2);
 	return [c & 0x3FFF, (c >> 14) & 1, (c >> 15) & 1];
 }
 
 /* 2.5.198.105 */
-function parse_RgceArea(blob, length) {
-	var r=blob.read_shift(2), R=blob.read_shift(2);
+function parse_RgceArea(blob, length, opts) {
+	var w = 2;
+	if(opts) {
+		if(opts.biff >= 2 && opts.biff <= 5) return parse_RgceArea_BIFF2(blob, length, opts);
+	}
+	var r=blob.read_shift(w), R=blob.read_shift(w);
 	var c=parse_ColRelU(blob, 2);
 	var C=parse_ColRelU(blob, 2);
 	return { s:{r:r, c:c[0], cRel:c[1], rRel:c[2]}, e:{r:R, c:C[0], cRel:C[1], rRel:C[2]} };
+}
+/* BIFF 2-5 encodes flags in the row field */
+function parse_RgceArea_BIFF2(blob, length, opts) {
+	var r=parse_ColRelU(blob, 2), R=parse_ColRelU(blob, 2);
+	var c=blob.read_shift(1);
+	var C=blob.read_shift(1);
+	return { s:{r:r[0], c:c, cRel:r[1], rRel:r[2]}, e:{r:R[0], c:C, cRel:R[1], rRel:R[2]} };
 }
 
 /* 2.5.198.105 TODO */
@@ -28,36 +39,58 @@ function parse_RgceAreaRel(blob, length) {
 }
 
 /* 2.5.198.109 */
-function parse_RgceLoc(blob, length) {
+function parse_RgceLoc(blob, length, opts) {
+	if(opts && opts.biff >= 2 && opts.biff <= 5) return parse_RgceLoc_BIFF2(blob, length, opts);
 	var r = blob.read_shift(2);
 	var c = parse_ColRelU(blob, 2);
 	return {r:r, c:c[0], cRel:c[1], rRel:c[2]};
 }
+function parse_RgceLoc_BIFF2(blob, length, opts) {
+	var r = parse_ColRelU(blob, 2);
+	var c = blob.read_shift(1);
+	return {r:r[0], c:c, cRel:r[1], rRel:r[2]};
+}
 
 /* 2.5.198.111 */
-function parse_RgceLocRel(blob, length) {
+function parse_RgceLocRel(blob, length, opts) {
+	var biff = opts && opts.biff ? opts.biff : 8;
+	if(biff >= 2 && biff <= 5) return parse_RgceLocRel_BIFF2(blob, length, opts);
 	var r = blob.read_shift(2);
 	var cl = blob.read_shift(2);
 	var cRel = (cl & 0x8000) >> 15, rRel = (cl & 0x4000) >> 14;
 	cl &= 0x3FFF;
-	if(cRel !== 0) while(cl >= 0x100) cl -= 0x100;
+	if(rRel == 1) while(r > 0x7FFFF) r -= 0x100000;
+	if(cRel == 1) while(cl > 0x1FFF) cl = cl - 0x4000;
 	return {r:r,c:cl,cRel:cRel,rRel:rRel};
+}
+function parse_RgceLocRel_BIFF2(blob, length) {
+	var rl = blob.read_shift(2);
+	var c = blob.read_shift(1);
+	var rRel = (rl & 0x8000) >> 15, cRel = (rl & 0x4000) >> 14;
+	rl &= 0x3FFF;
+	if(rRel == 1 && rl >= 0x2000) rl = rl - 0x4000;
+	if(cRel == 1 && c >= 0x80) c = c - 0x100;
+	return {r:rl,c:c,cRel:cRel,rRel:rRel};
 }
 
 /* Ptg Tokens */
 
 /* 2.5.198.27 */
-function parse_PtgArea(blob, length) {
+function parse_PtgArea(blob, length, opts) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
-	var area = parse_RgceArea(blob, 8);
+	var area = parse_RgceArea(blob, opts.biff >= 2 && opts.biff <= 5 ? 6 : 8, opts);
 	return [type, area];
 }
 
 /* 2.5.198.28 */
-function parse_PtgArea3d(blob, length) {
+function parse_PtgArea3d(blob, length, opts) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
-	var ixti = blob.read_shift(2);
-	var area = parse_RgceArea(blob, 8);
+	var ixti = blob.read_shift(2, 'i');
+	var w = 8;
+	if(opts) switch(opts.biff) {
+		case 5: blob.l += 12; w = 6; break;
+	}
+	var area = parse_RgceArea(blob, w, opts);
 	return [type, ixti, area];
 }
 
@@ -68,10 +101,14 @@ function parse_PtgAreaErr(blob, length) {
 	return [type];
 }
 /* 2.5.198.30 */
-function parse_PtgAreaErr3d(blob, length) {
+function parse_PtgAreaErr3d(blob, length, opts) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
 	var ixti = blob.read_shift(2);
-	blob.l += 8;
+	var w = 8;
+	if(opts) switch(opts.biff) {
+		case 5: blob.l += 12; w = 6; break;
+	}
+	blob.l += w;
 	return [type, ixti];
 }
 
@@ -83,9 +120,9 @@ function parse_PtgAreaN(blob, length) {
 }
 
 /* 2.5.198.32 -- ignore this and look in PtgExtraArray for shape + values */
-function parse_PtgArray(blob, length) {
+function parse_PtgArray(blob, length, opts) {
 	var type = (blob[blob.l++] & 0x60) >> 5;
-	blob.l += 7;
+	blob.l += opts.biff == 2 ? 6 : 7;
 	return [type];
 }
 
@@ -98,33 +135,33 @@ function parse_PtgAttrBaxcel(blob, length) {
 }
 
 /* 2.5.198.34 */
-function parse_PtgAttrChoose(blob, length) {
+function parse_PtgAttrChoose(blob, length, opts) {
 	blob.l +=2;
-	var offset = blob.read_shift(2);
+	var offset = blob.read_shift(opts && opts.biff == 2 ? 1 : 2);
 	var o = [];
 	/* offset is 1 less than the number of elements */
-	for(var i = 0; i <= offset; ++i) o.push(blob.read_shift(2));
+	for(var i = 0; i <= offset; ++i) o.push(blob.read_shift(opts && opts.biff == 2 ? 1 : 2));
 	return o;
 }
 
 /* 2.5.198.35 */
-function parse_PtgAttrGoto(blob, length) {
+function parse_PtgAttrGoto(blob, length, opts) {
 	var bitGoto = (blob[blob.l+1] & 0xFF) ? 1 : 0;
 	blob.l += 2;
-	return [bitGoto, blob.read_shift(2)];
+	return [bitGoto, blob.read_shift(opts && opts.biff == 2 ? 1 : 2)];
 }
 
 /* 2.5.198.36 */
-function parse_PtgAttrIf(blob, length) {
+function parse_PtgAttrIf(blob, length, opts) {
 	var bitIf = (blob[blob.l+1] & 0xFF) ? 1 : 0;
 	blob.l += 2;
-	return [bitIf, blob.read_shift(2)];
+	return [bitIf, blob.read_shift(opts && opts.biff == 2 ? 1 : 2)];
 }
 
 /* 2.5.198.37 */
-function parse_PtgAttrSemi(blob, length) {
+function parse_PtgAttrSemi(blob, length, opts) {
 	var bitSemi = (blob[blob.l+1] & 0xFF) ? 1 : 0;
-	blob.l += 4;
+	blob.l += opts && opts.biff == 2 ? 3 : 4;
 	return [bitSemi];
 }
 
@@ -147,46 +184,44 @@ function parse_PtgAttrSpaceSemi(blob, length) {
 }
 
 /* 2.5.198.84 TODO */
-function parse_PtgRef(blob, length) {
+function parse_PtgRef(blob, length, opts) {
 	var ptg = blob[blob.l] & 0x1F;
 	var type = (blob[blob.l] & 0x60)>>5;
 	blob.l += 1;
-	var loc = parse_RgceLoc(blob,4);
+	var loc = parse_RgceLoc(blob, 4, opts);
 	return [type, loc];
 }
 
 /* 2.5.198.88 TODO */
-function parse_PtgRefN(blob, length) {
-	var ptg = blob[blob.l] & 0x1F;
+function parse_PtgRefN(blob, length, opts) {
 	var type = (blob[blob.l] & 0x60)>>5;
 	blob.l += 1;
-	var loc = parse_RgceLocRel(blob,4);
+	var loc = parse_RgceLocRel(blob, 4, opts);
 	return [type, loc];
 }
 
 /* 2.5.198.85 TODO */
-function parse_PtgRef3d(blob, length) {
-	var ptg = blob[blob.l] & 0x1F;
+function parse_PtgRef3d(blob, length, opts) {
 	var type = (blob[blob.l] & 0x60)>>5;
 	blob.l += 1;
 	var ixti = blob.read_shift(2); // XtiIndex
-	var loc = parse_RgceLoc(blob,4);
+	var loc = parse_RgceLoc(blob, 0, opts);
 	return [type, ixti, loc];
 }
 
 
 /* 2.5.198.62 TODO */
-function parse_PtgFunc(blob, length) {
+function parse_PtgFunc(blob, length, opts) {
 	var ptg = blob[blob.l] & 0x1F;
 	var type = (blob[blob.l] & 0x60)>>5;
 	blob.l += 1;
-	var iftab = blob.read_shift(2);
-	return [FtabArgc[iftab], Ftab[iftab]];
+	var iftab = blob.read_shift(opts && opts.biff <= 3 ? 1 : 2);
+	return [FtabArgc[iftab], Ftab[iftab], type];
 }
 /* 2.5.198.63 TODO */
-function parse_PtgFuncVar(blob, length) {
+function parse_PtgFuncVar(blob, length, opts) {
 	blob.l++;
-	var cparams = blob.read_shift(1), tab = parsetab(blob);
+	var cparams = blob.read_shift(1), tab = opts && opts.biff <= 3 ? [0, blob.read_shift(1)]: parsetab(blob);
 	return [cparams, (tab[0] === 0 ? Ftab : Cetab)[tab[1]]];
 }
 
@@ -195,15 +230,18 @@ function parsetab(blob, length) {
 }
 
 /* 2.5.198.41 */
-var parse_PtgAttrSum = parseread(4);
+function parse_PtgAttrSum(blob, length, opts) {
+	blob.l += opts && opts.biff == 2 ? 3 : 4; return;
+}
+
 /* 2.5.198.43 */
 var parse_PtgConcat = parseread1;
 
 /* 2.5.198.58 */
-function parse_PtgExp(blob, length) {
+function parse_PtgExp(blob, length, opts) {
 	blob.l++;
 	var row = blob.read_shift(2);
-	var col = blob.read_shift(2);
+	var col = blob.read_shift(opts && opts.biff == 2 ? 1 : 2);
 	return [row, col];
 }
 
@@ -220,12 +258,12 @@ function parse_PtgBool(blob, length) { blob.l++; return blob.read_shift(1)!==0;}
 function parse_PtgNum(blob, length) { blob.l++; return parse_Xnum(blob, 8); }
 
 /* 2.5.198.89 */
-function parse_PtgStr(blob, length) { blob.l++; return parse_ShortXLUnicodeString(blob); }
+function parse_PtgStr(blob, length, opts) { blob.l++; return parse_ShortXLUnicodeString(blob, length-1, opts); }
 
 /* 2.5.192.112 + 2.5.192.11{3,4,5,6,7} */
-function parse_SerAr(blob) {
-	var val = [];
-	switch((val[0] = blob.read_shift(1))) {
+function parse_SerAr(blob, biff/*:number*/) {
+	var val = [blob.read_shift(1)];
+	switch(val[0]) {
 		/* 2.5.192.113 */
 		case 0x04: /* SerBool -- boolean */
 			val[1] = parsebool(blob, 1) ? 'TRUE' : 'FALSE';
@@ -242,7 +280,7 @@ function parse_SerAr(blob) {
 			val[1] = parse_Xnum(blob, 8); break;
 		/* 2.5.192.117 */
 		case 0x02: /* SerStr -- XLUnicodeString (<256 chars) */
-			val[1] = parse_XLUnicodeString(blob); break;
+			val[1] = parse_XLUnicodeString2(blob, 0, {biff:biff > 0 && biff < 8 ? 2 : biff}); break;
 		// default: throw "Bad SerAr: " + val[0]; /* Unreachable */
 	}
 	return val;
@@ -257,47 +295,63 @@ function parse_PtgExtraMem(blob, cce) {
 }
 
 /* 2.5.198.59 */
-function parse_PtgExtraArray(blob) {
+function parse_PtgExtraArray(blob, length, opts) {
 	var cols = 1 + blob.read_shift(1); //DColByteU
 	var rows = 1 + blob.read_shift(2); //DRw
+	if(opts.biff >= 2 && opts.biff < 8) { --rows; if(--cols == 0) cols = 0x100; }
 	for(var i = 0, o=[]; i != rows && (o[i] = []); ++i)
-		for(var j = 0; j != cols; ++j) o[i][j] = parse_SerAr(blob);
+		for(var j = 0; j != cols; ++j) o[i][j] = parse_SerAr(blob, opts.biff);
 	return o;
 }
 
 /* 2.5.198.76 */
-function parse_PtgName(blob, length) {
+function parse_PtgName(blob, length, opts) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
-	var nameindex = blob.read_shift(4);
+	var w = (!opts || (opts.biff >= 8)) ? 4 : 2;
+	var nameindex = blob.read_shift(w);
+	switch(opts.biff) {
+		case 2: blob.l += 5; break;
+		case 3: case 4: blob.l += 8; break;
+		case 5: blob.l += 12; break;
+	}
 	return [type, 0, nameindex];
 }
 
 /* 2.5.198.77 */
-function parse_PtgNameX(blob, length) {
+function parse_PtgNameX(blob, length, opts) {
+	if(opts.biff == 5) return parse_PtgNameX_BIFF5(blob, length, opts);
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	var ixti = blob.read_shift(2); // XtiIndex
 	var nameindex = blob.read_shift(4);
 	return [type, ixti, nameindex];
 }
+function parse_PtgNameX_BIFF5(blob, length, opts) {
+	var type = (blob.read_shift(1) >>> 5) & 0x03;
+	var ixti = blob.read_shift(2, 'i'); // XtiIndex
+	blob.l += 8;
+	var nameindex = blob.read_shift(2);
+	blob.l += 12;
+	return [type, ixti, nameindex];
+}
 
 /* 2.5.198.70 */
-function parse_PtgMemArea(blob, length) {
+function parse_PtgMemArea(blob, length, opts) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
-	blob.l += 4;
-	var cce = blob.read_shift(2);
+	blob.l += (opts && opts.biff == 2 ? 3 : 4);
+	var cce = blob.read_shift(opts && opts.biff == 2 ? 1 : 2);
 	return [type, cce];
 }
 
 /* 2.5.198.72 */
-function parse_PtgMemFunc(blob, length) {
+function parse_PtgMemFunc(blob, length, opts) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
-	var cce = blob.read_shift(2);
+	var cce = blob.read_shift(opts && opts.biff == 2 ? 1 : 2);
 	return [type, cce];
 }
 
 
 /* 2.5.198.86 */
-function parse_PtgRefErr(blob, length) {
+function parse_PtgRefErr(blob, length, opts) {
 	var type = (blob.read_shift(1) >>> 5) & 0x03;
 	blob.l += 4;
 	return [type];

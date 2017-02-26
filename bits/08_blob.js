@@ -1,22 +1,14 @@
-function readIEEE754(buf, idx, isLE, nl, ml) {
-	if(isLE === undefined) isLE = true;
-	if(!nl) nl = 8;
-	if(!ml && nl === 8) ml = 52;
-	var e, m, el = nl * 8 - ml - 1, eMax = (1 << el) - 1, eBias = eMax >> 1;
-	var bits = -7, d = isLE ? -1 : 1, i = isLE ? (nl - 1) : 0, s = buf[idx + i];
-
-	i += d;
-	e = s & ((1 << (-bits)) - 1); s >>>= (-bits); bits += el;
-	for (; bits > 0; e = e * 256 + buf[idx + i], i += d, bits -= 8);
-	m = e & ((1 << (-bits)) - 1); e >>>= (-bits); bits += ml;
-	for (; bits > 0; m = m * 256 + buf[idx + i], i += d, bits -= 8);
-	if (e === eMax) return m ? NaN : ((s ? -1 : 1) * Infinity);
-	else if (e === 0) e = 1 - eBias;
-	else { m = m + Math.pow(2, ml); e = e - eBias; }
-	return (s ? -1 : 1) * m * Math.pow(2, e - ml);
+function read_double_le(b, idx/*:number*/)/*:number*/ {
+	var s = 1 - 2 * (b[idx + 7] >>> 7);
+	var e = ((b[idx + 7] & 0x7f) << 4) + ((b[idx + 6] >>> 4) & 0x0f);
+	var m = (b[idx+6]&0x0f);
+	for(var i = 5; i >= 0; --i) m = m * 256 + b[idx + i];
+	if(e == 0x7ff) return m == 0 ? s * Infinity : NaN;
+	if(e == 0) e = -1022;
+	else { e -= 1023; m += Math.pow(2,52); }
+	return s * Math.pow(2, e - 52) * m;
 }
 
-var chr0 = /\u0000/g, chr1 = /[\u0001-\u0006]/;
 var __toBuffer, ___toBuffer;
 __toBuffer = ___toBuffer = function toBuffer_(bufs) { var x = []; for(var i = 0; i < bufs[0].length; ++i) { x.push.apply(x, bufs[0][i]); } return x; };
 var __utf16le, ___utf16le;
@@ -30,9 +22,7 @@ __lpstr = ___lpstr = function lpstr_(b,i) { var len = __readUInt32LE(b,i); retur
 var __lpwstr, ___lpwstr;
 __lpwstr = ___lpwstr = function lpwstr_(b,i) { var len = 2*__readUInt32LE(b,i); return len > 0 ? __utf8(b, i+4,i+4+len-1) : "";};
 var __double, ___double;
-__double = ___double = function(b, idx) { return readIEEE754(b, idx);};
-
-var bconcat = function(bufs) { return [].concat.apply([], bufs); };
+__double = ___double = function(b, idx) { return read_double_le(b, idx);};
 
 
 if(typeof Buffer !== "undefined") {
@@ -40,22 +30,11 @@ if(typeof Buffer !== "undefined") {
 	__hexlify = function(b,s,l) { return Buffer.isBuffer(b) ? b.toString('hex',s,s+l) : ___hexlify(b,s,l); };
 	__lpstr = function lpstr_b(b,i) { if(!Buffer.isBuffer(b)) return ___lpstr(b, i); var len = b.readUInt32LE(i); return len > 0 ? b.toString('utf8',i+4,i+4+len-1) : "";};
 	__lpwstr = function lpwstr_b(b,i) { if(!Buffer.isBuffer(b)) return ___lpwstr(b, i); var len = 2*b.readUInt32LE(i); return b.toString('utf16le',i+4,i+4+len-1);};
-	__utf8 = function utf8_b(s,e) { return this.toString('utf8',s,e); };
+	__utf8 = function utf8_b(b, s,e) { return b.toString('utf8',s,e); };
 	__toBuffer = function(bufs) { return (bufs[0].length > 0 && Buffer.isBuffer(bufs[0][0])) ? Buffer.concat(bufs[0]) : ___toBuffer(bufs);};
 	bconcat = function(bufs) { return Buffer.isBuffer(bufs[0]) ? Buffer.concat(bufs) : [].concat.apply([], bufs); };
-	__double = function double_(b,i) { if(Buffer.isBuffer(b)) return b.readDoubleLE(i); return ___double(b,i); };
+	__double = function double_(b,i) { if(Buffer.isBuffer(b)/*::&& b instanceof Buffer*/) return b.readDoubleLE(i); return ___double(b,i); };
 }
-
-
-var __readUInt8 = function(b, idx) { return b[idx]; };
-var __readUInt16LE = function(b, idx) { return b[idx+1]*(1<<8)+b[idx]; };
-var __readInt16LE = function(b, idx) { var u = b[idx+1]*(1<<8)+b[idx]; return (u < 0x8000) ? u : (0xffff - u + 1) * -1; };
-var __readUInt32LE = function(b, idx) { return b[idx+3]*(1<<24)+(b[idx+2]<<16)+(b[idx+1]<<8)+b[idx]; };
-var __readInt32LE = function(b, idx) { return (b[idx+3]<<24)|(b[idx+2]<<16)|(b[idx+1]<<8)|b[idx]; };
-
-var ___unhexlify = function(s) { return s.match(/../g).map(function(x) { return parseInt(x,16);}); };
-
-var __unhexlify = typeof Buffer !== "undefined" ? function(s) { return Buffer.isBuffer(s) ? new Buffer(s, 'hex') : ___unhexlify(s); } : ___unhexlify;
 
 if(typeof cptable !== 'undefined') {
 	__utf16le = function(b,s,e) { return cptable.utils.decode(1200, b.slice(s,e)); };
@@ -64,10 +43,21 @@ if(typeof cptable !== 'undefined') {
 	__lpwstr = function(b,i) { var len = 2*__readUInt32LE(b,i); return len > 0 ? cptable.utils.decode(1200, b.slice(i+4,i+4+len-1)) : "";};
 }
 
+var __readUInt8 = function(b, idx) { return b[idx]; };
+var __readUInt16LE = function(b, idx) { return b[idx+1]*(1<<8)+b[idx]; };
+var __readInt16LE = function(b, idx) { var u = b[idx+1]*(1<<8)+b[idx]; return (u < 0x8000) ? u : (0xffff - u + 1) * -1; };
+var __readUInt32LE = function(b, idx) { return b[idx+3]*(1<<24)+(b[idx+2]<<16)+(b[idx+1]<<8)+b[idx]; };
+var __readInt32LE = function(b, idx) { return (b[idx+3]<<24)|(b[idx+2]<<16)|(b[idx+1]<<8)|b[idx]; };
+
+var ___unhexlify = function(s) { return s.match(/../g).map(function(x) { return parseInt(x,16);}); };
+var __unhexlify = typeof Buffer !== "undefined" ? function(s) { return Buffer.isBuffer(s) ? new Buffer(s, 'hex') : ___unhexlify(s); } : ___unhexlify;
 
 function ReadShift(size, t) {
-	var o, oI, oR, oo=[], w, vv, i, loc;
+	var o="", oI, oR, oo=[], w, vv, i, loc;
 	switch(t) {
+		case 'utf8': o = __utf8(this, this.l, this.l + size); break;
+		case 'utf16le': size *= 2; o = __utf16le(this, this.l, this.l + size); break;
+
 		/* [MS-OLEDS] 2.1.4 LengthPrefixedAnsiString */
 		case 'lpstr': o = __lpstr(this, this.l); size = 5 + o.length; break;
 		/* [MS-OLEDS] 2.1.5 LengthPrefixedUnicodeString */
@@ -81,37 +71,34 @@ function ReadShift(size, t) {
 			size+=2; o = oo.join(""); break;
 
 		/* sbcs and dbcs support continue records in the SST way TODO codepages */
-		case 'dbcs': o = ""; loc = this.l;
+		case 'dbcs-cont': o = ""; loc = this.l;
 			for(i = 0; i != size; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, size-i, w ? 'dbcs' : 'sbcs');
+					vv = ReadShift.call(this, size-i, w ? 'dbcs-cont' : 'sbcs-cont');
 					return oo.join("") + vv;
 				}
 				oo.push(_getchar(__readUInt16LE(this, loc)));
 				loc+=2;
 			} o = oo.join(""); size *= 2; break;
 
-		case 'sbcs': o = ""; loc = this.l;
+		case 'sbcs-cont': o = ""; loc = this.l;
 			for(i = 0; i != size; ++i) {
 				if(this.lens && this.lens.indexOf(loc) !== -1) {
 					w = __readUInt8(this, loc);
 					this.l = loc + 1;
-					vv = ReadShift.call(this, size-i, w ? 'dbcs' : 'sbcs');
+					vv = ReadShift.call(this, size-i, w ? 'dbcs-cont' : 'sbcs-cont');
 					return oo.join("") + vv;
 				}
 				oo.push(_getchar(__readUInt8(this, loc)));
 				loc+=1;
 			} o = oo.join(""); break;
 
-		case 'utf8': o = __utf8(this, this.l, this.l + size); break;
-		case 'utf16le': size *= 2; o = __utf16le(this, this.l, this.l + size); break;
-
 		default:
 	switch(size) {
 		case 1: oI = __readUInt8(this, this.l); this.l++; return oI;
-		case 2: oI = t !== 'i' ? __readUInt16LE(this, this.l) : __readInt16LE(this, this.l); this.l += 2; return oI;
+		case 2: oI = (t === 'i' ? __readInt16LE : __readUInt16LE)(this, this.l); this.l += 2; return oI;
 		case 4:
 			if(t === 'i' || (this[this.l+3] & 0x80)===0) { oI = __readInt32LE(this, this.l); this.l += 4; return oI; }
 			else { oR = __readUInt32LE(this, this.l); this.l += 4; return oR; } break;
@@ -128,7 +115,7 @@ function CheckField(hexstr, fld) {
 	this.l += hexstr.length>>1;
 }
 
-function prep_blob(blob, pos) {
+function prep_blob(blob, pos/*:number*/) {
 	blob.l = pos;
 	blob.read_shift = ReadShift;
 	blob.chk = CheckField;

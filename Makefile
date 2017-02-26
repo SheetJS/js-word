@@ -1,100 +1,120 @@
+SHELL=/bin/bash
 LIB=xls
 FMT=xls xml misc full
 REQS=
 ADDONS=dist/cpexcel.js
 AUXTARGETS=
+CMDS=bin/xls.njs
+HTMLLINT=index.html
 
 ULIB=$(shell echo $(LIB) | tr a-z A-Z)
 DEPS=$(sort $(wildcard bits/*.js))
 TARGET=$(LIB).js
+FLOWTARGET=$(LIB).flow.js
+FLOWAUX=$(patsubst %.js,%.flow.js,$(AUXTARGETS))
+AUXSCPTS=
+FLOWTGTS=$(TARGET) $(AUXTARGETS) $(AUXSCPTS)
+UGLIFYOPTS=--support-ie8
+
+## Main Targets
 
 .PHONY: all
-all: $(TARGET) $(AUXTARGETS)
+all: $(TARGET) $(AUXTARGETS) $(AUXSCPTS) ## Build library and auxiliary scripts
 
-$(TARGET): $(DEPS)
+$(FLOWTGTS): %.js : %.flow.js
+	node -e 'process.stdout.write(require("fs").readFileSync("$<","utf8").replace(/^[ \t]*\/\*[:#][^*]*\*\/\s*(\n)?/gm,"").replace(/\/\*[:#][^*]*\*\//gm,""))' > $@
+
+$(FLOWTARGET): $(DEPS)
 	cat $^ | tr -d '\15\32' > $@
 
 bits/01_version.js: package.json
 	echo "$(ULIB).version = '"`grep version package.json | awk '{gsub(/[^0-9a-z\.-]/,"",$$2); print $$2}'`"';" > $@
 
-bits/18_cfb.js: node_modules/cfb/dist/xlscfb.js
+bits/18_cfb.js: node_modules/cfb/xlscfb.flow.js
 	cp $^ $@
 
 .PHONY: clean
-clean:
-	rm -f $(TARGET)
+clean: ## Remove targets and build artifacts
+	rm -f $(TARGET) $(FLOWTARGET)
 
 .PHONY: clean-data
 clean-data:
 	rm -f *.xlsx *.xlsm *.xlsb *.xls *.xml
 
 .PHONY: init
-init:
+init: ## Initial setup for development
 	git submodule init
 	git submodule update
 	git submodule foreach git pull origin master
 	git submodule foreach make
+	mkdir -p tmp
 
+.PHONY: dist
+dist: dist-deps $(TARGET) bower.json ## Prepare JS files for distribution
+	cp $(TARGET) dist/
+	cp LICENSE dist/
+	uglifyjs $(UGLIFYOPTS) $(TARGET) -o dist/$(LIB).min.js --source-map dist/$(LIB).min.map --preamble "$$(head -n 1 bits/00_header.js)"
+	misc/strip_sourcemap.sh dist/$(LIB).min.js
+	uglifyjs $(UGLIFYOPTS) $(REQS) $(TARGET) -o dist/$(LIB).core.min.js --source-map dist/$(LIB).core.min.map --preamble "$$(head -n 1 bits/00_header.js)"
+	misc/strip_sourcemap.sh dist/$(LIB).core.min.js
+	uglifyjs $(UGLIFYOPTS) $(REQS) $(ADDONS) $(TARGET) -o dist/$(LIB).full.min.js --source-map dist/$(LIB).full.min.map --preamble "$$(head -n 1 bits/00_header.js)"
+	misc/strip_sourcemap.sh dist/$(LIB).full.min.js
+
+.PHONY: dist-deps
+dist-deps: ## Copy dependencies for distribution
+	cp node_modules/codepage/dist/cpexcel.full.js dist/cpexcel.js
+.PHONY: aux
+aux: $(AUXTARGETS)
+
+
+## Testing
 
 .PHONY: test mocha
-test mocha: test.js
-	mkdir -p tmp
+test mocha: test.js ## Run test suite
 	mocha -R spec -t 20000
 
-.PHONY: prof
-prof:
-	cat misc/prof.js test.js > prof.js
-	node --prof prof.js
-
+#*                      To run tests for one format, make test_<fmt>
 TESTFMT=$(patsubst %,test_%,$(FMT))
 .PHONY: $(TESTFMT)
 $(TESTFMT): test_%:
 	FMTS=$* make test
 
 
+## Code Checking
+
 .PHONY: lint
-lint: $(TARGET)
-	jshint --show-non-errors $(TARGET) $(AUXTARGETS)
-	jscs $(TARGET) $(AUXTARGETS)
+lint: $(TARGET) $(AUXTARGETS) ## Run jshint and jscs checks
+	@jshint --show-non-errors $(TARGET) $(AUXTARGETS)
+	@jshint --show-non-errors $(CMDS)
+	@jshint --show-non-errors package.json bower.json
+	@jshint --show-non-errors --extract=always $(HTMLLINT)
+	@jscs $(TARGET) $(AUXTARGETS)
 
+.PHONY: flow
+flow: lint ## Run flow checker
+	@flow check --all --show-all-errors
 
-.PHONY: cov cov-spin
-cov: misc/coverage.html
-cov-spin:
-	make cov & bash misc/spin.sh $$!
+.PHONY: cov
+cov: misc/coverage.html ## Run coverage test
 
+#*                      To run coverage tests for one format, make cov_<fmt>
 COVFMT=$(patsubst %,cov_%,$(FMT))
 .PHONY: $(COVFMT)
 $(COVFMT): cov_%:
 	FMTS=$* make cov
 
 misc/coverage.html: $(TARGET) test.js
-	mocha --require blanket -R html-cov > $@
+	mocha --require blanket -R html-cov -t 20000 > $@
 
-.PHONY: coveralls coveralls-spin
-coveralls:
-	mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+.PHONY: coveralls
+coveralls: ## Coverage Test + Send to coveralls.io
+	mocha --require blanket --reporter mocha-lcov-reporter -t 20000 | node ./node_modules/coveralls/bin/coveralls.js
 
-coveralls-spin:
-	make coveralls & bash misc/spin.sh $$!
 
-bower.json: misc/_bower.json package.json
-	cat $< | sed 's/_VERSION_/'`grep version package.json | awk '{gsub(/[^0-9a-z\.-]/,"",$$2); print $$2}'`'/' > $@
+.PHONY: help
+help:
+	@grep -hE '(^[a-zA-Z_-][ a-zA-Z_-]*:.*?|^#[#*])' $(MAKEFILE_LIST) | bash misc/help.sh
 
-.PHONY: dist
-dist: dist-deps $(TARGET) bower.json
-	cp $(TARGET) dist/
-	cp LICENSE dist/
-	uglifyjs $(TARGET) -o dist/$(LIB).min.js --source-map dist/$(LIB).min.map --preamble "$$(head -n 1 bits/00_header.js)"
-	misc/strip_sourcemap.sh dist/$(LIB).min.js
-	uglifyjs $(REQS) $(TARGET) -o dist/$(LIB).core.min.js --source-map dist/$(LIB).core.min.map --preamble "$$(head -n 1 bits/00_header.js)"
-	misc/strip_sourcemap.sh dist/$(LIB).core.min.js
-	uglifyjs $(REQS) $(ADDONS) $(TARGET) -o dist/$(LIB).full.min.js --source-map dist/$(LIB).full.min.map --preamble "$$(head -n 1 bits/00_header.js)"
-	misc/strip_sourcemap.sh dist/$(LIB).full.min.js
-
-.PHONY: aux
-aux: $(AUXTARGETS)
-
-.PHONY: dist-deps
-dist-deps:
-	cp node_modules/codepage/dist/cpexcel.full.js dist/cpexcel.js
+#* To show a spinner, append "-spin" to any target e.g. cov-spin
+%-spin:
+	@make $* & bash misc/spin.sh $$!

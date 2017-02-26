@@ -38,12 +38,12 @@ function parse_Bes(blob) {
 /* [MS-XLS] 2.5.240 ShortXLUnicodeString */
 function parse_ShortXLUnicodeString(blob, length, opts) {
 	var cch = blob.read_shift(1);
-	var width = 1, encoding = 'sbcs';
+	var width = 1, encoding = 'sbcs-cont';
 	var cp = current_codepage;
 	if(opts && opts.biff >= 8) current_codepage = 1200;
-	if(opts === undefined || opts.biff !== 5) {
+	if(!opts || opts.biff == 8 ) {
 		var fHighByte = blob.read_shift(1);
-		if(fHighByte) { width = 2; encoding = 'dbcs'; }
+		if(fHighByte) { width = 2; encoding = 'dbcs-cont'; }
 	}
 	var o = cch ? blob.read_shift(cch, encoding) : "";
 	current_codepage = cp;
@@ -57,11 +57,11 @@ function parse_XLUnicodeRichExtendedString(blob) {
 	var cch = blob.read_shift(2), flags = blob.read_shift(1);
 	var fHighByte = flags & 0x1, fExtSt = flags & 0x4, fRichSt = flags & 0x8;
 	var width = 1 + (flags & 0x1); // 0x0 -> utf8, 0x1 -> dbcs
-	var cRun, cbExtRst;
+	var cRun = 0, cbExtRst;
 	var z = {};
 	if(fRichSt) cRun = blob.read_shift(2);
 	if(fExtSt) cbExtRst = blob.read_shift(4);
-	var encoding = (flags & 0x1) ? 'dbcs' : 'sbcs';
+	var encoding = (flags & 0x1) ? 'dbcs-cont' : 'sbcs-cont';
 	var msg = cch === 0 ? "" : blob.read_shift(cch, encoding);
 	if(fRichSt) blob.l += 4 * cRun; //TODO: parse this
 	if(fExtSt) blob.l += cbExtRst; //TODO: parse this
@@ -74,24 +74,27 @@ function parse_XLUnicodeRichExtendedString(blob) {
 /* 2.5.296 XLUnicodeStringNoCch */
 function parse_XLUnicodeStringNoCch(blob, cch, opts) {
 	var retval;
+	if(opts) {
+		if(opts.biff >= 2 && opts.biff <= 5) return blob.read_shift(cch, 'sbcs-cont');
+	}
 	var fHighByte = blob.read_shift(1);
-	if(fHighByte===0) { retval = blob.read_shift(cch, 'sbcs'); }
-	else { retval = blob.read_shift(cch, 'dbcs'); }
+	if(fHighByte===0) { retval = blob.read_shift(cch, 'sbcs-cont'); }
+	else { retval = blob.read_shift(cch, 'dbcs-cont'); }
 	return retval;
 }
 
 /* 2.5.294 XLUnicodeString */
 function parse_XLUnicodeString(blob, length, opts) {
-	var cch = blob.read_shift(opts !== undefined && opts.biff > 0 && opts.biff < 8 ? 1 : 2);
+	var cch = blob.read_shift(opts && opts.biff == 2 ? 1 : 2);
 	if(cch === 0) { blob.l++; return ""; }
 	return parse_XLUnicodeStringNoCch(blob, cch, opts);
 }
 /* BIFF5 override */
 function parse_XLUnicodeString2(blob, length, opts) {
-	if(opts.biff !== 5 && opts.biff !== 2) return parse_XLUnicodeString(blob, length, opts);
+	if(opts.biff > 5) return parse_XLUnicodeString(blob, length, opts);
 	var cch = blob.read_shift(1);
 	if(cch === 0) { blob.l++; return ""; }
-	return blob.read_shift(cch, 'sbcs');
+	return blob.read_shift(cch, 'sbcs-cont');
 }
 
 /* 2.5.342 Xnum */

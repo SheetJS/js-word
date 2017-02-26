@@ -1,5 +1,5 @@
-function xlml_format(format, value) {
-	var fmt = magic_formats[format] || unescapexml(format);
+function xlml_format(format, value)/*:string*/ {
+	var fmt = XLMLFormatMap[format] || unescapexml(format);
 	if(fmt === "General") return SSF._general(value);
 	return SSF.format(fmt, value);
 }
@@ -27,7 +27,7 @@ function safe_format_xlml(cell, nf, o) {
 			else cell.w = SSF._general(cell.v);
 		}
 		else cell.w = xlml_format(nf||"General", cell.v);
-		if(o.cellNF) cell.z = magic_formats[nf]||nf||"General";
+		if(o.cellNF) cell.z = XLMLFormatMap[nf]||nf||"General";
 	} catch(e) { if(o.WTF) throw e; }
 }
 
@@ -42,7 +42,7 @@ function process_style_xlml(styles, stag, opts) {
 }
 
 /* TODO: there must exist some form of OSP-blessed spec */
-function parse_xlml_data(xml, ss, data, cell, base, styles, csty, row, o) {
+function parse_xlml_data(xml, ss, data, cell/*:any*/, base, styles, csty, row, arrayf, o)/*:Workbook*/ {
 	var nf = "General", sid = cell.StyleID, S = {}; o = o || {};
 	var interiors = [];
 	if(sid === undefined && row) sid = row.StyleID;
@@ -60,7 +60,7 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, csty, row, o) {
 			break;
 		case 'String':
 			cell.t = 's'; cell.r = fixstr(unescapexml(xml));
-			cell.v = xml.indexOf("<") > -1 ? ss : cell.r;
+			cell.v = xml.indexOf("<") > -1 ? unescapexml(ss) : cell.r;
 			break;
 		case 'DateTime':
 			cell.v = (Date.parse(xml) - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
@@ -76,9 +76,24 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, csty, row, o) {
 		default: cell.t = 's'; cell.v = fixstr(ss); break;
 	}
 	safe_format_xlml(cell, nf, o);
-	if(o.cellFormula != null && cell.Formula) {
-		cell.f = rc_to_a1(unescapexml(cell.Formula), base);
-		cell.Formula = undefined;
+	if(o.cellFormula != null) {
+		if(cell.Formula) {
+			var fstr = unescapexml(cell.Formula);
+			/* strictly speaking, the leading = is required but some writers omit */
+			if(fstr.charCodeAt(0) == 61 /* = */) fstr = fstr.substr(1);
+			cell.f = rc_to_a1(fstr, base);
+			cell.Formula = undefined;
+			if(cell.ArrayRange == "RC") cell.F = rc_to_a1("RC:RC", base);
+			else if(cell.ArrayRange) {
+				cell.F = rc_to_a1(cell.ArrayRange, base);
+				arrayf.push([safe_decode_range(cell.F), cell.F]);
+			}
+		} else {
+			for(i = 0; i < arrayf.length; ++i)
+				if(base.r >= arrayf[i][0].s.r && base.r <= arrayf[i][0].e.r)
+					if(base.c >= arrayf[i][0].s.c && base.c <= arrayf[i][0].e.c)
+						cell.F = arrayf[i][1];
+		}
 	}
 	if(o.cellStyles) {
 		interiors.forEach(function(x) {
@@ -89,37 +104,40 @@ function parse_xlml_data(xml, ss, data, cell, base, styles, csty, row, o) {
 	cell.ixfe = cell.StyleID !== undefined ? cell.StyleID : 'Default';
 }
 
-function xlml_clean_comment(comment) {
+function xlml_clean_comment(comment/*:any*/) {
 	comment.t = comment.v;
 	comment.v = comment.w = comment.ixfe = undefined;
 }
 
-function xlml_normalize(d) {
+function xlml_normalize(d)/*:string*/ {
 	if(has_buf && Buffer.isBuffer(d)) return d.toString('utf8');
 	if(typeof d === 'string') return d;
-	throw "badf";
+	throw new Error("Bad input format: expected Buffer or string");
 }
 
 /* TODO: Everything */
 var xlmlregex = /<(\/?)([a-z0-9]*:|)(\w+)[^>]*>/mg;
 function parse_xlml_xml(d, opts) {
-	var str = xlml_normalize(d);
+	var str = debom(xlml_normalize(d));
 	var Rn;
 	var state = [], tmp;
 	var sheets = {}, sheetnames = [], cursheet = {}, sheetname = "";
-	var table = {}, cell = {}, row = {}, dtag, didx;
+	var table = {}, cell = ({}/*:any*/), row = {};
+	var dtag = parsexmltag('<Data ss:Type="String">'), didx = 0;
 	var c = 0, r = 0;
-	var refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
+	var refguess = {s: {r:2000000, c:2000000}, e: {r:0, c:0} };
 	var styles = {}, stag = {};
 	var ss = "", fidx = 0;
 	var mergecells = [];
 	var Props = {}, Custprops = {}, pidx = 0, cp = {};
 	var comments = [], comment = {};
 	var cstys = [], csty;
+	var arrayf = [];
+	xlmlregex.lastIndex = 0;
 	while((Rn = xlmlregex.exec(str))) switch(Rn[3]) {
 		case 'Data':
 			if(state[state.length-1][1]) break;
-			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, cstys[c], row, opts);
+			if(Rn[1]==='/') parse_xlml_data(str.slice(didx, Rn.index), ss, dtag, state[state.length-1][0]=="Comment"?comment:cell, {c:c,r:r}, styles, cstys[c], row, arrayf, opts);
 			else { ss = ""; dtag = parsexmltag(Rn[0]); didx = Rn.index + Rn[0].length; }
 			break;
 		case 'Cell':
@@ -142,15 +160,15 @@ function parse_xlml_xml(d, opts) {
 				if(cell.Index) c = +cell.Index - 1;
 				if(c < refguess.s.c) refguess.s.c = c;
 				if(c > refguess.e.c) refguess.e.c = c;
-				if(Rn[0].substr(-2) === "/>") ++c;
+				if(Rn[0].slice(-2) === "/>") ++c;
 				comments = [];
 			}
 			break;
 		case 'Row':
-			if(Rn[1]==='/' || Rn[0].substr(-2) === "/>") {
+			if(Rn[1]==='/' || Rn[0].slice(-2) === "/>") {
 				if(r < refguess.s.r) refguess.s.r = r;
 				if(r > refguess.e.r) refguess.e.r = r;
-				if(Rn[0].substr(-2) === "/>") {
+				if(Rn[0].slice(-2) === "/>") {
 					row = parsexmltag(Rn[0]);
 					if(row.Index) r = +row.Index - 1;
 				}
@@ -168,7 +186,7 @@ function parse_xlml_xml(d, opts) {
 				if(mergecells.length) cursheet["!merges"] = mergecells;
 				sheets[sheetname] = cursheet;
 			} else {
-				refguess = {s: {r:1000000, c:1000000}, e: {r:0, c:0} };
+				refguess = {s: {r:2000000, c:2000000}, e: {r:0, c:0} };
 				r = c = 0;
 				state.push([Rn[3], false]);
 				tmp = parsexmltag(Rn[0]);
@@ -216,7 +234,7 @@ function parse_xlml_xml(d, opts) {
 		case 'Alignment': break;
 		case 'Borders': break;
 		case 'Font':
-			if(Rn[0].substr(-2) === "/>") break;
+			if(Rn[0].slice(-2) === "/>") break;
 			else if(Rn[1]==="/") ss += str.slice(fidx, Rn.index);
 			else fidx = Rn.index + Rn[0].length;
 			break;
@@ -242,7 +260,7 @@ function parse_xlml_xml(d, opts) {
 		case 'TotalTime':
 		case 'HyperlinkBase':
 		case 'Manager':
-			if(Rn[0].substr(-2) === "/>") break;
+			if(Rn[0].slice(-2) === "/>") break;
 			else if(Rn[1]==="/") xlml_set_prop(Props, Rn[3], str.slice(pidx, Rn.index));
 			else pidx = Rn.index + Rn[0].length;
 			break;
@@ -294,6 +312,11 @@ function parse_xlml_xml(d, opts) {
 			break;
 
 		default:
+			/* FODS file root is <office:document> */
+			if(state.length == 0 && Rn[3] == "document") throw new Error("Unsupported FODS format");
+			/* UOS file root is <uof:UOF> */
+			if(state.length == 0 && Rn[3] == "UOF") throw new Error("Unsupported UOS format");
+
 			var seen = true;
 			switch(state[state.length-1][0]) {
 				/* OfficeDocumentSettings */
@@ -631,14 +654,14 @@ function parse_xlml_xml(d, opts) {
 			/* CustomDocumentProperties */
 			if(!state[state.length-1][1]) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 			if(state[state.length-1][0]==='CustomDocumentProperties') {
-				if(Rn[0].substr(-2) === "/>") break;
+				if(Rn[0].slice(-2) === "/>") break;
 				else if(Rn[1]==="/") xlml_set_custprop(Custprops, Rn, cp, str.slice(pidx, Rn.index));
 				else { cp = Rn; pidx = Rn.index + Rn[0].length; }
 				break;
 			}
 			if(opts.WTF) throw 'Unrecognized tag: ' + Rn[3] + "|" + state.join("|");
 	}
-	var out = {};
+	var out = ({}/*:any*/);
 	if(!opts.bookSheets && !opts.bookProps) out.Sheets = sheets;
 	out.SheetNames = sheetnames;
 	out.SSF = SSF.get_table();
@@ -656,4 +679,8 @@ function parse_xlml(data, opts) {
 	}
 }
 
-function write_xlml(wb, opts) { }
+/* TODO */
+function write_xlml(wb, opts)/*:string*/ {
+	var o = [XML_HEADER];
+	return o.join("");
+}

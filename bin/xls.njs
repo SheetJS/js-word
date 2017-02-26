@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-/* xls.js (C) 2013-2015 SheetJS -- http://sheetjs.com */
+/* xls.js (C) 2013-present SheetJS -- http://sheetjs.com */
 var n = "xls";
 /* vim: set ts=2 ft=javascript: */
 var X = require('../');
+require('exit-on-epipe');
 var fs = require('fs'), program = require('commander');
 program
 	.version(X.version)
@@ -15,6 +16,7 @@ program
 	.option('-S, --formulae', 'print formulae')
 	.option('-j, --json', 'emit formatted JSON (all fields text)')
 	.option('-J, --raw-js', 'emit raw JS object (raw numbers)')
+	.option('-A, --arrays', 'emit rows as JS objects (raw numbers)')
 	.option('-F, --field-sep <sep>', 'CSV field separator', ",")
 	.option('-R, --row-sep <sep>', 'CSV row separator', "\n")
 	.option('-n, --sheet-rows <num>', 'Number of rows to process (0=all rows)')
@@ -32,7 +34,7 @@ program.on('--help', function() {
 
 program.parse(process.argv);
 
-var filename, sheetname = '';
+var filename/*:?string*/, sheetname = '';
 if(program.args[0]) {
 	filename = program.args[0];
 	if(program.args[1]) sheetname = program.args[1];
@@ -44,13 +46,13 @@ if(!filename) {
 	console.error(n + ": must specify a filename");
 	process.exit(1);
 }
-
+/*:: if(filename) { */
 if(!fs.existsSync(filename)) {
 	console.error(n + ": " + filename + ": No such file or directory");
 	process.exit(2);
 }
 
-var opts = {}, wb;
+var opts = {}, wb/*:?Workbook*/;
 if(program.listSheets) opts.bookSheets = true;
 if(program.sheetRows) opts.sheetRows = program.sheetRows;
 if(program.password) opts.password = program.password;
@@ -78,6 +80,7 @@ else try {
 }
 if(program.read) process.exit(0);
 
+/*::   if(wb) { */
 if(program.listSheets) {
 	console.log(wb.SheetNames.join("\n"));
 	process.exit(0);
@@ -95,14 +98,17 @@ try {
 	process.exit(4);
 }
 
-if(program.perf) return;
+if(program.perf) process.exit(0);
 
-var oo = ""; 
+var oo = "";
 if(!program.quiet) console.error(target_sheet);
 if(program.formulae) oo = X.utils.get_formulae(ws).join("\n");
 else if(program.json) oo = JSON.stringify(X.utils.sheet_to_row_object_array(ws));
 else if(program.rawJs) oo = JSON.stringify(X.utils.sheet_to_row_object_array(ws,{raw:true}));
+else if(program.arrays) oo = JSON.stringify(X.utils.sheet_to_row_object_array(ws,{raw:true, header:1}));
 else oo = X.utils.make_csv(ws, {FS:program.fieldSep, RS:program.rowSep});
 
 if(program.output) fs.writeFileSync(program.output, oo);
 else console.log(oo);
+/*::   } */
+/*:: } */

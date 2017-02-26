@@ -1,7 +1,7 @@
 var _chr = function(c) { return String.fromCharCode(c); };
 var attregexg=/([\w:]+)=((?:")([^"]*)(?:")|(?:')([^']*)(?:'))/g;
 var attregex=/([\w:]+)=((?:")(?:[^"]*)(?:")|(?:')(?:[^']*)(?:'))/;
-function parsexmltag(tag, skip_root) {
+function parsexmltag(tag/*:string*/, skip_root/*:?boolean*/)/*:any*/ {
 	var words = tag.split(/\s+/);
 	var z = []; if(!skip_root) z[0] = words[0];
 	if(words.length === 1) return z;
