@@ -1,4 +1,4 @@
-NOTE: this project has been merged into [js-xlsx](http://sheetjs.com/js-xlsx).
+NOTE: this project has been merged into [js-xlsx](https://github.com/sheetjs/js-xlsx).
 The API is identical to js-xls. Some future changes may be backported, but all 
 new projects should use js-xlsx.  The API is identical and xlsx.js is a complete
 drop-in replacement.
@@ -10,7 +10,7 @@ implementation from the Microsoft Open Specifications and related documents.
 
 Demo: <http://oss.sheetjs.com/js-xls>
 
-Source: <http://sheetjs.com/js-xls>
+Source: <https://github.com/SheetJS/js-xls>
 
 ## Installation
 
