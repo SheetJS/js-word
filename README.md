@@ -71,7 +71,7 @@ data and feeding it into the library.  Here are a few common scenarios:
 - node readFile:
 
 ```js
-if(typeof require !== 'undefined') XLS = require('xlsjs');
+if(typeof require !== 'undefined') XLS = require('xlsx');
 var workbook = XLS.readFile('test.xls');
 /* DO SOMETHING WITH workbook HERE */
 ```
