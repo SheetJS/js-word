@@ -1,0 +1,1 @@
+﻿This is a document with numbered lists1. Entry #12. Entry #2, with childrena. 2-ab. 2-bc. 2-c3. Entry #34. Entry #41. Restarted to 1 from 52. Restarted @ 23. Restarted @ 310. Jump to new list at 1011. Now 11Normal text here12. Carrying on @ 1213. Carrying on @ 13All done!
