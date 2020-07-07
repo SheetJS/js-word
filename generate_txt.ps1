@@ -34,7 +34,9 @@ $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
         $Doc = $Word.Documents.Open($AbsPathI, $False, $True, $False, "WordJS", "WordJS")
         $Doc.SaveAs(($AbsPathI+".txt"), 7, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
         $Doc.Close()
-    } catch {}
+    } catch {
+        Write-Output "Skipping (has pwd): $AbsPathI"
+    }
 
     Stop-Process -Name "winword"
 }
