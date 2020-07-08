@@ -1,0 +1,2 @@
+﻿This is a sample word document. It has two pages. It has a simple header and footer, which is different to all the other pages.HEADING TEXTMore on page oneEnd of page 1
+This is page two. It also has a three column heading, and a three column footer.First header column!0Mid header0Right header!Footer Left0Footer Middle0Footer RightI am the header on the first page, and I’m nice and simpleThe footer of the first page
