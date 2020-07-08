@@ -1,0 +1,1 @@
+﻿No width given:testimgWith height 10cm:2testimgWith width 6cm:3testimgWith height 3in and width 6in:4testimg
