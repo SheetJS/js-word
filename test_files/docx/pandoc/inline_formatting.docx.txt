@@ -1,0 +1,1 @@
+﻿Regular text italics bold bold italics.This is SMALL CAPS, and this is strikethrough.Some people use single underlines for emphasis.Above the line is superscript and below the line is subscript.A linebreak.
