@@ -2,7 +2,10 @@ import { read, find } from "cfb";
 import { readFib } from "./fib";
 import { getDocTxt } from "./clx";
 
-function parseDoc(filePath: string) {
+/**
+ * [MS-DOC] 2.4.1 Retrieving Text
+ */
+function parseDoc(filePath: string): string {
   const file = read(filePath, {type: "file"});
   const wordDocument = find(file, "/WordDocument");
   const wordStream = wordDocument.content as Buffer;

@@ -1,27 +1,21 @@
+import { Fib, FibRgLw97, FibRgFcLcb, FibRgCswNew, } from "./fib";
+
 /**
  * [MS-DOC] 2.4.1 Retrieving Text
- *
- * @param {Buffer} fib - FIB Structure
- * @param {Buffer} doc - Document Content
- * @param {Buffer} tableStream - Either 1Table or 0Table
- * @return {string} Document Text
  */
-function getDocTxt(fib, doc, tableStream) {
+function getDocTxt(fib: Fib, docStream: Buffer, tableStream: Buffer): string {
   const { fibRgLw, fibRgFcLcbBlob } = fib;
   const { fcClx, lcbClx } = fibRgFcLcbBlob;
   const clx = tableStream.slice(fcClx, fcClx + lcbClx);
   const plcPcd = parseClx(clx);
-  const txt = getTxt(fibRgLw, plcPcd, doc);
+  const txt = getTxt(fibRgLw, plcPcd, docStream);
   return txt;
 }
 
 /**
  * [MS-DOC] 2.9.38 Clx
- *
- * @param {Buffer} clx - Clx Structure
- * @return {string} Document Text
  */
-function parseClx(clx) {
+function parseClx(clx: Buffer): Buffer {
   /* Skip RgPrc to get Pcdt */
   let offset = 0;
 
@@ -57,24 +51,15 @@ function parseClx(clx) {
 
 /**
  * [MS-DOC] 2.8.35 PlcPcd
- *
- * @param {Buffer} fibRgLw - FibRgLw Structure
- * @return {number} Value of Last CP
  */
-function getLastCp(fibRgLw) {
+function getLastCp(fibRgLw: FibRgLw97): number {
   const fibMeta = Object.values(fibRgLw);
   const [ccpText, ...ccpOther] = fibMeta;
   const ccpSum = ccpOther.reduce((a, b) => a + b, 0);
   return ccpSum !== 0 ? ccpSum + ccpText + 1 : ccpText;
 }
 
-/**
- * @param {Buffer} fibRgLw - FibRgLw Structure
- * @param {Buffer} plcPcd - PlcPcd Structure
- * @param {Buffer} doc - Document Content
- * @return {string} Document Text
- */
-function getTxt(fibRgLw, plcPcd, doc) {
+function getTxt(fibRgLw: FibRgLw97, plcPcd: Buffer, doc: Buffer): string {
   const cpSizeBytes = 4;
   const lastCp = getLastCp(fibRgLw);
   let offset = 0;
@@ -111,26 +96,15 @@ function getTxt(fibRgLw, plcPcd, doc) {
 
 /* [MS - DOC] 2.9.73 FcCompressed */
 
-/**
- * @param {Buffer} doc - Compressed String
- * @param {number} fc - Document Offset
- * @param {number} strlen - Text Length
- * @return {string} Document Text
- */
-
-function getTxtCompressed(doc, fc, strlen) {
+function getTxtCompressed(doc: Buffer, fc: number, strlen: number): string {
   return fixFcString(doc.slice(fc / 2, fc / 2 + strlen).toString("binary"));
 }
 
-function getTxtNotCompressed(doc, fc, strlen) {
+function getTxtNotCompressed(doc: Buffer, fc: number, strlen: number): string {
   return doc.slice(fc, fc + 2 * strlen).toString("utf16le");
 }
 
-/**
- * @param {string} str - Compressed String
- * @return {string} Fixed Value
- */
-function fixFcString(str) {
+function fixFcString(str: string): string {
   const replacements = {
     "\x82": "\u201A",
     "\x83": "\u0192",
@@ -161,6 +135,6 @@ function fixFcString(str) {
   return str.replace(/[\x82-\x8C\x91-\x9C\x9F]/g, ($$) => replacements[$$]);
 }
 
-module.exports = {
-  getDocTxt,
+export {
+  getDocTxt
 };
