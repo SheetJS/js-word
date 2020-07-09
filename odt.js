@@ -5,8 +5,8 @@ const {JSDOM} = require('jsdom');
 /**
  * Grabs the text content of an odt file
  * 
- * @param {string} file .odt file
- * @return text content of file
+ * @param {string} file path to .odt file
+ * @return {string} text content of file
  */
 function odtToText(file) {
   // Read the content.xml of the file
