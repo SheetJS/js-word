@@ -6,7 +6,9 @@ interface Fib {
   fibRgCswNew?: FibRgCswNew;
 }
 
-/* [MS-DOC] 2.5.2 FibBase */
+/**
+ * [MS-DOC] 2.5.2 FibBase
+ */
 interface FibBase {
   /**
    * nFib (2 bytes): An unsigned integer that specifies the version number of
@@ -24,7 +26,9 @@ interface FibBase {
   fWhichTblStm: number;
 }
 
-/* [MS-DOC] 2.5.4 FibRgLw97 */
+/**
+ * [MS-DOC] 2.5.4 FibRgLw97
+ */
 interface FibRgLw97 {
   /**
    * ccpText (4 bytes): A signed integer that specifies the count of CPs in the
@@ -71,7 +75,9 @@ interface FibRgLw97 {
   ccpHdrTxbx: number;
 }
 
-/* [MS-DOC] 2.5.6 FibRgFcLcb97 */
+/**
+ * [MS-DOC] 2.5.6 FibRgFcLcb97
+ */
 interface FibRgFcLcb {
   /**
    * fcClx (4 bytes):  An unsigned integer that specifies an offset in the
@@ -87,7 +93,9 @@ interface FibRgFcLcb {
   lcbClx: number;
 }
 
-/* [MS-DOC] 2.5.11 FibRgCswNew */
+/**
+ * [MS-DOC] 2.5.11 FibRgCswNew
+ */
 interface FibRgCswNew {
   /**
    * nFibNew (2 bytes): An unsigned integer that specifies the version number
@@ -97,7 +105,9 @@ interface FibRgCswNew {
   nFibNew: number;
 }
 
-/* [MS-DOC] 2.5.1 Fib */
+/**
+ * [MS-DOC] 2.5.1 Fib
+ */
 function readFib(buffer: Buffer): Fib {
   let offset = 0;
   const base = readBase(buffer.slice(offset, offset += 32));
@@ -120,7 +130,9 @@ function readFib(buffer: Buffer): Fib {
   return fib;
 }
 
-/* [MS-DOC] 2.5.2 FibBase */
+/**
+ * [MS-DOC] 2.5.2 FibBase
+ */
 function readBase(buffer: Buffer): FibBase {
   let offset = 2;
   const nFib = buffer.readUInt16LE(offset);
@@ -135,7 +147,9 @@ function readBase(buffer: Buffer): FibBase {
   };
 }
 
-/* [MS-DOC] 2.5.4 FibRgLw97 */
+/**
+ * [MS-DOC] 2.5.4 FibRgLw97
+ */
 function readFibRgLw(buffer: Buffer): FibRgLw97 {
   let offset = 12;
   const ccpText = buffer.readInt32LE(offset);
@@ -169,7 +183,9 @@ function readFibRgLw(buffer: Buffer): FibRgLw97 {
   };
 }
 
-/* [MS-DOC] 2.5.6 FibRgFcLcb97 */
+/**
+ * [MS-DOC] 2.5.6 FibRgFcLcb97
+ */
 function readFibRgFcLcbBlob(buffer: Buffer): FibRgFcLcb {
   let offset = 264;
   const fcClx = buffer.readUInt32LE(offset);
@@ -183,7 +199,9 @@ function readFibRgFcLcbBlob(buffer: Buffer): FibRgFcLcb {
   };
 }
 
-/* [MS-DOC] 2.5.11 FibRgCswNew */
+/**
+ * [MS-DOC] 2.5.11 FibRgCswNew
+ */
 function readFibRgCswNew(buffer: Buffer): FibRgCswNew {
   const nFibNew = buffer.readUInt16LE(0);
 
@@ -193,5 +211,9 @@ function readFibRgCswNew(buffer: Buffer): FibRgCswNew {
 }
 
 export {
+  Fib,
+  FibRgLw97,
+  FibRgFcLcb,
+  FibRgCswNew,
   readFib
 };
