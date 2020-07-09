@@ -1,0 +1,2 @@
+﻿This is a test file of paragraph.• This is section 1.It contains 2 paragraphs in section 1, and 2 paragraphs in section 2.
+• This is section 2.It contains 2 paragraphs in section 1, and 2 paragraphs in section 2.

@@ -1,0 +1,1 @@
+﻿1. Left 0in. First +0in. Tab stops at 0.5in;     2. Left 0in. First +0.25in; Tab stops at 0.5in;             3. Left 0in. First +0.7in. Tab stops at 1in;4. Left -0.7in; First -0.6in; Tab stops at -1in;

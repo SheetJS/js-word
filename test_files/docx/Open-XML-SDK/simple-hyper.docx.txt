@@ -1,0 +1,1 @@
+﻿This paragraph contains a hyperlink to be deleted.This paragraph doesn’t contain hyperlink.

@@ -1,0 +1,12 @@
+.\test_files\docx\apachepoi\bug53475-password-is-pass.docx
+.\test_files\docx\apachepoi\bug53475-password-is-solrcell.docx
+.\test_files\docx\apachepoi\ExternalEntityInText.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_AlternateTimezones.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_DCTermsNamespaceLimitedUseFAIL.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_LimitedXSITypeAttribute_NotPresentFAIL.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_LimitedXSITypeAttribute_PresentWithUnauthorizedValueFAIL.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_OnlyOneCorePropertiesPartFAIL.docx
+.\test_files\docx\apachepoi\OPCCompliance_CoreProperties_UnauthorizedXMLLangAttributeFAIL.docx
+.\test_files\docx\apachepoi\protected_agile.docx
+.\test_files\docx\apachepoi\signed.docx
+.\test_files\docx\apachepoi\truncated62886.docx
