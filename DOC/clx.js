@@ -78,7 +78,7 @@ function getTxt(fibRgLw, plcPcd, doc) {
   const cpSizeBytes = 4;
   const lastCp = getLastCp(fibRgLw);
   let offset = 0;
-  let pcdCount = 0;
+  let pcdCount = -1;
 
   while (plcPcd.readUInt32LE(offset) <= lastCp) {
     offset += cpSizeBytes;
