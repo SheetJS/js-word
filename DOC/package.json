@@ -1,0 +1,14 @@
+{
+  "name": "doc-parser",
+  "version": "1.0.0",
+  "description": "MS-DOC parser",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "@types/node": "^14.0.20",
+    "cfb": "^1.2.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  }
+}
