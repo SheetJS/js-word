@@ -1,4 +1,6 @@
-/* [MS-DOC] 2.5.1 Fib */
+/**
+ * [MS-DOC] 2.5.1 Fib
+ */
 interface Fib {
   base: FibBase;
   fibRgLw: FibRgLw97;
