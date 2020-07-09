@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "start": "tsc --downlevelIteration read.ts && node read.js && rm *.js",
+        "old":  "tsc fileType.ts && node fileType.js && rm *.js",
+        "trie": "tsc --downlevelIteration trie.ts && node trie.js && rm *.js",
+        "triebyte": "tsc --downlevelIteration triebyte.ts && node triebyte.js && rm *.js"
+    }
+}

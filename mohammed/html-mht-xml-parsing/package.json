@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "html": "tsc htmlParse.ts && node htmlParse.js && rm *.js",
+        "xml": "tsc xmlParse.ts && node xmlParse.js && rm *.js"
+    },
+    "dependencies": {
+        "@types/jsdom": "^16.2.3",
+        "cfb": "^1.2.0",
+        "jsdom": "^16.2.2"
+    }
+}
