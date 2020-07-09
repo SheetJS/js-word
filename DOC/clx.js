@@ -94,11 +94,11 @@ function getTxt(fibRgLw, plcPcd, doc) {
   let finalTxt = "";
   while (offset < upperBound) {
     const pcd = plcPcd.slice(offset, (offset += pcdSizeBytes));
-    const fcCompressed = pcd.slice(2, 6);
-    const fc = fcCompressed & ~(0x1 << 31);
+    const fcCompressed = pcd.readUInt32LE(2);
+    const fc = fcCompressed & ~(0x1 << 30);
     const strlen =
       acp.readUInt32LE((acpIndex + 1) * 4) - acp.readUInt32LE(acpIndex * 4);
-    if ((fcCompressed >> 31) & 0x1) {
+    if ((fcCompressed >> 30) & 0x1) {
       finalTxt += getTxtCompressed(doc, fc, strlen);
     } else {
       finalTxt += getTxtNotCompressed(doc, fc, strlen);
@@ -158,7 +158,7 @@ function fixFcString(str) {
     "\x9F": "\u0178",
   };
 
-  return str.replace(/[\x82-\x8C\x91-9C\x9F]/g, ($$) => replacements[$$]);
+  return str.replace(/[\x82-\x8C\x91-\x9C\x9F]/g, ($$) => replacements[$$]);
 }
 
 module.exports = {
