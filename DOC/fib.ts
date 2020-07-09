@@ -171,7 +171,7 @@ function readFibRgLw(buffer: Buffer): FibRgLw97 {
 
 /* [MS-DOC] 2.5.6 FibRgFcLcb97 */
 function readFibRgFcLcbBlob(buffer: Buffer): FibRgFcLcb {
-  let offset = 268;
+  let offset = 264;
   const fcClx = buffer.readUInt32LE(offset);
   offset += 4;
 
