@@ -1,45 +1,66 @@
+/**
+ * [MS-DOC] 2.4.1 Retrieving Text
+ *
+ * @param {Buffer} fib - FIB Structure
+ * @param {Buffer} doc - Document Content
+ * @param {Buffer} tableStream - Either 1Table or 0Table
+ * @return {string} Document Text
+ */
 function getDocTxt(fib, doc, tableStream) {
   const { fibRgLw, fibRgFcLcbBlob } = fib;
   const { fcClx, lcbClx } = fibRgFcLcbBlob;
   const clx = tableStream.slice(fcClx, fcClx + lcbClx);
-  const plcPcd = getPlcPcd(clx);
+  const plcPcd = parseClx(clx);
   const txt = getTxt(fibRgLw, plcPcd, doc);
   return txt;
 }
 
-function getPlcPcd(clx) {
-  const rowSizeBytes = 4;
-
-  // skip RgPrc in order to get Pcdt
+/**
+ * [MS-DOC] 2.9.38 Clx
+ *
+ * @param {Buffer} clx - Clx Structure
+ * @return {string} Document Text
+ */
+function parseClx(clx) {
+  /* Skip RgPrc to get Pcdt */
   let offset = 0;
+
+  /* [MS-DOC] 2.9.209 Prc */
   const firstByte = clx.readUInt8(offset);
   if (firstByte !== 0x1 && firstByte !== 0x2) {
-    throw Error("invalid first byte of clx");
+    throw Error("Invalid first byte of Clx.");
   }
 
-  // if RgPrc, array of Prc, is not empty
+  /* Not empty RgPrc */
   while (clx.readUInt8(offset) === 0x1) {
+    /* [MS-DOC] 2.9.210 PrcData */
     offset++;
     const cbGrpGpl = clx.readInt16LE(offset);
     offset += 2;
-    console.log(cbGrpGpl);
-    // cbGrpGpl must be less than or equal to 0x3fa2
-    console.assert(cbGrpGpl <= 0x3fa2);
 
-    // skip GrpGpl
+    /* cbGrpGpl must be less than or equal to 0x3fa2 */
+    console.assert(cbGrpGpl <= 0x3fa2);
     offset += cbGrpGpl;
   }
 
+  /* [MS-DOC] 2.9.178 Pcdt */
   const pcdt = clx.slice(offset);
 
-  // clxt (first byte of Pcdt) must be 0x2
+  /* clxt (first byte of Pcdt) must be 0x2 */
   console.assert(pcdt.readUInt8(0) === 0x2);
-
-  // size of PlcPcd
   const lcb = pcdt.readUInt32LE(1);
-  return pcdt.slice(5, 5 + lcb);
+
+  /* [MS-DOC] 2.8.35 PlcPcd */
+  const plcPcd = pcdt.slice(5, 5 + lcb);
+  return plcPcd;
 }
 
+/**
+ * [MS-DOC] 2.8.35 PlcPcd
+ *
+ * @param {Buffer} fibRgLw - FibRgLw Structure
+ * @return {number} Value of Last CP
+ */
 function getLastCp(fibRgLw) {
   const fibMeta = Object.values(fibRgLw);
   const [ccpText, ...ccpOther] = fibMeta;
@@ -47,6 +68,12 @@ function getLastCp(fibRgLw) {
   return ccpSum !== 0 ? ccpSum + ccpText + 1 : ccpText;
 }
 
+/**
+ * @param {Buffer} fibRgLw - FibRgLw Structure
+ * @param {Buffer} plcPcd - PlcPcd Structure
+ * @param {Buffer} doc - Document Content
+ * @return {string} Document Text
+ */
 function getTxt(fibRgLw, plcPcd, doc) {
   const cpSizeBytes = 4;
   const lastCp = getLastCp(fibRgLw);
@@ -58,6 +85,7 @@ function getTxt(fibRgLw, plcPcd, doc) {
     pcdCount++;
   }
 
+  /* [MS-DOC] 2.8.35 PlcPcd */
   const acp = plcPcd.slice(0, offset);
 
   const pcdSizeBytes = 8;
@@ -68,18 +96,27 @@ function getTxt(fibRgLw, plcPcd, doc) {
     const pcd = plcPcd.slice(offset, (offset += pcdSizeBytes));
     const fcCompressed = pcd.slice(2, 6);
     const fc = fcCompressed & ~(0x1 << 31);
-    const strlen = acp[acpIndex + 1] - acp[acpIndex];
+    const strlen =
+      acp.readUInt32LE((acpIndex + 1) * 4) - acp.readUInt32LE(acpIndex * 4);
     if ((fcCompressed >> 31) & 0x1) {
       finalTxt += getTxtCompressed(doc, fc, strlen);
     } else {
       finalTxt += getTxtNotCompressed(doc, fc, strlen);
     }
-
     acpIndex++;
   }
 
   return finalTxt;
 }
+
+/* [MS - DOC] 2.9.73 FcCompressed */
+
+/**
+ * @param {Buffer} doc - Compressed String
+ * @param {number} fc - Document Offset
+ * @param {number} strlen - Text Length
+ * @return {string} Document Text
+ */
 
 function getTxtCompressed(doc, fc, strlen) {
   return fixFcString(doc.slice(fc / 2, fc / 2 + strlen).toString("binary"));
@@ -89,6 +126,10 @@ function getTxtNotCompressed(doc, fc, strlen) {
   return doc.slice(fc, fc + 2 * strlen).toString("utf16le");
 }
 
+/**
+ * @param {string} str - Compressed String
+ * @return {string} Fixed Value
+ */
 function fixFcString(str) {
   const replacements = {
     "\x82": "\u201A",
