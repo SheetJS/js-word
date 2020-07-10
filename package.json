@@ -8,8 +8,11 @@
 	],
 	"main": "./word",
 	"dependencies": {
+		"cfb": "^1.1.4",
+		"jsdom": "^16.2.2"
 	},
 	"devDependencies": {
+		"@types/node": "^14.0.20"
 	},
 	"repository": {
 		"type": "git",
