@@ -93,6 +93,20 @@ interface FibRgFcLcb {
    * than zero.
    */
   lcbClx: number;
+
+  /**
+   * fcPlcfBtePapx (4 bytes): An unsigned integer that specifies an offset in
+   * the Table Stream. A PlcBtePapx begins at the offset. fcPlcfBtePapx MUST be
+   * greater than zero, and MUST be a valid offset in the Table Stream.
+   */
+  fcPlcfBtePapx: number;
+
+  /**
+   * lcbPlcfBtePapx (4 bytes): An unsigned integer that specifies the size, in
+   * bytes, of the PlcBtePapx at offset fcPlcfBtePapx in the Table Stream.
+   * lcbPlcfBteChpx MUST be greater than zero.
+   */
+  lcbPlcfBtePapx: number;
 }
 
 /**
@@ -189,13 +203,51 @@ function readFibRgLw(buffer: Buffer): FibRgLw97 {
  * [MS-DOC] 2.5.6 FibRgFcLcb97
  */
 function readFibRgFcLcbBlob(buffer: Buffer): FibRgFcLcb {
-  let offset = 264;
-  const fcClx = buffer.readUInt32LE(offset);
-  offset += 4;
+  let offset = 0;
+  offset += 8; // StshfOrig
+  offset += 8; // Stshf
+  offset += 8; // PlcffndRef
+  offset += 8; // PlcffndTxt
+  offset += 8; // PlcfandRef
+  offset += 8; // PlcfandTxt
+  offset += 8; // PlcfSed
+  offset += 8; // PlcPad
+  offset += 8; // PlcfPhe
+  offset += 8; // SttbfGlsy
+  offset += 8; // PlcfGlsy
+  offset += 8; // PlcfHdd
+  offset += 8; // PlcfBteChpx
 
-  const lcbClx = buffer.readUInt32LE(offset);
+  const fcPlcfBtePapx = buffer.readUInt32LE(offset); offset += 4;
+  const lcbPlcfBtePapx = buffer.readUInt32LE(offset); offset += 4;
+
+  offset += 8; // PlcfSea
+  offset += 8; // SttbfFfn
+  offset += 8; // PlcfFldMom
+  offset += 8; // PlcfFldHdr
+  offset += 8; // PlcfFldFtn
+  offset += 8; // PlcfFldAtn
+  offset += 8; // PlcfFldMcr
+  offset += 8; // SttbfBkmk
+  offset += 8; // PlcfBkf
+  offset += 8; // PlcfBkl
+  offset += 8; // Cmds
+  offset += 8; // Unused1
+  offset += 8; // SttbfMcr
+  offset += 8; // PrDrvr
+  offset += 8; // PrEnvPort
+  offset += 8; // PrEnvLand
+  offset += 8; // Wss
+  offset += 8; // Dop
+  offset += 8; // SttbfAssoc
+
+  if(offset != 33*8) throw new Error("Could not read FibRgFcLcb");
+  const fcClx = buffer.readUInt32LE(offset); offset += 4;
+  const lcbClx = buffer.readUInt32LE(offset); offset += 4;
 
   return {
+    fcPlcfBtePapx,
+    lcbPlcfBtePapx,
     fcClx,
     lcbClx
   };

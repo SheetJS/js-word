@@ -1,0 +1,15 @@
+language: node_js
+dist: xenial
+node_js:
+  - "14"
+  - "12"
+  - "10"
+
+before_install:
+  - "npm install -g mocha voc ts-node @types/mocha @types/node glob typescript"
+  - "npm install mocha voc ts-node @types/mocha @types/node glob typescript"
+  - "npm install -g word"
+install:
+  - npm install
+after_success:
+#  - "make coveralls-spin"

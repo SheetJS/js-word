@@ -1,18 +1,6 @@
 import { Fib, FibRgLw97, FibRgFcLcb, FibRgCswNew, } from "./fib";
 
 /**
- * [MS-DOC] 2.4.1 Retrieving Text
- */
-function getDocTxt(fib: Fib, docStream: Buffer, tableStream: Buffer): string {
-  const { fibRgLw, fibRgFcLcbBlob } = fib;
-  const { fcClx, lcbClx } = fibRgFcLcbBlob;
-  const clx = tableStream.slice(fcClx, fcClx + lcbClx);
-  const plcPcd = parseClx(clx);
-  const txt = getTxt(fibRgLw, plcPcd, docStream);
-  return txt;
-}
-
-/**
  * [MS-DOC] 2.9.38 Clx
  */
 function parseClx(clx: Buffer): Buffer {
@@ -59,7 +47,7 @@ function getLastCp(fibRgLw: FibRgLw97): number {
   return ccpSum !== 0 ? ccpSum + ccpText + 1 : ccpText;
 }
 
-function getTxt(fibRgLw: FibRgLw97, plcPcd: Buffer, doc: Buffer): string {
+export function getTxt(fibRgLw: FibRgLw97, plcPcd: Buffer, doc: Buffer): string {
   const cpSizeBytes = 4;
   const lastCp = getLastCp(fibRgLw);
   let offset = 0;
@@ -94,7 +82,7 @@ function getTxt(fibRgLw: FibRgLw97, plcPcd: Buffer, doc: Buffer): string {
   return finalTxt;
 }
 
-/* [MS - DOC] 2.9.73 FcCompressed */
+/* [MS-DOC] 2.9.73 FcCompressed */
 
 function getTxtCompressed(doc: Buffer, fc: number, strlen: number): string {
   return fixFcString(doc.slice(fc / 2, fc / 2 + strlen).toString("binary"));
@@ -136,5 +124,5 @@ function fixFcString(str: string): string {
 }
 
 export {
-  getDocTxt
+  parseClx
 };

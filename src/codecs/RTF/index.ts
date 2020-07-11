@@ -1,5 +1,6 @@
-const fs = require("fs");
+import { WJSDoc } from "../../types";
 
+export function parse_str(data: string): WJSDoc {
 // var pairs = [];
 // var seen_par = false;
 var blacklist = ["\\fonttbl", "\\rtlch", "\\fcs1", "\\af0", "\\ltrch", "\\fcs0", "\\insrsid"];
@@ -20,7 +21,7 @@ var skiplength = Infinity; // keep track of skip length
 // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 \\par }"
 var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}"
 // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid14709222  bok}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \insrsid6445377 \\par }"
-
+rtf = data;
 var extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}?\b\w+\b)/g, function ($$, $1, idx) {
     if ($$ == "{") {
         counter.push(0);
@@ -73,7 +74,7 @@ var extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}?\b\w+\b)/g, function ($$, $1,
 
                 par_start = idx; // mark where \\par begins
                 skiplength = counter.length; // skip
-                pairs.push($$)
+                //pairs.push($$)
 
                 para_text.push(current_par)
                 current_par = ""
@@ -85,5 +86,9 @@ var extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}?\b\w+\b)/g, function ($$, $1,
         }
     }
 });
+return { p: [ {elts: [{t: "s", v: para_text.join("")}] } ] };
+}
 
-console.log(para_text);
+export function read(data: Buffer): WJSDoc {
+  return parse_str(data.toString());
+}

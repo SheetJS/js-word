@@ -18,7 +18,7 @@ $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
 
     # $filename = Split-Path $AbsPath[$i] -leaf
     # $join_fn = Join-Path -Path $Args[0] -ChildPath $filename
-    <# if (($join_fn | Out-String) -contains $Blacklist) { 
+    <# if (($join_fn | Out-String) -contains $Blacklist) {
         Write-Output "Skipping $join_fn"
         continue main
     } #>

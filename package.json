@@ -12,14 +12,18 @@
 		"jsdom": "^16.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "^14.0.20"
+		"@types/mocha": "^7.0.2",
+		"@types/node": "^14.0.20",
+		"glob": "^7.1.6",
+		"ts-node": "^8.10.2",
+		"typescript": "^3.9.6"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/SheetJS/js-word.git"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "mocha -r ts-node/register test.ts"
 	},
 	"homepage": "https://wordjs.com/",
 	"bugs": {
