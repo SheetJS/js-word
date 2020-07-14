@@ -13,9 +13,23 @@ function process_para(child: Node, root: WJSPara) {
         case "w:sdtContent":
           element.childNodes.forEach((child) => process_para(child, root));
           break;
-        case "w:t": 
+        case "w:t":
           root.elts.push({t: "s", v: child.textContent}); break;
-        default: throw "unsupported node type " + child.nodeType;
+        case "w:hyperlink": // TODO: store actual hyperlink?
+          element.childNodes.forEach((child) => process_para(child, root));
+          break;
+        case "w:br":
+          break;
+        case "w:pPr":
+        case "w:rPr":
+        case "w:bookmarkStart":
+        case "w:bookmarkEnd":
+        case "w:sectPr":
+        case "w:pict":
+        case "w:lastRenderedPageBreak":
+        case "w:drawing":
+          break;
+        default: throw `DOCX para unsupported ${element.tagName} element`
       }
     break;
   }
@@ -33,6 +47,7 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara|void
       case "w:tbl":
       case "w:customXML":
         if(root) break;
+      case "w:sectPr": break;
       default: throw `DOCX body unsupported ${element.tagName} element`
     }
     break;
