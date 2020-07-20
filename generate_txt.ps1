@@ -1,3 +1,7 @@
+if ($Args.count -ne 1) {
+    Write-Output "Provide a test file directory"
+    exit
+}
 $Directory = Resolve-Path $Args[0]
 $LineEnding = 1 # WdLineEndingType 1 = CROnly
 $Encoding = 65001 # Codepage for UTF8
