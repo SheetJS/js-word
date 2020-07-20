@@ -10,11 +10,11 @@ if ($Args.count -ne 1) {
 if ($Args[0] -match '^-') {
     #Check if option is help
     if ($Args[0] -match '^-[h|H](elp)?$') {
-        Write-Output "Usage: 
-        .\generate_txt[.ps1] <filePath> 
+        Write-Output "Usage:
+        .\generate_txt[.ps1] <filePath>
         .\generate_txt[.ps1] -[h|H[elp]]
     
-        Examples: 
+        Examples:
         filePath = .\test_files\docx\apachepoi
         "
     } else {
