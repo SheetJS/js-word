@@ -1,11 +1,38 @@
+$HelpCommand = "Run '.\generate_txt.ps1 -h' to see examples"
+
+#Check if argument or option is provided
 if ($Args.count -ne 1) {
-    Write-Output "Provide a test file directory"
+    Write-Output "ERROR: Provide a test file directory or options. $HelpCommand"
     exit
 }
-$Directory = Resolve-Path $Args[0]
+
+# Check if argument is an option
+if ($Args[0] -match '^-') {
+    #Check if option is help
+    if ($Args[0] -match '^-[h|H](elp)?$') {
+        Write-Output "Usage: 
+        .\generate_txt[.ps1] <filePath> 
+        .\generate_txt[.ps1] -[h|H[elp]]
+    
+        Examples: 
+        filePath = .\test_files\docx\apachepoi
+        "
+    } else {
+        Write-Output "ERROR: Provide a valid option. $HelpCommand"
+        exit
+    }
+}
+
+# Check if path exists
+if (Test-Path $Args[0]) {
+    $Directory = Resolve-Path $Args[0]
+} else {
+    Write-Output "ERROR: Provide a valid test file directory. $HelpCommand"
+    exit
+}
+
 $LineEnding = 1 # WdLineEndingType 1 = CROnly
 $Encoding = 65001 # Codepage for UTF8
-
 # Read backlist
 # $Blacklist = @()
 # $parent = (get-item $Directory).parent.parent.parent
