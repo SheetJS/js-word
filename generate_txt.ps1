@@ -13,7 +13,7 @@ if ($Args[0] -match '^-') {
         Write-Output "Usage:
         .\generate_txt[.ps1] <filePath>
         .\generate_txt[.ps1] -[h|H[elp]]
-    
+
         Examples:
         filePath = .\test_files\docx\apachepoi
         "
