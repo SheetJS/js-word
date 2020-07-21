@@ -12,6 +12,7 @@
 		"jsdom": "^16.2.2"
 	},
 	"devDependencies": {
+		"mocha": "^8.0.1",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^14.0.20",
 		"glob": "^7.1.6",
