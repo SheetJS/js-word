@@ -1,0 +1,1 @@
+﻿This is a source file .specify the picture’s stylesStep s:1FormatShape/Presets/Parallel/ 2 picture bolder:6pt black3 Text Wrapping : in front of Text4 add Size

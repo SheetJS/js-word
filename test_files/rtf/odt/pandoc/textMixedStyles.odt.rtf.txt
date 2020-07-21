@@ -1,0 +1,1 @@
+﻿This is a simple textthat is both italic bold underlined and the first two and the last two  and bold and line throughAnd with superscripts

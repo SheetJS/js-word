@@ -1,0 +1,1 @@
+﻿This whole line will be replaced by ${title}The following will be replaced ${inline}This paragraph will be replaced with a ${table}Let’s insert a date field: ${field}And here is a link: ${link}

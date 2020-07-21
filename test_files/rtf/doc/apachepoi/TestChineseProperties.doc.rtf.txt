@@ -1,0 +1,1 @@
+﻿This file is for testing Chinese characters support in POI. Some characters are copied from Chinse.yahoo.com世界雅虎亞太：亞洲 - 中國 - 香港 - 台灣 - 新加坡 - 印度 - 日本 - 韓國 - 澳紐美洲：Yahoo! - 加拿大 - 巴西 - 墨西哥 - 西班牙文 - 阿根廷歐洲：英國、愛爾蘭 - 法國 - 德國 - 意大利 - 丹麥 - 挪威 - 瑞典 - 西班牙 - 加泰隆
