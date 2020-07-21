@@ -1,6 +1,6 @@
 import { read as readCFB, find, CFB$Container } from "cfb";
 import { JSDOM } from "jsdom";
-import { WJSDoc, WJSPara, WJSTable } from "../../types";
+import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell } from "../../types";
 
 /* ECMA 17.3.1.22 p CT_P */
 function process_para(child: Node, root: WJSPara) {
@@ -68,8 +68,54 @@ function process_para(child: Node, root: WJSPara) {
   }
 };
 
+function process_tc(tcelt: Element): WJSTableCell {
+  const tableCell: WJSTableCell = { t: "c", p: [] };
+  const para: WJSPara = {elts: []};
+  tcelt.childNodes.forEach(child => {
+    const data = process_body_elt(child);
+    if (data) tableCell.p.push(data);
+    // console.log(tableCell.p[0]);
+  })
+  return tableCell;
+}
+
+function process_tr(trelt: Element): WJSTableRow {
+  const tableRow: WJSTableRow = { t: "r", c: [] };
+  trelt.childNodes.forEach(child => {
+    if(child.nodeType != 1) return;
+    const element = (child as Element);
+    switch(element.tagName) {
+      case "w:trPr": 
+      case "w:sdt":
+      case "w:tblPrEx": 
+      case "w:commentRangeEnd": 
+      break;
+      case "w:tc" :
+        tableRow.c.push(process_tc(element));
+        break;
+      default: throw `DOCX tablerow unsupported ${element.tagName} element`
+    }
+  });
+  return tableRow
+
+}
+
 function process_table(tablelt: Element): WJSTable {
   const table: WJSTable = { t: "t", r: [] };
+  tablelt.childNodes.forEach(child => {
+    if (child.nodeType != 1) return;
+    const element = (child as Element);
+    switch (element.tagName) {
+      case "w:tblPr":
+      case "w:tblGrid":
+      case "w:bookmarkEnd":
+        break;
+      case "w:tr":
+        table.r.push(process_tr(element));
+        break;
+      default: throw `DOCX table unsuported ${element.tagName} element`
+    }
+  });
   return table;
 }
 
@@ -83,8 +129,8 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara | vo
           element.childNodes.forEach((child) => process_para(child, para));
           return para;
         case "w:tbl":
-          // para.elts.push(process_table(element));
-          console.log(element);
+          para.elts.push(process_table(element));
+        // console.log(element);
         case "w:customXML":
           if (root) break;
         case "w:sectPr":
@@ -92,6 +138,7 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara | vo
         case "w:bookmarkEnd":
         case "w:commentRangeEnd":
         case "w:moveFromRangeEnd":
+        case "w:tcPr":
         case "w:sdt":
         case "w:altChunk": //TODO: implicit/explicit link handeling
         case "mc:AlternateContent":
