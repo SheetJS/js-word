@@ -1,0 +1,1 @@
+﻿Notes: “VariableX” is a bookmark name to the text “4” below. The formula field uses the bookmark in it’s calculation, and, more specifically, applies a number format to the result.4.01.00000000

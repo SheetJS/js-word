@@ -1,0 +1,1 @@
+﻿A paragraph in ‘Having Typeface’ style.Paragraph in ‘Large Size’ style.Paragraph in ‘Underlined’ style.Paragraph in ‘Double Underlined’ style.Paragraph in ‘None Underlined’ style.Text having some superscript and some subscript.

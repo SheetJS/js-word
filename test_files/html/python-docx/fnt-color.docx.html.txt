@@ -1,0 +1,1 @@
+﻿Text with no color Text with auto color Text with RGB color Text with theme color
