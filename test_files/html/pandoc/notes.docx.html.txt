@@ -1,0 +1,1 @@
+﻿A footnoteTest footnote.1 Test endnote.i1 My note.i This is an endnote at the end of the document.------------------------------------------------------------------------------------------------------------------------------------------------------

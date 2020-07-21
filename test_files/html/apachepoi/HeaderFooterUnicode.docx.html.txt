@@ -1,0 +1,2 @@
+﻿This is a fairly simple word document, over two pages, with headers and footers.The trick with this one is that it contains some Unicode based strings in it.Firstly, some currency symbols:	GBP - £	EUR - €Now, we’ll have some French text, in bold and big:	MolièreAnd some normal French text:	L'Avare ou l'École du mensongeThat’s it for page one
+This is page two. Les Précieuses ridicules. The end.

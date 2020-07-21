@@ -1,0 +1,3533 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<meta name=Originator content="Microsoft Word 15">
+<link rel=File-List href="complexity.docx_files/filelist.xml">
+<link rel=Edit-Time-Data href="complexity.docx_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>MS Intranet Strategy</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Jim Allchin</o:Author>
+  <o:Template>MARKET.DOT</o:Template>
+  <o:LastAuthor>Mohammed Kably</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:LastPrinted>1997-09-09T05:13:00Z</o:LastPrinted>
+  <o:Created>2020-07-21T18:59:00Z</o:Created>
+  <o:LastSaved>2020-07-21T18:59:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>5244</o:Words>
+  <o:Characters>29896</o:Characters>
+  <o:Company>Microsoft Corporation</o:Company>
+  <o:Lines>249</o:Lines>
+  <o:Paragraphs>70</o:Paragraphs>
+  <o:CharactersWithSpaces>35070</o:CharactersWithSpaces>
+  <o:Version>16.00</o:Version>
+ </o:DocumentProperties>
+ <o:CustomDocumentProperties>
+  <o:Product dt:dt="string">Office</o:Product>
+  <o:Version dt:dt="string">7.0</o:Version>
+  <o:Platform dt:dt="string">Cross Platform</o:Platform>
+  <o:PartNumber dt:dt="string">n/a</o:PartNumber>
+  <o:Target_x0020_Audience dt:dt="string">General/Everyone</o:Target_x0020_Audience>
+  <o:Status dt:dt="string"></o:Status>
+ </o:CustomDocumentProperties>
+</xml><![endif]-->
+<link rel=themeData href="complexity.docx_files/themedata.thmx">
+<link rel=colorSchemeMapping href="complexity.docx_files/colorschememapping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:UpdateStylesOnOpen/>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>EN-US</w:LidThemeOther>
+  <w:LidThemeAsian>ZH-CN</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:UsePrinterMetrics/>
+   <w:WW6BorderRules/>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:DoNotUseHTMLParagraphAutoSpacing/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+   <w:UseWord97LineBreakingRules/>
+   <w:SelectEntireFieldWithStartOrEnd/>
+   <w:UseWord2002TableStyleRules/>
+   <w:UseWord2010TableStyleRules/>
+   <w:DontUseIndentAsNumberingTabStop/>
+   <w:FELineBreak11/>
+   <w:WW11IndentRules/>
+   <w:DontAutofitConstrainedTables/>
+   <w:AutofitLikeWW11/>
+   <w:UnderlineTabInNumList/>
+   <w:HangulWidthLikeWW11/>
+   <w:UseNormalStyleForList/>
+   <w:DontVertAlignCellWithSp/>
+   <w:DontBreakConstrainedForcedTables/>
+   <w:DontVertAlignInTxbx/>
+   <w:Word11KerningPairs/>
+   <w:CachedColBalance/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:DocumentVariables>
+   <w:AutoClose>Disabled</w:AutoClose>
+  </w:DocumentVariables>
+  <m:mathPr>
+   <m:mathFont m:val="Cambria Math"/>
+   <m:brkBin m:val="before"/>
+   <m:brkBinSub m:val="&#45;-"/>
+   <m:smallFrac m:val="off"/>
+   <m:dispDef/>
+   <m:lMargin m:val="0"/>
+   <m:rMargin m:val="0"/>
+   <m:defJc m:val="centerGroup"/>
+   <m:wrapIndent m:val="1440"/>
+   <m:intLim m:val="subSup"/>
+   <m:naryLim m:val="undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" DefUnhideWhenUsed="false"
+  DefSemiHidden="false" DefQFormat="false" DefPriority="99"
+  LatentStyleCount="377">
+  <w:LsdException Locked="false" Priority="0" QFormat="true" Name="Normal"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 1"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 2"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 3"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 4"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 5"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 6"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 7"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 8"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 9"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 9"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 1"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 2"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 3"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 4"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 5"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 6"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 7"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 8"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 9"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Normal Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footnote text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="header"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footer"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index heading"/>
+  <w:LsdException Locked="false" Priority="35" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="caption"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="table of figures"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="envelope address"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="envelope return"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footnote reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="line number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="page number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="endnote reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="endnote text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="table of authorities"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="macro"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="toa heading"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 5"/>
+  <w:LsdException Locked="false" Priority="10" QFormat="true" Name="Title"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Closing"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Signature"/>
+  <w:LsdException Locked="false" Priority="1" SemiHidden="true"
+   UnhideWhenUsed="true" Name="Default Paragraph Font"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Message Header"/>
+  <w:LsdException Locked="false" Priority="11" QFormat="true" Name="Subtitle"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Salutation"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Date"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text First Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text First Indent 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Note Heading"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Block Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Hyperlink"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="FollowedHyperlink"/>
+  <w:LsdException Locked="false" Priority="22" QFormat="true" Name="Strong"/>
+  <w:LsdException Locked="false" Priority="20" QFormat="true" Name="Emphasis"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Document Map"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Plain Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="E-mail Signature"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Top of Form"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Bottom of Form"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Normal (Web)"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Acronym"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Address"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Cite"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Code"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Definition"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Keyboard"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Preformatted"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Sample"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Typewriter"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Variable"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Normal Table"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation subject"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="No List"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Contemporary"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Elegant"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Professional"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Subtle 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Subtle 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Web 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Web 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Web 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Balloon Text"/>
+  <w:LsdException Locked="false" Priority="59" SemiHidden="true"
+   UnhideWhenUsed="true" Name="Table Grid"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Theme"/>
+  <w:LsdException Locked="false" SemiHidden="true" Name="Placeholder Text"/>
+  <w:LsdException Locked="false" Priority="1" QFormat="true" Name="No Spacing"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 1"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" Name="Revision"/>
+  <w:LsdException Locked="false" Priority="34" QFormat="true"
+   Name="List Paragraph"/>
+  <w:LsdException Locked="false" Priority="29" QFormat="true" Name="Quote"/>
+  <w:LsdException Locked="false" Priority="30" QFormat="true"
+   Name="Intense Quote"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 1"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 1"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 2"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 2"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 2"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 3"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 3"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 3"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 4"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 4"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 4"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 5"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 5"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 5"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 6"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 6"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 6"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="19" QFormat="true"
+   Name="Subtle Emphasis"/>
+  <w:LsdException Locked="false" Priority="21" QFormat="true"
+   Name="Intense Emphasis"/>
+  <w:LsdException Locked="false" Priority="31" QFormat="true"
+   Name="Subtle Reference"/>
+  <w:LsdException Locked="false" Priority="32" QFormat="true"
+   Name="Intense Reference"/>
+  <w:LsdException Locked="false" Priority="33" QFormat="true" Name="Book Title"/>
+  <w:LsdException Locked="false" Priority="37" SemiHidden="true"
+   UnhideWhenUsed="true" Name="Bibliography"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="TOC Heading"/>
+  <w:LsdException Locked="false" Priority="41" Name="Plain Table 1"/>
+  <w:LsdException Locked="false" Priority="42" Name="Plain Table 2"/>
+  <w:LsdException Locked="false" Priority="43" Name="Plain Table 3"/>
+  <w:LsdException Locked="false" Priority="44" Name="Plain Table 4"/>
+  <w:LsdException Locked="false" Priority="45" Name="Plain Table 5"/>
+  <w:LsdException Locked="false" Priority="40" Name="Grid Table Light"/>
+  <w:LsdException Locked="false" Priority="46" Name="Grid Table 1 Light"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark"/>
+  <w:LsdException Locked="false" Priority="51" Name="Grid Table 6 Colorful"/>
+  <w:LsdException Locked="false" Priority="52" Name="Grid Table 7 Colorful"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 1"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 1"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 1"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 2"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 2"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 2"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 3"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 3"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 3"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 4"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 4"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 5"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 5"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 5"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 6"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 6"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 6"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="46" Name="List Table 1 Light"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark"/>
+  <w:LsdException Locked="false" Priority="51" Name="List Table 6 Colorful"/>
+  <w:LsdException Locked="false" Priority="52" Name="List Table 7 Colorful"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 1"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 1"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 1"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 2"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 2"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 2"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 3"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 3"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 3"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 4"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 4"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 5"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 5"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 5"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 6"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 6"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 6"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Mention"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Smart Hyperlink"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Hashtag"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Unresolved Mention"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Smart Link"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Smart Link Error"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:\5B8B\4F53;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536869121 1107305727 33554432 0 415 0;}
+@font-face
+	{font-family:MicrosoftLogo95;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Times New Roman";
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:"Lucida Sans Typewriter";
+	panose-1:2 11 5 9 3 5 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:MSIcons;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 0 0 0 0 0;}
+@font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 6 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 2048 0 0 159 0;}
+@font-face
+	{font-family:"Arial Black";
+	panose-1:2 11 10 4 2 1 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-1610612049 1073772795 0 0 159 0;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-name:"Normal\,DO NOT USE\,n";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+h1
+	{mso-style-name:"Heading 1\,H1";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-36.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	mso-hyphenate:none;
+	font-size:16.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h2
+	{mso-style-name:"Heading 2\,H2";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"Heading 1\,H1";
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-18.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	mso-hyphenate:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h3
+	{mso-style-name:"Heading 3\,H3";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h4
+	{mso-style-name:"Heading 4\,H4";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:4;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h5
+	{mso-style-name:"Heading 5\,DO NOT USE_h5";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-outline-level:5;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h6
+	{mso-style-name:"Heading 6\,DO NOT USE_h6";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-outline-level:6;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{mso-style-name:"TOC 1\,toc1";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{mso-style-name:"TOC 2\,toc2";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{mso-style-name:"TOC 3\,toc3";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:24.0pt;
+	line-height:11.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:30.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:40.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:50.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:60.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:70.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:80.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 216.0pt right 432.0pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-name:"Footer\,f";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-161.3pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:center 98.5pt right 351.0pt;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+span.MsoPageNumber
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.zzSanSerif, li.zzSanSerif, div.zzSanSerif
+	{mso-style-name:zzSanSerif;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Text, li.Text, div.Text
+	{mso-style-name:"Text\,t";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Platform, li.Platform, div.Platform
+	{mso-style-name:"Platform\,pl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Descriptor\,pd";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-163.0pt;
+	margin-bottom:.0001pt;
+	text-align:right;
+	mso-pagination:widow-orphan lines-together no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:24.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:36.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ProductDescriptor, li.ProductDescriptor, div.ProductDescriptor
+	{mso-style-name:"Product Descriptor\,pd";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:50.0pt;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.zzMargin, li.zzMargin, div.zzMargin
+	{mso-style-name:zzMargin;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListBulletedItem1, li.ListBulletedItem1, div.ListBulletedItem1
+	{mso-style-name:"List Bulleted Item 1\,lb1";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:-67.7pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-18.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.zzSpacing, li.zzSpacing, div.zzSpacing
+	{mso-style-name:zzSpacing;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:right;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+span.KeyName
+	{mso-style-name:"*Key Name\,kn";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.Spacing6points, li.Spacing6points, div.Spacing6points
+	{mso-style-name:"Spacing 6 points\,6";
+	mso-style-unhide:no;
+	mso-style-parent:zzSpacing;
+	mso-style-next:"Text\,t";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:6.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ListText1, li.ListText1, div.ListText1
+	{mso-style-name:"List Text 1\,lt1";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"List Bulleted Item 1\,lb1";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListBulletedItem2, li.ListBulletedItem2, div.ListBulletedItem2
+	{mso-style-name:"List Bulleted Item 2\,lb2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:24.0pt;
+	text-indent:-12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListText2, li.ListText2, div.ListText2
+	{mso-style-name:"List Text 2\,lt2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:24.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Art, li.Art, div.Art
+	{mso-style-name:"Art\,a";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListArt1, li.ListArt1, div.ListArt1
+	{mso-style-name:"List Art 1\,la";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtWide, li.ArtWide, div.ArtWide
+	{mso-style-name:"Art Wide\,aw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Legalese, li.Legalese, div.Legalese
+	{mso-style-name:"Legalese\,l";
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:7.5pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:184.5pt;
+	font-size:7.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ProductHead, li.ProductHead, div.ProductHead
+	{mso-style-name:"Product Head\,ph";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Name\,pn";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-162.7pt;
+	margin-bottom:.0001pt;
+	line-height:28.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan lines-together no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:28.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:36.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ProductName, li.ProductName, div.ProductName
+	{mso-style-name:"Product Name\,pn";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Platform\,pl";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-162.7pt;
+	margin-bottom:.0001pt;
+	line-height:32.0pt;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:28.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Product-MS, li.Product-MS, div.Product-MS
+	{mso-style-name:"Product-MS\,pms";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Head\,ph";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-163.0pt;
+	margin-bottom:.0001pt;
+	mso-line-height-alt:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:20.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-1.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Logo-Microsoft, li.Logo-Microsoft, div.Logo-Microsoft
+	{mso-style-name:Logo-Microsoft;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product-MS\,pms";
+	margin-top:10.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:24.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"MicrosoftLogo95",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	position:relative;
+	top:4.0pt;
+	mso-text-raise:-4.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.ConditionalMark
+	{mso-style-name:"*Conditional Mark\,cm";
+	mso-style-unhide:no;
+	color:maroon;
+	display:none;
+	mso-hide:all;}
+p.BoxArt, li.BoxArt, div.BoxArt
+	{mso-style-name:"Box Art\,ba";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Box Summary\,bs";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:100.0pt;
+	mso-element-frame-hspace:9.35pt;
+	mso-element-frame-vspace:9.35pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.65pt;
+	mso-element-top:9.4pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.BoxSummary, li.BoxSummary, div.BoxSummary
+	{mso-style-name:"Box Summary\,bs";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:100.0pt;
+	mso-element-frame-hspace:9.35pt;
+	mso-element-frame-vspace:9.35pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.65pt;
+	mso-element-top:9.4pt;
+	mso-height-rule:exactly;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.Quote1, li.Quote1, div.Quote1
+	{mso-style-name:"Quote1\,q";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Quote Name\,qn";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:16.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.QuoteName, li.QuoteName, div.QuoteName
+	{mso-style-name:"Quote Name\,qn";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.ArtCaptionSecondary, li.ArtCaptionSecondary, div.ArtCaptionSecondary
+	{mso-style-name:"Art Caption Secondary\,acs";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.ListSequentialItem1, li.ListSequentialItem1, div.ListSequentialItem1
+	{mso-style-name:"List Sequential Item 1\,ls";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtSecondary, li.ArtSecondary, div.ArtSecondary
+	{mso-style-name:"Art Secondary\,as";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableHeading, li.TableHeading, div.TableHeading
+	{mso-style-name:"Table Heading\,th";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:white;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ArtCaption, li.ArtCaption, div.ArtCaption
+	{mso-style-name:"Art Caption\,ac";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.TableRule, li.TableRule, div.TableRule
+	{mso-style-name:"Table Rule\,tr";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Table Text\,tt";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:2.0pt;
+	line-height:2.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.TableText, li.TableText, div.TableText
+	{mso-style-name:"Table Text\,tt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtCaptionList, li.ArtCaptionList, div.ArtCaptionList
+	{mso-style-name:"Art Caption List\,acl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"List Art 1\,la";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.TOCHeading1, li.TOCHeading1, div.TOCHeading1
+	{mso-style-name:"TOC Heading1\,toch";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"TOC 1\,toc1";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableTitleWide, li.TableTitleWide, div.TableTitleWide
+	{mso-style-name:"Table Title Wide\,ttlw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ArtCaptionWide, li.ArtCaptionWide, div.ArtCaptionWide
+	{mso-style-name:"Art Caption Wide\,acw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.NoteText, li.NoteText, div.NoteText
+	{mso-style-name:"Note Text\,nt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:3.0pt 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.NoteHead
+	{mso-style-name:"Note Head\,nh";
+	mso-style-unhide:no;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.NoteTextIndented, li.NoteTextIndented, div.NoteTextIndented
+	{mso-style-name:"Note Text Indented\,nti";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:3.0pt 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableArt, li.TableArt, div.TableArt
+	{mso-style-name:"Table Art\,tart";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Table Text\,tt";
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableTitle, li.TableTitle, div.TableTitle
+	{mso-style-name:"Table Title\,ttl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableListBulletedItem1, li.TableListBulletedItem1, div.TableListBulletedItem1
+	{mso-style-name:"Table List Bulleted Item 1\,tlb";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.zzMono, li.zzMono, div.zzMono
+	{mso-style-name:zzMono;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Lucida Sans Typewriter";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.CodeText, li.CodeText, div.CodeText
+	{mso-style-name:"Code Text\,ct";
+	mso-style-unhide:no;
+	mso-style-parent:zzMono;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ListCodeText1, li.ListCodeText1, div.ListCodeText1
+	{mso-style-name:"List Code Text 1\,lct1";
+	mso-style-unhide:no;
+	mso-style-parent:zzMono;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:12.0pt;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Lucida Sans Typewriter";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+span.CodeContinuation
+	{mso-style-name:"*Code Continuation\,ccont";
+	mso-style-unhide:no;
+	mso-ansi-font-size:14.0pt;
+	font-family:MSIcons;
+	mso-ascii-font-family:MSIcons;
+	mso-hansi-font-family:MSIcons;
+	mso-no-proof:yes;}
+p.TableListBulletedItem2, li.TableListBulletedItem2, div.TableListBulletedItem2
+	{mso-style-name:"Table List Bulleted Item 2\,tlb2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:24.5pt;
+	text-indent:-12.25pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Heading1wide, li.Heading1wide, div.Heading1wide
+	{mso-style-name:"Heading 1 wide\,h1w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 1\,H1";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.Copyright
+	{mso-style-name:"*Copyright\,copy";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.Registered
+	{mso-style-name:"*Registered\,reg";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.Trademark
+	{mso-style-name:"*Trademark\,tm";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.ListSequentialItem2, li.ListSequentialItem2, div.ListSequentialItem2
+	{mso-style-name:"List Sequential Item 2\,ls2";
+	mso-style-unhide:no;
+	mso-style-parent:"List Sequential Item 1\,ls";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	text-indent:12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableFootnoteText, li.TableFootnoteText, div.TableFootnoteText
+	{mso-style-name:"Table Footnote Text\,tft";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:12.0pt;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.Italic
+	{mso-style-name:"Italic\,i";
+	mso-style-unhide:no;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.FooterRule, li.FooterRule, div.FooterRule
+	{mso-style-name:"Footer Rule\,fr";
+	mso-style-unhide:no;
+	mso-style-parent:"Footer\,f";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-161.3pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:center 98.5pt right 351.0pt;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:1.0pt 0cm 0cm 0cm;
+	font-size:4.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+p.HeadTitle, li.HeadTitle, div.HeadTitle
+	{mso-style-name:"HeadTitle\,ht";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 1\,H1";
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-36.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:18.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-1.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableRulewide, li.TableRulewide, div.TableRulewide
+	{mso-style-name:"Table Rule wide\,trw";
+	mso-style-unhide:no;
+	mso-style-parent:"Table Rule\,tr";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:2.0pt;
+	line-height:2.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.WatermarkDate, li.WatermarkDate, div.WatermarkDate
+	{mso-style-name:"Watermark Date\,wd";
+	mso-style-unhide:no;
+	mso-style-parent:Header;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-165.6pt;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	tab-stops:center 216.0pt right 432.0pt;
+	font-size:100.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:yellow;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+p.QuoteTitle, li.QuoteTitle, div.QuoteTitle
+	{mso-style-name:"Quote Title\,qt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+span.DetailLabel
+	{mso-style-name:"*Detail Label\,det";
+	mso-style-unhide:no;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Arial Narrow",sans-serif;
+	mso-ascii-font-family:"Arial Narrow";
+	mso-hansi-font-family:"Arial Narrow";
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Heading2wide, li.Heading2wide, div.Heading2wide
+	{mso-style-name:"Heading 2 wide\,h2w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 2\,H2";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Heading3wide, li.Heading3wide, div.Heading3wide
+	{mso-style-name:"Heading 3 wide\,h3w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 3\,H3";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.Placeholder
+	{mso-style-name:"*Placeholder\,p";
+	mso-style-unhide:no;
+	mso-ansi-font-size:12.0pt;
+	color:red;}
+p.lvb1, li.lvb1, div.lvb1
+	{mso-style-name:lvb1;
+	mso-style-unhide:no;
+	mso-style-parent:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ls1, li.ls1, div.ls1
+	{mso-style-name:ls1;
+	mso-style-unhide:no;
+	mso-style-parent:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+span.EmDash
+	{mso-style-name:"*Em Dash\,emd";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.EnDash
+	{mso-style-name:"*En Dash\,end";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.ca, li.ca, div.ca
+	{mso-style-name:ca;
+	mso-style-unhide:no;
+	mso-style-parent:"Art\,a";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.sumbody, li.sumbody, div.sumbody
+	{mso-style-name:"sum body";
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:9.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	color:black;
+	mso-fareast-language:ZH-CN;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+ /* Page Definitions */
+ @page
+	{mso-footnote-separator:url("complexity.docx_files/header.html") fs;
+	mso-footnote-continuation-separator:url("complexity.docx_files/header.html") fcs;
+	mso-endnote-separator:url("complexity.docx_files/header.html") es;
+	mso-endnote-continuation-separator:url("complexity.docx_files/header.html") ecs;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:-76.5pt 85.5pt -85.5pt 200.15pt;
+	mso-header-margin:36.0pt;
+	mso-footer-margin:36.0pt;
+	mso-gutter-margin:12.25pt;
+	mso-even-footer:url("complexity.docx_files/header.html") ef1;
+	mso-footer:url("complexity.docx_files/header.html") f1;
+	mso-paper-source:15;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:-2;
+	mso-list-type:simple;
+	mso-list-template-ids:-1;}
+@list l0:level1
+	{mso-level-start-at:0;
+	mso-level-text:*;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l1
+	{mso-list-id:6910529;
+	mso-list-type:simple;
+	mso-list-template-ids:67698703;}
+@list l1:level1
+	{mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;}
+@list l2
+	{mso-list-id:88431595;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l3
+	{mso-list-id:520821689;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l4
+	{mso-list-id:1067531074;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l5
+	{mso-list-id:1371615553;
+	mso-list-type:simple;
+	mso-list-template-ids:67698703;}
+@list l5:level1
+	{mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;}
+@list l6
+	{mso-list-id:1404371321;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l6:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l0:level1 lfo1
+	{mso-level-start-at:1;
+	mso-level-number-format:bullet;
+	mso-level-numbering:continue;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:12.0pt;
+	mso-level-legacy-space:0cm;
+	margin-left:-73.7pt;
+	text-indent:-12.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-language:ZH-CN;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1027"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US style='tab-interval:324.0pt'>
+
+<div class=WordSection1>
+
+<p class=Logo-Microsoft style='margin-right:9.35pt'><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:490.5pt;
+ height:27.75pt' fillcolor="window">
+ <v:imagedata src="complexity.docx_files/image001.wmz" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=654 height=37
+src="complexity.docx_files/image002.gif" v:shapes="_x0000_i1025"><![endif]></p>
+
+<p class=ProductHead><span style='font-family:"Arial Black",sans-serif'><o:p>&nbsp;</o:p></span></p>
+
+<p class=ProductHead><span style='font-family:"Arial Black",sans-serif'>Complexity<o:p></o:p></span></p>
+
+<p class=ProductName><span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'>“</span><i
+style='mso-bidi-font-style:normal'><span style='font-size:16.0pt;mso-bidi-font-size:
+10.0pt;font-family:"Arial Black",sans-serif'>Easy to use is easy to say, but
+hard to do</span></i><span style='font-size:16.0pt;mso-bidi-font-size:10.0pt'>”<o:p></o:p></span></p>
+
+<div style='mso-element:para-border-div;border:none;border-bottom:solid windowtext 1.0pt;
+mso-border-bottom-alt:solid windowtext .75pt;padding:0cm 0cm 3.0pt 0cm;
+margin-left:-163.0pt;margin-right:0cm'>
+
+<p class=ProductDescriptor style='margin-left:0cm;tab-stops:67.5pt'>Jim Allchin
+– 9/4/97</p>
+
+<p class=ProductDescriptor style='margin-left:0cm;tab-stops:67.5pt'><span
+style='mso-tab-count:1'>                                                                             </span></p>
+
+</div>
+
+<p class=Text><o:p>&nbsp;</o:p></p>
+
+<p class=Text>While I think everyone acknowledges that our software and PCs in
+general are hard to use, I don’t think the magnitude of the problem is
+understood at all.<span style='mso-spacerun:yes'>   </span>No other consumer
+product in history has been so hard to use and so fragile.<span
+style='mso-spacerun:yes'>   </span>Yet computers and software have continued
+selling despite this.<span style='mso-spacerun:yes'>    </span>It is an amazing
+testament to all the benefits that personal computers bring that consumers are
+willing to put up with the vast array of associated problems.</p>
+
+<p class=Text>All of us have our horror stories about spouses, neighbors,
+family members, <i style='mso-bidi-font-style:normal'>ourselves </i>where we
+wasted a weekend (or longer!) trying to get something to work.<span
+style='mso-spacerun:yes'>    </span>We are supposed to be experts, but even we
+can’t get things to work properly.<span style='mso-spacerun:yes'>   
+</span>(Any one who gets ISDN working without getting help from someone else
+deserves an award.)<span style='mso-spacerun:yes'>     </span>It is a total
+embarrassment.<span style='mso-spacerun:yes'>    </span>Craig Mundie said to me
+recently that he never touches his machines in his home except at the beginning
+of a weekend because it knows it might take the entire weekend to recover from
+whatever goes wrong.</p>
+
+<p class=Text>What is fascinating is that when you talk to average users, they
+assume that <i style='mso-bidi-font-style:normal'>they </i>aren’t smart enough
+or that <i style='mso-bidi-font-style:normal'>they</i> are doing something
+wrong when the computer doesn’t work properly.<span
+style='mso-spacerun:yes'>     </span>However, if those same people were dealing
+with other consumer appliances, they would more than likely say that the
+appliance was designed wrong.<span style='mso-spacerun:yes'>   </span>There is
+even a culture growing dealing with “idiots” and “dummies” that have to work
+with computers.<span style='mso-spacerun:yes'>   </span>This is an amazing
+social phenomenon.<span style='mso-spacerun:yes'>  </span>Eventually consumers
+will wake up with the equivalent of Ralph Nader taking the lead.</p>
+
+<p class=Text>So, is it just that software has gotten so complicated that we
+can’t make the system resilient and easy to use any more?<span
+style='mso-spacerun:yes'>    </span>Is it that the demands for features mean
+that we can’t focus on naïve users?<span style='mso-spacerun:yes'>    
+</span>Is performance or memory size more important than consistent operation?<span
+style='mso-spacerun:yes'>     </span>What are we going to do about the hardware
+companies that continue building unreliable PC products?</p>
+
+<p class=Text>Our software is approaching massive size (and internal
+complexity).<span style='mso-spacerun:yes'>    </span>NT Workstation 5.0 will
+have around 27 million lines of code at Beta 1 – and more will be added before
+it finally ships some time next year.<span style='mso-spacerun:yes'>    
+</span>For perspective, the first version of NT only had around 6 million lines
+of code.<span style='mso-spacerun:yes'>     </span>In my view however, the size
+of the system has nothing to do with whether the system can be made resilient
+or easy to use.<span style='mso-spacerun:yes'>    </span>In fact, more software
+is required to make systems consistent and more reliable; it just has to be the
+<i style='mso-bidi-font-style:normal'>right</i> software.</p>
+
+<p class=Text>Our products are becoming more and more feature rich.<span
+style='mso-spacerun:yes'>    </span>We have ways to “tweak” virtually
+everything.<span style='mso-spacerun:yes'>     </span>The amount of information
+known publicly about flags/fields stored in the registry and how to tailor
+aspects of the software is amazing.<span style='mso-spacerun:yes'>    
+</span>We present user interface dialog box tabs covering technical features
+that only a miniscule fraction of all users will ever need (or understand).<span
+style='mso-spacerun:yes'>    </span>You could argue that this is great --- it’s
+a Turing machine, you know – you can customize it to do anything.<span
+style='mso-spacerun:yes'>    </span>Unfortunately, we seem to look at these
+things as a computer geek does and forget about “the rest of us”.<span
+style='mso-spacerun:yes'>     </span>On the other hand, we have done some good
+work in areas where we have added features (e.g., spelling correction in Word)
+which do not add additional complexity.<span style='mso-spacerun:yes'>    
+</span>I believe you can simplify the experience for naïve users and still
+maintain the flexibility for power users.</p>
+
+<p class=Text>What about performance?<span style='mso-spacerun:yes'>   
+</span>Is it ok to trade off consistency or reliability for performance?<span
+style='mso-spacerun:yes'>   </span>How about trading off consistency or
+reliability for smaller memory size?<span style='mso-spacerun:yes'>    
+</span>Is it ok to make the system super fast <i style='mso-bidi-font-style:
+normal'>most</i> of the time, if it doesn’t operate correctly (or crashes) in
+some rare cases?<span style='mso-spacerun:yes'>     </span>Microsoft has a
+disease dealing with these questions.<span style='mso-spacerun:yes'>   </span>I
+have been in many meetings where tradeoffs like this are actively discussed
+from billg on down.<span style='mso-spacerun:yes'>     </span>“We could win the
+benchmark.”<span style='mso-spacerun:yes'>    </span>“It saves 80K of
+memory.”<span style='mso-spacerun:yes'>   </span>This is a travesty.<span
+style='mso-spacerun:yes'>    </span>It would be better to not have a feature
+than have one that doesn’t work consistently 100% of the time. </p>
+
+<p class=Text>So the question is:<span style='mso-spacerun:yes'>  </span>Is it
+possible to have a set of rules that guide the development of software that is
+more resilient, consistent, and easier to use?<span style='mso-spacerun:yes'> 
+</span>Unfortunately, software is still art and I do not know of any perfect
+rules, but I do believe there is a philosophy that can be adopted to start
+addressing our complexity morass.<span style='mso-spacerun:yes'>    </span>The
+rest of this paper covers this philosophy.</p>
+
+<p class=Text>The thoughts below may seem very obvious.<span
+style='mso-spacerun:yes'>    </span>You may disagree with some of them.<span
+style='mso-spacerun:yes'>   </span>Nevertheless, I claim that following these
+rules would result in software order of magnitude less complex and friendlier
+to humans.<span style='mso-spacerun:yes'>     </span>The question is why don’t
+we follow them. </p>
+
+<p class=Text><o:p>&nbsp;</o:p></p>
+
+<h1 style='margin-left:-139.5pt'>Quality</h1>
+
+<p class=Text>From rec.humor.funny:</p>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='margin-left:-62.1pt;border-collapse:collapse;mso-table-layout-alt:fixed;
+ border:none;mso-border-alt:solid windowtext .5pt;mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes;
+  height:171.4pt'>
+  <td width=241 valign=top style='width:180.9pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:171.4pt'>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>Multitasking</b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>You can
+  crash several programs all at once.<span style='mso-spacerun:yes'>  
+  </span>No waiting!</p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>Built-in Networking<o:p></o:p></b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>You can
+  crash several PC’s all at once.<span style='mso-spacerun:yes'>   </span>No
+  need to buy Novell Personal Netware or LANtastic to crash.</p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>Microsoft Network<o:p></o:p></b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>Connect with
+  other Windows 95 users and talk about your crash experiences.</p>
+  </td>
+  <td width=242 valign=top style='width:181.25pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:171.4pt'>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>PnP<o:p></o:p></b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>Plug and
+  Pray (that it works)</p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>Multimedia<o:p></o:p></b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>Experience
+  the immense sign and sound of crashing.</p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'><b
+  style='mso-bidi-font-weight:normal'>Compatible with existing software<o:p></o:p></b></p>
+  <p class=Text align=left style='margin-left:0cm;text-align:left'>It will also
+  crash your existing software</p>
+  </td>
+ </tr>
+</table>
+
+<p class=Text><o:p>&nbsp;</o:p></p>
+
+<p class=Text>From KISS Software, Rescue Me! Product advertisement: “There are
+over 9,345 ways to trash your system.” “Windows in your TV?<span
+style='mso-spacerun:yes'>   </span>Who wants to boot your TV every few hours?”
+I could go on and on.<span style='mso-spacerun:yes'>    </span>Our products
+have a poor quality reputation.</p>
+
+<p class=Text>Quality is about ensuring the system works consistently: every
+time, all the time.<span style='mso-spacerun:yes'>  </span><span
+style='mso-spacerun:yes'>  </span>A key metric I think about is crashing.<span
+style='mso-spacerun:yes'>   </span>Our software should never crash –
+period.<span style='mso-spacerun:yes'>   </span>We ship software today that we <i
+style='mso-bidi-font-style:normal'>know</i> has bugs in it that can crash the
+system or that has architectural holes that would allow an errant application
+to crash the system.<span style='mso-spacerun:yes'>    </span>We are under
+“market pressure” and somehow are able to convince ourselves that the
+likelihood of the condition (usually very complicated) occurring is very small
+and so it is ok to ship the product and fix it in the next release. </p>
+
+<p class=Text>The first building block for making a system easy to use is
+quality.<span style='mso-spacerun:yes'>    </span>Quality doesn’t make a system
+easy to use; on the other hand, you can’t have a good system without it.<span
+style='mso-spacerun:yes'>   </span>You can have a very hard to use system that
+has high quality.<span style='mso-spacerun:yes'>   </span>MVS or VM/CP
+represent such systems.<span style='mso-spacerun:yes'>    </span>Once you get
+one of these systems running they are amazing resilient to hardware and
+software problems.<span style='mso-spacerun:yes'>    </span>I spent time with
+IBM engineers adding code for some of the error recovery paths for VM/CP.<span
+style='mso-spacerun:yes'>     </span>Tons of code exists to handle faults in
+these types of systems.<span style='mso-spacerun:yes'>     </span>It’s not that
+these systems were designed correctly.<span style='mso-spacerun:yes'>  
+</span>If you changed a line of code you were required to add your initials to
+the comment field on that line.<span style='mso-spacerun:yes'>    </span>I
+would look at pages and pages of BAL assembler code where the comment field of <i
+style='mso-bidi-font-style:normal'>every</i> line had been updated.<span
+style='mso-spacerun:yes'>    </span>And not by a single person.<span
+style='mso-spacerun:yes'>    </span>In more cases than not, there would be 5 or
+more initials on the same BAL line.<span style='mso-spacerun:yes'>    
+</span>Code (and quality?) by brute force.</p>
+
+<p class=Text>So everyone says they support quality (Mom and apple pie,
+right?).<span style='mso-spacerun:yes'>     </span>What should we change?<span
+style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l6 level1 lfo3;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We should tradeoff compatibility for quality if
+necessary.<span style='mso-spacerun:yes'>     </span>At a minimum if we know
+that being compatible with some feature (from the past) could cause the system
+to crash or get in some inconsistent state, then we should have an option that
+a user can select that prevents the compatibility, in favor of stability.<span
+style='mso-spacerun:yes'>    </span>Users then have a choice in how the system
+operates.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l3 level1 lfo4;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No algorithms should be used which we know a
+priori could cause the system to fail or enter an inconsistent state.<span
+style='mso-spacerun:yes'>    </span>No benchmark, size, or schedule crunch
+should be allowed to come between quality and us.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l3 level1 lfo4;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We must ensure that PC hardware doesn’t impede
+our quality efforts.<span style='mso-spacerun:yes'>   </span>The classic
+example here is ISA slots allowing non-PnP cards to be supported.<span
+style='mso-spacerun:yes'>    </span>But, it goes beyond this.<span
+style='mso-spacerun:yes'>    </span>We need to drive the industry to address
+areas that are likely causes of consumer issues and faults in the system.<span
+style='mso-spacerun:yes'>    </span>An example here would be the fact that
+PC-Card (or PCMCIA) devices can be removed without warning from the
+system.<span style='mso-spacerun:yes'>    </span>That’s like being able to rip
+a CD out of your audio system while it is still moving and playing.<span
+style='mso-spacerun:yes'>    </span>If we want to improve the experience for
+end-users, we must focus on improving the fragile hardware we have today in
+PCs.</p>
+
+<h1 style='margin-left:-139.5pt'>Resiliency</h1>
+
+<p class=Text>Ok, suppose the system doesn’t crash. <span
+style='mso-spacerun:yes'>  </span>But, does it recover gracefully from
+problems?<span style='mso-spacerun:yes'>   </span>Resiliency is about having
+the system recover automatically from environmental issues (e.g., server going
+away, DHCP server not found, etc.) or common user mistakes.</p>
+
+<p class=Text>This takes a very specific designer mindset.<span
+style='mso-spacerun:yes'>    </span>You have to assume that if something could
+go wrong, it will and then program defensively for these problems.<span
+style='mso-spacerun:yes'>    </span>Too often I find designers programming for
+the case when everything works perfectly.<span style='mso-spacerun:yes'> 
+</span>When an error occurs, they simply give up, spew an error message to the
+screen, and return an error message to their caller (who of course does nothing
+with the error except return it to their caller, etc.).</p>
+
+<p class=Text>Networking is perhaps the area where this is most visible.<span
+style='mso-spacerun:yes'>  </span>Our networking code is extremely fragile
+today.<span style='mso-spacerun:yes'>    </span>Virtually any problem (lost
+packet, server not responding after we have a connection to it, configuration
+error, etc.) either makes the system totally unresponsive (with no indication
+to the end-user what is going on) or worse yet it actually stops working
+correctly.<span style='mso-spacerun:yes'>     </span>This lack of resiliency is
+a problem for the operating system (e.g., networking errors during
+authentication, etc.), but it’s also a problem for applications such as mail,
+calendar, chat, browsing, etc.<span style='mso-spacerun:yes'>    </span>No
+other peripheral is more error prone today than the network.<span
+style='mso-spacerun:yes'>   </span>It takes special designs to deal with this.</p>
+
+<p class=Text>How many times does your computer just sit there doing nothing
+after you entered a command.<span style='mso-spacerun:yes'>   </span>There is
+no disk activity; no screen activity; nothing.<span style='mso-spacerun:yes'>  
+</span>But, you can’t do anything since the application or the operating system
+is “locked up”.<span style='mso-spacerun:yes'>    </span>This is because the
+software isn’t handling the network (flakiness) correctly.<span
+style='mso-spacerun:yes'>    </span>The network will continue to be very error
+prone (e.g., different delays, outages, errors, node failures, etc.) for quite
+some time in the future.<span style='mso-spacerun:yes'>   </span>Moreover, the
+fact that we want to be mobile moving between wireless cells or connecting
+between very different speed networks means that handling networking resiliency
+must be a top priority for us.<span style='mso-spacerun:yes'>   </span><span
+style='mso-spacerun:yes'> </span>Architecturally, we need to learn about
+network errors in a standard way and then avoid multiple timeouts, nested
+retries, etc.</p>
+
+<p class=Text>We do have parts of the operating system that are more resilient
+today than other parts.<span style='mso-spacerun:yes'>   </span>One example is
+scandisk that automatically “repairs” the system if there are disk
+inconsistencies detected.<span style='mso-spacerun:yes'>    </span>The issue
+today is that scandisk may not correct the problem totally.<span
+style='mso-spacerun:yes'>   </span>In fact, it could delete a critical
+file.<span style='mso-spacerun:yes'>    </span>Still it is better than not
+doing anything.<span style='mso-spacerun:yes'>    </span>Assuming that we must
+have a utility like scandisk (because of the file system design) we need to
+ensure that upper levels of the software can recover from perhaps poor deletion
+choices that scandisk might make.<span style='mso-spacerun:yes'>  
+</span>(Furthermore, as noted later, if we have to have scandisk utilities,
+they should run silently without introducing the user to any bizarre
+terminology or operational choices.)</p>
+
+<p class=Text>Resiliency is about keeping the system running at all costs.<span
+style='mso-spacerun:yes'>    </span>An example of this is that if the NT 4
+shell (or IE 4 shell on NT 5) dies, the desktop disappears for a second.<span
+style='mso-spacerun:yes'>    </span>But, the operating system restarts the
+shell quietly in the background.<span style='mso-spacerun:yes'>    </span>The
+system is resilient to shell faults.<span style='mso-spacerun:yes'>   
+</span>This is not the case with win95 or win98.</p>
+
+<p class=Text>Ways to improve resiliency:</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Auto-configure.<span style='mso-spacerun:yes'>  
+</span>Do not let the user configure things.<span style='mso-spacerun:yes'>   
+</span>Networking is one of the most complicated areas of our system.<span
+style='mso-spacerun:yes'>    </span>Asking a novice (or even an “expert”) to
+configure a protocol stack is like asking a layperson to do surgery – it takes
+training and even then they sometimes make a mistake.<span
+style='mso-spacerun:yes'>     </span>If you can't auto-configure, then the
+system should probably be redesigned so that it can be auto-configured.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Assume a machine is transiently connected to the
+network.<span style='mso-spacerun:yes'>    </span>Never allow the user
+interface to be stopped by a network outage. <span
+style='mso-spacerun:yes'>   </span>Switch gracefully (but visibly) from network
+mode to offline mode.<span style='mso-spacerun:yes'>   </span></p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Once an error is detected (e.g., network
+timeout), it should be sensed only once.<span style='mso-spacerun:yes'>  
+</span>That is, at most one timeout should happen until there is good
+communications established again.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Design for error cases even if it means the
+regular operation of the system is impacted slightly.<span
+style='mso-spacerun:yes'>   </span>A good example here is out of disk
+space.<span style='mso-spacerun:yes'>    </span>Assume you run out of disk
+space at the worse possible time.<span style='mso-spacerun:yes'>    </span>Will
+the system still function correctly?<span style='mso-spacerun:yes'>   
+</span>Can the user still remove some space?<span style='mso-spacerun:yes'>   
+</span>If it takes allocating some free disk space as a buffer during normal
+operation (to ensure that the system is still totally functional) then do it.</p>
+
+<h1 style='margin-left:-139.5pt'>Terminology</h1>
+
+<p class=Text>For some strange reason we insist on trying to teach people a
+foreign language: <i style='mso-bidi-font-style:normal'>geektalk</i>.<span
+style='mso-spacerun:yes'>   </span>My Mom doesn’t want to learn another
+language right now.<span style='mso-spacerun:yes'>    </span>She just wants to
+track her church work, write letters, exchange email, track her budget, look
+for things on the Internet, etc.<span style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text>Geektalk is actually one of our worse sins in interacting with a
+user.<span style='mso-spacerun:yes'>    </span>Our systems tend to produce more
+internal information than a user needs to know and in doing so we use terms
+that only a computer literate person (and in some cases programmer) would
+understand.</p>
+
+<p class=Text>Turn on (note a naïve user thinks a “boot” is a shoe) any PC and
+just watch the words/characters fly by.<span style='mso-spacerun:yes'>   
+</span></p>
+
+<p class=Text style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style='mso-bidi-font-weight:
+normal'>24576 KB OK <o:p></o:p></b></p>
+
+<p class=Text style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style='mso-bidi-font-weight:
+normal'>SystemSoft BIOS for Opt Viper 557/508N 1.00 (2450-35) (Version 01.11)<o:p></o:p></b></p>
+
+<p class=Text style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style='mso-bidi-font-weight:
+normal'>SystemSoft Plug-n-Play BIOS<o:p></o:p></b></p>
+
+<p class=Text><b style='mso-bidi-font-weight:normal'>&lt;F10&gt; to enter
+Computer Setup</b></p>
+
+<p class=Text>Oh, I see…</p>
+
+<p class=Text>Now of all of the above, what do you think a first time user <i
+style='mso-bidi-font-style:normal'>has</i> to know?<span
+style='mso-spacerun:yes'>    </span>What terms would they know?<span
+style='mso-spacerun:yes'>    </span>Why do we insist on telling a user all
+these things?<span style='mso-spacerun:yes'>     </span>I believe it is because
+the system is basically in debug mode all the time.<span
+style='mso-spacerun:yes'>    </span>We never know when a user might have to
+know the internals of the system to deal with a problem.</p>
+
+<p class=Text>When our software starts running we are even worse.<span
+style='mso-spacerun:yes'>    </span>I can’t even begin to represent the insane
+number of terms we use.<span style='mso-spacerun:yes'>   </span>We use terms
+such as “FAT32”, “clusters”, “defragging”, “DHCP”, “DNS”, “WBEM”, “WAN
+Mini-port”, “ODBC”, “enable IP forwarding”, “bindings”, “NDIS Proxy TAPI
+Service Provider”, “Video Compression Codecs”, “Device Tree”, “devmgmt”, IRQ,
+DMA, “Launch Internet Explorer Browser” (launch?), “Insert ActiveX Monitor Control”,
+etc. </p>
+
+<p class=Text>And our error messages are nothing short of amazing.<span
+style='mso-spacerun:yes'>  </span>Consider these error messages from NT 5:</p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No IPSEC Policy DN. </p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>{A79C9582-19D1-11D1-91C7-C4252BDEA3A4} : Could
+not find an adapter.</p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>The Net Logon service terminated with service-specific
+error 3095. </p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No Windows NT Domain Controller is available for
+domain NTWKSTA. (This event is expected and can be ignored when booting with
+the 'No Net' Hardware Profile.)<span style='mso-spacerun:yes'>  </span>The
+following error occurred: The RPC server is unavailable. </p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Illegal instruction</p>
+
+<p class=Text style='margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>And on and on.</p>
+
+<p class=Text>When a TV is sold the manufacturer doesn’t have to explain how to
+read the color bands (detailing resistance) on some resistor that is used.<span
+style='mso-spacerun:yes'>    </span>Why do we insist on trying to make computer
+people out of everyone?<span style='mso-spacerun:yes'>     </span>We are still
+making software for the hobbyist.<span style='mso-spacerun:yes'>    </span>We
+need to make software for the consumer.<span style='mso-spacerun:yes'>    
+</span>Do we want the user to debug the system?<span
+style='mso-spacerun:yes'>    </span>Is our software so unreliable that we have
+to be in pseudo debugging mode all the time?</p>
+
+<p class=Text>Of all the issues raised in this paper, reducing information
+dumping and simplifying/removing terminology is the easiest to change.<span
+style='mso-spacerun:yes'>    </span>Every product should have a glossary of
+terms that is used throughout the product.<span style='mso-spacerun:yes'>   
+</span>We can introduce new (computer) concepts to end-users, but they should be
+done with great care.<span style='mso-spacerun:yes'>    </span>Developers and
+user education (e.g., help, documentation) should only communicate using
+layperson’s language and the approved glossary.<span
+style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text>One other key point is that some areas of a product might require
+more advanced knowledge and therefore a richer set of terms.<span
+style='mso-spacerun:yes'>    </span>In this case there should be an advanced
+button (or tool) that permits access to these terms (otherwise they are
+hidden).<span style='mso-spacerun:yes'>   </span>In general though these
+advanced dialogs should be avoided.<span style='mso-spacerun:yes'>   
+</span>Why?<span style='mso-spacerun:yes'>    </span>Because having the concepts
+exposed at all makes it hard to avoid having some error/information message pop
+out at a naïve user (e.g., “can’t renew IP address because DHCP server is not
+responding”).<span style='mso-spacerun:yes'>    </span>It would be far better
+in my view to have a command line utility that adjusts certain parameters (as
+in debugging mode), then have this information exposed in a general UI.<span
+style='mso-spacerun:yes'>    </span>Then we would never have to even explain
+what something like a DHCP server was to an end-user.</p>
+
+<h1 style='margin-left:-139.5pt'>Consistency</h1>
+
+<p class=Text>Lack of consistency is a key problem in our user interface and
+our underlying conceptual model. Humans are amazingly adept at dealing with
+ambiguity and inconsistency – but only up to a point.<span
+style='mso-spacerun:yes'>    </span>Much of learning is about understanding
+rules.<span style='mso-spacerun:yes'>    </span>If A, then B.<span
+style='mso-spacerun:yes'>     </span>Anyone who programs knows that deep nesting
+of <b style='mso-bidi-font-weight:normal'>if</b>/<b style='mso-bidi-font-weight:
+normal'>else </b>statements is very difficult to debug.<span
+style='mso-spacerun:yes'>    </span>In every day life it is no different.<span
+style='mso-spacerun:yes'>   </span>If you have to memorize one exception after
+exception, it is very difficult to not make mistakes unless you are living and
+breathing the environment constantly.<span style='mso-spacerun:yes'>   
+</span>Teaching someone about the system deals with teaching him or her about
+the rules.<span style='mso-spacerun:yes'>    </span>You want the rules to be
+very simple: if you do this, then that happens. </p>
+
+<p class=Text>Our systems have tons of footnotes on how it works.<span
+style='mso-spacerun:yes'>    </span>Let’s look at some examples.<span
+style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text><b style='mso-bidi-font-weight:normal'>Inconsistent drag-drop</b>.<span
+style='mso-spacerun:yes'>   </span>When you drag a file from one place to
+another, it would seem reasonable that the file will be moved, not copied.<span
+style='mso-spacerun:yes'>     </span>That rule is not correct however.<span
+style='mso-spacerun:yes'>    </span>If you drag a file on the same disk, then
+the file is moved.<span style='mso-spacerun:yes'>    </span>However, if you
+drag between disks, the files are copied – not moved.<span
+style='mso-spacerun:yes'>    </span>If you drag an EXE, then a shortcut is
+created, and the file is neither copied nor moved – that is, unless the
+destination is a removable drive.</p>
+
+<p class=Text><b style='mso-bidi-font-weight:normal'>Tray</b>.<span
+style='mso-spacerun:yes'>   </span>This area on the screen doesn’t seem to follow
+<i style='mso-bidi-font-style:normal'>any</i> rules.<span
+style='mso-spacerun:yes'>    </span>It holds mostly icons except for the clock
+that is.<span style='mso-spacerun:yes'>    </span>Some icons get double-clicks,
+some get single-clicks, some get right-clicked, and some don’t get clicked at
+all.<span style='mso-spacerun:yes'>    </span>Some icons have tool-tips, others
+don’t (it depends on whether the application window is selected or not).<span
+style='mso-spacerun:yes'>    </span>With IE 4, there is yet another area on the
+tray that operates totally differently than the other tray components.<span
+style='mso-spacerun:yes'>   </span>It is magic.</p>
+
+<p class=Text><b style='mso-bidi-font-weight:normal'>Shortcuts</b>.<span
+style='mso-spacerun:yes'>   </span>Shortcuts are very inconsistent since they
+are not supported through win32 APIs.<span style='mso-spacerun:yes'>  
+</span>Shortcuts are kludges done on top of the file system.<span
+style='mso-spacerun:yes'>   </span>The result? Terrible inconsistency.<span
+style='mso-spacerun:yes'>     </span>Whether a shortcut is linked to a file or
+a folder, it is always treated as a file.<span style='mso-spacerun:yes'>    
+</span>Specifically, you can’t specify a shortcut to a folder in a path.<span
+style='mso-spacerun:yes'>    </span>So, shortcuts are “sort of” transparent,
+but not always.</p>
+
+<p class=Text>We should not be rigid about consistency.<span
+style='mso-spacerun:yes'>    </span>There is a higher level principle of
+familiarity (with real –world objects/tasks) that I think is even more
+important than consistency across all aspects of the system.<span
+style='mso-spacerun:yes'>    </span>Nevertheless, we are not consistent enough
+today in our systems.<span style='mso-spacerun:yes'>    </span>We use different
+terms for the same task, object, etc. in different parts of our system (e.g.,
+Emergency Recovery Disk).<span style='mso-spacerun:yes'>      </span>We need
+fewer concepts defined and few ways to do things.<span
+style='mso-spacerun:yes'>   </span>Concepts that we introduce should be
+consistent unless there is a overwhelming reason not to be.</p>
+
+<h1 style='margin-left:-139.5pt'>Familiarity</h1>
+
+<p class=Text>A key to allowing people to learn something quickly is to build
+on prior knowledge.<span style='mso-spacerun:yes'>     </span>We need to
+maximize the concepts and techniques in our products that users are familiar
+with from their real world experiences.<span style='mso-spacerun:yes'>    
+</span>The first time someone uses an automated washbowl, they look curiously
+around the sink for handles.<span style='mso-spacerun:yes'>    </span>Once
+someone explains how it works or they discover how it works independently, then
+from then on they will intuitively try putting their hands under the nozzle if
+they don’t see handles.<span style='mso-spacerun:yes'>    </span>Of course, in
+some countries the water flow is controlled through foot petals.<span
+style='mso-spacerun:yes'>    </span>And someone who is used to automatic
+washbowls will be surprised when the water doesn’t come on.<span
+style='mso-spacerun:yes'>    </span>(I know because this happened to me.)<span
+style='mso-spacerun:yes'>      </span>The point is that once someone learns
+something they become familiar with it and expect it to be the same in a
+variety of situations.</p>
+
+<p class=Text>Our user interface and our conceptual model should attempt to
+model within reason tasks or objects that people already know.<span
+style='mso-spacerun:yes'>     </span>If there is an analogy that exists outside
+the computer realm that a culture understands we should use it in our
+systems.<span style='mso-spacerun:yes'>    </span>A good example of this is <span
+style='background:yellow;mso-highlight:yellow'>highlighting</span> in
+Word.<span style='mso-spacerun:yes'>    </span>This is something that virtually
+all people are familiar with.<span style='mso-spacerun:yes'>    </span>Using
+yellow as the default and calling the feature highlighting is easy to
+understand for most everyone.</p>
+
+<p class=Text>Designers should not force fit metaphors if the computer
+operation isn’t a close match to the real world.<span
+style='mso-spacerun:yes'>    </span>Strong metaphors (e.g., phone) need to
+behave as much like a phone as possible – because users really know how a phone
+works and they will map their knowledge appropriately onto the computer interaction.</p>
+
+<p class=Text>When I am writing a letter, I am writing a letter.<span
+style='mso-spacerun:yes'>     </span>I usually don’t want to deal with anything
+else.<span style='mso-spacerun:yes'>    </span>A new mail indication might
+interrupt me and I might switch to reading mail, but that is no different than
+being interrupted by a phone call.<span style='mso-spacerun:yes'>   </span>In
+both cases, though I am doing a single task.<span style='mso-spacerun:yes'>   
+</span>This argues for more full screen activities focused on single/related
+tasks and less window management.</p>
+
+<p class=Text>I strongly believe in virtualized User Interfaces that map to
+particular tasks that a user is currently doing.<span
+style='mso-spacerun:yes'>    </span>However, more investigation is required to
+really understand the right level of virtualization.<span
+style='mso-spacerun:yes'>    </span>It could be at a macro level:
+entertainment, office work, programming, etc.<span style='mso-spacerun:yes'>  
+</span>Or it might be more granular: home financials, music composing,
+correspondence (e.g., letters, faxes, email, voice, etc.), watching TV,
+etc.<span style='mso-spacerun:yes'>    </span>The reason I think this makes so
+much sense is that it allows us to create a more familiar environment for a
+user and still let the user switch from task to task.<span
+style='mso-spacerun:yes'>    </span>Further, I think this task-based view is
+much closer to the way average users work (e.g., I need to write some checks
+and see where the portfolio is today).</p>
+
+<p class=Text>Without a doubt, the best computer concept is the concept that
+you don’t have to invent (because it already exists in the real world).</p>
+
+<h1 style='margin-left:-139.5pt'>Simplicity</h1>
+
+<p class=Text>We seem to clutter everything.<span style='mso-spacerun:yes'>   
+</span>We clutter the desktop.<span style='mso-spacerun:yes'>    </span>When
+was the last time you opened the “network neighborhood”?<span
+style='mso-spacerun:yes'>     </span>Yet it is on the desktop of probably 100
+millions machines.<span style='mso-spacerun:yes'>    </span>We clutter
+menus.<span style='mso-spacerun:yes'>    </span>Look at the cascading menu
+after menu off the Start/Programs area.<span style='mso-spacerun:yes'>    
+</span>We clutter toolbars.<span style='mso-spacerun:yes'>    </span>And on and
+on.<span style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text>We have so many tab dialogs for some functions that we created
+multi-row-tabbed dialogs.<span style='mso-spacerun:yes'>  </span>Some of these
+tab dialogs are amazingly complex.<span style='mso-spacerun:yes'>    </span>(By
+the way, the fact that the tabs all change positions when a back-row tab is
+clicked is extremely confusing and difficult to use.)<span
+style='mso-spacerun:yes'>     </span>We should only include a function in the
+system if a large number of users need the function.<span
+style='mso-spacerun:yes'>    </span>Basic functions should be immediately
+apparent – not masked by reams of options that most customers will never use. </p>
+
+<p class=Text>The <b style='mso-bidi-font-weight:normal'>Administrative Tools </b>folder
+(off the <b style='mso-bidi-font-weight:normal'>Programs</b> <b
+style='mso-bidi-font-weight:normal'>Start</b> menu) in NT 5 Workstation Beta 1
+is a classic example of not designing for the bulk of users.<span
+style='mso-spacerun:yes'>    </span>It is more complicated than NTW 4 – which
+was already much too complicated for the average user.<span
+style='mso-spacerun:yes'>  </span>Most users just never need to know about most
+of these functions.<span style='mso-spacerun:yes'>     </span>In addition, the
+current user interface is designed for a computer expert.<span
+style='mso-spacerun:yes'>    </span>We have to change our mindset totally here.</p>
+
+<p class=Text>We can make systems much smarter than they are today.<span
+style='mso-spacerun:yes'>    </span>I think some of the intelligence in the
+office applications is quite good.<span style='mso-spacerun:yes'>    
+</span>There is no equivalent of this in the operating system however.<span
+style='mso-spacerun:yes'>  </span>Simple heuristics go a long way.<span
+style='mso-spacerun:yes'>    </span>For example, if we can’t sense a network
+adapter, then we shouldn’t have timeouts and we shouldn’t ask the user anything
+about a network.<span style='mso-spacerun:yes'>    </span>We should
+automatically reconfigure the system.<span style='mso-spacerun:yes'>   
+</span>Suppose we do find a network that is operating, but if we can’t find a
+DHCP server, then we should be able to automatically assign an IP address.<span
+style='mso-spacerun:yes'>     </span>If a DHCP server comes back online, then
+we should automatically switch to the right IP address.<span
+style='mso-spacerun:yes'>    </span>If someone is looking at a help topic, then
+we should be able to step him or her through the tasks to address their
+question.<span style='mso-spacerun:yes'>    </span>We should be using as much
+automatic and dynamic self-configuration as possible.<span
+style='mso-spacerun:yes'>    </span>The system should be viewed as a true
+organism that is constantly adapting to its surroundings (usage, environmental
+changes, etc.).</p>
+
+<p class=Text>Still, simplicity is about more than just being smarter.<span
+style='mso-spacerun:yes'>    </span>I expect that most early users believe that
+Office is quite complicated.<span style='mso-spacerun:yes'>    </span>Why?<span
+style='mso-spacerun:yes'>  </span>Because Office doesn’t ease a user into using
+the product --- starting with the basics and gradually expanding to richer and
+richer power.<span style='mso-spacerun:yes'>     </span>My Mom was overwhelmed
+when I first introduced her to Office.<span style='mso-spacerun:yes'>   
+</span>She now has a limited set of functions that she knows and she tries to
+avoid deviating from them.</p>
+
+<p class=Text>I believe that user interfaces need to be scaled.<span
+style='mso-spacerun:yes'>    </span>The scaling can be done in many ways.<span
+style='mso-spacerun:yes'>    </span>The most naïve way to do this is to only
+show the basics and then create an advance area(s) where the “pros” go.<span
+style='mso-spacerun:yes'>    </span>Another technique is to have toolbars not
+show up by default.<span style='mso-spacerun:yes'>    </span>Another more
+high-tech approach is to track which features/functions a user does frequently
+and slowly evolve the interface to favor/highlight these functions.<span
+style='mso-spacerun:yes'>    </span>We must really improve in this area in the
+future.</p>
+
+<p class=Text>I hate most wizards.<span style='mso-spacerun:yes'>   
+</span>They simply cover up the complexity that exists in the system.<span
+style='mso-spacerun:yes'>   </span>If a wizard fails for some unplanned reason,
+the user is dumped right back in the underlying complex system.<span
+style='mso-spacerun:yes'>    </span>If the underlying system weren’t
+complicated, then probably a wizard wouldn’t have been needed in the first
+place.<span style='mso-spacerun:yes'>     </span>A wizard might be useful in
+certain multi-step interactions with the system, but in general they could be avoided
+if the system was simpler and smarter.</p>
+
+<p class=Text>In short, I think we need ways to scale the UI from simple/basic
+operation to more advanced operation.<span style='mso-spacerun:yes'>   
+</span>We need the system to be more automated about configuration and learning
+what a user uses and might want to use.<span style='mso-spacerun:yes'>   
+</span>And we should hide (or totally remove) clutter that is in everyone’s
+face unless the bulk of naïve users will use the function.</p>
+
+<h1 style='margin-left:-139.5pt'>Obviousness</h1>
+
+<p class=Text>If you delete an icon on the desktop, what do you think
+happens?<span style='mso-spacerun:yes'>    </span>Does the object really go
+away?<span style='mso-spacerun:yes'>   </span>You would think so – it’s the
+obvious thing – after all you deleted it, right?<span
+style='mso-spacerun:yes'>   </span>Well, it depends on the object.<span
+style='mso-spacerun:yes'>  </span>In some cases the entire object goes away
+(e.g., spreadsheet – assuming no links!), but in other cases only portions of
+the total object goes away (e.g., program executables).<span
+style='mso-spacerun:yes'>     </span>Some programs today have icons on the
+desktop, menu items in the <b style='mso-bidi-font-weight:normal'>Start</b>
+menu, tons of files somewhere on the disk, and a series of registry entries
+(sometimes dispersed in several areas of the registry).<span
+style='mso-spacerun:yes'>    </span>The obvious thing just doesn’t happen when
+you delete objects.<span style='mso-spacerun:yes'>    </span>In fact, our
+inconsistency concerning deletion is one reason why most user’s disks are full
+of unnecessary files; the user thinks they were already deleted!</p>
+
+<p class=Text>The system should never pretend to do something transparently if
+it can’t do it perfectly 100% of the time.<span style='mso-spacerun:yes'>   
+</span>The cancel button in the browser is a great idea, for example.<span
+style='mso-spacerun:yes'>    </span>It is horribly confusing when the system
+tries to hide something that ends up showing up in certain failure cases.<span
+style='mso-spacerun:yes'>   </span>Better to let the user participate in the
+environment in this case.<span style='mso-spacerun:yes'>    </span>It is much
+more obvious this way.<span style='mso-spacerun:yes'>    </span>The conceptual
+model then is the same for the user and the computer.<span
+style='mso-spacerun:yes'>    </span>Another example deals with
+Intellimirroring.<span style='mso-spacerun:yes'>    </span>We should NOT hide
+the fact that there is a difference between a user who is connected vs.
+standalone.<span style='mso-spacerun:yes'>    </span>Trying to pretend like
+there is no difference will clearly not work and the user will be surprised at
+random times as the transparency fails.</p>
+
+<p class=Text>Tasks that users perform frequently or would likely have to do at
+some point should be very discoverable.<span style='mso-spacerun:yes'>   
+</span>It is critical to understand a prioritized list of tasks and optimize
+the obviousness of these.<span style='mso-spacerun:yes'>   </span>The operating
+system is a mixed bag today.<span style='mso-spacerun:yes'>    </span>An
+example of a big improvement is the Small Business Server.<span
+style='mso-spacerun:yes'>    </span>But, in general, our usability is very poor
+across our products.<span style='mso-spacerun:yes'>   </span>I don’t think we
+ever generated such a prioritized list for the operating system.<span
+style='mso-spacerun:yes'>    </span>If we had, then things like configuring and
+accessing Mail (or fax) would have been much simpler than it is today.
+Designers must be very hardcore to ensure that the ease of use for the key
+tasks is not undermined.</p>
+
+<p class=Text>As an example, consider Backup.<span style='mso-spacerun:yes'>   
+</span>Where should the program item and/or icon be placed?<span
+style='mso-spacerun:yes'>    </span>Should the dialogs give the user lots of
+power through many choices (incremental, scheduled times, particular files, job
+definitions, etc.)?<span style='mso-spacerun:yes'>    </span>The obvious task
+the user wants to do is to simply backup the system (or restore a file).<span
+style='mso-spacerun:yes'>    </span>Any design that doesn’t make this task <i
+style='mso-bidi-font-style:normal'>extremely</i> obvious and easy is failing at
+this design principle.</p>
+
+<h1 style='margin-left:-139.5pt'>Safety</h1>
+
+<p class=Text>Users should be protected from making errors.<span
+style='mso-spacerun:yes'>    </span>This seems obvious enough.<span
+style='mso-spacerun:yes'>    </span>We do some of the easy things today (e.g.,
+have a recycle bin, reconfirm a deletion or format, etc.).<span
+style='mso-spacerun:yes'>    </span>But, we do virtually nothing to provide any
+safety for the system as a whole.<span style='mso-spacerun:yes'>   
+</span>Users can make a machine non-bootable in less than 10 seconds.<span
+style='mso-spacerun:yes'>    </span>They can stop networking from working in 10
+seconds.<span style='mso-spacerun:yes'>   </span>They can break an application
+in about 10 seconds.<span style='mso-spacerun:yes'>     </span></p>
+
+<p class=Text>We should never allow a system to be put in an unusable state
+unless the hardware has failed.<span style='mso-spacerun:yes'>    </span>Today,
+we have several problems.<span style='mso-spacerun:yes'>    </span>First, we
+let people metaphorically play with the integrated circuits of the software by
+being able to play with system files loaded on the disk.<span
+style='mso-spacerun:yes'>    </span>By system files I mean any component of the
+system that is used in the standard operation of the system.<span
+style='mso-spacerun:yes'>   </span>There is no reason for this.<span
+style='mso-spacerun:yes'>    </span>There is no reason anyone except a
+programmer needs to know anything about these files in the system.<span
+style='mso-spacerun:yes'>     </span>They should not be able to be seen, deleted,
+moved, renamed, or tampered with in any way.<span style='mso-spacerun:yes'>   
+</span>Drivers (or other system components) should be signed and a user should
+explicitly agree to use a driver (or other system component) before they can be
+installed.<span style='mso-spacerun:yes'>     </span>There should not be any
+way to partially remove or install an application.</p>
+
+<p class=Text>Second, we need to ensure that manual configuration operations
+(hopefully over time there should be fewer and fewer of these) cannot put the
+system in an unusable or non-recoverable state.<span
+style='mso-spacerun:yes'>   </span>If a manual configuration could make some
+part of the system (e.g., hardware device, network connection) stop working,
+then the user should be strongly warned about the danger of the proposed
+change.<span style='mso-spacerun:yes'>   </span>We should attempt to make
+significant changes a single step UI operation so that we can detect the danger
+easily.<span style='mso-spacerun:yes'>    </span>In contrast today, configuring
+a dial-in line requires multiple steps in different areas of the UI with
+reboots in between.<span style='mso-spacerun:yes'>    </span>Obviously mistakes
+are easy and restoring the system to the way it was before the configuration
+started in very difficult.<span style='mso-spacerun:yes'>    </span>A global
+undo is a good idea.<span style='mso-spacerun:yes'>  </span>In addition, issues
+arise when something is reconfigured (e.g., deleting an ISDN board) where we
+leave partial bits of information around that confuse the system.<span
+style='mso-spacerun:yes'>    </span>When something is deleted, <i
+style='mso-bidi-font-style:normal'>every </i>trace should be removed from the
+system.<span style='mso-spacerun:yes'>    </span>There shouldn’t be any
+information in the registry, file system, or user interface associated with the
+deleted entity.<span style='mso-spacerun:yes'>   </span>In general, reversibility
+would build confidence for users to try new things since they would know that
+they could reverse any bad decision they made.<span
+style='mso-spacerun:yes'>    </span></p>
+
+<p class=Text>Having an overall default mode for everything in the system is
+also a good idea.<span style='mso-spacerun:yes'>   </span>This is a mode that
+lets the system operate no matter what, albeit perhaps not as customized as the
+user might want. </p>
+
+<h1 style='margin-left:-139.5pt'>Personalization</h1>
+
+<p class=Text>Personal computers are about being “personal”.<span
+style='mso-spacerun:yes'>    </span>That means it is critical that users be
+able to customize the interface they use to the computer – just like people
+customize/decorate their cars, homes, and desks at work. <span
+style='mso-spacerun:yes'>   </span>Personalization can help make the system
+feel comfortable and familiar.</p>
+
+<p class=Text>This is an area where we need to do a lot of work – especially
+when a computer is shared. Today, we confuse per machine and per user state
+frequently.<span style='mso-spacerun:yes'>    </span>We need to be able to
+customize very clearly for each user --- as well as make it easy to reset the
+environment to an overall default state for a new user (e.g., family
+member).<span style='mso-spacerun:yes'>    </span>Further, it is important that
+this personalization be moveable easily from one computer to another.</p>
+
+<b style='mso-bidi-font-weight:normal'><span style='font-size:16.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Arial",sans-serif;mso-fareast-font-family:
+SimSun;mso-fareast-theme-font:minor-fareast;mso-bidi-font-family:"Times New Roman";
+mso-ansi-language:EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA'><br
+clear=all style='page-break-before:always'>
+</span></b>
+
+<h1 style='margin-left:-139.5pt'>Some Mini Rules to Consider</h1>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Data
+integrity or crashes must be ship stoppers.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Gracefully
+support all known failure conditions.<span style='mso-spacerun:yes'>  
+</span>Program defensively being prepared for these failure cases.<span
+style='mso-spacerun:yes'>     </span>Given the complexity of the system, don’t
+expect administrators or the end-user to figure out what the problem is.<span
+style='mso-spacerun:yes'>    </span>You (the designer) have more knowledge of
+what to do than anyone else does.<span style='mso-spacerun:yes'>    </span>The
+probability of having a human make the situation worse is very high.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Test
+all limit cases – e.g., disk full.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Do
+not permit a user to change anything that could cause the system to crash
+(e.g., registry).<span style='mso-spacerun:yes'>    </span>Do not give a user
+access to internal parts of the system that should be hidden.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Do
+not use computer terms (e.g., DNS, DHCP, FAT32, scandisk, DLL, etc.) when communicating
+with a user.<span style='mso-spacerun:yes'>    </span>THINK like someone who
+has never seen a computer before.<span style='mso-spacerun:yes'>   
+</span>Create and use a glossary of terms for the product.<span
+style='mso-spacerun:yes'>    </span>Error messages should only use terms from
+the glossary.<span style='mso-spacerun:yes'>    </span>(The “repair” person
+should have some means to get more diagnostic information.)</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>6.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Make
+concepts shown to the user work consistently in all cases (e.g., <b
+style='mso-bidi-font-weight:normal'>shortcuts</b>).</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>7.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Avoid
+configuration if at all possible (e.g., make systems auto configuring by
+sensing the environment: memory size, network condition, etc.)</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>8.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Do
+not show error messages to users unless they can specifically do something
+about the problem.<span style='mso-spacerun:yes'>    </span>The system should
+recover from the problem automatically or simply stop working so that a
+“repair” person can diagnose the problem.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>9.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Make
+the 90% case the design center.<span style='mso-spacerun:yes'>    </span>Ensure
+that the basic top 10 tasks are obvious.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>10.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Integrate
+resolution of a user issue with the Help system.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>11.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Assume
+that the network is error prone and transient.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>12.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Create
+scaleable User Interfaces where a user can be slowed exposed to more power, but
+can start their experience in a simple, non-threatening mode.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>13.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Avoid
+wizards that simply cover up the complexity of the underlying system.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>14.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Use
+concepts from the real world.<span style='mso-spacerun:yes'>    </span>And
+match the semantics of the real world as closely as possible.<span
+style='mso-spacerun:yes'>    </span>If a new concept is required, then ensure
+that it is defined and use consistency throughout the product and
+documentation.</p>
+
+<p class=Text style='margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style='mso-fareast-font-family:
+Arial;mso-bidi-font-family:Arial'><span style='mso-list:Ignore'>15.<span
+style='font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif]>Design
+per user capabilities in the product from the start so that easy
+personalization is possible.</p>
+
+</div>
+
+</body>
+
+</html>

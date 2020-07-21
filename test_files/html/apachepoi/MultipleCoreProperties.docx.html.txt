@@ -1,0 +1,2 @@
+﻿Appendix A:  Example File StructureThe following example illustrates the basic structure of an object.
+Appendix B:  SFF IPSec (ESP) Output FormatThe following section illustrates the use of the file format.
