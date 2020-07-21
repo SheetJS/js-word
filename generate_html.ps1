@@ -6,13 +6,13 @@ $Encoding = 65001 # Codepage for UTF8
 $testFileDepth = 2
 
 $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip, "*.html", "*.rtf","*.odt","*.doc")
-:main for ($i = 0; $i -lt $AbsPath.length; $i++) {
+:htmlMain for ($i = 0; $i -lt $AbsPath.length; $i++) {
 
     $AbsPathI = Resolve-Path $AbsPath[$i] | Select-Object -ExpandProperty Path
 
-    if (Test-Path ($AbsPathI + $ext) -PathType Leaf ) { continue main }
+    if (Test-Path ($AbsPathI + $ext) -PathType Leaf ) { continue htmlMain }
 
-    if (Test-Path ($AbsPathI + ".skip")) { continue main }
+    if (Test-Path ($AbsPathI + ".skip")) { continue htmlMain }
 
     $Word = New-Object -ComObject Word.Application
     try {
@@ -44,13 +44,13 @@ $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip, "*.
 
 
 $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip, *.docx, "*.rtf","*.odt","*.doc")
-:main2 for ($i = 0; $i -lt $AbsPath.length; $i++) {
+:txtMain for ($i = 0; $i -lt $AbsPath.length; $i++) {
     $AbsPathI = Resolve-Path $AbsPath[$i] | Select-Object -ExpandProperty Path
     Write-Output $AbsPathI
 
-    if (Test-Path ($AbsPathI + ".txt") -PathType Leaf ) { continue main2 }
+    if (Test-Path ($AbsPathI + ".txt") -PathType Leaf ) { continue txtMain }
 
-    if (Test-Path ($AbsPathI + ".skip")) { continue main2 }
+    if (Test-Path ($AbsPathI + ".skip")) { continue txtMain }
 
     $Word = New-Object -ComObject Word.Application
     try {
