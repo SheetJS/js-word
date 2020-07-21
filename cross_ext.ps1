@@ -1,4 +1,5 @@
-$HelpCommand = "Run '.\generate_txt.ps1 -h' to see examples"
+$HelpCommand = "Run '.\cross_ext.ps1 -h' to see examples"
+$ext = ".rtf"
 
 #Check if argument or option is provided
 if ($Args.count -ne 1) {
@@ -11,8 +12,8 @@ if ($Args[0] -match '^-') {
     #Check if option is help
     if ($Args[0] -match '^-[h|H](elp)?$') {
         Write-Output "Usage:
-        .\generate_txt[.ps1] <filePath>
-        .\generate_txt[.ps1] -[h|H[elp]]
+        .\cross_ext[.ps1] <filePath>
+        .\cross_ext[.ps1] -[h|H[elp]]
         Examples:
         filePath = .\test_files\docx\apachepoi
         "
@@ -47,7 +48,7 @@ $CurrAbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
     try {
         $similarAbsPath = Join-Path -Path .\test_files\rtf -ChildPath $parent\$subparent
         $filename = Split-Path $CurrAbsPathI -Leaf
-        $similarAbsFilePath = Resolve-Path (Join-Path -Path $similarAbsPath -ChildPath ($filename+".rtf")) -ErrorAction Stop
+        $similarAbsFilePath = Resolve-Path (Join-Path -Path $similarAbsPath -ChildPath ($filename+$ext)) -ErrorAction Stop
 
         if (Test-Path $similarAbsFilePath -PathType Leaf) {
             continue curr_main
@@ -64,7 +65,7 @@ $CurrAbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
     $Word = New-Object -ComObject Word.Application
     try {
         $Doc = $Word.Documents.Open($CurrAbsPathI, $False, $True, $False, "WordJS", "WordJS")
-        $Doc.SaveAs(($CurrAbsPathI+".rtf"), 6, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
+        $Doc.SaveAs(($CurrAbsPathI+$ext), 6, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
         $Doc.Close()
     } catch {
         Write-Output "Skipping (has pwd or cannot edit): $CurrAbsPathI"
@@ -87,6 +88,7 @@ $rtfPath = Join-Path -Path .\test_files\ -ChildPath rtf
 
     # Only keep `.rtf` files that are under 10 mb
     if ((Get-Item $ExtAbsPathI).length -gt 10000kb) {
+        Write-Output "deleting $ExtAbsPathI"
         Remove-Item $ExtAbsPathI
         continue ext_main
     }
