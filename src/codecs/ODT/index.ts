@@ -1,6 +1,6 @@
 import { CFB$Container, find } from "cfb";
 import { JSDOM } from "jsdom";
-import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell } from "../../types";
+import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSParaElement } from "../../types";
 
 /* 5.1.3 <text:p> children */
 function process_para(child: Node, root: WJSPara) {
@@ -9,6 +9,7 @@ function process_para(child: Node, root: WJSPara) {
       const element = (child as Element);
       if(element.tagName.match(/draw:/)) return;
       if(element.tagName == "text:s") root.elts.push({t:"s", v: " ".repeat(+element.getAttribute("c") || 1)});
+      if(element.tagName == "text:tab") root.elts.push({t:"s", v: "\t".repeat(+element.getAttribute("c") || 1)});
       element.childNodes.forEach((child) => process_para(child, root));
       break;
     case 3 /*TEXT_NODE*/: root.elts.push({t:"s", v: child.textContent}); break;
@@ -21,7 +22,7 @@ function process_td(tdelt: Element): WJSTableCell {
   const tablecell: WJSTableCell = { t: "c", p: [] };
   tdelt.childNodes.forEach(child => {
     const data = process_body_elt(child);
-    if(data) tablecell.p.push(data);
+    if(data) tablecell.p.push(data as WJSPara);
   });
   return tablecell;
 }
@@ -60,8 +61,44 @@ function process_table(tablelt: Element): WJSTable {
   return table;
 }
 
+/* 8.4 <text:illustration-index> children */
+function process_illustration_index(child: Node, root: WJSPara[]) {
+  switch(child.nodeType) {
+    case 1 /*ELEMENT_NODE*/:
+      const element = (child as Element);
+      switch(element.tagName) {
+        case "text:illustration-index-source": break;
+        case "text:index-body":
+          element.childNodes.forEach((child) => process_index_body(child, root));
+          break;
+        default: throw `ODT illustration-index unsupported ${element.tagName} element`
+      }
+  }
+}
+
+/* 8.2.2 <text:index-body> children */
+function process_index_body(child: Node, root: WJSPara[]) {
+  switch(child.nodeType) {
+    case 1:
+      const element = (child as Element);
+      switch(element.tagName) {
+        case "text:index-title":
+          element.childNodes.forEach((child) => process_index_body(child, root));
+          break;
+        case "text:p":
+        case "text:h":
+          const para: WJSPara = { elts: [] };
+          element.childNodes.forEach((child) => {
+            process_para(child, para);
+          });
+          root.push(para);
+          break;
+      }
+  }
+}
+
 /* 3.4 <office:text> children */
-function process_body_elt(child: ChildNode, root: boolean = false): WJSPara|void {
+function process_body_elt(child: ChildNode, root: boolean = false): WJSPara[]|WJSPara|void {
   const para: WJSPara = { elts: []};
   switch(child.nodeType) {
     case 1 /*ELEMENT_NODE*/:
@@ -79,10 +116,20 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara|void
         case "table:table":
           para.elts.push(process_table(element));
           return para;
+        // text:illustration-index
+        case "text:illustration-index":
+          const paraArray: WJSPara[] = [];
+          console.log()
+          element.childNodes.forEach((child) => process_illustration_index(child, paraArray));
+          return paraArray;
+        // case "text:illustration-index-body":
+          // recursively parse children
+          // para.elts.push(process_illustration_index(element, para));
+          // return para;
         // text:list
+        case "text:illustration-index-source":
         case "text:sequence-decls":
         case "text:variable-decls":
-        case "text:illustration-index":
         case "text:tracked-changes":
           if(root) break;
         default: throw `ODT body unsupported ${element.tagName} element`
@@ -119,7 +166,15 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   const textelt = bodyelt.querySelector("office\\:body > office\\:text");
   textelt.childNodes.forEach(child => {
     const res = process_body_elt(child, true);
-    if(res) doc.p.push(res);
+    if(res) {
+      if ((res as WJSPara[]).push == undefined) {
+        doc.p.push(res as WJSPara);
+      } else {
+        (res as WJSPara[]).forEach(para => {
+          doc.p.push(para);
+        });
+      }
+    }
   });
 
   return doc;
