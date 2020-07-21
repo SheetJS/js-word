@@ -1,0 +1,2 @@
+﻿This is a sample word document. It has two pages. It has a 2 column heading, and a three column footerHEADING TEXTMore on page oneEnd of page 1
+This is page two. It also has a two column heading, and a simple footer.[THIS IS AN EVEN PAGE, WITH A HEADER]August 20, 2008August 20, 2008[ODD PAGE HEADER TEXT]Page 2This is a simple footer on the second pageFooter Left	Footer Middle Footer Right
