@@ -27,7 +27,7 @@ function process_para(child: Node, root: WJSPara) {
         case "w:bookmarkStart":
         case "w:commentRangeStart":
         case "w:commentRangeEnd":
-        case "w:commentReference":
+        case "w:commentReference": //TODO: add reference support
         case "w:del":
         case "w:drawing":
         case "w:endnoteReference":
@@ -55,8 +55,8 @@ function process_para(child: Node, root: WJSPara) {
         case "w:sectPr":
         case "w:smartTag":
         case "w:softHyphen":
-        case "w:sym": //TODO: Read documentation about this
-        case "w:tab":
+        case "w:sym": 
+        case "w:tab": //TODO: Add tab support
         case "mc:AlternateContent":
         case "m:oMath":
         case "m:oMathPara":
@@ -92,6 +92,7 @@ function process_tr(trelt: Element): WJSTableRow {
       break;
       case "w:tc" :
         tableRow.c.push(process_tc(element));
+        // console.log("cells: ", tableRow.c);
         break;
       default: throw `DOCX tablerow unsupported ${element.tagName} element`
     }
@@ -112,6 +113,7 @@ function process_table(tablelt: Element): WJSTable {
         break;
       case "w:tr":
         table.r.push(process_tr(element));
+        // console.log("rows: ", table.r);
         break;
       default: throw `DOCX table unsuported ${element.tagName} element`
     }
@@ -130,7 +132,8 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara | vo
           return para;
         case "w:tbl":
           para.elts.push(process_table(element));
-        // console.log(element);
+          return para;
+        // console.log("tables: ", para.elts);
         case "w:customXML":
           if (root) break;
         case "w:sectPr":
