@@ -1,2 +1,11 @@
+node_modules/
+package-lock.json
+*.tgz
 test_files/
 CNAME
+src/
+.travis.yml
+blacklist.txt
+test*.ts
+*.ps1
+CONTRIBUTING.md
