@@ -110,38 +110,51 @@ function process_index_body(child: Node, root: WJSPara[]) {
 }
 
 /* <text:list> children */
-function process_list(child: Node, root: WJSPara) {
+function process_list(child: Node, root: WJSPara[], index: number) {
   switch(child.nodeType) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
       switch(element.tagName) {
         // Recursive case
         case "text:list-item":
-          element.childNodes.forEach((child) => process_list_item(child, root));
+          element.childNodes.forEach((child) => {
+            process_list_item(child, root, index);
+            index++;
+
+          });
           break;
       }
   }
 }
 
 /* <text:list-item> children */
-function process_list_item(child: Node, root: WJSPara) {
+function process_list_item(child: Node, root: WJSPara[], iter: number) {
   switch(child.nodeType) {
     case 1:
       const element = (child as Element);
       switch(element.tagName) {
         case "text:list":
-          element.childNodes.forEach((child) => process_list(child, root));
+          let index : number = 1;
+          element.childNodes.forEach((child) => {
+            process_list(child, root, index);
+            index++;
+          });
           break;
         case "text:h":
         case "text:p":
-          element.childNodes.forEach((child) => process_para(child, root));
+          const para : WJSPara = { elts: [] };
+          para.elts.push({t: "s", v: "" + iter + ". "});
+          element.childNodes.forEach((child) => {
+            process_para(child, para);
+          });
+          root.push(para);
           break;
       }
   }
 }
 
 function process_note(child: Node, root: WJSPara) {
-
+  
 }
 
 /* 3.4 <office:text> children */
@@ -170,7 +183,11 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara[]|WJ
           return paraArray;
         // text:list
         case "text:list":
-          element.childNodes.forEach((child) => process_list(child, para));
+          let index : number = 1;
+          element.childNodes.forEach((child) => {
+            process_list(child, paraArray, index);
+            index++;
+          });
           return paraArray;
         case "text:note":
         case "text:sequence-decls":
