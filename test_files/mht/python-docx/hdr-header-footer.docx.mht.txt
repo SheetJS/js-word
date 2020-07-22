@@ -1,0 +1,2 @@
+﻿section with header
+section without header of its own.Header for section-1Footer for section 1

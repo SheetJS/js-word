@@ -1,0 +1,1 @@
+﻿This is a paragraph in an sdt block.This is another paragraph.
