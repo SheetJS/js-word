@@ -1,0 +1,4758 @@
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="----=_NextPart_01D6601F.F2EB2E00"
+
+This document is a Single File Web Page, also known as a Web Archive file.  If you are seeing this message, your browser or editor doesn't support Web Archive files.  Please download a browser that supports Web Archive.
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx.htm
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="us-ascii"
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml"
+xmlns:o=3D"urn:schemas-microsoft-com:office:office"
+xmlns:w=3D"urn:schemas-microsoft-com:office:word"
+xmlns:dt=3D"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml"
+xmlns=3D"http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=3DContent-Type content=3D"text/html; charset=3Dus-ascii">
+<meta name=3DProgId content=3DWord.Document>
+<meta name=3DGenerator content=3D"Microsoft Word 15">
+<meta name=3DOriginator content=3D"Microsoft Word 15">
+<link rel=3DFile-List href=3D"complexity.docx_files/filelist.xml">
+<link rel=3DEdit-Time-Data href=3D"complexity.docx_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>MS Intranet Strategy</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Jim Allchin</o:Author>
+  <o:Template>MARKET.DOT</o:Template>
+  <o:LastAuthor>Mohammed Kably</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:LastPrinted>1997-09-09T05:13:00Z</o:LastPrinted>
+  <o:Created>2020-07-22T16:02:00Z</o:Created>
+  <o:LastSaved>2020-07-22T16:02:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>5244</o:Words>
+  <o:Characters>29896</o:Characters>
+  <o:Company>Microsoft Corporation</o:Company>
+  <o:Lines>249</o:Lines>
+  <o:Paragraphs>70</o:Paragraphs>
+  <o:CharactersWithSpaces>35070</o:CharactersWithSpaces>
+  <o:Version>16.00</o:Version>
+ </o:DocumentProperties>
+ <o:CustomDocumentProperties>
+  <o:Product dt:dt=3D"string">Office</o:Product>
+  <o:Version dt:dt=3D"string">7.0</o:Version>
+  <o:Platform dt:dt=3D"string">Cross Platform</o:Platform>
+  <o:PartNumber dt:dt=3D"string">n/a</o:PartNumber>
+  <o:Target_x0020_Audience dt:dt=3D"string">General/Everyone</o:Target_x002=
+0_Audience>
+  <o:Status dt:dt=3D"string"></o:Status>
+ </o:CustomDocumentProperties>
+</xml><![endif]-->
+<link rel=3DthemeData href=3D"complexity.docx_files/themedata.thmx">
+<link rel=3DcolorSchemeMapping href=3D"complexity.docx_files/colorschememap=
+ping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:UpdateStylesOnOpen/>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEve=
+ry>
+  <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>EN-US</w:LidThemeOther>
+  <w:LidThemeAsian>ZH-CN</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:UsePrinterMetrics/>
+   <w:WW6BorderRules/>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:DoNotUseHTMLParagraphAutoSpacing/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+   <w:UseWord97LineBreakingRules/>
+   <w:SelectEntireFieldWithStartOrEnd/>
+   <w:UseWord2002TableStyleRules/>
+   <w:UseWord2010TableStyleRules/>
+   <w:DontUseIndentAsNumberingTabStop/>
+   <w:FELineBreak11/>
+   <w:WW11IndentRules/>
+   <w:DontAutofitConstrainedTables/>
+   <w:AutofitLikeWW11/>
+   <w:UnderlineTabInNumList/>
+   <w:HangulWidthLikeWW11/>
+   <w:UseNormalStyleForList/>
+   <w:DontVertAlignCellWithSp/>
+   <w:DontBreakConstrainedForcedTables/>
+   <w:DontVertAlignInTxbx/>
+   <w:Word11KerningPairs/>
+   <w:CachedColBalance/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:DocumentVariables>
+   <w:AutoClose>Disabled</w:AutoClose>
+  </w:DocumentVariables>
+  <m:mathPr>
+   <m:mathFont m:val=3D"Cambria Math"/>
+   <m:brkBin m:val=3D"before"/>
+   <m:brkBinSub m:val=3D"&#45;-"/>
+   <m:smallFrac m:val=3D"off"/>
+   <m:dispDef/>
+   <m:lMargin m:val=3D"0"/>
+   <m:rMargin m:val=3D"0"/>
+   <m:defJc m:val=3D"centerGroup"/>
+   <m:wrapIndent m:val=3D"1440"/>
+   <m:intLim m:val=3D"subSup"/>
+   <m:naryLim m:val=3D"undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState=3D"false" DefUnhideWhenUsed=3D"false"
+  DefSemiHidden=3D"false" DefQFormat=3D"false" DefPriority=3D"99"
+  LatentStyleCount=3D"377">
+  <w:LsdException Locked=3D"false" Priority=3D"0" QFormat=3D"true" Name=3D"=
+Normal"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" QFormat=3D"true" Name=3D"=
+heading 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" QFormat=3D"true" Name=3D"heading 7"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" QFormat=3D"true" Name=3D"heading 8"/>
+  <w:LsdException Locked=3D"false" Priority=3D"9" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" QFormat=3D"true" Name=3D"heading 9"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 6"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 7"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 8"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index 9"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 7"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 8"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"toc 9"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Normal Indent"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"footnote text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"annotation text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"header"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"footer"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"index heading"/>
+  <w:LsdException Locked=3D"false" Priority=3D"35" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" QFormat=3D"true" Name=3D"caption"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"table of figures"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"envelope address"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"envelope return"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"footnote reference"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"annotation reference"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"line number"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"page number"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"endnote reference"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"endnote text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"table of authorities"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"macro"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"toa heading"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Bullet"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Number"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Bullet 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Bullet 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Bullet 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Bullet 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Number 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Number 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Number 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Number 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"10" QFormat=3D"true" Name=3D=
+"Title"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Closing"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Signature"/>
+  <w:LsdException Locked=3D"false" Priority=3D"1" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"Default Paragraph Font"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text Indent"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Continue"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Continue 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Continue 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Continue 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"List Continue 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Message Header"/>
+  <w:LsdException Locked=3D"false" Priority=3D"11" QFormat=3D"true" Name=3D=
+"Subtitle"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Salutation"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Date"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text First Indent"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text First Indent 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Note Heading"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text Indent 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Body Text Indent 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Block Text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Hyperlink"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"FollowedHyperlink"/>
+  <w:LsdException Locked=3D"false" Priority=3D"22" QFormat=3D"true" Name=3D=
+"Strong"/>
+  <w:LsdException Locked=3D"false" Priority=3D"20" QFormat=3D"true" Name=3D=
+"Emphasis"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Document Map"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Plain Text"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"E-mail Signature"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Top of Form"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Bottom of Form"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Normal (Web)"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Acronym"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Address"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Cite"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Code"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Definition"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Keyboard"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Preformatted"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Sample"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Typewriter"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"HTML Variable"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Normal Table"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"annotation subject"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"No List"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Outline List 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Outline List 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Outline List 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Simple 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Simple 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Simple 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Classic 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Classic 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Classic 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Classic 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Colorful 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Colorful 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Colorful 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Columns 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Columns 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Columns 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Columns 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Columns 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 6"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 7"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Grid 8"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 4"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 5"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 6"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 7"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table List 8"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table 3D effects 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table 3D effects 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table 3D effects 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Contemporary"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Elegant"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Professional"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Subtle 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Subtle 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Web 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Web 2"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Web 3"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Balloon Text"/>
+  <w:LsdException Locked=3D"false" Priority=3D"59" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"Table Grid"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Table Theme"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" Name=3D"Placeholder =
+Text"/>
+  <w:LsdException Locked=3D"false" Priority=3D"1" QFormat=3D"true" Name=3D"=
+No Spacing"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" Name=3D"Revision"/>
+  <w:LsdException Locked=3D"false" Priority=3D"34" QFormat=3D"true"
+   Name=3D"List Paragraph"/>
+  <w:LsdException Locked=3D"false" Priority=3D"29" QFormat=3D"true" Name=3D=
+"Quote"/>
+  <w:LsdException Locked=3D"false" Priority=3D"30" QFormat=3D"true"
+   Name=3D"Intense Quote"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"60" Name=3D"Light Shading Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"61" Name=3D"Light List Accen=
+t 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"62" Name=3D"Light Grid Accen=
+t 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"63" Name=3D"Medium Shading 1=
+ Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"64" Name=3D"Medium Shading 2=
+ Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"65" Name=3D"Medium List 1 Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"66" Name=3D"Medium List 2 Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"67" Name=3D"Medium Grid 1 Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"68" Name=3D"Medium Grid 2 Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"69" Name=3D"Medium Grid 3 Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"70" Name=3D"Dark List Accent=
+ 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"71" Name=3D"Colorful Shading=
+ Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"72" Name=3D"Colorful List Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"73" Name=3D"Colorful Grid Ac=
+cent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"19" QFormat=3D"true"
+   Name=3D"Subtle Emphasis"/>
+  <w:LsdException Locked=3D"false" Priority=3D"21" QFormat=3D"true"
+   Name=3D"Intense Emphasis"/>
+  <w:LsdException Locked=3D"false" Priority=3D"31" QFormat=3D"true"
+   Name=3D"Subtle Reference"/>
+  <w:LsdException Locked=3D"false" Priority=3D"32" QFormat=3D"true"
+   Name=3D"Intense Reference"/>
+  <w:LsdException Locked=3D"false" Priority=3D"33" QFormat=3D"true" Name=3D=
+"Book Title"/>
+  <w:LsdException Locked=3D"false" Priority=3D"37" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" Name=3D"Bibliography"/>
+  <w:LsdException Locked=3D"false" Priority=3D"39" SemiHidden=3D"true"
+   UnhideWhenUsed=3D"true" QFormat=3D"true" Name=3D"TOC Heading"/>
+  <w:LsdException Locked=3D"false" Priority=3D"41" Name=3D"Plain Table 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"42" Name=3D"Plain Table 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"43" Name=3D"Plain Table 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"44" Name=3D"Plain Table 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"45" Name=3D"Plain Table 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"40" Name=3D"Grid Table Light=
+"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46" Name=3D"Grid Table 1 Lig=
+ht"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51" Name=3D"Grid Table 6 Col=
+orful"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52" Name=3D"Grid Table 7 Col=
+orful"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"Grid Table 1 Light Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"Grid Table 2 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"Grid Table 3 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"Grid Table 4 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"Grid Table 5 Dar=
+k Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"Grid Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"Grid Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46" Name=3D"List Table 1 Lig=
+ht"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51" Name=3D"List Table 6 Col=
+orful"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52" Name=3D"List Table 7 Col=
+orful"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked=3D"false" Priority=3D"46"
+   Name=3D"List Table 1 Light Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"47" Name=3D"List Table 2 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"48" Name=3D"List Table 3 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"49" Name=3D"List Table 4 Acc=
+ent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"50" Name=3D"List Table 5 Dar=
+k Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"51"
+   Name=3D"List Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked=3D"false" Priority=3D"52"
+   Name=3D"List Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Mention"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Smart Hyperlink"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Hashtag"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Unresolved Mention"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Smart Link"/>
+  <w:LsdException Locked=3D"false" SemiHidden=3D"true" UnhideWhenUsed=3D"tr=
+ue"
+   Name=3D"Smart Link Error"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:\5B8B\4F53;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536869121 1107305727 33554432 0 415 0;}
+@font-face
+	{font-family:MicrosoftLogo95;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Times New Roman";
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:"Lucida Sans Typewriter";
+	panose-1:2 11 5 9 3 5 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:MSIcons;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 0 0 0 0 0;}
+@font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 6 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 2048 0 0 159 0;}
+@font-face
+	{font-family:"Arial Black";
+	panose-1:2 11 10 4 2 1 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-1610612049 1073772795 0 0 159 0;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 680460288 22 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-name:"Normal\,DO NOT USE\,n";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+h1
+	{mso-style-name:"Heading 1\,H1";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-36.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	mso-hyphenate:none;
+	font-size:16.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h2
+	{mso-style-name:"Heading 2\,H2";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"Heading 1\,H1";
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-18.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	mso-hyphenate:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h3
+	{mso-style-name:"Heading 3\,H3";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h4
+	{mso-style-name:"Heading 4\,H4";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-outline-level:4;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h5
+	{mso-style-name:"Heading 5\,DO NOT USE_h5";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-outline-level:5;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;}
+h6
+	{mso-style-name:"Heading 6\,DO NOT USE_h6";
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-outline-level:6;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{mso-style-name:"TOC 1\,toc1";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{mso-style-name:"TOC 2\,toc2";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{mso-style-name:"TOC 3\,toc3";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:24.0pt;
+	line-height:11.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:30.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:40.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:50.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:60.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:70.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:80.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 351.35pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 216.0pt right 432.0pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-name:"Footer\,f";
+	mso-style-noshow:yes;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-161.3pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:center 98.5pt right 351.0pt;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+span.MsoPageNumber
+	{mso-style-noshow:yes;
+	mso-style-unhide:no;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.zzSanSerif, li.zzSanSerif, div.zzSanSerif
+	{mso-style-name:zzSanSerif;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Text, li.Text, div.Text
+	{mso-style-name:"Text\,t";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Platform, li.Platform, div.Platform
+	{mso-style-name:"Platform\,pl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Descriptor\,pd";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-163.0pt;
+	margin-bottom:.0001pt;
+	text-align:right;
+	mso-pagination:widow-orphan lines-together no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:24.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:36.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ProductDescriptor, li.ProductDescriptor, div.ProductDescriptor
+	{mso-style-name:"Product Descriptor\,pd";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:50.0pt;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.zzMargin, li.zzMargin, div.zzMargin
+	{mso-style-name:zzMargin;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListBulletedItem1, li.ListBulletedItem1, div.ListBulletedItem1
+	{mso-style-name:"List Bulleted Item 1\,lb1";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:-67.7pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-indent:-18.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.zzSpacing, li.zzSpacing, div.zzSpacing
+	{mso-style-name:zzSpacing;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:right;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+span.KeyName
+	{mso-style-name:"*Key Name\,kn";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.Spacing6points, li.Spacing6points, div.Spacing6points
+	{mso-style-name:"Spacing 6 points\,6";
+	mso-style-unhide:no;
+	mso-style-parent:zzSpacing;
+	mso-style-next:"Text\,t";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:6.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ListText1, li.ListText1, div.ListText1
+	{mso-style-name:"List Text 1\,lt1";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"List Bulleted Item 1\,lb1";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListBulletedItem2, li.ListBulletedItem2, div.ListBulletedItem2
+	{mso-style-name:"List Bulleted Item 2\,lb2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:24.0pt;
+	text-indent:-12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListText2, li.ListText2, div.ListText2
+	{mso-style-name:"List Text 2\,lt2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:24.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Art, li.Art, div.Art
+	{mso-style-name:"Art\,a";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ListArt1, li.ListArt1, div.ListArt1
+	{mso-style-name:"List Art 1\,la";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtWide, li.ArtWide, div.ArtWide
+	{mso-style-name:"Art Wide\,aw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Legalese, li.Legalese, div.Legalese
+	{mso-style-name:"Legalese\,l";
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:7.5pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:184.5pt;
+	font-size:7.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ProductHead, li.ProductHead, div.ProductHead
+	{mso-style-name:"Product Head\,ph";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Name\,pn";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-162.7pt;
+	margin-bottom:.0001pt;
+	line-height:28.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan lines-together no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:28.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:36.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ProductName, li.ProductName, div.ProductName
+	{mso-style-name:"Product Name\,pn";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Platform\,pl";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-162.7pt;
+	margin-bottom:.0001pt;
+	line-height:32.0pt;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:28.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-2.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Product-MS, li.Product-MS, div.Product-MS
+	{mso-style-name:"Product-MS\,pms";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product Head\,ph";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-163.0pt;
+	margin-bottom:.0001pt;
+	mso-line-height-alt:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:20.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-1.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Logo-Microsoft, li.Logo-Microsoft, div.Logo-Microsoft
+	{mso-style-name:Logo-Microsoft;
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Product-MS\,pms";
+	margin-top:10.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:24.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"MicrosoftLogo95",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	position:relative;
+	top:4.0pt;
+	mso-text-raise:-4.0pt;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.ConditionalMark
+	{mso-style-name:"*Conditional Mark\,cm";
+	mso-style-unhide:no;
+	color:maroon;
+	display:none;
+	mso-hide:all;}
+p.BoxArt, li.BoxArt, div.BoxArt
+	{mso-style-name:"Box Art\,ba";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Box Summary\,bs";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:100.0pt;
+	mso-element-frame-hspace:9.35pt;
+	mso-element-frame-vspace:9.35pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.65pt;
+	mso-element-top:9.4pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.BoxSummary, li.BoxSummary, div.BoxSummary
+	{mso-style-name:"Box Summary\,bs";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:100.0pt;
+	mso-element-frame-hspace:9.35pt;
+	mso-element-frame-vspace:9.35pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.65pt;
+	mso-element-top:9.4pt;
+	mso-height-rule:exactly;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.Quote1, li.Quote1, div.Quote1
+	{mso-style-name:"Quote1\,q";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Quote Name\,qn";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:16.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.QuoteName, li.QuoteName, div.QuoteName
+	{mso-style-name:"Quote Name\,qn";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.ArtCaptionSecondary, li.ArtCaptionSecondary, div.ArtCaptionSecondary
+	{mso-style-name:"Art Caption Secondary\,acs";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.ListSequentialItem1, li.ListSequentialItem1, div.ListSequentialItem1
+	{mso-style-name:"List Sequential Item 1\,ls";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtSecondary, li.ArtSecondary, div.ArtSecondary
+	{mso-style-name:"Art Secondary\,as";
+	mso-style-unhide:no;
+	mso-style-parent:zzMargin;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	mso-element:frame;
+	mso-element-frame-width:143.0pt;
+	mso-element-frame-hspace:9.0pt;
+	mso-element-frame-vspace:9.0pt;
+	mso-element-wrap:around;
+	mso-element-anchor-vertical:paragraph;
+	mso-element-anchor-horizontal:margin;
+	mso-element-left:-162.95pt;
+	mso-element-top:.05pt;
+	mso-height-rule:exactly;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableHeading, li.TableHeading, div.TableHeading
+	{mso-style-name:"Table Heading\,th";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:white;
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ArtCaption, li.ArtCaption, div.ArtCaption
+	{mso-style-name:"Art Caption\,ac";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.TableRule, li.TableRule, div.TableRule
+	{mso-style-name:"Table Rule\,tr";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Table Text\,tt";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:2.0pt;
+	line-height:2.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.TableText, li.TableText, div.TableText
+	{mso-style-name:"Table Text\,tt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	line-height:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ArtCaptionList, li.ArtCaptionList, div.ArtCaptionList
+	{mso-style-name:"Art Caption List\,acl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"List Art 1\,la";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.TOCHeading1, li.TOCHeading1, div.TOCHeading1
+	{mso-style-name:"TOC Heading1\,toch";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"TOC 1\,toc1";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableTitleWide, li.TableTitleWide, div.TableTitleWide
+	{mso-style-name:"Table Title Wide\,ttlw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ArtCaptionWide, li.ArtCaptionWide, div.ArtCaptionWide
+	{mso-style-name:"Art Caption Wide\,acw";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.NoteText, li.NoteText, div.NoteText
+	{mso-style-name:"Note Text\,nt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:3.0pt 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.NoteHead
+	{mso-style-name:"Note Head\,nh";
+	mso-style-unhide:no;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.NoteTextIndented, li.NoteTextIndented, div.NoteTextIndented
+	{mso-style-name:"Note Text Indented\,nti";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:3.0pt 0cm 3.0pt 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableArt, li.TableArt, div.TableArt
+	{mso-style-name:"Table Art\,tart";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Table Text\,tt";
+	margin-top:2.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableTitle, li.TableTitle, div.TableTitle
+	{mso-style-name:"Table Title\,ttl";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableListBulletedItem1, li.TableListBulletedItem1, div.TableListBulletedI=
+tem1
+	{mso-style-name:"Table List Bulleted Item 1\,tlb";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.zzMono, li.zzMono, div.zzMono
+	{mso-style-name:zzMono;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Lucida Sans Typewriter";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.CodeText, li.CodeText, div.CodeText
+	{mso-style-name:"Code Text\,ct";
+	mso-style-unhide:no;
+	mso-style-parent:zzMono;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.ListCodeText1, li.ListCodeText1, div.ListCodeText1
+	{mso-style-name:"List Code Text 1\,lct1";
+	mso-style-unhide:no;
+	mso-style-parent:zzMono;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:12.0pt;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Lucida Sans Typewriter";
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+span.CodeContinuation
+	{mso-style-name:"*Code Continuation\,ccont";
+	mso-style-unhide:no;
+	mso-ansi-font-size:14.0pt;
+	font-family:MSIcons;
+	mso-ascii-font-family:MSIcons;
+	mso-hansi-font-family:MSIcons;
+	mso-no-proof:yes;}
+p.TableListBulletedItem2, li.TableListBulletedItem2, div.TableListBulletedI=
+tem2
+	{mso-style-name:"Table List Bulleted Item 2\,tlb2";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:2.0pt;
+	margin-left:24.5pt;
+	text-indent:-12.25pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.Heading1wide, li.Heading1wide, div.Heading1wide
+	{mso-style-name:"Heading 1 wide\,h1w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 1\,H1";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.Copyright
+	{mso-style-name:"*Copyright\,copy";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.Registered
+	{mso-style-name:"*Registered\,reg";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.Trademark
+	{mso-style-name:"*Trademark\,tm";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.ListSequentialItem2, li.ListSequentialItem2, div.ListSequentialItem2
+	{mso-style-name:"List Sequential Item 2\,ls2";
+	mso-style-unhide:no;
+	mso-style-parent:"List Sequential Item 1\,ls";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:4.0pt;
+	margin-left:0cm;
+	text-indent:12.0pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.TableFootnoteText, li.TableFootnoteText, div.TableFootnoteText
+	{mso-style-name:"Table Footnote Text\,tft";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:12.0pt;
+	text-indent:-12.0pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:12.0pt;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+span.Italic
+	{mso-style-name:"Italic\,i";
+	mso-style-unhide:no;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.FooterRule, li.FooterRule, div.FooterRule
+	{mso-style-name:"Footer Rule\,fr";
+	mso-style-unhide:no;
+	mso-style-parent:"Footer\,f";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-161.3pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	tab-stops:center 98.5pt right 351.0pt;
+	border:none;
+	mso-border-top-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:1.0pt 0cm 0cm 0cm;
+	font-size:4.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+p.HeadTitle, li.HeadTitle, div.HeadTitle
+	{mso-style-name:"HeadTitle\,ht";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 1\,H1";
+	mso-style-next:"Text\,t";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-36.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:18.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	letter-spacing:-1.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.TableRulewide, li.TableRulewide, div.TableRulewide
+	{mso-style-name:"Table Rule wide\,trw";
+	mso-style-unhide:no;
+	mso-style-parent:"Table Rule\,tr";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:2.0pt;
+	line-height:2.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	border:none;
+	mso-border-bottom-alt:solid windowtext .75pt;
+	padding:0cm;
+	mso-padding-alt:0cm 0cm 0cm 0cm;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	mso-no-proof:yes;}
+p.WatermarkDate, li.WatermarkDate, div.WatermarkDate
+	{mso-style-name:"Watermark Date\,wd";
+	mso-style-unhide:no;
+	mso-style-parent:Header;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:-165.6pt;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	tab-stops:center 216.0pt right 432.0pt;
+	font-size:100.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	color:yellow;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	mso-no-proof:yes;}
+p.QuoteTitle, li.QuoteTitle, div.QuoteTitle
+	{mso-style-name:"Quote Title\,qt";
+	mso-style-unhide:no;
+	mso-style-parent:zzSanSerif;
+	mso-style-next:"Text\,t";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+span.DetailLabel
+	{mso-style-name:"*Detail Label\,det";
+	mso-style-unhide:no;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Arial Narrow",sans-serif;
+	mso-ascii-font-family:"Arial Narrow";
+	mso-hansi-font-family:"Arial Narrow";
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Heading2wide, li.Heading2wide, div.Heading2wide
+	{mso-style-name:"Heading 2 wide\,h2w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 2\,H2";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.Heading3wide, li.Heading3wide, div.Heading3wide
+	{mso-style-name:"Heading 3 wide\,h3w";
+	mso-style-unhide:no;
+	mso-style-parent:"Heading 3\,H3";
+	margin-top:5.0pt;
+	margin-right:0cm;
+	margin-bottom:3.0pt;
+	margin-left:-163.0pt;
+	mso-pagination:widow-orphan no-line-numbers;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.Placeholder
+	{mso-style-name:"*Placeholder\,p";
+	mso-style-unhide:no;
+	mso-ansi-font-size:12.0pt;
+	color:red;}
+p.lvb1, li.lvb1, div.lvb1
+	{mso-style-name:lvb1;
+	mso-style-unhide:no;
+	mso-style-parent:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.ls1, li.ls1, div.ls1
+	{mso-style-name:ls1;
+	mso-style-unhide:no;
+	mso-style-parent:"Text\,t";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:-117.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+span.EmDash
+	{mso-style-name:"*Em Dash\,emd";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+span.EnDash
+	{mso-style-name:"*En Dash\,end";
+	mso-style-unhide:no;
+	mso-style-parent:"";}
+p.ca, li.ca, div.ca
+	{mso-style-name:ca;
+	mso-style-unhide:no;
+	mso-style-parent:"Art\,a";
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:12.0pt;
+	margin-left:0cm;
+	mso-pagination:widow-orphan no-line-numbers;
+	mso-hyphenate:none;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:10.0pt;
+	mso-fareast-language:ZH-CN;}
+p.sumbody, li.sumbody, div.sumbody
+	{mso-style-name:"sum body";
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	mso-style-next:"Normal\,DO NOT USE\,n";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	line-height:9.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	color:black;
+	mso-fareast-language:ZH-CN;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	mso-fareast-font-family:SimSun;
+	mso-fareast-theme-font:minor-fareast;
+	mso-fareast-language:ZH-CN;}
+ /* Page Definitions */
+ @page
+	{mso-footnote-separator:url("complexity.docx_files/header.htm") fs;
+	mso-footnote-continuation-separator:url("complexity.docx_files/header.htm"=
+) fcs;
+	mso-endnote-separator:url("complexity.docx_files/header.htm") es;
+	mso-endnote-continuation-separator:url("complexity.docx_files/header.htm")=
+ ecs;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:-76.5pt 85.5pt -85.5pt 200.15pt;
+	mso-header-margin:36.0pt;
+	mso-footer-margin:36.0pt;
+	mso-gutter-margin:12.25pt;
+	mso-even-footer:url("complexity.docx_files/header.htm") ef1;
+	mso-footer:url("complexity.docx_files/header.htm") f1;
+	mso-paper-source:15;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:-2;
+	mso-list-type:simple;
+	mso-list-template-ids:-1;}
+@list l0:level1
+	{mso-level-start-at:0;
+	mso-level-text:*;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l1
+	{mso-list-id:6910529;
+	mso-list-type:simple;
+	mso-list-template-ids:67698703;}
+@list l1:level1
+	{mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;}
+@list l2
+	{mso-list-id:88431595;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l3
+	{mso-list-id:520821689;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l4
+	{mso-list-id:1067531074;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l5
+	{mso-list-id:1371615553;
+	mso-list-type:simple;
+	mso-list-template-ids:67698703;}
+@list l5:level1
+	{mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;}
+@list l6
+	{mso-list-id:1404371321;
+	mso-list-type:simple;
+	mso-list-template-ids:67698689;}
+@list l6:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:18.0pt;
+	mso-level-number-position:left;
+	margin-left:18.0pt;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+@list l0:level1 lfo1
+	{mso-level-start-at:1;
+	mso-level-number-format:bullet;
+	mso-level-numbering:continue;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:12.0pt;
+	mso-level-legacy-space:0cm;
+	margin-left:-73.7pt;
+	text-indent:-12.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-language:ZH-CN;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext=3D"edit" spidmax=3D"1027"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext=3D"edit">
+  <o:idmap v:ext=3D"edit" data=3D"1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=3DEN-US style=3D'tab-interval:324.0pt'>
+
+<div class=3DWordSection1>
+
+<p class=3DLogo-Microsoft style=3D'margin-right:9.35pt'><!--[if gte vml 1]>=
+<v:shapetype
+ id=3D"_x0000_t75" coordsize=3D"21600,21600" o:spt=3D"75" o:preferrelative=
+=3D"t"
+ path=3D"m@4@5l@4@11@9@11@9@5xe" filled=3D"f" stroked=3D"f">
+ <v:stroke joinstyle=3D"miter"/>
+ <v:formulas>
+  <v:f eqn=3D"if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn=3D"sum @0 1 0"/>
+  <v:f eqn=3D"sum 0 0 @1"/>
+  <v:f eqn=3D"prod @2 1 2"/>
+  <v:f eqn=3D"prod @3 21600 pixelWidth"/>
+  <v:f eqn=3D"prod @3 21600 pixelHeight"/>
+  <v:f eqn=3D"sum @0 0 1"/>
+  <v:f eqn=3D"prod @6 1 2"/>
+  <v:f eqn=3D"prod @7 21600 pixelWidth"/>
+  <v:f eqn=3D"sum @8 21600 0"/>
+  <v:f eqn=3D"prod @7 21600 pixelHeight"/>
+  <v:f eqn=3D"sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok=3D"f" gradientshapeok=3D"t" o:connecttype=3D"rect"/>
+ <o:lock v:ext=3D"edit" aspectratio=3D"t"/>
+</v:shapetype><v:shape id=3D"_x0000_i1025" type=3D"#_x0000_t75" style=3D'wi=
+dth:490.5pt;
+ height:27.75pt' fillcolor=3D"window">
+ <v:imagedata src=3D"complexity.docx_files/image001.wmz" o:title=3D""/>
+</v:shape><![endif]--><![if !vml]><img width=3D654 height=3D37
+src=3D"complexity.docx_files/image002.gif" v:shapes=3D"_x0000_i1025"><![end=
+if]></p>
+
+<p class=3DProductHead><span style=3D'font-family:"Arial Black",sans-serif'=
+><o:p>&nbsp;</o:p></span></p>
+
+<p class=3DProductHead><span style=3D'font-family:"Arial Black",sans-serif'=
+>Complexity<o:p></o:p></span></p>
+
+<p class=3DProductName><span style=3D'font-size:16.0pt;mso-bidi-font-size:1=
+0.0pt'>&#8220;</span><i
+style=3D'mso-bidi-font-style:normal'><span style=3D'font-size:16.0pt;mso-bi=
+di-font-size:
+10.0pt;font-family:"Arial Black",sans-serif'>Easy to use is easy to say, but
+hard to do</span></i><span style=3D'font-size:16.0pt;mso-bidi-font-size:10.=
+0pt'>&#8221;<o:p></o:p></span></p>
+
+<div style=3D'mso-element:para-border-div;border:none;border-bottom:solid w=
+indowtext 1.0pt;
+mso-border-bottom-alt:solid windowtext .75pt;padding:0cm 0cm 3.0pt 0cm;
+margin-left:-163.0pt;margin-right:0cm'>
+
+<p class=3DProductDescriptor style=3D'margin-left:0cm;tab-stops:67.5pt'>Jim=
+ Allchin
+&#8211; 9/4/97</p>
+
+<p class=3DProductDescriptor style=3D'margin-left:0cm;tab-stops:67.5pt'><sp=
+an
+style=3D'mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+
+</div>
+
+<p class=3DText><o:p>&nbsp;</o:p></p>
+
+<p class=3DText>While I think everyone acknowledges that our software and P=
+Cs in
+general are hard to use, I don&#8217;t think the magnitude of the problem is
+understood at all.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>No o=
+ther consumer
+product in history has been so hard to use and so fragile.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Yet computers and software h=
+ave
+continued selling despite this.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It is an amazing testa=
+ment
+to all the benefits that personal computers bring that consumers are willin=
+g to
+put up with the vast array of associated problems.</p>
+
+<p class=3DText>All of us have our horror stories about spouses, neighbors,
+family members, <i style=3D'mso-bidi-font-style:normal'>ourselves </i>where=
+ we
+wasted a weekend (or longer!) trying to get something to work.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We are supposed to be
+experts, but even we can&#8217;t get things to work properly.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(Any one who gets ISDN
+working without getting help from someone else deserves an award.)<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>It is a total
+embarrassment.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Cr=
+aig
+Mundie said to me recently that he never touches his machines in his home
+except at the beginning of a weekend because it knows it might take the ent=
+ire
+weekend to recover from whatever goes wrong.</p>
+
+<p class=3DText>What is fascinating is that when you talk to average users,=
+ they
+assume that <i style=3D'mso-bidi-font-style:normal'>they </i>aren&#8217;t s=
+mart
+enough or that <i style=3D'mso-bidi-font-style:normal'>they</i> are doing
+something wrong when the computer doesn&#8217;t work properly.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>However, if thos=
+e same
+people were dealing with other consumer appliances, they would more than li=
+kely
+say that the appliance was designed wrong.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>There is even a culture grow=
+ing
+dealing with &#8220;idiots&#8221; and &#8220;dummies&#8221; that have to wo=
+rk
+with computers.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>This is=
+ an
+amazing social phenomenon.<span style=3D'mso-spacerun:yes'>&nbsp;
+</span>Eventually consumers will wake up with the equivalent of Ralph Nader
+taking the lead.</p>
+
+<p class=3DText>So, is it just that software has gotten so complicated that=
+ we
+can&#8217;t make the system resilient and easy to use any more?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Is it that the demands=
+ for
+features mean that we can&#8217;t focus on na&iuml;ve users?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Is performance or
+memory size more important than consistent operation?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>What are we goin=
+g to
+do about the hardware companies that continue building unreliable PC produc=
+ts?</p>
+
+<p class=3DText>Our software is approaching massive size (and internal
+complexity).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>NT
+Workstation 5.0 will have around 27 million lines of code at Beta 1 &#8211;=
+ and
+more will be added before it finally ships some time next year.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>For perspective,=
+ the first
+version of NT only had around 6 million lines of code.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>In my view howev=
+er,
+the size of the system has nothing to do with whether the system can be made
+resilient or easy to use.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>In fact, more software is required to make systems consistent and mo=
+re
+reliable; it just has to be the <i style=3D'mso-bidi-font-style:normal'>rig=
+ht</i>
+software.</p>
+
+<p class=3DText>Our products are becoming more and more feature rich.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We have ways to
+&#8220;tweak&#8221; virtually everything.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>The amount of
+information known publicly about flags/fields stored in the registry and ho=
+w to
+tailor aspects of the software is amazing.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>We present user
+interface dialog box tabs covering technical features that only a miniscule
+fraction of all users will ever need (or understand).<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>You could argue that t=
+his is
+great --- it&#8217;s a Turing machine, you know &#8211; you can customize i=
+t to
+do anything.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>Unfortunately, we seem to look at these things as a computer geek do=
+es
+and forget about &#8220;the rest of us&#8221;.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>On the other han=
+d, we
+have done some good work in areas where we have added features (e.g., spell=
+ing
+correction in Word) which do not add additional complexity.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>I believe you can
+simplify the experience for na&iuml;ve users and still maintain the flexibi=
+lity
+for power users.</p>
+
+<p class=3DText>What about performance?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Is it ok to trade off
+consistency or reliability for performance?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>How about trading off consis=
+tency
+or reliability for smaller memory size?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Is it ok to make=
+ the
+system super fast <i style=3D'mso-bidi-font-style:normal'>most</i> of the t=
+ime,
+if it doesn&#8217;t operate correctly (or crashes) in some rare cases?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Microsoft has a
+disease dealing with these questions.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>I have been in many meetings=
+ where
+tradeoffs like this are actively discussed from billg on down.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>&#8220;We could =
+win the
+benchmark.&#8221;<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>&#8220;It saves 80K of memory.&#8221;<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>This is a travesty.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It would be better to =
+not
+have a feature than have one that doesn&#8217;t work consistently 100% of t=
+he
+time. </p>
+
+<p class=3DText>So the question is:<span style=3D'mso-spacerun:yes'>&nbsp;
+</span>Is it possible to have a set of rules that guide the development of
+software that is more resilient, consistent, and easier to use?<span
+style=3D'mso-spacerun:yes'>&nbsp; </span>Unfortunately, software is still a=
+rt and
+I do not know of any perfect rules, but I do believe there is a philosophy =
+that
+can be adopted to start addressing our complexity morass.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The rest of this paper
+covers this philosophy.</p>
+
+<p class=3DText>The thoughts below may seem very obvious.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>You may disagree with =
+some
+of them.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Nevertheless, I
+claim that following these rules would result in software order of magnitude
+less complex and friendlier to humans.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>The question is =
+why
+don&#8217;t we follow them. </p>
+
+<p class=3DText><o:p>&nbsp;</o:p></p>
+
+<h1 style=3D'margin-left:-139.5pt'>Quality</h1>
+
+<p class=3DText>From rec.humor.funny:</p>
+
+<table class=3DMsoNormalTable border=3D1 cellspacing=3D0 cellpadding=3D0
+ style=3D'margin-left:-62.1pt;border-collapse:collapse;mso-table-layout-alt=
+:fixed;
+ border:none;mso-border-alt:solid windowtext .5pt;mso-padding-alt:0cm 5.4pt=
+ 0cm 5.4pt;
+ mso-border-insideh:.5pt solid windowtext;mso-border-insidev:.5pt solid win=
+dowtext'>
+ <tr style=3D'mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes;
+  height:171.4pt'>
+  <td width=3D241 valign=3Dtop style=3D'width:180.9pt;border:solid windowte=
+xt 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:1=
+71.4pt'>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>Multitasking</b></p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>Yo=
+u can
+  crash several programs all at once.<span
+  style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>No waiting!</p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>Built-in Networking<o:p></o:p></b><=
+/p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>Yo=
+u can
+  crash several PC&#8217;s all at once.<span
+  style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>No need to buy Novell Pers=
+onal
+  Netware or LANtastic to crash.</p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>Microsoft Network<o:p></o:p></b></p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>Co=
+nnect with
+  other Windows 95 users and talk about your crash experiences.</p>
+  </td>
+  <td width=3D242 valign=3Dtop style=3D'width:181.25pt;border:solid windowt=
+ext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt;height:171.4pt'>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>PnP<o:p></o:p></b></p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>Pl=
+ug and
+  Pray (that it works)</p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>Multimedia<o:p></o:p></b></p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>Ex=
+perience
+  the immense sign and sound of crashing.</p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'><b
+  style=3D'mso-bidi-font-weight:normal'>Compatible with existing software<o=
+:p></o:p></b></p>
+  <p class=3DText align=3Dleft style=3D'margin-left:0cm;text-align:left'>It=
+ will also
+  crash your existing software</p>
+  </td>
+ </tr>
+</table>
+
+<p class=3DText><o:p>&nbsp;</o:p></p>
+
+<p class=3DText>From KISS Software, Rescue Me! Product advertisement:
+&#8220;There are over 9,345 ways to trash your system.&#8221; &#8220;Window=
+s in
+your TV?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Who wants to b=
+oot
+your TV every few hours?&#8221; I could go on and on.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Our products have a po=
+or
+quality reputation.</p>
+
+<p class=3DText>Quality is about ensuring the system works consistently: ev=
+ery
+time, all the time.<span style=3D'mso-spacerun:yes'>&nbsp; </span><span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;</span>A key metric I think about is
+crashing.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Our software =
+should
+never crash &#8211; period.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;
+</span>We ship software today that we <i style=3D'mso-bidi-font-style:norma=
+l'>know</i>
+has bugs in it that can crash the system or that has architectural holes th=
+at
+would allow an errant application to crash the system.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We are under &#8220;ma=
+rket
+pressure&#8221; and somehow are able to convince ourselves that the likelih=
+ood
+of the condition (usually very complicated) occurring is very small and so =
+it
+is ok to ship the product and fix it in the next release. </p>
+
+<p class=3DText>The first building block for making a system easy to use is
+quality.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Quality
+doesn&#8217;t make a system easy to use; on the other hand, you can&#8217;t=
+ have
+a good system without it.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </sp=
+an>You
+can have a very hard to use system that has high quality.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>MVS or VM/CP represent such
+systems.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Once you=
+ get
+one of these systems running they are amazing resilient to hardware and
+software problems.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </spa=
+n>I
+spent time with IBM engineers adding code for some of the error recovery pa=
+ths
+for VM/CP.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>=
+Tons
+of code exists to handle faults in these types of systems.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>It&#8217;s not t=
+hat
+these systems were designed correctly.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>If you changed a line of cod=
+e you
+were required to add your initials to the comment field on that line.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>I would look at pages =
+and
+pages of BAL assembler code where the comment field of <i style=3D'mso-bidi=
+-font-style:
+normal'>every</i> line had been updated.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>And not by a single
+person.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>In more c=
+ases
+than not, there would be 5 or more initials on the same BAL line.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Code (and qualit=
+y?) by
+brute force.</p>
+
+<p class=3DText>So everyone says they support quality (Mom and apple pie,
+right?).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Wh=
+at
+should we change?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span=
+></p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+6 level1 lfo3;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We should tradeoff compatibility for quality=
+ if
+necessary.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>=
+At a
+minimum if we know that being compatible with some feature (from the past)
+could cause the system to crash or get in some inconsistent state, then we
+should have an option that a user can select that prevents the compatibilit=
+y,
+in favor of stability.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>Users then have a choice in how the system operates.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+3 level1 lfo4;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No algorithms should be used which we know a
+priori could cause the system to fail or enter an inconsistent state.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>No benchmark, size, or
+schedule crunch should be allowed to come between quality and us.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+3 level1 lfo4;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We must ensure that PC hardware doesn&#8217;t
+impede our quality efforts.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;
+</span>The classic example here is ISA slots allowing non-PnP cards to be
+supported.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>But, i=
+t goes
+beyond this.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We n=
+eed to
+drive the industry to address areas that are likely causes of consumer issu=
+es
+and faults in the system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>An example here would be the fact that PC-Card (or PCMCIA) devices c=
+an
+be removed without warning from the system.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>That&#8217;s like bein=
+g able
+to rip a CD out of your audio system while it is still moving and playing.<=
+span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If we want to improve =
+the
+experience for end-users, we must focus on improving the fragile hardware we
+have today in PCs.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Resiliency</h1>
+
+<p class=3DText>Ok, suppose the system doesn&#8217;t crash. <span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;</span>But, does it recover graceful=
+ly
+from problems?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Resilien=
+cy is
+about having the system recover automatically from environmental issues (e.=
+g.,
+server going away, DHCP server not found, etc.) or common user mistakes.</p>
+
+<p class=3DText>This takes a very specific designer mindset.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>You have to assume tha=
+t if
+something could go wrong, it will and then program defensively for these
+problems.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Too oft=
+en I
+find designers programming for the case when everything works perfectly.<sp=
+an
+style=3D'mso-spacerun:yes'>&nbsp; </span>When an error occurs, they simply =
+give
+up, spew an error message to the screen, and return an error message to the=
+ir
+caller (who of course does nothing with the error except return it to their
+caller, etc.).</p>
+
+<p class=3DText>Networking is perhaps the area where this is most visible.<=
+span
+style=3D'mso-spacerun:yes'>&nbsp; </span>Our networking code is extremely f=
+ragile
+today.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Virtually =
+any
+problem (lost packet, server not responding after we have a connection to i=
+t,
+configuration error, etc.) either makes the system totally unresponsive (wi=
+th
+no indication to the end-user what is going on) or worse yet it actually st=
+ops
+working correctly.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span>This lack of resiliency is a problem for the operating system (e.g.,
+networking errors during authentication, etc.), but it&#8217;s also a probl=
+em
+for applications such as mail, calendar, chat, browsing, etc.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>No other peripheral is=
+ more
+error prone today than the network.<span style=3D'mso-spacerun:yes'>&nbsp;&=
+nbsp;
+</span>It takes special designs to deal with this.</p>
+
+<p class=3DText>How many times does your computer just sit there doing noth=
+ing
+after you entered a command.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;
+</span>There is no disk activity; no screen activity; nothing.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>But, you can&#8217;t do anyt=
+hing
+since the application or the operating system is &#8220;locked up&#8221;.<s=
+pan
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>This is because the so=
+ftware
+isn&#8217;t handling the network (flakiness) correctly.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The network will conti=
+nue to
+be very error prone (e.g., different delays, outages, errors, node failures,
+etc.) for quite some time in the future.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Moreover, the fact that we w=
+ant to
+be mobile moving between wireless cells or connecting between very different
+speed networks means that handling networking resiliency must be a top prio=
+rity
+for us.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span><span
+style=3D'mso-spacerun:yes'>&nbsp;</span>Architecturally, we need to learn a=
+bout
+network errors in a standard way and then avoid multiple timeouts, nested
+retries, etc.</p>
+
+<p class=3DText>We do have parts of the operating system that are more resi=
+lient
+today than other parts.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span=
+>One
+example is scandisk that automatically &#8220;repairs&#8221; the system if
+there are disk inconsistencies detected.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The issue today is that
+scandisk may not correct the problem totally.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>In fact, it could delete a
+critical file.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>St=
+ill it
+is better than not doing anything.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Assuming that we must =
+have a
+utility like scandisk (because of the file system design) we need to ensure
+that upper levels of the software can recover from perhaps poor deletion
+choices that scandisk might make.<span style=3D'mso-spacerun:yes'>&nbsp;&nb=
+sp;
+</span>(Furthermore, as noted later, if we have to have scandisk utilities,
+they should run silently without introducing the user to any bizarre
+terminology or operational choices.)</p>
+
+<p class=3DText>Resiliency is about keeping the system running at all costs=
+.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>An example of this is =
+that
+if the NT 4 shell (or IE 4 shell on NT 5) dies, the desktop disappears for a
+second.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>But, the
+operating system restarts the shell quietly in the background.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The system is resilien=
+t to
+shell faults.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Thi=
+s is
+not the case with win95 or win98.</p>
+
+<p class=3DText>Ways to improve resiliency:</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Auto-configure.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Do not let the user configure
+things.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Networkin=
+g is
+one of the most complicated areas of our system.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Asking a novice (or ev=
+en an
+&#8220;expert&#8221;) to configure a protocol stack is like asking a layper=
+son
+to do surgery &#8211; it takes training and even then they sometimes make a
+mistake.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>If=
+ you
+can't auto-configure, then the system should probably be redesigned so that=
+ it
+can be auto-configured.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Assume a machine is transiently connected to=
+ the
+network.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Never al=
+low
+the user interface to be stopped by a network outage. <span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span>Switch gracefully (but
+visibly) from network mode to offline mode.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span></p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Once an error is detected (e.g., network
+timeout), it should be sensed only once.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>That is, at most one timeout
+should happen until there is good communications established again.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+4 level1 lfo5;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Design for error cases even if it means the
+regular operation of the system is impacted slightly.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>A good example here is out o=
+f disk
+space.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Assume you=
+ run
+out of disk space at the worse possible time.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Will the system still
+function correctly?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </sp=
+an>Can
+the user still remove some space?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If it takes allocating=
+ some
+free disk space as a buffer during normal operation (to ensure that the sys=
+tem
+is still totally functional) then do it.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Terminology</h1>
+
+<p class=3DText>For some strange reason we insist on trying to teach people=
+ a
+foreign language: <i style=3D'mso-bidi-font-style:normal'>geektalk</i>.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>My Mom doesn&#8217;t want to=
+ learn
+another language right now.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nb=
+sp;
+</span>She just wants to track her church work, write letters, exchange ema=
+il,
+track her budget, look for things on the Internet, etc.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText>Geektalk is actually one of our worse sins in interacting w=
+ith a
+user.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Our systems=
+ tend
+to produce more internal information than a user needs to know and in doing=
+ so
+we use terms that only a computer literate person (and in some cases
+programmer) would understand.</p>
+
+<p class=3DText>Turn on (note a na&iuml;ve user thinks a &#8220;boot&#8221;=
+ is a
+shoe) any PC and just watch the words/characters fly by.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText style=3D'margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style=3D'mso-bidi-font-weig=
+ht:
+normal'>24576 KB OK <o:p></o:p></b></p>
+
+<p class=3DText style=3D'margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style=3D'mso-bidi-font-weig=
+ht:
+normal'>SystemSoft BIOS for Opt Viper 557/508N 1.00 (2450-35) (Version 01.1=
+1)<o:p></o:p></b></p>
+
+<p class=3DText style=3D'margin-top:0cm;margin-right:0cm;margin-bottom:0cm;
+margin-left:-117.35pt;margin-bottom:.0001pt'><b style=3D'mso-bidi-font-weig=
+ht:
+normal'>SystemSoft Plug-n-Play BIOS<o:p></o:p></b></p>
+
+<p class=3DText><b style=3D'mso-bidi-font-weight:normal'>&lt;F10&gt; to ent=
+er
+Computer Setup</b></p>
+
+<p class=3DText>Oh, I see&#8230;</p>
+
+<p class=3DText>Now of all of the above, what do you think a first time use=
+r <i
+style=3D'mso-bidi-font-style:normal'>has</i> to know?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>What terms would they
+know?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Why do we i=
+nsist
+on telling a user all these things?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>I believe it is
+because the system is basically in debug mode all the time.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We never know when a u=
+ser
+might have to know the internals of the system to deal with a problem.</p>
+
+<p class=3DText>When our software starts running we are even worse.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>I can&#8217;t even beg=
+in to
+represent the insane number of terms we use.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>We use terms such as &#8220;=
+FAT32&#8221;,
+&#8220;clusters&#8221;, &#8220;defragging&#8221;, &#8220;DHCP&#8221;,
+&#8220;DNS&#8221;, &#8220;WBEM&#8221;, &#8220;WAN Mini-port&#8221;,
+&#8220;ODBC&#8221;, &#8220;enable IP forwarding&#8221;, &#8220;bindings&#82=
+21;,
+&#8220;NDIS Proxy TAPI Service Provider&#8221;, &#8220;Video Compression
+Codecs&#8221;, &#8220;Device Tree&#8221;, &#8220;devmgmt&#8221;, IRQ, DMA,
+&#8220;Launch Internet Explorer Browser&#8221; (launch?), &#8220;Insert Act=
+iveX
+Monitor Control&#8221;, etc. </p>
+
+<p class=3DText>And our error messages are nothing short of amazing.<span
+style=3D'mso-spacerun:yes'>&nbsp; </span>Consider these error messages from=
+ NT 5:</p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No IPSEC Policy DN. </p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>{A79C9582-19D1-11D1-91C7-C4252BDEA3A4} : Cou=
+ld
+not find an adapter.</p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>The Net Logon service terminated with servic=
+e-specific
+error 3095. </p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>No Windows NT Domain Controller is available=
+ for
+domain NTWKSTA. (This event is expected and can be ignored when booting with
+the 'No Net' Hardware Profile.)<span style=3D'mso-spacerun:yes'>&nbsp; </sp=
+an>The
+following error occurred: The RPC server is unavailable. </p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Illegal instruction</p>
+
+<p class=3DText style=3D'margin-left:-72.0pt;text-indent:-22.5pt;mso-list:l=
+2 level1 lfo7;
+tab-stops:list -72.0pt'><![if !supportLists]><span style=3D'font-family:Sym=
+bol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style=3D'mso-list:Ignore'>&middot;<span style=3D'font:7.0pt "Times New Roma=
+n"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>And on and on.</p>
+
+<p class=3DText>When a TV is sold the manufacturer doesn&#8217;t have to ex=
+plain
+how to read the color bands (detailing resistance) on some resistor that is
+used.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Why do we i=
+nsist
+on trying to make computer people out of everyone?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>We are still mak=
+ing
+software for the hobbyist.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbs=
+p;
+</span>We need to make software for the consumer.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Do we want the u=
+ser to
+debug the system?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span=
+>Is
+our software so unreliable that we have to be in pseudo debugging mode all =
+the
+time?</p>
+
+<p class=3DText>Of all the issues raised in this paper, reducing information
+dumping and simplifying/removing terminology is the easiest to change.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Every product should h=
+ave a
+glossary of terms that is used throughout the product.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We can introduce new
+(computer) concepts to end-users, but they should be done with great care.<=
+span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Developers and user
+education (e.g., help, documentation) should only communicate using
+layperson&#8217;s language and the approved glossary.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText>One other key point is that some areas of a product might r=
+equire
+more advanced knowledge and therefore a richer set of terms.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>In this case there sho=
+uld be
+an advanced button (or tool) that permits access to these terms (otherwise =
+they
+are hidden).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>In general
+though these advanced dialogs should be avoided.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Why?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Because having the con=
+cepts
+exposed at all makes it hard to avoid having some error/information message=
+ pop
+out at a na&iuml;ve user (e.g., &#8220;can&#8217;t renew IP address because
+DHCP server is not responding&#8221;).<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It would be far better=
+ in my
+view to have a command line utility that adjusts certain parameters (as in
+debugging mode), then have this information exposed in a general UI.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Then we would never ha=
+ve to
+even explain what something like a DHCP server was to an end-user.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Consistency</h1>
+
+<p class=3DText>Lack of consistency is a key problem in our user interface =
+and
+our underlying conceptual model. Humans are amazingly adept at dealing with
+ambiguity and inconsistency &#8211; but only up to a point.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Much of learning is ab=
+out
+understanding rules.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </s=
+pan>If
+A, then B.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>=
+Anyone
+who programs knows that deep nesting of <b style=3D'mso-bidi-font-weight:no=
+rmal'>if</b>/<b
+style=3D'mso-bidi-font-weight:normal'>else </b>statements is very difficult=
+ to
+debug.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>In every d=
+ay
+life it is no different.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </spa=
+n>If
+you have to memorize one exception after exception, it is very difficult to=
+ not
+make mistakes unless you are living and breathing the environment constantl=
+y.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Teaching someone about=
+ the
+system deals with teaching him or her about the rules.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>You want the rules to =
+be
+very simple: if you do this, then that happens. </p>
+
+<p class=3DText>Our systems have tons of footnotes on how it works.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Let&#8217;s look at so=
+me
+examples.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText><b style=3D'mso-bidi-font-weight:normal'>Inconsistent drag-=
+drop</b>.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>When you drag a file from one
+place to another, it would seem reasonable that the file will be moved, not
+copied.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Tha=
+t rule
+is not correct however.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>If you drag a file on the same disk, then the file is moved.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>However, if you drag b=
+etween
+disks, the files are copied &#8211; not moved.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If you drag an EXE, th=
+en a
+shortcut is created, and the file is neither copied nor moved &#8211; that =
+is,
+unless the destination is a removable drive.</p>
+
+<p class=3DText><b style=3D'mso-bidi-font-weight:normal'>Tray</b>.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>This area on the screen
+doesn&#8217;t seem to follow <i style=3D'mso-bidi-font-style:normal'>any</i>
+rules.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It holds m=
+ostly
+icons except for the clock that is.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Some icons get
+double-clicks, some get single-clicks, some get right-clicked, and some
+don&#8217;t get clicked at all.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Some icons have tool-t=
+ips,
+others don&#8217;t (it depends on whether the application window is selecte=
+d or
+not).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>With IE 4, =
+there
+is yet another area on the tray that operates totally differently than the
+other tray components.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>=
+It is
+magic.</p>
+
+<p class=3DText><b style=3D'mso-bidi-font-weight:normal'>Shortcuts</b>.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Shortcuts are very inconsist=
+ent
+since they are not supported through win32 APIs.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Shortcuts are kludges done o=
+n top
+of the file system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>The
+result? Terrible inconsistency.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Whether a shortc=
+ut is
+linked to a file or a folder, it is always treated as a file.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Specifically, you
+can&#8217;t specify a shortcut to a folder in a path.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>So, shortcuts are
+&#8220;sort of&#8221; transparent, but not always.</p>
+
+<p class=3DText>We should not be rigid about consistency.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>There is a higher level
+principle of familiarity (with real &#8211;world objects/tasks) that I thin=
+k is
+even more important than consistency across all aspects of the system.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Nevertheless, we are n=
+ot
+consistent enough today in our systems.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We use different terms=
+ for
+the same task, object, etc. in different parts of our system (e.g., Emergen=
+cy
+Recovery Disk).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;
+</span>We need fewer concepts defined and few ways to do things.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Concepts that we introduce s=
+hould
+be consistent unless there is a overwhelming reason not to be.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Familiarity</h1>
+
+<p class=3DText>A key to allowing people to learn something quickly is to b=
+uild
+on prior knowledge.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span>We need to maximize the concepts and techniques in our products that
+users are familiar with from their real world experiences.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>The first time s=
+omeone
+uses an automated washbowl, they look curiously around the sink for handles=
+.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Once someone explains =
+how it
+works or they discover how it works independently, then from then on they w=
+ill
+intuitively try putting their hands under the nozzle if they don&#8217;t see
+handles.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Of cours=
+e, in
+some countries the water flow is controlled through foot petals.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>And someone who is use=
+d to
+automatic washbowls will be surprised when the water doesn&#8217;t come
+on.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(I know becau=
+se
+this happened to me.)<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>The point =
+is
+that once someone learns something they become familiar with it and expect =
+it
+to be the same in a variety of situations.</p>
+
+<p class=3DText>Our user interface and our conceptual model should attempt =
+to
+model within reason tasks or objects that people already know.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>If there is an a=
+nalogy
+that exists outside the computer realm that a culture understands we should=
+ use
+it in our systems.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </spa=
+n>A
+good example of this is <span style=3D'background:yellow;mso-highlight:yell=
+ow'>highlighting</span>
+in Word.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>This is
+something that virtually all people are familiar with.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Using yellow as the de=
+fault
+and calling the feature highlighting is easy to understand for most everyon=
+e.</p>
+
+<p class=3DText>Designers should not force fit metaphors if the computer
+operation isn&#8217;t a close match to the real world.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Strong metaphors (e.g.,
+phone) need to behave as much like a phone as possible &#8211; because users
+really know how a phone works and they will map their knowledge appropriate=
+ly
+onto the computer interaction.</p>
+
+<p class=3DText>When I am writing a letter, I am writing a letter.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>I usually don&#8=
+217;t
+want to deal with anything else.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>A new mail indication =
+might
+interrupt me and I might switch to reading mail, but that is no different t=
+han
+being interrupted by a phone call.<span style=3D'mso-spacerun:yes'>&nbsp;&n=
+bsp;
+</span>In both cases, though I am doing a single task.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>This argues for more f=
+ull
+screen activities focused on single/related tasks and less window managemen=
+t.</p>
+
+<p class=3DText>I strongly believe in virtualized User Interfaces that map =
+to
+particular tasks that a user is currently doing.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>However, more investig=
+ation
+is required to really understand the right level of virtualization.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It could be at a macro
+level: entertainment, office work, programming, etc.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Or it might be more granular=
+: home
+financials, music composing, correspondence (e.g., letters, faxes, email,
+voice, etc.), watching TV, etc.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The reason I think this
+makes so much sense is that it allows us to create a more familiar environm=
+ent
+for a user and still let the user switch from task to task.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Further, I think this
+task-based view is much closer to the way average users work (e.g., I need =
+to
+write some checks and see where the portfolio is today).</p>
+
+<p class=3DText>Without a doubt, the best computer concept is the concept t=
+hat
+you don&#8217;t have to invent (because it already exists in the real world=
+).</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Simplicity</h1>
+
+<p class=3DText>We seem to clutter everything.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We clutter the desktop=
+.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>When was the last time=
+ you
+opened the &#8220;network neighborhood&#8221;?<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>Yet it is on the
+desktop of probably 100 millions machines.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We clutter menus.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Look at the cascading =
+menu
+after menu off the Start/Programs area.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>We clutter
+toolbars.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>And on =
+and
+on.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText>We have so many tab dialogs for some functions that we crea=
+ted
+multi-row-tabbed dialogs.<span style=3D'mso-spacerun:yes'>&nbsp; </span>Som=
+e of
+these tab dialogs are amazingly complex.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(By the way, the fact =
+that
+the tabs all change positions when a back-row tab is clicked is extremely
+confusing and difficult to use.)<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>We should only i=
+nclude
+a function in the system if a large number of users need the function.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Basic functions should=
+ be immediately
+apparent &#8211; not masked by reams of options that most customers will ne=
+ver
+use. </p>
+
+<p class=3DText>The <b style=3D'mso-bidi-font-weight:normal'>Administrative=
+ Tools </b>folder
+(off the <b style=3D'mso-bidi-font-weight:normal'>Programs</b> <b
+style=3D'mso-bidi-font-weight:normal'>Start</b> menu) in NT 5 Workstation B=
+eta 1
+is a classic example of not designing for the bulk of users.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It is more complicated=
+ than
+NTW 4 &#8211; which was already much too complicated for the average user.<=
+span
+style=3D'mso-spacerun:yes'>&nbsp; </span>Most users just never need to know=
+ about
+most of these functions.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>In addition, the current user interface is designed for a computer
+expert.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We have to
+change our mindset totally here.</p>
+
+<p class=3DText>We can make systems much smarter than they are today.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>I think some of the
+intelligence in the office applications is quite good.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>There is no equi=
+valent
+of this in the operating system however.<span style=3D'mso-spacerun:yes'>&n=
+bsp;
+</span>Simple heuristics go a long way.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>For example, if we
+can&#8217;t sense a network adapter, then we shouldn&#8217;t have timeouts =
+and
+we shouldn&#8217;t ask the user anything about a network.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We should automatically
+reconfigure the system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>Suppose we do find a network that is operating, but if we can&#8217;t
+find a DHCP server, then we should be able to automatically assign an IP
+address.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>If=
+ a
+DHCP server comes back online, then we should automatically switch to the r=
+ight
+IP address.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If so=
+meone
+is looking at a help topic, then we should be able to step him or her throu=
+gh
+the tasks to address their question.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We should be using as =
+much
+automatic and dynamic self-configuration as possible.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The system should be v=
+iewed
+as a true organism that is constantly adapting to its surroundings (usage,
+environmental changes, etc.).</p>
+
+<p class=3DText>Still, simplicity is about more than just being smarter.<sp=
+an
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>I expect that most ear=
+ly
+users believe that Office is quite complicated.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Why?<span
+style=3D'mso-spacerun:yes'>&nbsp; </span>Because Office doesn&#8217;t ease =
+a user
+into using the product --- starting with the basics and gradually expanding=
+ to
+richer and richer power.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>My Mom was overwhelmed when I first introduced her to Office.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>She now has a limited =
+set of
+functions that she knows and she tries to avoid deviating from them.</p>
+
+<p class=3DText>I believe that user interfaces need to be scaled.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The scaling can be don=
+e in
+many ways.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The mo=
+st
+na&iuml;ve way to do this is to only show the basics and then create an adv=
+ance
+area(s) where the &#8220;pros&#8221; go.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Another technique is t=
+o have
+toolbars not show up by default.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Another more high-tech
+approach is to track which features/functions a user does frequently and sl=
+owly
+evolve the interface to favor/highlight these functions.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We must really improve=
+ in
+this area in the future.</p>
+
+<p class=3DText>I hate most wizards.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>They simply cover up t=
+he
+complexity that exists in the system.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>If a wizard fails for some
+unplanned reason, the user is dumped right back in the underlying complex
+system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If the un=
+derlying
+system weren&#8217;t complicated, then probably a wizard wouldn&#8217;t have
+been needed in the first place.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>A wizard might be
+useful in certain multi-step interactions with the system, but in general t=
+hey
+could be avoided if the system was simpler and smarter.</p>
+
+<p class=3DText>In short, I think we need ways to scale the UI from simple/=
+basic
+operation to more advanced operation.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We need the system to =
+be
+more automated about configuration and learning what a user uses and might =
+want
+to use.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>And we sh=
+ould
+hide (or totally remove) clutter that is in everyone&#8217;s face unless the
+bulk of na&iuml;ve users will use the function.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Obviousness</h1>
+
+<p class=3DText>If you delete an icon on the desktop, what do you think
+happens?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Does the
+object really go away?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>=
+You
+would think so &#8211; it&#8217;s the obvious thing &#8211; after all you
+deleted it, right?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Well=
+, it
+depends on the object.<span style=3D'mso-spacerun:yes'>&nbsp; </span>In some
+cases the entire object goes away (e.g., spreadsheet &#8211; assuming no li=
+nks!),
+but in other cases only portions of the total object goes away (e.g., progr=
+am
+executables).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </sp=
+an>Some
+programs today have icons on the desktop, menu items in the <b
+style=3D'mso-bidi-font-weight:normal'>Start</b> menu, tons of files somewhe=
+re on
+the disk, and a series of registry entries (sometimes dispersed in several
+areas of the registry).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>The obvious thing just doesn&#8217;t happen when you delete
+objects.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>In fact,=
+ our
+inconsistency concerning deletion is one reason why most user&#8217;s disks=
+ are
+full of unnecessary files; the user thinks they were already deleted!</p>
+
+<p class=3DText>The system should never pretend to do something transparent=
+ly if
+it can&#8217;t do it perfectly 100% of the time.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The cancel button in t=
+he
+browser is a great idea, for example.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It is horribly confusi=
+ng
+when the system tries to hide something that ends up showing up in certain
+failure cases.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Better t=
+o let
+the user participate in the environment in this case.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It is much more obviou=
+s this
+way.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The conceptu=
+al
+model then is the same for the user and the computer.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Another example deals =
+with
+Intellimirroring.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span=
+>We
+should NOT hide the fact that there is a difference between a user who is
+connected vs. standalone.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>Trying to pretend like there is no difference will clearly not work =
+and
+the user will be surprised at random times as the transparency fails.</p>
+
+<p class=3DText>Tasks that users perform frequently or would likely have to=
+ do at
+some point should be very discoverable.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>It is critical to unde=
+rstand
+a prioritized list of tasks and optimize the obviousness of these.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>The operating system is a mi=
+xed
+bag today.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>An exa=
+mple
+of a big improvement is the Small Business Server.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>But, in general, our u=
+sability
+is very poor across our products.<span style=3D'mso-spacerun:yes'>&nbsp;&nb=
+sp;
+</span>I don&#8217;t think we ever generated such a prioritized list for the
+operating system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span=
+>If we
+had, then things like configuring and accessing Mail (or fax) would have be=
+en
+much simpler than it is today. Designers must be very hardcore to ensure th=
+at
+the ease of use for the key tasks is not undermined.</p>
+
+<p class=3DText>As an example, consider Backup.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Where should the progr=
+am
+item and/or icon be placed?<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nb=
+sp;
+</span>Should the dialogs give the user lots of power through many choices
+(incremental, scheduled times, particular files, job definitions, etc.)?<sp=
+an
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The obvious task the u=
+ser
+wants to do is to simply backup the system (or restore a file).<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Any design that
+doesn&#8217;t make this task <i style=3D'mso-bidi-font-style:normal'>extrem=
+ely</i>
+obvious and easy is failing at this design principle.</p>
+
+<h1 style=3D'margin-left:-139.5pt'>Safety</h1>
+
+<p class=3DText>Users should be protected from making errors.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>This seems obvious
+enough.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>We do som=
+e of
+the easy things today (e.g., have a recycle bin, reconfirm a deletion or
+format, etc.).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Bu=
+t, we
+do virtually nothing to provide any safety for the system as a whole.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Users can make a machi=
+ne
+non-bootable in less than 10 seconds.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>They can stop networki=
+ng
+from working in 10 seconds.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;
+</span>They can break an application in about 10 seconds.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText>We should never allow a system to be put in an unusable sta=
+te
+unless the hardware has failed.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Today, we have several
+problems.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>First, =
+we let
+people metaphorically play with the integrated circuits of the software by
+being able to play with system files loaded on the disk.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>By system files I mean=
+ any
+component of the system that is used in the standard operation of the
+system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>There is no rea=
+son
+for this.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>There i=
+s no
+reason anyone except a programmer needs to know anything about these files =
+in
+the system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span=
+>They
+should not be able to be seen, deleted, moved, renamed, or tampered with in=
+ any
+way.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Drivers (or =
+other
+system components) should be signed and a user should explicitly agree to u=
+se a
+driver (or other system component) before they can be installed.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>There should not=
+ be
+any way to partially remove or install an application.</p>
+
+<p class=3DText>Second, we need to ensure that manual configuration operati=
+ons
+(hopefully over time there should be fewer and fewer of these) cannot put t=
+he
+system in an unusable or non-recoverable state.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>If a manual configuration co=
+uld
+make some part of the system (e.g., hardware device, network connection) st=
+op
+working, then the user should be strongly warned about the danger of the
+proposed change.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>We sho=
+uld
+attempt to make significant changes a single step UI operation so that we c=
+an
+detect the danger easily.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>In contrast today, configuring a dial-in line requires multiple step=
+s in
+different areas of the UI with reboots in between.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Obviously mistakes are=
+ easy
+and restoring the system to the way it was before the configuration started=
+ in
+very difficult.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>A
+global undo is a good idea.<span style=3D'mso-spacerun:yes'>&nbsp; </span>In
+addition, issues arise when something is reconfigured (e.g., deleting an IS=
+DN
+board) where we leave partial bits of information around that confuse the
+system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>When some=
+thing
+is deleted, <i style=3D'mso-bidi-font-style:normal'>every </i>trace should =
+be
+removed from the system.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>There shouldn&#8217;t be any information in the registry, file syste=
+m,
+or user interface associated with the deleted entity.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>In general, reversibility wo=
+uld
+build confidence for users to try new things since they would know that they
+could reverse any bad decision they made.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span></p>
+
+<p class=3DText>Having an overall default mode for everything in the system=
+ is
+also a good idea.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>This =
+is a
+mode that lets the system operate no matter what, albeit perhaps not as
+customized as the user might want. </p>
+
+<h1 style=3D'margin-left:-139.5pt'>Personalization</h1>
+
+<p class=3DText>Personal computers are about being &#8220;personal&#8221;.<=
+span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>That means it is criti=
+cal
+that users be able to customize the interface they use to the computer &#82=
+11;
+just like people customize/decorate their cars, homes, and desks at work. <=
+span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;</span>Personalization can hel=
+p make
+the system feel comfortable and familiar.</p>
+
+<p class=3DText>This is an area where we need to do a lot of work &#8211;
+especially when a computer is shared. Today, we confuse per machine and per
+user state frequently.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>We need to be able to customize very clearly for each user --- as we=
+ll
+as make it easy to reset the environment to an overall default state for a =
+new
+user (e.g., family member).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nb=
+sp;
+</span>Further, it is important that this personalization be moveable easily
+from one computer to another.</p>
+
+<b style=3D'mso-bidi-font-weight:normal'><span style=3D'font-size:16.0pt;
+mso-bidi-font-size:10.0pt;font-family:"Arial",sans-serif;mso-fareast-font-f=
+amily:
+SimSun;mso-fareast-theme-font:minor-fareast;mso-bidi-font-family:"Times New=
+ Roman";
+mso-ansi-language:EN-US;mso-fareast-language:ZH-CN;mso-bidi-language:AR-SA'=
+><br
+clear=3Dall style=3D'page-break-before:always'>
+</span></b>
+
+<h1 style=3D'margin-left:-139.5pt'>Some Mini Rules to Consider</h1>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>1.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Data
+integrity or crashes must be ship stoppers.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>2.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Gracefully
+support all known failure conditions.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp; </span>Program defensively being pr=
+epared
+for these failure cases.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;=
+&nbsp;
+</span>Given the complexity of the system, don&#8217;t expect administrator=
+s or
+the end-user to figure out what the problem is.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>You (the designer) hav=
+e more
+knowledge of what to do than anyone else does.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>The probability of hav=
+ing a
+human make the situation worse is very high.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>3.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Test
+all limit cases &#8211; e.g., disk full.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>4.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Do
+not permit a user to change anything that could cause the system to crash
+(e.g., registry).<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span=
+>Do
+not give a user access to internal parts of the system that should be hidde=
+n.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>5.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Do
+not use computer terms (e.g., DNS, DHCP, FAT32, scandisk, DLL, etc.) when c=
+ommunicating
+with a user.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>THIN=
+K like
+someone who has never seen a computer before.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Create and use a gloss=
+ary of
+terms for the product.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+</span>Error messages should only use terms from the glossary.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(The &#8220;repair&#82=
+21;
+person should have some means to get more diagnostic information.)</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>6.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Make
+concepts shown to the user work consistently in all cases (e.g., <b
+style=3D'mso-bidi-font-weight:normal'>shortcuts</b>).</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>7.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Avoid
+configuration if at all possible (e.g., make systems auto configuring by
+sensing the environment: memory size, network condition, etc.)</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>8.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Do
+not show error messages to users unless they can specifically do something
+about the problem.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </spa=
+n>The
+system should recover from the problem automatically or simply stop working=
+ so
+that a &#8220;repair&#8221; person can diagnose the problem.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>9.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></sp=
+an></span><![endif]>Make
+the 90% case the design center.<span
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>Ensure that the basic =
+top 10
+tasks are obvious.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>10.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Integrate
+resolution of a user issue with the Help system.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>11.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Assume
+that the network is error prone and transient.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>12.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Create
+scaleable User Interfaces where a user can be slowed exposed to more power,=
+ but
+can start their experience in a simple, non-threatening mode.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>13.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Avoid
+wizards that simply cover up the complexity of the underlying system.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>14.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Use
+concepts from the real world.<span style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&=
+nbsp;
+</span>And match the semantics of the real world as closely as possible.<sp=
+an
+style=3D'mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>If a new concept is
+required, then ensure that it is defined and use consistency throughout the
+product and documentation.</p>
+
+<p class=3DText style=3D'margin-left:-99.0pt;text-indent:-18.0pt;mso-list:l=
+5 level1 lfo2;
+tab-stops:list -99.0pt'><![if !supportLists]><span style=3D'mso-fareast-fon=
+t-family:
+Arial;mso-bidi-font-family:Arial'><span style=3D'mso-list:Ignore'>15.<span
+style=3D'font:7.0pt "Times New Roman"'>&nbsp; </span></span></span><![endif=
+]>Design
+per user capabilities in the product from the start so that easy
+personalization is possible.</p>
+
+</div>
+
+</body>
+
+</html>
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/themedata.thmx
+Content-Transfer-Encoding: base64
+Content-Type: application/vnd.ms-officetheme
+
+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
+AACbCgAAAAA=
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/colorschememapping.xml
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/xml
+
+<?xml version=3D"1.0" encoding=3D"UTF-8" standalone=3D"yes"?>
+<a:clrMap xmlns:a=3D"http://schemas.openxmlformats.org/drawingml/2006/main"=
+ bg1=3D"lt1" tx1=3D"dk1" bg2=3D"lt2" tx2=3D"dk2" accent1=3D"accent1" accent=
+2=3D"accent2" accent3=3D"accent3" accent4=3D"accent4" accent5=3D"accent5" a=
+ccent6=3D"accent6" hlink=3D"hlink" folHlink=3D"folHlink"/>
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/image001.wmz
+Content-Transfer-Encoding: base64
+Content-Type: image/x-wmz
+
+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
+Iv8HcRK3hqglAAA=
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/image002.gif
+Content-Transfer-Encoding: base64
+Content-Type: image/gif
+
+R0lGODlhjgIlAHcAMSH+GlNvZnR3YXJlOiBNaWNyb3NvZnQgT2ZmaWNlACH5BAEAAAAALAAAAwCN
+AiIAggAAAAAAAAQEBAUFBfv7+/r6+v///wECAwP/GLrc/jDKSau9OOvNu/9gKI5kaZ5oqq4ewL5w
+LM90bd94ru/84/bAoHBILBqPyOTqp2w6n9CodEolMqvYrHbL7XqD1694TC6bz9owes1uu99wkDpO
+r9vv+Ow8z+/7/4Ase4GEhYaHOQQGiwIBioyKjSsFAxKDiJiZmpsdjwaNngKRKgWLlRGXnKqrrJuh
+joufLKWxpj6tuLm6hq+vk6a0pw2pu8XGx2OhnrWgjLCfBM2Sz9MKowHB2cIKxMje3+BOyrWxoszL
+5M3Mz4y05NsL3eHz9PU4y+bk+tD75ej55dzVgsfNnsGDCGvgQ5cuEkOAzhxC6gcMnryEGDNqrMCQ
+x6K6fR9lWfMHzMCAYBAublzJUmPHieUYPMoXMqJNk6VO2rrVsqfPni/5xVzwbyTEdY906jSZ8qfT
+pwmD6qsmUdZMdkhLLiVYEKrXr96kTpUpVBrZrDjTMuUJtq1bVjPj9jtKE2tNadnWsn3Lty8vmEcp
+ChXsUeBOByr9Kl6MRu7guVfFFtbHNUBixpgzc3FMt9fNz6Ab5dU7TLPp0z4vo17NOpfq1rBjY3ot
+u7btPrRv6979Jjfv38DH+A5OvHiV4caTK08CIAEAOw==
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/header.htm
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="us-ascii"
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml"
+xmlns:o=3D"urn:schemas-microsoft-com:office:office"
+xmlns:w=3D"urn:schemas-microsoft-com:office:word"
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml"
+xmlns=3D"http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=3DContent-Type content=3D"text/html; charset=3Dus-ascii">
+<meta name=3DProgId content=3DWord.Document>
+<meta name=3DGenerator content=3D"Microsoft Word 15">
+<meta name=3DOriginator content=3D"Microsoft Word 15">
+<link id=3DMain-File rel=3DMain-File href=3D"../complexity.docx.htm">
+<![if IE]>
+<base href=3D"file:///C:/F513C8D8/complexity.docx_files/header.htm"
+id=3D"webarch_temp_base_tag">
+<![endif]>
+</head>
+
+<body lang=3DEN-US>
+
+<div style=3D'mso-element:footnote-separator' id=3Dfs>
+
+<p class=3DMsoNormal><span style=3D'mso-special-character:footnote-separato=
+r'><![if !supportFootnotes]>
+
+<hr align=3Dleft size=3D1 width=3D"33%">
+
+<![endif]></span></p>
+
+</div>
+
+<div style=3D'mso-element:footnote-continuation-separator' id=3Dfcs>
+
+<p class=3DMsoNormal><span style=3D'mso-special-character:footnote-continua=
+tion-separator'><![if !supportFootnotes]>
+
+<hr align=3Dleft size=3D1>
+
+<![endif]></span></p>
+
+</div>
+
+<div style=3D'mso-element:endnote-separator' id=3Des>
+
+<p class=3DMsoNormal><span style=3D'mso-special-character:footnote-separato=
+r'><![if !supportFootnotes]>
+
+<hr align=3Dleft size=3D1 width=3D"33%">
+
+<![endif]></span></p>
+
+</div>
+
+<div style=3D'mso-element:endnote-continuation-separator' id=3Decs>
+
+<p class=3DMsoNormal><span style=3D'mso-special-character:footnote-continua=
+tion-separator'><![if !supportFootnotes]>
+
+<hr align=3Dleft size=3D1>
+
+<![endif]></span></p>
+
+</div>
+
+<div style=3D'mso-element:footer' id=3Def1>
+
+<p class=3DMsoFooter>Document Type<span style=3D'mso-tab-count:1'>&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><!--=
+[if supportFields]><span
+style=3D'mso-element:field-begin'></span> PAGE<span
+style=3D'mso-spacerun:yes'>&nbsp; </span>\* MERGEFORMAT <span style=3D'mso-=
+element:
+field-separator'></span><![endif]-->25<!--[if supportFields]><span
+style=3D'mso-element:field-end'></span><![endif]--><span style=3D'mso-tab-c=
+ount:
+1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Document
+Title</p>
+
+</div>
+
+<div style=3D'mso-element:footer' id=3Df1>
+
+<div style=3D'mso-element:para-border-div;border:none;border-top:solid wind=
+owtext 1.0pt;
+mso-border-top-alt:solid windowtext .75pt;padding:1.0pt 0cm 0cm 0cm;margin-=
+left:
+-161.3pt;margin-right:0cm'>
+
+<p class=3DFooterRule style=3D'margin-left:0cm'><o:p>&nbsp;</o:p></p>
+
+</div>
+
+<p class=3DMsoFooter><!--[if supportFields]><span style=3D'mso-element:fiel=
+d-begin'></span><span
+style=3D'mso-spacerun:yes'>&nbsp;</span>STYLEREF &quot;Product Head,ph&quot=
+; \*
+MERGEFORMAT <span style=3D'mso-element:field-separator'></span><![endif]-->=
+Complexity<!--[if supportFields]><span
+style=3D'mso-element:field-end'></span><![endif]--><span style=3D'mso-tab-c=
+ount:
+1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><!--[if supportFields]><s=
+pan
+style=3D'mso-element:field-begin'></span> PAGE<span
+style=3D'mso-spacerun:yes'>&nbsp; </span>\* MERGEFORMAT <span style=3D'mso-=
+element:
+field-separator'></span><![endif]-->1<!--[if supportFields]><span
+style=3D'mso-element:field-end'></span><![endif]--> <span style=3D'mso-tab-=
+count:
+1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Microsoft
+Confidential<span style=3D'mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+
+</div>
+
+</body>
+
+</html>
+
+------=_NextPart_01D6601F.F2EB2E00
+Content-Location: file:///C:/F513C8D8/complexity.docx_files/filelist.xml
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/xml; charset="utf-8"
+
+<xml xmlns:o=3D"urn:schemas-microsoft-com:office:office">
+ <o:MainFile HRef=3D"../complexity.docx.htm"/>
+ <o:File HRef=3D"themedata.thmx"/>
+ <o:File HRef=3D"colorschememapping.xml"/>
+ <o:File HRef=3D"image001.wmz"/>
+ <o:File HRef=3D"image002.gif"/>
+ <o:File HRef=3D"header.htm"/>
+ <o:File HRef=3D"filelist.xml"/>
+</xml>
+------=_NextPart_01D6601F.F2EB2E00--

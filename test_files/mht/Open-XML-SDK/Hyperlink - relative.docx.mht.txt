@@ -1,0 +1,1 @@
+﻿This document is for hyperlink testing. We’re going to test against the following aspects:External links such as http hyperlinks Microsoft official site;Internal links such another anchor in the same document;Relative links, another anchor in another document but will be merged into same documents.
