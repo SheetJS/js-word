@@ -1,4 +1,5 @@
-$HelpCommand = "Run '.\generate_txt.ps1 -h' to see examples"
+$HelpCommand = "Run '.\cross_ext.ps1 -h' to see examples"
+$ext = ".rtf"
 
 #Check if argument or option is provided
 if ($Args.count -ne 1) {
@@ -11,8 +12,8 @@ if ($Args[0] -match '^-') {
     #Check if option is help
     if ($Args[0] -match '^-[h|H](elp)?$') {
         Write-Output "Usage:
-        .\generate_txt[.ps1] <filePath>
-        .\generate_txt[.ps1] -[h|H[elp]]
+        .\cross_ext[.ps1] <filePath>
+        .\cross_ext[.ps1] -[h|H[elp]]
         Examples:
         filePath = .\test_files\docx\apachepoi
         "
@@ -43,13 +44,13 @@ $CurrAbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
 :curr_main for($i=0; $i -lt $CurrAbsPath.length; $i++) {
     $CurrAbsPathI = Resolve-Path $CurrAbsPath[$i] | Select-Object -ExpandProperty Path
  
+    # Check if file exists, if not continue
     try {
         $similarAbsPath = Join-Path -Path .\test_files\rtf -ChildPath $parent\$subparent
         $filename = Split-Path $CurrAbsPathI -Leaf
-        $similarAbsFilePath = Resolve-Path (Join-Path -Path $similarAbsPath -ChildPath ($filename+".rtf"))
+        $similarAbsFilePath = Resolve-Path (Join-Path -Path $similarAbsPath -ChildPath ($filename+$ext)) -ErrorAction Stop
 
-        if (Test-Path $similarAbsFilePath -PathType Leaf) { 
-            Write-Output "RTF already exists"
+        if (Test-Path $similarAbsFilePath -PathType Leaf) {
             continue curr_main
         }
     } catch {
@@ -60,13 +61,14 @@ $CurrAbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
  
     if (Test-Path ($CurrAbsPathI + ".skip")) { continue curr_main }
  
+    # Save from current extension to `.rtf`
     $Word = New-Object -ComObject Word.Application
     try {
         $Doc = $Word.Documents.Open($CurrAbsPathI, $False, $True, $False, "WordJS", "WordJS")
-        $Doc.SaveAs(($CurrAbsPathI+".rtf"), 6, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
+        $Doc.SaveAs(($CurrAbsPathI+$ext), 6, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
         $Doc.Close()
     } catch {
-        Write-Output "Skipping (has pwd): $CurrAbsPathI"
+        Write-Output "Skipping (has pwd or cannot edit): $CurrAbsPathI"
     }
  
     Stop-Process -Name "winword"
@@ -84,7 +86,9 @@ $rtfPath = Join-Path -Path .\test_files\ -ChildPath rtf
 :ext_main for($i=0; $i -lt $ExtAbsPath.length; $i++) {
     $ExtAbsPathI = Resolve-Path $ExtAbsPath[$i] | Select-Object -ExpandProperty Path
 
-    if ((Get-Item $ExtAbsPathI).length > 10000000) {
+    # Only keep `.rtf` files that are under 10 mb
+    if ((Get-Item $ExtAbsPathI).length -gt 10000kb) {
+        Write-Output "(Deleting file exceeds 10 mb) $ExtAbsPathI"
         Remove-Item $ExtAbsPathI
         continue ext_main
     }
@@ -93,11 +97,13 @@ $rtfPath = Join-Path -Path .\test_files\ -ChildPath rtf
  
     if (Test-Path ($ExtAbsPathI + ".skip")) { continue ext_main }
  
+    # Mirror folder structure into `rtf/` 
     New-Item -Path $rtfPath -Name $parent -ItemType "directory" -Force
     $p_rtfPath = Join-Path -Path $rtfPath -ChildPath $parent
     New-Item -Path $p_rtfPath -Name $subparent -ItemType "directory" -Force
     $sp_rtfPath = Join-Path -Path $p_rtfPath -ChildPath $subparent
 
+    # Save a `.txt` file of the `.rtf` 
     $Word = New-Object -ComObject Word.Application
     try {
         $Doc = $Word.Documents.Open($ExtAbsPathI, $False, $True, $False, "WordJS", "WordJS")
