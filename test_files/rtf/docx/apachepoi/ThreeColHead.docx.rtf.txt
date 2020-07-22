@@ -1,0 +1,2 @@
+﻿This is a sample word document. It has two pages. It has a three column heading, but no footer.HEADING TEXTMore on page oneEnd of page 1
+This is page two. It also has a three column heading, and no footer.First header column!0Mid header0Right header!

@@ -1,0 +1,1 @@
+﻿First run having no directly-applied character style. Next run having Emphasis character style. Last run having Strong style.

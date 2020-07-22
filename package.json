@@ -1,20 +1,23 @@
 {
 	"name": "word",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"author": "sheetjs",
 	"description": "Word Processing Document library",
 	"keywords": [
 		"word"
 	],
 	"main": "./word",
+	"types": "./dist/typings/index.d.ts",
 	"dependencies": {
 		"cfb": "^1.2.0",
 		"jsdom": "^16.2.2"
 	},
 	"devDependencies": {
+		"@types/jsdom": "^16.2.3",
 		"@types/mocha": "^7.0.2",
 		"@types/node": "^14.0.20",
 		"glob": "^7.1.6",
+		"mocha": "^8.0.1",
 		"ts-node": "^8.10.2",
 		"typescript": "^3.9.6"
 	},
@@ -23,6 +26,8 @@
 		"url": "git://github.com/SheetJS/js-word.git"
 	},
 	"scripts": {
+		"build:cjs": "tsc -p tsconfig/tsconfig.cjs.json",
+		"build:types": "tsc -p tsconfig/tsconfig.types.json",
 		"test": "mocha -r ts-node/register test.ts"
 	},
 	"homepage": "https://wordjs.com/",

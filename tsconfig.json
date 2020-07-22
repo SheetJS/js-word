@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"word": [ "./src/index" ]
+		}
+	},
+	"exclude": [ "./dist" ]
+}

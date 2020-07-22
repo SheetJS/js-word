@@ -85,6 +85,7 @@ var extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}?\b\w+\b)/g, function ($$, $1,
             current_par = ""
         }
     }
+    return $$;
 });
 return { p: [ {elts: [{t: "s", v: para_text.join("")}] } ] };
 }

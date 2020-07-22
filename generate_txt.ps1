@@ -47,7 +47,7 @@ $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
 
     if (Test-Path ($AbsPathI + ".txt") -PathType Leaf ) { continue main }
 
-    # $filename = Split-Path $AbsPath[$i] -leaf
+    $filename = Split-Path $AbsPath[$i] -leaf
     # $join_fn = Join-Path -Path $Args[0] -ChildPath $filename
     <# if (($join_fn | Out-String) -contains $Blacklist) {
         Write-Output "Skipping $join_fn"
@@ -55,18 +55,17 @@ $AbsPath = @(Get-ChildItem -path $Directory -Recurse -Exclude *.txt, *.skip)
     } #>
 
     if (Test-Path ($AbsPathI + ".skip")) { continue main }
-    # $p = $Args[0]
-    # Get-Process | Out-File -FilePath ".\$p\$filename.skip"
-    # continue main
-
-    Start-Process winword.exe
+    
     $Word = New-Object -ComObject Word.Application
     try {
         $Doc = $Word.Documents.Open($AbsPathI, $False, $True, $False, "WordJS", "WordJS")
         $Doc.SaveAs(($AbsPathI+".txt"), 7, $False, "", $False, "", $False, $False, $False, $False, $False, $Encoding, $False, $False, $LineEnding)
         $Doc.Close()
     } catch {
-        Write-Output "Skipping (has pwd): $AbsPathI"
+        $p = $Args[0]
+        Get-Process | Out-File -FilePath ".\$p\$filename.skip"
+        Write-Output "Skipping (has pwd or cannot edit): $AbsPathI"
+        continue main
     }
 
     Stop-Process -Name "winword"

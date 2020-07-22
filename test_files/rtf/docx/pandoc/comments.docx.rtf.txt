@@ -1,0 +1,1 @@
+﻿I want some text to have a comment [jkr1]on it.This is a new paragraph.And so[jkr2] is this.One more[jkr3]. And this is one with a comment in a comment[jkr4][jkr5].[jkr1]I left a comment.[jkr2]A comment across paragraphs.[jkr3]This one has multiple paragraphs.See?[jkr4]Do something.[jkr5R4]Do something else.
