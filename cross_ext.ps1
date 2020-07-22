@@ -88,7 +88,7 @@ $rtfPath = Join-Path -Path .\test_files\ -ChildPath rtf
 
     # Only keep `.rtf` files that are under 10 mb
     if ((Get-Item $ExtAbsPathI).length -gt 10000kb) {
-        Write-Output "deleting $ExtAbsPathI"
+        Write-Output "(Deleting file exceeds 10 mb) $ExtAbsPathI"
         Remove-Item $ExtAbsPathI
         continue ext_main
     }
