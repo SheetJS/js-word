@@ -86,7 +86,9 @@ function process_illustration_index(child: Node, root: WJSPara[]) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
       switch(element.tagName) {
-        case "text:illustration-index-source": break;
+        // Skip over this
+        case "text:illustration-index-source":
+          return;
         case "text:index-body":
           element.childNodes.forEach((child) => process_index_body(child, root));
           break;
@@ -125,31 +127,21 @@ function process_list(child: Node, root: WJSPara[], index: number) {
         // Recursive case
         case "text:list-item":
           element.childNodes.forEach((child) => {
-            process_list_item(child, root, index);
+            process_list(child, root, index);
             index++;
           });
           break;
-      }
-  }
-}
-
-/* <text:list-item> children */
-function process_list_item(child: Node, root: WJSPara[], iter: number) {
-  switch(child.nodeType) {
-    case 1:
-      const element = (child as Element);
-      switch(element.tagName) {
         case "text:list":
-          let index : number = 1;
+          let i : number = 1;
           element.childNodes.forEach((child) => {
-            process_list(child, root, index);
-            index++;
+            process_list(child, root, i);
+            i++;
           });
           break;
         case "text:h":
         case "text:p":
           const para : WJSPara = { elts: [] };
-          para.elts.push({t: "s", v: "" + iter + ". "});
+          para.elts.push({t: "s", v: "" + index + ". "});
           element.childNodes.forEach((child) => {
             process_para(child, para);
           });
