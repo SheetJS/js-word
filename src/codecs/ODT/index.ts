@@ -1,6 +1,6 @@
 import { CFB$Container, find } from "cfb";
 import { JSDOM } from "jsdom";
-import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSParaElement } from "../../types";
+import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSParaElement, WJSEndNote } from "../../types";
 
 /* 5.1.3 <text:p> children */
 function process_para(child: Node, root: WJSPara) {
@@ -9,16 +9,20 @@ function process_para(child: Node, root: WJSPara) {
       const element = (child as Element);
       if(element.tagName.match(/draw:/)) return;
       switch(element.tagName) {
+        // Parse tabs and spaces
         case "text:s":
           root.elts.push({ t: "s", v: " ".repeat(+element.getAttribute("c") || 1) });
           break;
         case "text:tab":
           root.elts.push({ t: "s", v: "\t".repeat(+element.getAttribute("c") || 1) });
           break;
+        // Special case for endnotes
         case "text:note":
+          let body : WJSPara[] = [];
           element.childNodes.forEach((child) => {
-            process_note(child, root);
+            process_note(child, root, body);
           });
+          root.elts.push({ t: "endnote", id: +element.getAttribute("id"), p: body});
           return;
         default:
           element.childNodes.forEach((child) => {
@@ -155,7 +159,8 @@ function process_list_item(child: Node, root: WJSPara[], iter: number) {
   }
 }
 
-function process_note(child: Node, root: WJSPara) {
+function process_note(child: Node, root: WJSPara, body: WJSPara[]) {
+  const para : WJSPara = { elts: [] };
   switch(child.nodeType) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
@@ -164,11 +169,11 @@ function process_note(child: Node, root: WJSPara) {
           element.childNodes.forEach((child) => process_para(child, root));
           break;
         case "text:note-body":
-          element.childNodes.forEach((child) => process_note(child, root));
+          element.childNodes.forEach((child) => process_note(child, root, body));
           break;
         case "text:p":
         case "text:h":
-          element.childNodes.forEach((child) => process_para(child, root));
+          element.childNodes.forEach((child) => process_para(child, para));
           break;
       }
       break;
