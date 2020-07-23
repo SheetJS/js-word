@@ -5,6 +5,14 @@ export interface WJSTextRun {
   v: string;
 }
 
+export interface WJSEndNote {
+  t: "endnote";
+  /** Id of the endnote element it's linked to */
+  id: Number;
+  /** Body */
+  p: WJSPara[];
+}
+
 export interface WJSTableCell {
   t: "c";
   /** Body */
@@ -26,7 +34,7 @@ export interface WJSTable {
 }
 
 /** Children elements of a Paragraph */
-export type WJSParaElement = WJSTextRun | WJSTable;
+export type WJSParaElement = WJSTextRun | WJSTable | WJSEndNote;
 
 /** Paragraph */
 export interface WJSPara {
@@ -37,4 +45,19 @@ export interface WJSPara {
 /** WordJS Document */
 export interface WJSDoc {
   p: WJSPara[];
+  rels?: WJSRelationship;
+}
+
+/** Relationship */
+export interface WJSRel {
+  t: "rel";
+  id: String;
+  type: String;
+  target: String;
+  targerMode?: String;
+}
+
+/** WordJS Relationship */
+export interface WJSRelationship {
+  rels: WJSRel[];
 }
