@@ -41,19 +41,19 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   // TODO: correctly split into paragraphs
   // getParagraphs(fib, wordStream, tableStream);
 
-  const doc: WJSDoc = { p: [] };
-  const para: WJSPara = { elts: [] };
-  para.elts.push({ t: "s", v: text });
+  const doc: WJSDoc = {p: []};
+  const para: WJSPara = {elts: []};
+  para.elts.push({t: "s", v: text});
   doc.p.push(para);
   return doc;
 }
 
 export function readFile(filePath: string): WJSDoc {
-  const file = readCFB(filePath, { type: "file" });
+  const file = readCFB(filePath, {type: "file"});
   return parse_cfb(file);
 }
 
 export function read(data: Buffer): WJSDoc {
-  const file = readCFB(data, { type: "buffer" });
+  const file = readCFB(data, {type: "buffer"});
   return parse_cfb(file);
 }
