@@ -16,6 +16,9 @@ function process_para(child: Node, root: WJSPara) {
           root.elts.push({ t: "s", v: "\t".repeat(+element.getAttribute("c") || 1) });
           break;
         case "text:note":
+          element.childNodes.forEach((child) => {
+            process_note(child, root);
+          });
           return;
         default:
           element.childNodes.forEach((child) => {
@@ -120,7 +123,6 @@ function process_list(child: Node, root: WJSPara[], index: number) {
           element.childNodes.forEach((child) => {
             process_list_item(child, root, index);
             index++;
-
           });
           break;
       }
@@ -154,7 +156,23 @@ function process_list_item(child: Node, root: WJSPara[], iter: number) {
 }
 
 function process_note(child: Node, root: WJSPara) {
-  
+  switch(child.nodeType) {
+    case 1 /*ELEMENT_NODE*/:
+      const element = (child as Element);
+      switch(element.tagName) {
+        case "text:note-citation":
+          element.childNodes.forEach((child) => process_para(child, root));
+          break;
+        case "text:note-body":
+          element.childNodes.forEach((child) => process_note(child, root));
+          break;
+        case "text:p":
+        case "text:h":
+          element.childNodes.forEach((child) => process_para(child, root));
+          break;
+      }
+      break;
+  }
 }
 
 /* 3.4 <office:text> children */
