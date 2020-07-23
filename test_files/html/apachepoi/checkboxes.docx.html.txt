@@ -1,0 +1,1 @@
+﻿This is a small test for checkboxes • unchecked:  Or checked: Test a checkbox within a textbox:  -> In Table:In Sequence:

@@ -29,7 +29,7 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   let text = getDocTxt(fib, wordStream, tableStream);
 
   /* TODO: 2.8.25 strip fields */
-  text = text.replace(/\x13.*?\x14(.*?)\x15/g, "$1")
+  text = text.replace(/\x13[^\x13]*\x14(.*?)\x15/g, "$1")
   text = text.replace(/\x13.*?\x15/g, "")
 
   /* TODO: 1.3.5 Inline Picture 0x01, Floating 0x08 */

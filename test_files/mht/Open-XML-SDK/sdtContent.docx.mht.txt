@@ -1,0 +1,1 @@
+﻿This is an SdtBlock.  This is an SdtRun.This is an SdtCell.This is an SdtRun?TextChoose an item.Choose an item.7/1/2008Click here to enter a date.Choose a building block.

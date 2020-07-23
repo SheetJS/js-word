@@ -1,0 +1,2 @@
+﻿This is a sample word document. It has two pages. It has a 2 column heading, and a three column footerHEADING TEXTMore on page oneEnd of page 1
+This is page two. It also has a two column heading, and a simple footer.

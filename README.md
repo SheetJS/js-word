@@ -48,14 +48,9 @@ if the file exists, so the content is immaterial and a single letter suffices.
 **Generating `.skip` files**
 
 The script will attempt to open password-protected documents using the password
-"WordJS".  The script will not halt but it will not generate a text file.  With
-a few adjustments, the script can generate `.skip` files for those cases
-
-1. Uncomment [L27-29](https://github.com/SheetJS/js-word/blob/master/generate_txt.ps1#L27-L29) in the script
-2. Comment [L26](https://github.com/SheetJS/js-word/blob/master/generate_txt.ps1#L26) in the script
-3. Rerun the script
-4. Undo Step 1 and 2
-
+"WordJS".  The script will not halt but it will not generate a text file. Instead, 
+an output would be written to terminal indicating a skip and will generate a `.skip` 
+when encountered. 
 
 ## License
 

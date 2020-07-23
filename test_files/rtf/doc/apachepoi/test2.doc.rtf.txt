@@ -1,0 +1,1 @@
+﻿This is a simple word documentIt has a number of paragraphs in itSome of them even feature bold, italic and underlined textThis bit is in a different font and sizeThis bit features some red text.It is otherwise very very boring.

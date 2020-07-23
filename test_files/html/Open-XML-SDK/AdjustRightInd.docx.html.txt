@@ -1,0 +1,1 @@
+﻿ ‘AdjustRightOnOff’ is off.‘AdjustRightOnOff’ is on (default).
