@@ -29,7 +29,7 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   let text = getDocTxt(fib, wordStream, tableStream);
 
   /* TODO: 2.8.25 strip fields */
-  text = text.replace(/\x13.*?\x14(.*?)\x15/g, "$1")
+  text = text.replace(/\x13[^\x13]*\x14(.*?)\x15/g, "$1")
   text = text.replace(/\x13.*?\x15/g, "")
 
   /* TODO: 1.3.5 Inline Picture 0x01, Floating 0x08 */
@@ -41,19 +41,19 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   // TODO: correctly split into paragraphs
   // getParagraphs(fib, wordStream, tableStream);
 
-  const doc: WJSDoc = {p: []};
-  const para: WJSPara = {elts: []};
-  para.elts.push({t: "s", v: text});
+  const doc: WJSDoc = { p: [] };
+  const para: WJSPara = { elts: [] };
+  para.elts.push({ t: "s", v: text });
   doc.p.push(para);
   return doc;
 }
 
 export function readFile(filePath: string): WJSDoc {
-  const file = readCFB(filePath, {type: "file"});
+  const file = readCFB(filePath, { type: "file" });
   return parse_cfb(file);
 }
 
 export function read(data: Buffer): WJSDoc {
-  const file = readCFB(data, {type: "buffer"});
+  const file = readCFB(data, { type: "buffer" });
   return parse_cfb(file);
 }
