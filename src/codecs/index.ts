@@ -1,4 +1,5 @@
 import { read as readCFB, find, CFB$Container } from "cfb";
+import { parse_cfb as parse_DOCX_password } from "./DOCX/password";
 import { parse_cfb as parse_DOCX } from "./DOCX";
 import { parse_cfb as parse_DOC } from "./DOC";
 import { parse_cfb as parse_MHT } from "./MHT";
@@ -11,6 +12,8 @@ import { readFileSync } from "fs";
 import { WJSDoc } from "../types";
 
 export function parse_cfb(file: CFB$Container): WJSDoc {
+  /* MS-OFFCRYPTO 2.1.1 */
+  if(find(file, "/\x06DataSpaces/Version") && find(file, "/\x06DataSpaces/DataSpaceMap")) parse_DOCX_password(file);
   if(find(file, "/WordDocument")) return parse_DOC(file);
   if(find(file, "/CONTENTS")) throw "Unsupported Works WPS file";
   if(find(file, "/MM") || find(file, "/MN0")) throw "Unsupported Works WPS file";
