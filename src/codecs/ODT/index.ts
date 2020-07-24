@@ -165,7 +165,10 @@ function process_note(child: Node, root: WJSPara, body: WJSPara[]) {
           break;
         case "text:p":
         case "text:h":
-          element.childNodes.forEach((child) => process_para(child, para));
+          element.childNodes.forEach((child) => {
+            process_para(child, para);
+            body.push(para);
+          });
           break;
       }
       break;
