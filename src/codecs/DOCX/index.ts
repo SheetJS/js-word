@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom";
 import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSRel } from "../../types";
 
 /* ECMA 17.3.1.22 p CT_P */
-function process_para(child: Node, root: WJSPara, file:CFB$Container) {
+function process_para(child: Node, root: WJSPara, file:CFB$Container, path: string) {
   switch (child.nodeType) {
     case 1 /* ELEMENT_NODE */:
       const element = (child as Element);
@@ -12,12 +12,12 @@ function process_para(child: Node, root: WJSPara, file:CFB$Container) {
         case "w:sdt":
         case "w:sdtContent":
         case "w:customXml":
-          element.childNodes.forEach((child) => process_para(child, root, file));
+          element.childNodes.forEach((child) => process_para(child, root, file, path));
           break;
         case "w:t":
           root.elts.push({ t: "s", v: child.textContent }); break;
         case "w:hyperlink": // TODO: store actual hyperlink?
-          element.childNodes.forEach((child) => process_para(child, root, file));
+          element.childNodes.forEach((child) => process_para(child, root, file, path));
           break;
         case "w:br":
           break;
@@ -31,7 +31,7 @@ function process_para(child: Node, root: WJSPara, file:CFB$Container) {
         case "w:del":
         case "w:drawing":
         case "w:endnoteReference":
-          parse_relationship(file, '/word/document.xml');
+          parse_relationship(file, path);
         case "w:fldChar":
         case "w:fldSimple":
         case "w:footnoteReference":
@@ -69,18 +69,18 @@ function process_para(child: Node, root: WJSPara, file:CFB$Container) {
   }
 };
 
-function process_tc(tcelt: Element, file:CFB$Container): WJSTableCell {
+function process_tc(tcelt: Element, file:CFB$Container, path: string): WJSTableCell {
   const tableCell: WJSTableCell = { t: "c", p: [] };
   const para: WJSPara = {elts: []};
   tcelt.childNodes.forEach(child => {
-    const data = process_body_elt(child, false, file);
+    const data = process_body_elt(child, false, file, path);
     if (data) tableCell.p.push(data);
     // console.log(tableCell.p[0]);
   })
   return tableCell;
 }
 
-function process_tr(trelt: Element, file:CFB$Container): WJSTableRow {
+function process_tr(trelt: Element, file:CFB$Container, path: string): WJSTableRow {
   const tableRow: WJSTableRow = { t: "r", c: [] };
   trelt.childNodes.forEach(child => {
     if(child.nodeType != 1) return;
@@ -92,7 +92,7 @@ function process_tr(trelt: Element, file:CFB$Container): WJSTableRow {
       case "w:commentRangeEnd": 
       break;
       case "w:tc" :
-        tableRow.c.push(process_tc(element, file));
+        tableRow.c.push(process_tc(element, file, path));
         // console.log("cells: ", tableRow.c);
         break;
       default: throw `DOCX tablerow unsupported ${element.tagName} element`
@@ -102,7 +102,7 @@ function process_tr(trelt: Element, file:CFB$Container): WJSTableRow {
 
 }
 
-function process_table(tablelt: Element, file:CFB$Container): WJSTable {
+function process_table(tablelt: Element, file:CFB$Container, path: string): WJSTable {
   const table: WJSTable = { t: "t", r: [] };
   tablelt.childNodes.forEach(child => {
     if (child.nodeType != 1) return;
@@ -113,7 +113,7 @@ function process_table(tablelt: Element, file:CFB$Container): WJSTable {
       case "w:bookmarkEnd":
         break;
       case "w:tr":
-        table.r.push(process_tr(element, file));
+        table.r.push(process_tr(element, file, path));
         // console.log("rows: ", table.r);
         break;
       default: throw `DOCX table unsuported ${element.tagName} element`
@@ -122,17 +122,17 @@ function process_table(tablelt: Element, file:CFB$Container): WJSTable {
   return table;
 }
 
-function process_body_elt(child: ChildNode, root: boolean = false, file:CFB$Container): WJSPara | void {
+function process_body_elt(child: ChildNode, root: boolean = false, file:CFB$Container, path: string): WJSPara | void {
   const para: WJSPara = { elts: [] };
   switch (child.nodeType) {
     case 1: /* ELEMENT_NODE */
       const element = (child as Element);
       switch (element.tagName) {
         case "w:p":
-          element.childNodes.forEach((child) => process_para(child, para, file));
+          element.childNodes.forEach((child) => process_para(child, para, file, path));
           return para;
         case "w:tbl":
-          para.elts.push(process_table(element, file));
+          para.elts.push(process_table(element, file, path));
           return para;
         // console.log("tables: ", para.elts);
         case "w:customXML":
@@ -182,7 +182,7 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   const bodyelt = rootelt.querySelector("w\\:document > w\\:body");
 
   bodyelt.childNodes.forEach(child => {
-    const res = process_body_elt(child, true, file);
+    const res = process_body_elt(child, true, file, path);
     if (res) docx.p.push(res);
   });
 
