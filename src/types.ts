@@ -45,7 +45,7 @@ export interface WJSPara {
 /** WordJS Document */
 export interface WJSDoc {
   p: WJSPara[];
-  rels?: WJSRelationship;
+  rels?: WJSRel[];
 }
 
 /** Relationship */
@@ -55,9 +55,4 @@ export interface WJSRel {
   type: String;
   target: String;
   targerMode?: String;
-}
-
-/** WordJS Relationship */
-export interface WJSRelationship {
-  rels: WJSRel[];
 }
