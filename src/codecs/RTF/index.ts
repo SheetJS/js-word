@@ -19,38 +19,38 @@ function should_skip(text: string): boolean {
 }
 
 export function parse_str(data: string): WJSDoc {
-    // var pairs = [];
-    // var seen_par = false;
-    // var blacklist = [ "\\fonttbl", "\\rtlch", "\\fcs1", "\\af0", "\\ltrch", "\\fcs0", "\\insrsid", "\\lsdlockedexcept", "\\*\\panose", "\\fbiminor"];
-    // var current_par = "";
-    // var counter = [];
-    // var offsets = [];
-    // var para_text = [];
-    // var par_start = -1;
-    // var last_open_brace = Infinity
-    // var skiplength = Infinity; // keep track of skip length
+    // let pairs = [];
+    // let seen_par = false;
+    // let blacklist = [ "\\fonttbl", "\\rtlch", "\\fcs1", "\\af0", "\\ltrch", "\\fcs0", "\\insrsid", "\\lsdlockedexcept", "\\*\\panose", "\\fbiminor"];
+    // let current_par = "";
+    // let counter = [];
+    // let offsets = [];
+    // let para_text = [];
+    // let par_start = -1;
+    // let last_open_brace = Infinity
+    // let skiplength = Infinity; // keep track of skip length
 
     const doc: WJSDoc = { p: [] }
     let current_paragraph: WJSPara = { elts: [] };
     doc.p.push(current_paragraph);
 
-    var will_contain_text = false;
+    let will_contain_text = false;
 
     /* 
         TEST SAMPLES
     */
-    var rtf = data;
-    // var rtf = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\froman Tms Rmn;}}"
-    // var rtf = "{\\par The word \'93}{\\cs15\\b\\ul\\cf6 style}{\'94 is red and underlined. I used a style I called UNDERLINE.\\par }"
-    // var rtf = "{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid5199918 \\par }{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid6445377 There\\par }"
-    // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 \\par }"
-    // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}"
-    // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid14709222  bok}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \insrsid6445377 \\par }"
-    // var rtf = "{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\loch\\af43\\insrsid16543523 \\hich\\af31506\\dbch\\af31505\\loch\\f43 TEST}{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid9255049 \\par }"
-    // var rtf = "{\\fhimajor\\f31534\\fbidi \\fswiss\\fcharset178\\fprq2 Calibri Light (Arabic);}"
-    // var rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6769711 CHAPTER 1 \\par }\\pard \\ltrpar\\s28\\ql \\li0\\ri0\\widctlpar\\wrapdefault\\aspalpha\\aspnum\\faauto\\adjustright\\rin0\\lin0\\itap0\\pararsid9385249 {\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6769711 Certain infectious and parasitic diseases }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid2574294 \\par }"
+    let rtf = data;
+    // let rtf = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\froman Tms Rmn;}}"
+    // let rtf = "{\\par The word \'93}{\\cs15\\b\\ul\\cf6 style}{\'94 is red and underlined. I used a style I called UNDERLINE.\\par }"
+    // let rtf = "{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid5199918 \\par }{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid6445377 There\\par }"
+    // let rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 \\par }"
+    // let rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}"
+    // let rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6445377 Hello}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid11279206  ba}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid14709222  bok}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid3943939 \\par }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid5116832 aaa}{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \insrsid6445377 \\par }"
+    // let rtf = "{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\loch\\af43\\insrsid16543523 \\hich\\af31506\\dbch\\af31505\\loch\\f43 TEST}{\\rtlch\\fcs1 \\af31507 \\ltrch\\fcs0 \\insrsid9255049 \\par }"
+    // let rtf = "{\\fhimajor\\f31534\\fbidi \\fswiss\\fcharset178\\fprq2 Calibri Light (Arabic);}"
+    // let rtf = "{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6769711 CHAPTER 1 \\par }\\pard \\ltrpar\\s28\\ql \\li0\\ri0\\widctlpar\\wrapdefault\\aspalpha\\aspnum\\faauto\\adjustright\\rin0\\lin0\\itap0\\pararsid9385249 {\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid6769711 Certain infectious and parasitic diseases }{\\rtlch\\fcs1 \\af0 \\ltrch\\fcs0 \\insrsid2574294 \\par }"
 
-    var extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}|[A-Za-z\d\.]+\s)/g, function ($$, $1, idx) { // ({|\\[A-Za-z\d]+|}?\b\w+\b)
+    let extract_text = rtf.replace(/({|\\[A-Za-z\d]+|}|[A-Za-z\d\.]+\s)/g, function ($$, $1, idx) { // ({|\\[A-Za-z\d]+|}?\b\w+\b)
         // Removes all control words except \\par and \\insrsid
         if (!should_skip($$)) {
             if ($$ == "{") {
