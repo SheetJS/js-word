@@ -4,7 +4,7 @@ import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell } from "../../type
     Skips all the control words/groups other than 
     insrsid and par
 */
-function should_skip(text: string) {
+function should_skip(text: string): boolean {
     if (text.includes("\\") || text.includes("\\*\\")) {
         // TODO: DETECT \\caps
 
