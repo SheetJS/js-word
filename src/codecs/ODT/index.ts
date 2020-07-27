@@ -1,6 +1,6 @@
 import { CFB$Container, find } from "cfb";
 import { JSDOM } from "jsdom";
-import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSParaElement } from "../../types";
+import { WJSDoc, WJSPara, WJSTable, WJSTableRow, WJSTableCell, WJSParaElement, WJSEndNote } from "../../types";
 
 /* 5.1.3 <text:p> children */
 function process_para(child: Node, root: WJSPara) {
@@ -8,9 +8,28 @@ function process_para(child: Node, root: WJSPara) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
       if(element.tagName.match(/draw:/)) return;
-      if(element.tagName == "text:s") root.elts.push({t:"s", v: " ".repeat(+element.getAttribute("c") || 1)});
-      if(element.tagName == "text:tab") root.elts.push({t:"s", v: "\t".repeat(+element.getAttribute("c") || 1)});
-      element.childNodes.forEach((child) => process_para(child, root));
+      switch(element.tagName) {
+        // Parse tabs and spaces
+        case "text:s":
+          root.elts.push({ t: "s", v: " ".repeat(+element.getAttribute("c") || 1) });
+          break;
+        case "text:tab":
+          root.elts.push({ t: "s", v: "\t".repeat(+element.getAttribute("c") || 1) });
+          break;
+        // Special case for endnotes
+        case "text:note":
+          let body : WJSPara[] = [];
+          element.childNodes.forEach((child) => {
+            process_note(child, root, body);
+          });
+          root.elts.push({ t: "endnote", id: +element.getAttribute("id"), p: body});
+          return;
+        default:
+          element.childNodes.forEach((child) => {
+            process_para(child, root);
+          });
+          break;
+      }
       break;
     case 3 /*TEXT_NODE*/: root.elts.push({t:"s", v: child.textContent}); break;
     default: throw "unsupported node type " + child.nodeType;
@@ -67,7 +86,9 @@ function process_illustration_index(child: Node, root: WJSPara[]) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
       switch(element.tagName) {
-        case "text:illustration-index-source": break;
+        // Skip over this
+        case "text:illustration-index-source":
+          return;
         case "text:index-body":
           element.childNodes.forEach((child) => process_index_body(child, root));
           break;
@@ -97,9 +118,67 @@ function process_index_body(child: Node, root: WJSPara[]) {
   }
 }
 
+/* <text:list> children */
+function process_list(child: Node, root: WJSPara[], index: number) {
+  switch(child.nodeType) {
+    case 1 /*ELEMENT_NODE*/:
+      const element = (child as Element);
+      switch(element.tagName) {
+        // Recursive case
+        case "text:list-item":
+          element.childNodes.forEach((child) => {
+            process_list(child, root, index);
+            index++;
+          });
+          break;
+        case "text:list":
+          let i : number = 1;
+          element.childNodes.forEach((child) => {
+            process_list(child, root, i);
+            i++;
+          });
+          break;
+        case "text:h":
+        case "text:p":
+          const para : WJSPara = { elts: [] };
+          para.elts.push({t: "s", v: "" + index + ". "});
+          element.childNodes.forEach((child) => {
+            process_para(child, para);
+          });
+          root.push(para);
+          break;
+      }
+  }
+}
+
+function process_note(child: Node, root: WJSPara, body: WJSPara[]) {
+  const para : WJSPara = { elts: [] };
+  switch(child.nodeType) {
+    case 1 /*ELEMENT_NODE*/:
+      const element = (child as Element);
+      switch(element.tagName) {
+        case "text:note-citation":
+          element.childNodes.forEach((child) => process_para(child, root));
+          break;
+        case "text:note-body":
+          element.childNodes.forEach((child) => process_note(child, root, body));
+          break;
+        case "text:p":
+        case "text:h":
+          element.childNodes.forEach((child) => {
+            process_para(child, para);
+            body.push(para);
+          });
+          break;
+      }
+      break;
+  }
+}
+
 /* 3.4 <office:text> children */
 function process_body_elt(child: ChildNode, root: boolean = false): WJSPara[]|WJSPara|void {
   const para: WJSPara = { elts: []};
+  const paraArray: WJSPara[] = [];
   switch(child.nodeType) {
     case 1 /*ELEMENT_NODE*/:
       const element = (child as Element);
@@ -118,16 +197,17 @@ function process_body_elt(child: ChildNode, root: boolean = false): WJSPara[]|WJ
           return para;
         // text:illustration-index
         case "text:illustration-index":
-          const paraArray: WJSPara[] = [];
-          console.log()
           element.childNodes.forEach((child) => process_illustration_index(child, paraArray));
           return paraArray;
-        // case "text:illustration-index-body":
-          // recursively parse children
-          // para.elts.push(process_illustration_index(element, para));
-          // return para;
         // text:list
-        case "text:illustration-index-source":
+        case "text:list":
+          let index : number = 1;
+          element.childNodes.forEach((child) => {
+            process_list(child, paraArray, index);
+            index++;
+          });
+          return paraArray;
+        case "text:note":
         case "text:sequence-decls":
         case "text:variable-decls":
         case "text:tracked-changes":
@@ -167,9 +247,12 @@ export function parse_cfb(file: CFB$Container): WJSDoc {
   textelt.childNodes.forEach(child => {
     const res = process_body_elt(child, true);
     if(res) {
+      // Check if res is an array
       if ((res as WJSPara[]).push == undefined) {
+        // If not, push to doc
         doc.p.push(res as WJSPara);
       } else {
+        // If yes, push each paragraph to doc
         (res as WJSPara[]).forEach(para => {
           doc.p.push(para);
         });
